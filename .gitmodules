@@ -1,0 +1,3 @@
+[submodule "MdePkgInc"]
+	path = MdePkgInc
+	url = https://github.com/KilianKegel/MdePkgInc

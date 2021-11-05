@@ -1,0 +1,3 @@
+//#pragma warning (disable:4206/*translation unit is empty*/)
+
+20181216: examine, that iswctype()/iswctype.tst.c  is so slow compared to MSFT

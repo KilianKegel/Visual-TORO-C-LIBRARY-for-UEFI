@@ -1,0 +1,702 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\CdeServices.h" />
+    <ClInclude Include="Include\_invparm.h" />
+    <ClInclude Include="Include\_locale.h" />
+    <ClInclude Include="Include\_wctype.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Guids\CDE_DXE_PROTOCOL_GUID.c" />
+    <ClCompile Include="Guids\CDE_SMM_PROTOCOL_GUID.c" />
+    <ClCompile Include="Guids\EFI_DEVICE_PATH_PROTOCOL_GUID.c" />
+    <ClCompile Include="Guids\EFI_DEVICE_PATH_TO_TEXT_PROTOCOL_GUID.c" />
+    <ClCompile Include="Guids\EFI_FILE_INFO_ID_GUID.c" />
+    <ClCompile Include="Guids\EFI_SHELL_PROTOCOL_GUID.c" />
+    <ClCompile Include="Guids\EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID.c" />
+    <ClCompile Include="Guids\EFI_STATUS_CODE_RUNTIME_PROTOCOL_GUID.c" />
+    <ClCompile Include="Intrinsics\_fltused.c" />
+    <ClCompile Include="Intrinsics\_handle_error.c" />
+    <ClCompile Include="Intrinsics\_handle_errorf.c" />
+    <ClCompile Include="Intrinsics\_invalid_parameter_handler.c" />
+    <ClCompile Include="Intrinsics\_set_invalid_parameter_handler.c" />
+    <ClCompile Include="Intrinsics\_set_printf_count_output.c" />
+    <ClCompile Include="Intrinsics\__abort_behavior.c" />
+    <ClCompile Include="Intrinsics\__acrt_iob_func.c">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AssemblerOutput>
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </AssemblerOutput>
+    </ClCompile>
+    <ClCompile Include="Intrinsics\__CheckForDebuggerJustMyCode.c" />
+    <ClCompile Include="Intrinsics\__chkstk.c" />
+    <ClCompile Include="Intrinsics\__iob_func.c" />
+    <ClCompile Include="Intrinsics\__use_fma3_lib.c" />
+    <ClCompile Include="LibAssist\_cdeConvertDevicePathToText.c" />
+    <ClCompile Include="LibAssist\_CdeDbgCOMInit.c" />
+    <ClCompile Include="LibAssist\_CdeDbgCOMReady2Send.c" />
+    <ClCompile Include="LibAssist\_CdeDbgCOMSend.c" />
+    <ClCompile Include="LibAssist\_CdeDbgPutChar.c" />
+    <ClCompile Include="LibAssist\_CdeEDKDebugPrint.c" />
+    <ClCompile Include="LibAssist\_cdeEfiTime2TimeT.c" />
+    <ClCompile Include="LibAssist\_CdeFileonly.c" />
+    <ClCompile Include="LibAssist\_CdeGetCurDir.c" />
+    <ClCompile Include="LibAssist\_CdeGetMapFromDevicePath.c" />
+    <ClCompile Include="LibAssist\_CdeLocateHandleBuffer.c" />
+    <ClCompile Include="LibAssist\_CdeLocateProtocol.c" />
+    <ClCompile Include="LibAssist\_cdeMemGetChar.c" />
+    <ClCompile Include="LibAssist\_CdeMemGetWChar.c" />
+    <ClCompile Include="LibAssist\_CdeMemPutChar.c" />
+    <ClCompile Include="LibAssist\_CdeMemPutNada.c" />
+    <ClCompile Include="LibAssist\_CdeMemPutWChar.c" />
+    <ClCompile Include="LibAssist\_cdeMemUngetChar.c" />
+    <ClCompile Include="LibAssist\_CdeMemUngetWChar.c" />
+    <ClCompile Include="LibAssist\_CdeMoFiNe.c" />
+    <ClCompile Include="LibAssist\_CdePoolWcs2AppWcs.c" />
+    <ClCompile Include="LibAssist\_CdeSetCurDir.c" />
+    <ClCompile Include="LibAssist\_cdeStr2Argcv.c" />
+    <ClCompile Include="LibAssist\_CdeXDump2.c" />
+    <ClCompile Include="LibAssist\__cdeGetPeiServices.c" />
+    <ClCompile Include="LibAssist\__cdeTianocoreDEBUGDis.c" />
+    <ClCompile Include="LibAssist\__cdeTianocoreDEBUGEna.c" />
+    <ClCompile Include="LibAssist\__cdeTianocoreDEBUGGet.c" />
+    <ClCompile Include="LibAssist\__cdeTianocoreDebugPrintErrolevel2Str.c" />
+    <ClCompile Include="LibConfig\_gCdeCfgCmdLnParmPoolMemRetain.c" />
+    <ClCompile Include="LibConfig\_gCdeCfgCmdLnParmReportStatusCodeSTDOUT.c" />
+    <ClCompile Include="LibConfig\_gCdeCfgMofineRawSeparator.c" />
+    <ClCompile Include="LibConfig\_gSTDOUTMode.c" />
+    <ClCompile Include="LibCore\_cdeXDump.c" />
+    <ClCompile Include="LibCore\_cdeMemRealloc.c" />
+    <ClCompile Include="LibCore\_cdeMemStrxCmp.c" />
+    <ClCompile Include="LibCore\_cdeMemStrxCpy.c" />
+    <ClCompile Include="LibCore\_cdeVMofine.c" />
+    <ClCompile Include="LibCore\_cdeVwxPrintf.c" />
+    <ClCompile Include="LibCore\_cdeVwxScanf.c" />
+    <ClCompile Include="LibCore\_cdeWcsStrPbrkSpn.c" />
+    <ClCompile Include="LibCore\_cdeWcsStrTok.c" />
+    <ClCompile Include="LibCore\_cdeCoreClock.c" />
+    <ClCompile Include="LibCore\_cdeCoreExit.c" />
+    <ClCompile Include="LibCore\_cdeCoreMofine.c" />
+    <ClCompile Include="LibCore\_cdeCoreSprintf.c" />
+    <ClCompile Include="Library\assert_h\_assert.c" />
+    <ClCompile Include="Library\assert_h\_wassert.c" />
+    <ClCompile Include="Library\ctype_h\isalnum.c" />
+    <ClCompile Include="Library\ctype_h\isalpha.c" />
+    <ClCompile Include="Library\ctype_h\iscntrl.c" />
+    <ClCompile Include="Library\ctype_h\isdigit.c" />
+    <ClCompile Include="Library\ctype_h\isgraph.c" />
+    <ClCompile Include="Library\ctype_h\islower.c" />
+    <ClCompile Include="Library\ctype_h\isprint.c" />
+    <ClCompile Include="Library\ctype_h\ispunct.c" />
+    <ClCompile Include="Library\ctype_h\isspace.c" />
+    <ClCompile Include="Library\ctype_h\isupper.c" />
+    <ClCompile Include="Library\ctype_h\isxdigit.c" />
+    <ClCompile Include="Library\ctype_h\tolower.c" />
+    <ClCompile Include="Library\ctype_h\toupper.c" />
+    <ClCompile Include="Library\direct_h\_getcwd.c" />
+    <ClCompile Include="Library\direct_h\_getdcwd.c" />
+    <ClCompile Include="Library\direct_h\_mkdir.c" />
+    <ClCompile Include="Library\errno_h\errno.c" />
+    <ClCompile Include="Library\errno_h\_efierrno.c" />
+    <ClCompile Include="Library\errno_h\__cdeOnErrSet_errno.c" />
+    <ClCompile Include="Library\errno_h\__cdeOnErrSet_status.c" />
+    <ClCompile Include="Library\io_h\_findclose.c" />
+    <ClCompile Include="Library\io_h\_findfirst.c" />
+    <ClCompile Include="Library\io_h\_findnext.c" />
+    <ClCompile Include="Library\io_h\__cdeSplitSearchNameExt2Upcase.c" />
+    <ClCompile Include="Library\io_h\__cdeStrMatch.c" />
+    <ClCompile Include="Library\locale_h\localeconv.c" />
+    <ClCompile Include="Library\locale_h\setlocale.c" />
+    <ClCompile Include="Library\locale_h\_locales.c" />
+    <ClCompile Include="Library\locale_h\_locale_C_.c" />
+    <ClCompile Include="Library\signal_h\raise.c" />
+    <ClCompile Include="Library\signal_h\signal.c" />
+    <ClCompile Include="Library\signal_h\_cdeSig2idx.c" />
+    <ClCompile Include="Library\signal_h\_cdeSigDfl.c" />
+    <ClCompile Include="Library\signal_h\_cdeSigIgn.c" />
+    <ClCompile Include="Library\stdio_h\Clearerr.c" />
+    <ClCompile Include="Library\stdio_h\Fclose.c" />
+    <ClCompile Include="Library\stdio_h\Feof.c" />
+    <ClCompile Include="Library\stdio_h\Ferror.c" />
+    <ClCompile Include="Library\stdio_h\Fflush.c" />
+    <ClCompile Include="Library\stdio_h\Fgetc.c" />
+    <ClCompile Include="Library\stdio_h\Fgetpos.c" />
+    <ClCompile Include="Library\stdio_h\Fgets.c" />
+    <ClCompile Include="Library\stdio_h\Fopen.c" />
+    <ClCompile Include="Library\stdio_h\Fprintf.c" />
+    <ClCompile Include="Library\stdio_h\Fputc.c" />
+    <ClCompile Include="Library\stdio_h\Fputs.c" />
+    <ClCompile Include="Library\stdio_h\Fread.c" />
+    <ClCompile Include="Library\stdio_h\Freopen.c" />
+    <ClCompile Include="Library\stdio_h\Fscanf.c" />
+    <ClCompile Include="Library\stdio_h\Fseek.c" />
+    <ClCompile Include="Library\stdio_h\Fsetpos.c" />
+    <ClCompile Include="Library\stdio_h\Ftell.c" />
+    <ClCompile Include="Library\stdio_h\Fwrite.c" />
+    <ClCompile Include="Library\stdio_h\Getc.c" />
+    <ClCompile Include="Library\stdio_h\Getchar.c" />
+    <ClCompile Include="Library\stdio_h\Gets.c" />
+    <ClCompile Include="Library\stdio_h\Perror.c" />
+    <ClCompile Include="Library\stdio_h\Printf.c" />
+    <ClCompile Include="Library\stdio_h\Putc.c" />
+    <ClCompile Include="Library\stdio_h\Putchar.c" />
+    <ClCompile Include="Library\stdio_h\Puts.c" />
+    <ClCompile Include="Library\stdio_h\Remove.c" />
+    <ClCompile Include="Library\stdio_h\Rename.c" />
+    <ClCompile Include="Library\stdio_h\Rewind.c" />
+    <ClCompile Include="Library\stdio_h\Scanf.c" />
+    <ClCompile Include="Library\stdio_h\Setbuf.c" />
+    <ClCompile Include="Library\stdio_h\Setvbuf.c" />
+    <ClCompile Include="Library\stdio_h\Snprintf.c" />
+    <ClCompile Include="Library\stdio_h\Sprintf.c" />
+    <ClCompile Include="Library\stdio_h\Sscanf.c" />
+    <ClCompile Include="Library\stdio_h\Tmpfile.c" />
+    <ClCompile Include="Library\stdio_h\Tmpnam.c" />
+    <ClCompile Include="Library\stdio_h\Ungetc.c" />
+    <ClCompile Include="Library\stdio_h\Vfprintf.c" />
+    <ClCompile Include="Library\stdio_h\Vfscanf.c" />
+    <ClCompile Include="Library\stdio_h\Vprintf.c" />
+    <ClCompile Include="Library\stdio_h\Vscanf.c" />
+    <ClCompile Include="Library\stdio_h\Vsnprintf.c" />
+    <ClCompile Include="Library\stdio_h\Vsnwprintf.c" />
+    <ClCompile Include="Library\stdio_h\Vsprintf.c" />
+    <ClCompile Include="Library\stdio_h\Vsscanf.c" />
+    <ClCompile Include="Library\stdio_h\__cdeIsFilePointer.c" />
+    <ClCompile Include="Library\stdio_h\__cdsGetIOBuffer.c" />
+    <ClCompile Include="Library\stdlib_h\abort.c" />
+    <ClCompile Include="Library\stdlib_h\Abs.c" />
+    <ClCompile Include="Library\stdlib_h\atexit.c" />
+    <ClCompile Include="Library\stdlib_h\atoi.c" />
+    <ClCompile Include="Library\stdlib_h\atol.c" />
+    <ClCompile Include="Library\stdlib_h\Calloc.c" />
+    <ClCompile Include="Library\stdlib_h\Div.c" />
+    <ClCompile Include="Library\stdlib_h\exit.c" />
+    <ClCompile Include="Library\stdlib_h\Free.c" />
+    <ClCompile Include="Library\stdlib_h\getenv.c" />
+    <ClCompile Include="Library\stdlib_h\Labs.c" />
+    <ClCompile Include="Library\stdlib_h\Ldiv.c" />
+    <ClCompile Include="Library\stdlib_h\_cdeSnscanf.c" />
+    <ClCompile Include="Library\stdlib_h\_ltoa.c" />
+    <ClCompile Include="Library\stdlib_h\Malloc.c" />
+    <ClCompile Include="Library\stdlib_h\mblen.c" />
+    <ClCompile Include="Library\stdlib_h\mbstowcs.c" />
+    <ClCompile Include="Library\stdlib_h\mbtowc.c" />
+    <ClCompile Include="Library\stdlib_h\Qsort.c" />
+    <ClCompile Include="Library\stdlib_h\rand.c" />
+    <ClCompile Include="Library\stdlib_h\Realloc.c" />
+    <ClCompile Include="Library\stdlib_h\srand.c" />
+    <ClCompile Include="Library\stdlib_h\strtol.c" />
+    <ClCompile Include="Library\stdlib_h\strtoul.c" />
+    <ClCompile Include="Library\stdlib_h\system.c" />
+    <ClCompile Include="Library\stdlib_h\wcstombs.c" />
+    <ClCompile Include="Library\stdlib_h\wctomb.c" />
+    <ClCompile Include="Library\stdlib_h\_cdeAbort.c" />
+    <ClCompile Include="Library\string_h\MemChr.c" />
+    <ClCompile Include="Library\string_h\MemCmp.c" />
+    <ClCompile Include="Library\string_h\MemCpy.c" />
+    <ClCompile Include="Library\string_h\MemMove.c" />
+    <ClCompile Include="Library\string_h\MemSet.c" />
+    <ClCompile Include="Library\string_h\StrCat.c" />
+    <ClCompile Include="Library\string_h\StrChr.c" />
+    <ClCompile Include="Library\string_h\StrCmp.c" />
+    <ClCompile Include="Library\string_h\StrCpy.c" />
+    <ClCompile Include="Library\string_h\StrCSpn.c" />
+    <ClCompile Include="Library\string_h\StrError.c" />
+    <ClCompile Include="Library\string_h\StrLen.c" />
+    <ClCompile Include="Library\string_h\StrNCat.c" />
+    <ClCompile Include="Library\string_h\StrNCmp.c" />
+    <ClCompile Include="Library\string_h\StrNCpy.c" />
+    <ClCompile Include="Library\string_h\StrNLen.c" />
+    <ClCompile Include="Library\string_h\StrPbrk.c" />
+    <ClCompile Include="Library\string_h\StrRChr.c" />
+    <ClCompile Include="Library\string_h\StrSpn.c" />
+    <ClCompile Include="Library\string_h\StrStr.c" />
+    <ClCompile Include="Library\string_h\StrTok.c" />
+    <ClCompile Include="Library\string_h\_StrDup.c" />
+    <ClCompile Include="Library\string_h\_StrEfiError.c" />
+    <ClCompile Include="Library\string_h\_StrICmp.c" />
+    <ClCompile Include="Library\string_h\_StrNICmp.c" />
+    <ClCompile Include="Library\sys\stat_h\_stat64i32.c" />
+    <ClCompile Include="Library\time_h\asctime.c" />
+    <ClCompile Include="Library\time_h\clock.c" />
+    <ClCompile Include="Library\time_h\ctime.c" />
+    <ClCompile Include="Library\time_h\difftime.c" />
+    <ClCompile Include="Library\time_h\gmtime.c" />
+    <ClCompile Include="Library\time_h\localtime.c" />
+    <ClCompile Include="Library\time_h\mktime.c" />
+    <ClCompile Include="Library\time_h\strftime.c" />
+    <ClCompile Include="Library\time_h\time.c" />
+    <ClCompile Include="Library\time_h\_cdeDay2Greg.c" />
+    <ClCompile Include="Library\time_h\_cdeGmltime.c" />
+    <ClCompile Include="Library\time_h\_cdeGreg2Day.c" />
+    <ClCompile Include="Library\time_h\_cdeCalendarStrings.c" />
+    <ClCompile Include="Library\wchar_h\Swprintf.c" />
+    <ClCompile Include="Library\wchar_h\Vfwprintf.c" />
+    <ClCompile Include="Library\wchar_h\Vswprintf.c" />
+    <ClCompile Include="Library\wchar_h\Vwprintf.c" />
+    <ClCompile Include="Library\wchar_h\WcsCat.c" />
+    <ClCompile Include="Library\wchar_h\WcsChr.c" />
+    <ClCompile Include="Library\wchar_h\WcsCmp.c" />
+    <ClCompile Include="Library\wchar_h\WcsCpy.c" />
+    <ClCompile Include="Library\wchar_h\WcsCSpn.c" />
+    <ClCompile Include="Library\wchar_h\WcsLen.c" />
+    <ClCompile Include="Library\wchar_h\WcsNCat.c" />
+    <ClCompile Include="Library\wchar_h\WcsNCmp.c" />
+    <ClCompile Include="Library\wchar_h\WcsNCpy.c" />
+    <ClCompile Include="Library\wchar_h\WcsNLen.c" />
+    <ClCompile Include="Library\wchar_h\WcsPbrk.c" />
+    <ClCompile Include="Library\wchar_h\WcsRChr.c" />
+    <ClCompile Include="Library\wchar_h\WcsSpn.c" />
+    <ClCompile Include="Library\wchar_h\WcsStr.c" />
+    <ClCompile Include="Library\wchar_h\WcsTok.c" />
+    <ClCompile Include="Library\wchar_h\wctob.c" />
+    <ClCompile Include="Library\wchar_h\WMemChr.c" />
+    <ClCompile Include="Library\wchar_h\WMemCmp.c" />
+    <ClCompile Include="Library\wchar_h\WMemCpy.c" />
+    <ClCompile Include="Library\wchar_h\WMemMove.c" />
+    <ClCompile Include="Library\wchar_h\WMemSet.c" />
+    <ClCompile Include="Library\wchar_h\Wprintf.c" />
+    <ClCompile Include="Library\wchar_h\_WcsDup.c" />
+    <ClCompile Include="Library\wchar_h\_WcsICmp.c" />
+    <ClCompile Include="Library\wchar_h\_WcsNICmp.c" />
+    <ClCompile Include="Library\wctype_h\iswalnum.c" />
+    <ClCompile Include="Library\wctype_h\iswalpha.c" />
+    <ClCompile Include="Library\wctype_h\iswblank.c" />
+    <ClCompile Include="Library\wctype_h\iswcntrl.c" />
+    <ClCompile Include="Library\wctype_h\iswctype.c" />
+    <ClCompile Include="Library\wctype_h\iswdigit.c" />
+    <ClCompile Include="Library\wctype_h\iswgraph.c" />
+    <ClCompile Include="Library\wctype_h\iswlower.c" />
+    <ClCompile Include="Library\wctype_h\iswprint.c" />
+    <ClCompile Include="Library\wctype_h\iswpunct.c" />
+    <ClCompile Include="Library\wctype_h\iswspace.c" />
+    <ClCompile Include="Library\wctype_h\iswupper.c" />
+    <ClCompile Include="Library\wctype_h\iswxdigit.c" />
+    <ClCompile Include="Library\wctype_h\towctrans.c" />
+    <ClCompile Include="Library\wctype_h\towlower.c" />
+    <ClCompile Include="Library\wctype_h\towupper.c" />
+    <ClCompile Include="Library\wctype_h\wctrans.c" />
+    <ClCompile Include="Library\wctype_h\wctype.c" />
+    <ClCompile Include="Library\wctype_h\_cdeChkIsWxTbl.c" />
+    <ClCompile Include="Library\wctype_h\_iswalphacaseless_dflt_tbl.c" />
+    <ClCompile Include="Library\wctype_h\_iswblank_dflt_tbl.c" />
+    <ClCompile Include="Library\wctype_h\_iswcntrl_dflt_tbl.c" />
+    <ClCompile Include="Library\wctype_h\_iswdigit_dflt_tbl.c" />
+    <ClCompile Include="Library\wctype_h\_iswlower_dflt_tbl.c" />
+    <ClCompile Include="Library\wctype_h\_iswpunct_dflt_tbl.c" />
+    <ClCompile Include="Library\wctype_h\_iswspace_dflt_tbl.c" />
+    <ClCompile Include="Library\wctype_h\_iswupper_dflt_tbl.c" />
+    <ClCompile Include="Library\wctype_h\_iswxdigit_dflt_tbl.c" />
+    <ClCompile Include="Library\wctype_h\_wcproperty.c" />
+    <ClCompile Include="LibUefiDefault\_dfltGetCdeAppIf.c" />
+    <ClInclude Include="Library\io_h\__cdeFindFirst.h" />
+    <ClInclude Include="OSInterface\EDK2ObjBlocker\DebugLib_c.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="OSInterface\EDK2ObjBlocker\DriverEntryPoint_c.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="OSInterface\EDK2ObjBlocker\PeimEntryPoint_c.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClCompile Include="OSInterface\UEFIDXE\osifUefiDxeEntryPoint.c" />
+    <ClCompile Include="OSInterface\UEFIDXE\osifUefiDxeEntryPointEDK.c" />
+    <ClCompile Include="OSInterface\UEFIDXE\osifUefiDxeMemAlloc.c" />
+    <ClCompile Include="OSInterface\UEFIDXE\osifUefiDxeMemFree.c" />
+    <ClCompile Include="OSInterface\IBMAT\osifIbmAtGetTime.c" />
+    <ClCompile Include="OSInterface\IBMAT\osifIbmAtGetTsc.c" />
+    <ClCompile Include="OSInterface\IBMAT\osifIbmAtGetTscPerSec.c" />
+    <ClCompile Include="OSInterface\IBMAT\osifIbmAtSetTime.c" />
+    <ClCompile Include="OSInterface\UEFIPEI\osifUefiPeiEntryPoint.c" />
+    <ClCompile Include="OSInterface\UEFIPEI\osifUefiPeiEntryPointEDK.c" />
+    <ClCompile Include="OSInterface\UEFIPEI\osifUefiPeiMemAlloc.c" />
+    <ClCompile Include="OSInterface\UEFIPEI\osifUefiPeiMemFree.c" />
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellCmdExec.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellDirectoryCreate.c" />
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellDirectoryRemove.c" />
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPoint.c" />
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPointEDK.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AssemblerOutput>
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </AssemblerOutput>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileClose.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileDelete.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileFindAll.c" />
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileOpen.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileRead.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileRename.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileSetPos.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileGetStatus.c" />
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileWrite.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellGetDrvCwd.c" />
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellGetEnv.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellMemAlloc.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellMemFree.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISMM\osifUefiSmmEntryPoint.c" />
+    <ClCompile Include="OSInterface\UEFISMM\osifUefiSmmEntryPointEDK.c" />
+    <ClCompile Include="OSInterface\UEFISMM\osifUefiSmmMemAlloc.c" />
+    <ClCompile Include="OSInterface\UEFISMM\osifUefiSmmMemFree.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTCmdExec.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTDirectoryCreate.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTDirectoryRemove.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTEntryPoint.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileClose.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileDelete.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileFindAll.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileOpen.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileRead.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileRename.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileSetPos.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileGetStatus.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileWrite.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTGetDrvCwd.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTGetEnv.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTGetTime.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTGetTsc.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTGetTscPerSec.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTMemAlloc.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTMemFree.c" />
+    <ClCompile Include="Tools\PostBuild.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <None Include="Tools\PreBuild.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="Tools\PreLinkEvent.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="Intrinsics\__alldiv.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="Intrinsics\__alldvrm.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="Intrinsics\__allmul.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="Intrinsics\__allrem.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="Intrinsics\__allshl.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="Intrinsics\__allshr.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="Intrinsics\__aulldiv.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="Intrinsics\__aulldvrm.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="Intrinsics\__aullrem.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="Intrinsics\__aullshr.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="Intrinsics\__ltod3.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="LibAssist\_CdeGetCurrentPrivilegeLevel32.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="LibAssist\CdeGetCurrentPrivilegeLevel64.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="Library\setjmp_h\longjmp32.asm">
+      <FileType>MASM</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="Library\setjmp_h\longjmp64.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <FileType>MASM</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="Library\setjmp_h\setjmp32.asm">
+      <FileType>MASM</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="Library\setjmp_h\setjmp64.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <FileType>MASM</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+    </MASM>
+    <None Include="Tools\PostBuildEvent.bat" />
+    <None Include="Tools\PreBuildEvent.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Library\locale_h\__todo.txt" />
+    <Text Include="Library\wctype_h\__todo.txt" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{8C250C8A-C234-450D-83ED-F0C898E1A739}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>CdeLib</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+    <SpectreMitigation>false</SpectreMitigation>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <SpectreMitigation>false</SpectreMitigation>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>x86\$(Configuration)\</IntDir>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <CustomBuildBeforeTargets>
+    </CustomBuildBeforeTargets>
+    <CustomBuildAfterTargets>
+    </CustomBuildAfterTargets>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>MinSpace</Optimization>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>NMOFINE;NDEBUG;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;MDEPKG_NDEBUG;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(SolutionDir)toroCLibrary\include;$(SolutionDir)CdePkg\include;$(SolutionDir)CdePkg\include\###VS2022###;$(SolutionDir)MdePkgInc\IA32;$(SolutionDir)MdePkgInc</AdditionalIncludeDirectories>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ExceptionHandling>false</ExceptionHandling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>
+      </AdditionalOptions>
+      <AssemblerListingLocation>
+      </AssemblerListingLocation>
+      <ProgramDataBaseFileName>$(IntDir)32\$(ProjectName).pdb</ProgramDataBaseFileName>
+      <XMLDocumentationFileName>$(ProjectDir)Release\32</XMLDocumentationFileName>
+      <BrowseInformationFile>$(ProjectDir)Release\32</BrowseInformationFile>
+      <CompileAs>Default</CompileAs>
+      <PrecompiledHeaderOutputFile>
+      </PrecompiledHeaderOutputFile>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <PrecompiledHeaderFile />
+      <StringPooling>true</StringPooling>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <AssemblerOutput>
+      </AssemblerOutput>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <ExternalWarningLevel>Level4</ExternalWarningLevel>
+      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706</DisableSpecificWarnings>
+      <OmitFramePointers>true</OmitFramePointers>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PreBuildEvent>
+      <Command>tools\PreBuildEvent.bat</Command>
+    </PreBuildEvent>
+    <Lib>
+      <OutputFile>$(SolutionDir)$(Platform)\$(Configuration)\toroCLibrary.lib</OutputFile>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <AdditionalOptions>/IGNORE:4006</AdditionalOptions>
+    </Lib>
+    <PostBuildEvent>
+      <Command>COPY /y $(SolutionDir)$(Platform)\$(Configuration)\toroCLibrary.lib $(SolutionDir)CdePkg\toroC32.lib</Command>
+      <Message>COPY /y $(SolutionDir)$(Platform)\$(Configuration)\toroCLibrary.lib $(SolutionDir)CdePkg\toroC32.lib</Message>
+    </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>cmd /C tools\PreLinkEvent.bat $(IntDir) $(ProjectDir) $(Configuration) $(PlatformShortName)</Command>
+    </PreLinkEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>MinSpace</Optimization>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>MDEPKG_NDEBUG;NMOFINE;NDEBUG;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(SolutionDir)toroCLibrary\include;$(SolutionDir)CdePkg\include;$(SolutionDir)CdePkg\include\###VS2022###;$(SolutionDir)MdePkgInc\x64;$(SolutionDir)MdePkgInc</AdditionalIncludeDirectories>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ExceptionHandling>false</ExceptionHandling>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/wd4273 /wd4820 /wd4711</AdditionalOptions>
+      <PrecompiledHeaderOutputFile>
+      </PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>
+      </AssemblerListingLocation>
+      <ProgramDataBaseFileName>$(ProjectDir)Release\64\$(ProjectName).pdb</ProgramDataBaseFileName>
+      <XMLDocumentationFileName>$(ProjectDir)Release\64</XMLDocumentationFileName>
+      <BrowseInformationFile>$(ProjectDir)Release\64</BrowseInformationFile>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <CompileAs>Default</CompileAs>
+      <OmitFramePointers>true</OmitFramePointers>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <StringPooling>true</StringPooling>
+      <PrecompiledHeaderFile />
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AssemblerOutput />
+      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <CustomBuildStep>
+      <Command>echo #################### 12345 #########################</Command>
+      <Outputs>%(Outputs)</Outputs>
+      <Message>Performing Custom Build Step before!</Message>
+    </CustomBuildStep>
+    <PostBuildEvent>
+      <Command>COPY /y $(SolutionDir)$(Platform)\$(Configuration)\toroCLibrary.lib $(SolutionDir)CdePkg\toroC64.lib</Command>
+      <Message>COPY /y $(SolutionDir)$(Platform)\$(Configuration)\toroCLibrary.lib $(SolutionDir)CdePkg\toroC64.lib</Message>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>cmd /C tools\PreBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformShortName)
+	</Command>
+    </PreBuildEvent>
+    <Lib>
+      <OutputFile>$(SolutionDir)$(Platform)\$(Configuration)\toroCLibrary.lib</OutputFile>
+      <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <AdditionalOptions>/IGNORE:4006 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <PreLinkEvent>
+      <Command>cmd /C tools\PreLinkEvent.bat $(IntDir) $(ProjectDir) $(Configuration) $(PlatformShortName)</Command>
+    </PreLinkEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  </ImportGroup>
+</Project>

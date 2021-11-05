@@ -1,0 +1,9 @@
+//#pragma warning (disable:4206/*translation unit is empty*/)
+
+20181218: 
+    setlocale, _wsetlocale
+    https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/setlocale-wsetlocale?view=vs-2017
+    Language tags: 
+    https://msdn.microsoft.com/library/cc233982.aspx
+    UCRT Locale names, Languages, and Country/Region strings:
+    https://docs.microsoft.com/en-us/cpp/c-runtime-library/locale-names-languages-and-country-region-strings?view=vs-2017

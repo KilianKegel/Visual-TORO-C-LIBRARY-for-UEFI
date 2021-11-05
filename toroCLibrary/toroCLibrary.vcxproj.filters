@@ -1,0 +1,1112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\_invparm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\_locale.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\_wctype.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OSInterface\EDK2ObjBlocker\DebugLib_c.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OSInterface\EDK2ObjBlocker\DriverEntryPoint_c.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OSInterface\EDK2ObjBlocker\PeimEntryPoint_c.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\io_h\__cdeFindFirst.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\CdeServices.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Library\time_h\_cdeGreg2Day.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time_h\_cdeCalendarStrings.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time_h\time.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time_h\mktime.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time_h\localtime.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time_h\gmtime.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time_h\difftime.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time_h\ctime.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time_h\_cdeGmltime.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time_h\_cdeDay2Greg.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time_h\clock.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time_h\asctime.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time_h\strftime.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeWcsStrTok.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeMemRealloc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeMemStrxCmp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeMemStrxCpy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeVwxPrintf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeVwxScanf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeWcsStrPbrkSpn.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Intrinsics\__abort_behavior.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Intrinsics\__acrt_iob_func.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Intrinsics\__CheckForDebuggerJustMyCode.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Intrinsics\__chkstk.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Intrinsics\__iob_func.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Intrinsics\__use_fma3_lib.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Intrinsics\_fltused.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Intrinsics\_handle_error.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Intrinsics\_handle_errorf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Intrinsics\_invalid_parameter_handler.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Intrinsics\_set_invalid_parameter_handler.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Intrinsics\_set_printf_count_output.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibConfig\_gCdeCfgMofineRawSeparator.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibConfig\_gCdeCfgCmdLnParmPoolMemRetain.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibConfig\_gCdeCfgCmdLnParmReportStatusCodeSTDOUT.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_CdeDbgPutChar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_CdeEDKDebugPrint.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_CdeFileonly.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_cdeMemGetChar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_CdeMemGetWChar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_CdeMemPutChar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_CdeMemPutNada.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_CdeMemPutWChar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_cdeMemUngetChar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_CdeMemUngetWChar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_CdeMoFiNe.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_CdeDbgCOMInit.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_CdeDbgCOMReady2Send.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_CdeDbgCOMSend.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\isalnum.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\isalpha.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\iscntrl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\isdigit.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\isgraph.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\islower.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\isprint.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\ispunct.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\isspace.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\isupper.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\isxdigit.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\tolower.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\toupper.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\MemSet.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\_StrICmp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\_StrNICmp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\MemChr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\MemCmp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\MemCpy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\MemMove.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrCat.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrChr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrCmp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrCpy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrCSpn.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrError.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrLen.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrNCat.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrNCmp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrNCpy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrPbrk.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrRChr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrSpn.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrStr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrTok.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\_WcsICmp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\_WcsNICmp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\Swprintf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\Vswprintf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsCat.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsChr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsCmp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsCpy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsCSpn.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsLen.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsNCat.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsNCmp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsNCpy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsPbrk.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsRChr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsSpn.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsStr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsTok.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WMemCmp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WMemCpy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WMemMove.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WMemSet.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\Wprintf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\assert_h\_assert.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\assert_h\_wassert.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\errno_h\errno.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\locale_h\_locale_C_.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\locale_h\_locales.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\locale_h\localeconv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\locale_h\setlocale.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\signal_h\_cdeSig2idx.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\signal_h\_cdeSigDfl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\signal_h\_cdeSigIgn.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\signal_h\raise.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\signal_h\signal.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Printf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Snprintf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Sprintf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Sscanf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Tmpnam.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Vsprintf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Vsscanf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\_cdeAbort.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\abort.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\Abs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\atexit.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\atoi.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\atol.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\Calloc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\Div.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\exit.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\Free.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\Labs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\Ldiv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\_ltoa.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\Malloc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\Qsort.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\rand.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\Realloc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\srand.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\strtol.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\strtoul.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\_cdeChkIsWxTbl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\_iswalphacaseless_dflt_tbl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\_iswblank_dflt_tbl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\_iswcntrl_dflt_tbl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\_iswdigit_dflt_tbl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\_iswlower_dflt_tbl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\_iswpunct_dflt_tbl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\_iswspace_dflt_tbl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\_iswupper_dflt_tbl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\_iswxdigit_dflt_tbl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\_wcproperty.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswalnum.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswalpha.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswblank.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswcntrl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswctype.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswdigit.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswgraph.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswlower.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswprint.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswpunct.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswspace.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswupper.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswxdigit.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\towctrans.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\towlower.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\towupper.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\wctrans.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\wctype.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Vsnprintf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WMemChr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Vprintf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFIDXE\osifUefiDxeEntryPointEDK.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFIDXE\osifUefiDxeMemAlloc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFIDXE\osifUefiDxeMemFree.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFIPEI\osifUefiPeiEntryPointEDK.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFIPEI\osifUefiPeiMemAlloc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFIPEI\osifUefiPeiMemFree.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\IBMAT\osifIbmAtGetTime.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\IBMAT\osifIbmAtGetTsc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\IBMAT\osifIbmAtGetTscPerSec.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\IBMAT\osifIbmAtSetTime.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellCmdExec.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPointEDK.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileClose.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileDelete.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileOpen.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileRead.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileRename.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileSetPos.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileWrite.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellGetEnv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellMemAlloc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellMemFree.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTCmdExec.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTEntryPoint.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileClose.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileDelete.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileOpen.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileRead.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileRename.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileSetPos.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileWrite.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTGetEnv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTGetTime.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTGetTsc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTGetTscPerSec.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTMemAlloc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTMemFree.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Clearerr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Fclose.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Feof.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Ferror.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Fflush.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Fgetc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Fgetpos.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Fgets.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Fopen.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Fprintf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Perror.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Fputc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Fputs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Fread.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Freopen.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Fscanf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Fseek.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Fsetpos.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Ftell.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Fwrite.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Getchar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Gets.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Putc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Putchar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Puts.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Remove.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Rename.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Rewind.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Scanf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Setbuf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Setvbuf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Tmpfile.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Ungetc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Vfprintf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Vfscanf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Vscanf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Vsnwprintf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\getenv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_CdeLocateProtocol.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_CdePoolWcs2AppWcs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_CdeGetCurDir.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_CdeSetCurDir.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_CdeGetMapFromDevicePath.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_cdeConvertDevicePathToText.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_CdeLocateHandleBuffer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibConfig\_gSTDOUTMode.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Guids\CDE_DXE_PROTOCOL_GUID.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Guids\EFI_SHELL_PROTOCOL_GUID.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeVMofine.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeCoreSprintf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeXDump.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeCoreClock.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeCoreExit.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeCoreMofine.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\system.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_CdeXDump2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\Vwprintf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibUefiDefault\_dfltGetCdeAppIf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tools\PostBuild.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFIDXE\osifUefiDxeEntryPoint.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFIPEI\osifUefiPeiEntryPoint.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\__cdeIsFilePointer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\errno_h\__cdeOnErrSet_errno.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\errno_h\__cdeOnErrSet_status.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\__cdsGetIOBuffer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_cdeStr2Argcv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\wctomb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\mbtowc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\mblen.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\mbstowcs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\wcstombs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\wctob.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPoint.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\__cdeTianocoreDEBUGDis.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\__cdeTianocoreDEBUGEna.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\__cdeTianocoreDEBUGGet.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\__cdeTianocoreDebugPrintErrolevel2Str.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\__cdeGetPeiServices.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Guids\CDE_SMM_PROTOCOL_GUID.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISMM\osifUefiSmmEntryPoint.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISMM\osifUefiSmmEntryPointEDK.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISMM\osifUefiSmmMemAlloc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISMM\osifUefiSmmMemFree.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\Vfwprintf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Guids\EFI_DEVICE_PATH_PROTOCOL_GUID.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Guids\EFI_DEVICE_PATH_TO_TEXT_PROTOCOL_GUID.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Guids\EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Guids\EFI_STATUS_CODE_RUNTIME_PROTOCOL_GUID.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\io_h\__cdeSplitSearchNameExt2Upcase.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\io_h\__cdeStrMatch.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\io_h\_findclose.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\io_h\_findfirst.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\io_h\_findnext.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\direct_h\_getcwd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\direct_h\_getdcwd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\_WcsDup.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\_StrDup.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileFindAll.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellGetDrvCwd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileFindAll.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTGetDrvCwd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_cdeEfiTime2TimeT.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileGetStatus.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Guids\EFI_FILE_INFO_ID_GUID.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\sys\stat_h\_stat64i32.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileGetStatus.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\Getc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrNLen.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsNLen.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\direct_h\_mkdir.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellDirectoryCreate.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellDirectoryRemove.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTDirectoryCreate.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTDirectoryRemove.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\errno_h\_efierrno.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\_cdeSnscanf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\_StrEfiError.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Tools\PostBuildEvent.bat">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Tools\PreBuildEvent.bat">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Tools\PreBuild.c">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="Tools\PreLinkEvent.bat">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="Library\setjmp_h\longjmp32.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="Library\setjmp_h\setjmp32.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="Library\setjmp_h\longjmp64.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="Library\setjmp_h\setjmp64.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="LibAssist\_CdeGetCurrentPrivilegeLevel32.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="LibAssist\CdeGetCurrentPrivilegeLevel64.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="Intrinsics\__alldiv.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="Intrinsics\__alldvrm.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="Intrinsics\__allmul.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="Intrinsics\__allrem.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="Intrinsics\__allshl.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="Intrinsics\__allshr.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="Intrinsics\__aulldiv.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="Intrinsics\__aulldvrm.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="Intrinsics\__aullrem.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="Intrinsics\__aullshr.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="Intrinsics\__ltod3.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Library\locale_h\__todo.txt" />
+    <Text Include="Library\wctype_h\__todo.txt" />
+  </ItemGroup>
+</Project>
