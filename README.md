@@ -1,8 +1,8 @@
 # torosrc
 
-    [**toro C Library**](https://github.com/KilianKegel/toro-C-Library#toro-c-library-formerly-known-as-torito-c-library)
+[**toro C Library**](https://github.com/KilianKegel/toro-C-Library#toro-c-library-formerly-known-as-torito-c-library)
 
-```c
+```
     Copyright (c) 2017-2021, Kilian Kegel. All rights reserved.
     SPDX-License-Identifier: GNU General Public License v3.0
 ```
