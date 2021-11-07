@@ -102,6 +102,9 @@ extern void* __cdeGetIOBuffer(unsigned i);
 #define CDE_SUCCESS 0
 #define CDE_DEVICE_ERROR 7
 
+#define CDE_WMAIN_LIBDFLT "CDE_WMAIN_LIBDFLT"
+#define CDE_MAIN_LIBDFLT "CDE_MAIN_LIBDFLT"
+
 //
 // Forward declaration for the CDE_SERVICES.
 //

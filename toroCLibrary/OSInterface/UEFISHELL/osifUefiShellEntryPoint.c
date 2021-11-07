@@ -52,7 +52,7 @@ EFI_STATUS EFIAPI _cdeCRT0UefiShell/*for non-EDK build environment*/(IN EFI_HAND
     _cdegST = SystemTable;
     _cdegBS = SystemTable->BootServices;
     _cdegRT = SystemTable->RuntimeServices;
-
+//
     return _MainEntryPointShell(ImageHandle, SystemTable);
 }
 

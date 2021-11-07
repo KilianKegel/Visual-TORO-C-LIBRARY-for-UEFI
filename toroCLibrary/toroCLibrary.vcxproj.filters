@@ -1037,6 +1037,12 @@
     <ClCompile Include="Library\string_h\_StrEfiError.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LibAssist\__cdeWeakMainFunction.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibAssist\__cdeWeakWmainFunction.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Tools\PostBuildEvent.bat">

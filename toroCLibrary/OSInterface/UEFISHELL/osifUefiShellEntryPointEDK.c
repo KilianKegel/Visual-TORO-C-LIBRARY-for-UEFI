@@ -117,6 +117,7 @@ extern int _initterm_e(_PIFV* pfbegin, _PIFV* pfend);
 extern void _initterm(_PVFV* pfbegin, _PVFV* pfend);
 
 extern int main(int argc, char** argv);
+extern int wmain(int argc, wchar_t** argv);
 extern EFI_STATUS EFIAPI OemHookStatusCodeInitialize(void);
 extern void* _CdeLocateProtocol(IN EFI_GUID* Protocol, IN void* Registration OPTIONAL/*,OUT void **Interface*/);
 
@@ -145,7 +146,7 @@ EFI_RUNTIME_SERVICES*   _cdegRT;
 char* gszCdeDriverName;
 EFI_STATUS_CODE_PROTOCOL* pgEfiStatusCodeProtocol;
 CDESYSTEMVOLUMES gCdeSystemVolumes = { -1 };
-static CDEFILE _iob[CDE_FILEV_MAX];                                  /* Microsoft definition. Since it must be buildable within the DDK*/
+static CDEFILE _iob[CDE_FILEV_MAX];                                  /* Microsoft definition. It must be buildable within the DDK*/
 static EFI_GUID _gEfiStatusCodeRuntimeProtocolGuid = { 0xD2B2B828, 0x0826, 0x48A7, { 0xB3, 0xDF, 0x98, 0x3C, 0x00, 0x60, 0x24, 0xF0 } };
 //
 // include the original tianocore/UEFI DriverEntryPoint.c
@@ -524,7 +525,39 @@ _MainEntryPointShell(
             if (0 == __cdeGetCurrentPrivilegeLevel())        // running in RING0
                 _enable();
 
-            Status = setjmp(CdeAppIfShell.exit_buf) ? CdeAppIfShell.exit_status : main(argc, (char**)&argvex[0 + 2]);
+            if (1)// wmain() support
+            {
+                int fAppMain = strcmp((void*)main, CDE_MAIN_LIBDFLT);                   // check, if "main"  is present in application .OBJ
+                int fAppWmain = strcmp((void*)wmain, CDE_WMAIN_LIBDFLT);                // check, if "Wmain" is present in application .OBJ
+                //printf("fAppMain %d\nfAppWmain %d\n", fAppMain, fAppWmain);
+
+                if (0 == fAppMain && 0 == fAppWmain)
+                {
+                    fprintf(stderr, "\"main()\" not present\n");
+                    abort();
+                }
+                else
+                {
+                    int (*pxmain)(int argc, void** argv) = (int (*)(int, void**))main;  // pointer to main()
+
+                    if (0 == fAppMain && 1 == fAppWmain)
+                    {
+                        pxmain = (int (*)(int, void**))wmain;                           // pointer to wmain()
+                        for (i = 0; i < argc; i++)                                      // convert all argv to wchar_t*
+                        {
+                            size_t strsize = sizeof((char)'\0') + strlen(argvex[2 + i]);// argv[i] narrow string size
+                            wchar_t* pwcs = malloc(sizeof(wchar_t) * strsize);          // allocate buffer for corresponding wide string
+
+                            mbstowcs(pwcs, argvex[2 + i], INT_MAX);                     // convert str to wcs
+                            argvex[2 + i] = (void*)pwcs;                                // overwrite argv pointer
+                        }
+                    }
+                    //
+                    // invoke "main()"
+                    //
+                    Status = setjmp(CdeAppIfShell.exit_buf) ? CdeAppIfShell.exit_status : (*pxmain)(argc, (char**)&argvex[0 + 2]);
+                }
+            }
 
             if (0 == __cdeGetCurrentPrivilegeLevel())        // running in RING0
                 if (0 == (0x200 & eflags))          // restore IF interrupt flag

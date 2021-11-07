@@ -8,6 +8,10 @@
 ```
 
 ## Revision history
+### 20211107
+* add `wmain()` support
+    ATTENTION: The presence of `main()` is not detected at build time anymore, but at runtime.
+
 ### 20211105
 * initial release of the **toro C Library** source code
     * this is 4 years after providing **Torito C Library** in binary format: <br> https://github.com/KilianKegel/toro-C-Library#20171105r78

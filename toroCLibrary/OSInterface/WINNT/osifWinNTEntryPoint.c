@@ -34,7 +34,7 @@ Author:
 
 const char _1 = 1;
 const char _0 = 0;
-static CDEFILE _iob[CDE_FILEV_MAX];                                  /* Microsoft definition. Since it must be buildable within the DDK*/
+static CDEFILE _iob[CDE_FILEV_MAX];                                  /* Microsoft definition. It must be buildable within the DDK*/
 char* gszCdeDriverName;
 
 //
@@ -101,6 +101,7 @@ extern DIAGTRACE        _cdeVMofine;
 extern DIAGXDUMP        _cdeXDump;
 
 extern int main(int argc, char** argv);
+extern int wmain(int argc, wchar_t** argv);
 extern int _cdeStr2Argcv(char** argv, char* szCmdline);
 
 typedef int(__cdecl* _PIFV)(void);
@@ -362,10 +363,40 @@ int _MainEntryPointWinNT(void)
                         break;
                 }
             }
-            //
-            // invoke "main()"
-            //
-            Status = setjmp(pCdeAppIf->exit_buf) ? pCdeAppIf->exit_status : main(argc, (char**)&argvex[2]);
+
+            if (1)// wmain() support
+            {
+                int fAppMain  = strcmp((void*)main, CDE_MAIN_LIBDFLT);      // check, if "main"  is present in application .OBJ
+                int fAppWmain = strcmp((void*)wmain, CDE_WMAIN_LIBDFLT);    // check, if "Wmain" is present in application .OBJ
+                //printf("fAppMain %d\nfAppWmain %d\n", fAppMain, fAppWmain);
+
+                if (0 == fAppMain && 0 == fAppWmain)
+                {
+                    fprintf(stderr, "\"main()\" not present\n");
+                    abort();
+                }
+                else
+                {
+                    int (*pxmain)(int argc, void** argv) = (int (*)(int, void**))main;  // pointer to main()
+
+                    if (0 == fAppMain && 1 == fAppWmain)
+                    {
+                        pxmain = (int (*)(int, void**))wmain;                           // pointer to wmain()
+                        for (i = 0; i < argc; i++)                                      // convert all argv to wchar_t*
+                        {
+                            size_t strsize = sizeof((char)'\0') + strlen(argvex[2 + i]);// argv[i] narrow string size
+                            wchar_t* pwcs = malloc(sizeof(wchar_t) * strsize);          // allocate buffer for corresponding wide string
+
+                            mbstowcs(pwcs, argvex[2 + i], INT_MAX);                     // convert str to wcs
+                            argvex[2 + i] = (void*)pwcs;                                // overwrite argv pointer
+                        }
+                    }
+                    //
+                    // invoke "main()"
+                    //
+                    Status = setjmp(pCdeAppIf->exit_buf) ? pCdeAppIf->exit_status : (*pxmain)(argc, (char**)&argvex[0 + 2]);
+                }
+            }
 
             //
             // run the "atexit" registered functions (N1124 chap. 7.20.4.2)
