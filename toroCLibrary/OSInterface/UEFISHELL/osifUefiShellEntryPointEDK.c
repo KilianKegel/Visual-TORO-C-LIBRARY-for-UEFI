@@ -601,6 +601,12 @@ _MainEntryPointShell(
                     pHeap = pHeap->pSucc;
                 } while (pHeap);
             }//if(1)
+            
+            if (    (0 == (O_CDEREDIR & CDE_STDOUT->openmode))
+                &&  (0 == (O_CDEREDIR & CDE_STDERR->openmode)))
+            {
+                SystemTable->ConOut->OutputString(SystemTable->ConOut, L"\r\n");
+            }
 
         } while (0);
 

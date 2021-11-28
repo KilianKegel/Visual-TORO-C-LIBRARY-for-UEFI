@@ -8,6 +8,10 @@
 ```
 
 ## Revision history
+### 20211128
+* fixed: UEFI Shell overwrites the last line of text of a previously terminated application with its prompt
+* add: fgetws()
+
 ### 20211107
 * add `wmain()` support
     ATTENTION: The presence of `main()` is not detected at build time anymore, but at runtime.

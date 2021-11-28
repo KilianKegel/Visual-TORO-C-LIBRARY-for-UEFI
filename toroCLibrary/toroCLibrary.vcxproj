@@ -242,6 +242,7 @@
     <ClCompile Include="Library\time_h\_cdeGmltime.c" />
     <ClCompile Include="Library\time_h\_cdeGreg2Day.c" />
     <ClCompile Include="Library\time_h\_cdeCalendarStrings.c" />
+    <ClCompile Include="Library\wchar_h\Fgetws.c" />
     <ClCompile Include="Library\wchar_h\Swprintf.c" />
     <ClCompile Include="Library\wchar_h\Vfwprintf.c" />
     <ClCompile Include="Library\wchar_h\Vswprintf.c" />

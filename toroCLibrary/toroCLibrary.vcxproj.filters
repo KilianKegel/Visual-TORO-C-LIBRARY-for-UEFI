@@ -1043,6 +1043,9 @@
     <ClCompile Include="LibAssist\__cdeWeakWmainFunction.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Library\wchar_h\Fgetws.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Tools\PostBuildEvent.bat">
