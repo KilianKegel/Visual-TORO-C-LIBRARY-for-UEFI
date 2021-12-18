@@ -21,6 +21,8 @@ Author:
 --*/
 #ifndef _CDE_H_
 #define _CDE_H_
+#include <stdio.h>
+#include <stdlib.h>
 #include <stddef.h>
 #include <assert.h>
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -146,12 +148,11 @@ typedef union _XDUMPPARM {
 //
 extern char* gEfiCallerBaseName;
 extern void* __cdeGetAppIf(void);
-extern int _CdeTraceNumCharsTransmitted;
 //
 // ANSI C Library related extentions 
 //
 #define __CDEC_HOSTED__ (((void *)0)/*NULL*/ != __cdeGetAppIf())	// replacement for __STDC_HOSTED__ 
-extern char* strefierror(size_t errcode);           // strerror() replacement for UEFI. Convert EFI_STATUS to string
+extern char* _strefierror(size_t errcode);           // strerror() replacement for UEFI. Convert EFI_STATUS to string
 
 //
 // CDE related library diagnostic extentions 
@@ -185,6 +186,9 @@ extern int _CdeXDump(XDUMPPARM ctrl, unsigned elmcount, unsigned long long start
 #   define MOFINE_CONFIG    MOFINE_STATUSCODE /* | MOFINE_NDRIVER | MOFINE_NFILE | MOFINE_NLINE | MOFINE_NFUNCTION | MOFINE_NCLOCK | MOFINE_NSTDOUT | MOFINE_NCLASS | MOFINE_RAWFORMAT */
 #endif//MOFINE_CONFIG
 
+/////////////////////////////////////////////////////////////////////////////
+// NOTE: CDEMOFINE() is DEPRICATED
+/////////////////////////////////////////////////////////////////////////////
 //
 // MOFINE trace conficuration macro
 //
@@ -225,17 +229,71 @@ extern int _CdeXDump(XDUMPPARM ctrl, unsigned elmcount, unsigned long long start
 
 #endif//ndef NMOFINE
 
+/////////////////////////////////////////////////////////////////////////////
+// NOTE: CDETRACE() is THE SUCCESSOR OF CDEMOFINE
+/////////////////////////////////////////////////////////////////////////////
 #define CDEPOSTCODE(c,v)	if(c)outp(0x80,v)
 #define CDEDEADLOOP(c,v)	if(c){volatile int abcxyz = v;while(v == abcxyz);}
 #define CDEDEBUGBREAK(c,v)	if(c){volatile int abcxyz = v;while(v == abcxyz)__debugbreak();}
-#define CDEDBGMAGIC         0xCDEDB600                  // backdoor file pointer like stdin, stdout, stderr
-#define CDEDBGMAGICMASK     0xFFFFFF00                  // backdoor file pointer like stdin, stdout, stderr
-#define CDEDBG(x)           (void*)(CDEDBGMAGIC | x)    // backdoor file pointer like stdin, stdout, stderr
+#define CDEDBGMAGIC         ((size_t)0xCDEDB600)    // backdoor CDEDBG file pointer like stdin, stdout, stderr
+#define CDEDBGMAGICMASK     0xFFFFFF00              // backdoor CDEDBG file pointer like stdin, stdout, stderr
+#define CDEDBG(x)           (CDEDBGMAGIC | x)       // backdoor CDEDBG file pointer like stdin, stdout, stderr
 #   define CDEDBG_EN        1
 #   define CDEDBG_EFIFMT    2
 
-#define CDETRACE(cond,msg)  _CdeTraceNumCharsTransmitted  = fprintf((void*)(CDEDBGMAGIC | cond),"%s`%s(%d)`%s()`%s> ",gEfiCallerBaseName,__FILE__,__LINE__,__FUNCTION__,"INFO"),\
-                            _CdeTraceNumCharsTransmitted += fprintf((void*)(CDEDBGMAGIC | cond),msg)
+#define TRCBAR(cond)/*  bare trace          */ (void*)(CDEDBG((0 << 2) | (0 != (cond)))),
+#define TRCINF(cond)/*  INFO                */ (void*)(CDEDBG((1 << 2) | (0 != (cond)))),
+#define TRCSUC(cond)/*  SUCCESS             */ (void*)(CDEDBG((2 << 2) | (0 != (cond)))),
+#define TRCWAR(cond)/*  WARNING             */ (void*)(CDEDBG((3 << 2) | (0 != (cond)))),
+#define TRCERR(cond)/*  ERROR               */ (void*)(CDEDBG((4 << 2) | (0 != (cond)))),
+#define TRCFAT(cond)/*  FATAL               */ (void*)(CDEDBG((5 << 2) | /*MOFINE_EXITONCOND | */(0 != (cond)))),
+#define TRCASS(cond)/*  ASSERT              */ (void*)(CDEDBG((6 << 2) | /*MOFINE_DEADONCOND | */(0 != (cond)))),
+#define TRCMSK      /*  trace ID bit mask   */ (7 << 2)
+
+extern void exit(int);
+static void __cdeFatAss(int val)
+{
+    if ((5 << 2) == (TRCMSK & val))         // FATAL -> exit
+        exit(3);
+
+    if ((6 << 2) == (TRCMSK & val))         // ASSERT -> DEADLOOP
+    {
+        volatile int x = 0xCDE0DEAD;
+        while (0xCDE0DEAD == x)
+            ;
+    }
+}
+
+static size_t __cdeGetDbgSig(void* p, const char* str, ...)
+{
+    return (size_t)p;
+}
+
+static char* __cdeGetLevelString(size_t dbgsig)
+{
+    return  ((0 << 2) == (TRCMSK & dbgsig)) ? "" : \
+            ((1 << 2) == (TRCMSK & dbgsig)) ? "INFO" : \
+            ((2 << 2) == (TRCMSK & dbgsig)) ? "SUCCESS" : \
+            ((3 << 2) == (TRCMSK & dbgsig)) ? "WARNING" : \
+            ((4 << 2) == (TRCMSK & dbgsig)) ? "ERROR" : \
+            ((5 << 2) == (TRCMSK & dbgsig)) ? "FATAL" : \
+            ((6 << 2) == (TRCMSK & dbgsig)) ? "ASSERT" : "UNKNOWN";
+}
+
+#define CDETRACE(dbgsig_msg)  \
+do{\
+    size_t dbgsig = __cdeGetDbgSig dbgsig_msg;\
+    if(!(dbgsig & CDEDBG_EN))\
+        break;\
+    if((TRCMSK & dbgsig)){\
+        fprintf((void*)dbgsig,"%s`%s(%d)`%s()`%s> ",\
+            gEfiCallerBaseName,__FILE__,__LINE__,__FUNCTION__,__cdeGetLevelString(dbgsig)),\
+        fprintf dbgsig_msg,\
+        __cdeFatAss(TRCMSK & dbgsig);\
+    }\
+        else\
+            fprintf dbgsig_msg;\
+}while(0)
 
 //
 // CDE GUID definitions

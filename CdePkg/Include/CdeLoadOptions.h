@@ -1,24 +1,13 @@
-/*++
+/*!
+@copyright
+    Copyright (c) 2020, Kilian Kegel. All rights reserved.<BR>
+    SPDX-License-Identifier: BSD-2-Clause-Patent
 
-    toro C Library
-    https://github.com/KilianKegel/toro-C-Library#toro-c-library-formerly-known-as-torito-c-library
-
-    Copyright (c) 2017-2021, Kilian Kegel. All rights reserved.
-    SPDX-License-Identifier: GNU General Public License v3.0
-
-Module Name:
-
-    CdeLoadOptions.h
-
-Abstract:
-
-    command line parameters for UEFI POST driver
-
-Author:
-
-    Kilian Kegel
-
---*/
+    @file
+    CdeLoadOptionsDxe.h
+@brief this file provides the FILE_GUID to command line / Filename + LoadOptions mapping
+@todo
+*/
     {/*rejectStart*/ 0,/*FILE_GUID, EfiCallerIdGuid*/{ 0xCDE000FF, 0x4C0B, 0x4994, { 0xA2, 0x9E, 0x09, 0xD8, 0xA3, 0xCB, 0xF7, 0xE2 }},"templatePEI" },
     {/*rejectStart*/ 0,/*FILE_GUID, EfiCallerIdGuid*/{ 0xCDE000FF, 0x669C, 0x4A4D, { 0x9E, 0xB8, 0x05, 0x03, 0x48, 0xA3, 0xA5, 0xDE }},"templateDXE" },
     {/*rejectStart*/ 0,/*FILE_GUID, EfiCallerIdGuid*/{ 0xCDE000FF, 0xB3EB, 0x44D3, { 0xB4, 0x5C, 0xA4, 0xE8, 0x8E, 0x43, 0xA2, 0X37 }},"argcvPRE abc \"d e f g\" \\\"1 23" },
@@ -57,6 +46,17 @@ Author:
     {/*rejectStart*/ 0,/*FILE_GUID, EfiCallerIdGuid*/{ 0xCDE000FF, 0x4A99, 0x4854, { 0x81, 0xFC, 0x4D, 0x83, 0x55, 0x74, 0xB8, 0x21 }},"localehfunctionsPRE" },
     {/*rejectStart*/ 0,/*FILE_GUID, EfiCallerIdGuid*/{ 0xCDE000FF, 0x4A99, 0x4854, { 0x81, 0xFC, 0x4D, 0x83, 0x55, 0x74, 0xB8, 0x20 }},"localehfunctionsPei" },
     {/*rejectStart*/ 0,/*FILE_GUID, EfiCallerIdGuid*/{ 0xCDE000FF, 0xC3BD, 0x4A86, { 0xBA, 0x12, 0x8B, 0x05, 0x5A, 0xE1, 0x9D, 0x4B }},"localehfunctionsDxe" },
+
+    //
+    // RedfishPkg
+    //
+    {/*rejectStart*/ 0,/*FILE_GUID, EfiCallerIdGuid*/{ 0x83FAAFBF, 0xFC4B, 0x469F, {0x89, 0x2A, 0x79, 0x8E, 0x66, 0xA6, 0xF5, 0x0A}},"RestJsonStructureDxe 1 22 333 /DEBUGBREAK /count 256 "},
+    {/*rejectStart*/ 0,/*FILE_GUID, EfiCallerIdGuid*/{ 0xB64702DA, 0xE6B5, 0x43c8, {0x8C, 0xE8, 0xD2, 0x53, 0x07, 0x1E, 0x9D, 0x6C}},"RedfishRestExDxe a bb ccc" },
+    {/*rejectStart*/ 0,/*FILE_GUID, EfiCallerIdGuid*/{ 0x592626DA, 0x4A1E, 0x8B39, {0x28, 0xBA, 0xFE, 0xAD, 0x92, 0xC4, 0xA0, 0xA4}},"RedfishHostInterfaceDxe A BB CCC" },
+    {/*rejectStart*/ 0,/*FILE_GUID, EfiCallerIdGuid*/{ 0x28A76FE5, 0x43D7, 0x48A3, {0x97, 0x14, 0xC1, 0xB7, 0xBD, 0xD6, 0xDF, 0xB6}},"RedfishDiscoverDxe $ %% &&&" },
+    {/*rejectStart*/ 0,/*FILE_GUID, EfiCallerIdGuid*/{ 0x458CE95A, 0x4942, 0x09A9, {0x5D, 0x21, 0xA6, 0xB1, 0x6D, 0x5D, 0xAD, 0x7F}},"RedfishCredentialDxe /switch1 /switch2 /switch3" },
+    {/*rejectStart*/ 0,/*FILE_GUID, EfiCallerIdGuid*/{ 0x6e881000, 0x5749, 0x11e8, {0x9b, 0xf0, 0x8c, 0xdc, 0xd4, 0x26, 0xc9, 0x73}},"RedfishConfigHandlerDriver  -1 /2 3" },
+
 
     {/*rejectStart*/ 0,/*FILE_GUID, EfiCallerIdGuid*/{ 0xCDE00007, 0x0000, 0x0000, { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }},"UnknownDriver" },
         /* add more drivername/commandline pairs here...*/

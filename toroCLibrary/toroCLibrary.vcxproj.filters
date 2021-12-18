@@ -1046,6 +1046,18 @@
     <ClCompile Include="Library\wchar_h\Fgetws.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LibAssist\__cdeTraceNumCharsTransmitted.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPointEDKW.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPointW.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTEntryPointW.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Tools\PostBuildEvent.bat">

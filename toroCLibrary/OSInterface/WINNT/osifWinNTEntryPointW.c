@@ -100,7 +100,7 @@ extern OSIFGETDCWD      _osifWinNTGetDrvCwd;         /*pGetDrvCwd    current wor
 extern DIAGTRACE        _cdeVMofine;
 extern DIAGXDUMP        _cdeXDump;
 
-extern int main(int argc, char** argv);
+extern int wmain(int argc, wchar_t** argv);
 extern int _cdeStr2Argcv(char** argv, char* szCmdline);
 
 typedef int(__cdecl* _PIFV)(void);
@@ -362,10 +362,19 @@ int _MainEntryPointWinNT(void)
                         break;
                 }
             }
+
             //
-            // invoke "main()"
+            // conform all narrow argv to wide strings
             //
-            Status = setjmp(pCdeAppIf->exit_buf) ? pCdeAppIf->exit_status : main(argc, (char**)&argvex[2]);
+            for (i = 0; i < argc; i++)                                      // convert all argv to wchar_t*
+            {                                                               //
+                size_t strsize = sizeof((char)'\0') + strlen(argvex[2 + i]);// argv[i] narrow string size
+                wchar_t* pwcs = malloc(sizeof(wchar_t) * strsize);          // allocate buffer for corresponding wide string
+                                                                            //
+                mbstowcs(pwcs, argvex[2 + i], INT_MAX);                     // convert str to wcs
+                argvex[2 + i] = (void*)pwcs;                                // overwrite argv pointer
+            }
+            Status = setjmp(pCdeAppIf->exit_buf) ? pCdeAppIf->exit_status : wmain(argc, (wchar_t**)&argvex[0 + 2]);
 
             //
             // run the "atexit" registered functions (N1124 chap. 7.20.4.2)
@@ -412,7 +421,7 @@ Description
 Returns
     Status
 **/
-int _cdeCRT0WinNT(void)
+int _cdeCRT0WinNTW(void)
 {
     return _MainEntryPointWinNT();
 }

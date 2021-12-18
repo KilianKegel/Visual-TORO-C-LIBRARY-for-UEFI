@@ -340,6 +340,8 @@
       <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </AssemblerOutput>
     </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPointEDKW.c" />
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPointW.c" />
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileClose.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
@@ -381,6 +383,7 @@
     <ClCompile Include="OSInterface\WINNT\osifWinNTDirectoryCreate.c" />
     <ClCompile Include="OSInterface\WINNT\osifWinNTDirectoryRemove.c" />
     <ClCompile Include="OSInterface\WINNT\osifWinNTEntryPoint.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTEntryPointW.c" />
     <ClCompile Include="OSInterface\WINNT\osifWinNTFileClose.c" />
     <ClCompile Include="OSInterface\WINNT\osifWinNTFileDelete.c" />
     <ClCompile Include="OSInterface\WINNT\osifWinNTFileFindAll.c" />
@@ -588,8 +591,7 @@
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalOptions>
-      </AdditionalOptions>
+      <AdditionalOptions>/wd4273 /wd4820 /wd4711</AdditionalOptions>
       <AssemblerListingLocation>
       </AssemblerListingLocation>
       <ProgramDataBaseFileName>$(IntDir)32\$(ProjectName).pdb</ProgramDataBaseFileName>

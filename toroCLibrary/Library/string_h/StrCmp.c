@@ -46,7 +46,6 @@ Returns
 **/
 int strcmp(const char* pszDst, const char* pszSrc) {
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
-
     return pCdeAppIf->pCdeServices->pMemStrxCmp(&ROMPARM, pszDst, pszSrc, (size_t)-1);
 
 }

@@ -116,7 +116,7 @@ extern _PVFV* __xt_z; // C terminators (last)
 extern int _initterm_e(_PIFV* pfbegin, _PIFV* pfend);
 extern void _initterm(_PVFV* pfbegin, _PVFV* pfend);
 
-extern int main(int argc, char** argv);
+extern int wmain(int argc, wchar_t** argv);
 extern EFI_STATUS EFIAPI OemHookStatusCodeInitialize(void);
 extern void* _CdeLocateProtocol(IN EFI_GUID* Protocol, IN void* Registration OPTIONAL/*,OUT void **Interface*/);
 
@@ -176,12 +176,12 @@ Description
     @retval EFI_STATUS
 
 **/
-EFI_STATUS EFIAPI _cdeCRT0UefiShellEDK(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
+EFI_STATUS EFIAPI _cdeCRT0UefiShellEDKW(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
 {
     return _ModuleEntryPoint(ImageHandle, SystemTable);
 }
 
-EFI_STATUS EFIAPI _cdeCRT0UefiShellEDKINT3(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
+EFI_STATUS EFIAPI _cdeCRT0UefiShellEDKWINT3(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
 {
     __debugbreak();
     return _ModuleEntryPoint(ImageHandle, SystemTable);
@@ -269,7 +269,7 @@ static CDE_SERVICES gCdeServicesShell = {/*CDE_PROTOCOL*/
         .pXDump = _cdeXDump,
 };
 
-CDE_APP_IF CdeAppIfShell = {
+CDE_APP_IF CdeAppIfShellW = {
 
     .nErrno = 0,
     .nEfiErrno = 0,
@@ -301,7 +301,7 @@ void __CdeChkCtrlC(void) {
 
 void* __cdeGetAppIf(void) {
     __CdeChkCtrlC();
-    return &CdeAppIfShell;
+    return &CdeAppIfShellW;
 }
 
 /**
@@ -317,7 +317,7 @@ void* __cdeGetAppIf(void) {
 **/
 EFI_STATUS
 EFIAPI
-_MainEntryPointShell(
+_MainEntryPointShellW(
     IN EFI_HANDLE        ImageHandle,
     IN EFI_SYSTEM_TABLE* SystemTable
 )
@@ -354,8 +354,8 @@ _MainEntryPointShell(
             argvex[0] = (void*)ImageHandle;
             argvex[1] = (void*)SystemTable;//ADD SUPPORT FOR argv[-1] argv[-2]
 
-            CdeAppIfShell.DriverParm.BsDriverParm.ImageHandle = ImageHandle;
-            CdeAppIfShell.DriverParm.BsDriverParm.pSystemTable = SystemTable;
+            CdeAppIfShellW.DriverParm.BsDriverParm.ImageHandle = ImageHandle;
+            CdeAppIfShellW.DriverParm.BsDriverParm.pSystemTable = SystemTable;
 
             //
             // get the ReportStatusCodeProtocol
@@ -441,13 +441,13 @@ _MainEntryPointShell(
             //
             // clock() initialization
             //
-            CdeAppIfShell.pCdeServices->TSClocksAtSystemStart = gCdeServicesShell.pGetTsc(&CdeAppIfShell);
+            CdeAppIfShellW.pCdeServices->TSClocksAtSystemStart = gCdeServicesShell.pGetTsc(&CdeAppIfShellW);
             if (0 == __cdeGetCurrentPrivilegeLevel()) {                                      // running in RING0
-                CdeAppIfShell.pCdeServices->TSClocksPerSec = gCdeServicesShell.pGetTscPerSec(&CdeAppIfShell);
-                CdeAppIfShell.pCdeServices->TimeAtSystemStart = gCdeServicesShell.pGetTime(&CdeAppIfShell);
+                CdeAppIfShellW.pCdeServices->TSClocksPerSec = gCdeServicesShell.pGetTscPerSec(&CdeAppIfShellW);
+                CdeAppIfShellW.pCdeServices->TimeAtSystemStart = gCdeServicesShell.pGetTime(&CdeAppIfShellW);
             }
             //todo check STATUS
-            //Status = SystemTable->BootServices->LocateProtocol(&_gCdeDxeProtocolGuid,NULL,&CdeAppIfShell.pCdeServices);
+            //Status = SystemTable->BootServices->LocateProtocol(&_gCdeDxeProtocolGuid,NULL,&CdeAppIfShellW.pCdeServices);
 
             pwcsCmdLine = pLoadedImageProtocol->LoadOptions;
 
@@ -465,7 +465,7 @@ _MainEntryPointShell(
 
             gszCdeDriverName = argvex[0 + 2];
 
-            memset((void*)&CdeAppIfShell.rgcbAtexit[0], (int)0, sizeof(CdeAppIfShell.rgcbAtexit));
+            memset((void*)&CdeAppIfShellW.rgcbAtexit[0], (int)0, sizeof(CdeAppIfShellW.rgcbAtexit));
             
             if (1)
             {
@@ -524,7 +524,18 @@ _MainEntryPointShell(
             if (0 == __cdeGetCurrentPrivilegeLevel())        // running in RING0
                 _enable();
 
-            Status = setjmp(CdeAppIfShell.exit_buf) ? CdeAppIfShell.exit_status : main(argc, (char**)&argvex[0 + 2]);
+            //
+            // conform all narrow argv to wide strings
+            //
+            for (i = 0; i < argc; i++)                                      // convert all argv to wchar_t*
+            {                                                               //
+                size_t strsize = sizeof((char)'\0') + strlen(argvex[2 + i]);// argv[i] narrow string size
+                wchar_t* pwcs = malloc(sizeof(wchar_t) * strsize);          // allocate buffer for corresponding wide string
+                                                                            //
+                mbstowcs(pwcs, argvex[2 + i], INT_MAX);                     // convert str to wcs
+                argvex[2 + i] = (void*)pwcs;                                // overwrite argv pointer
+            }
+            Status = setjmp(CdeAppIfShellW.exit_buf) ? CdeAppIfShellW.exit_status : wmain(argc, (wchar_t**) & argvex[0 + 2]);
 
             if (0 == __cdeGetCurrentPrivilegeLevel())        // running in RING0
                 if (0 == (0x200 & eflags))          // restore IF interrupt flag
@@ -533,8 +544,8 @@ _MainEntryPointShell(
             CDEPOSTCODE(IS64BITCODE, 0xC9);
 
             for (i = CDE_ATEXIT_REGISTRATION_NUM - 1; i >= 0; i--) {
-                if (NULL != CdeAppIfShell.rgcbAtexit[i]) {
-                    (*CdeAppIfShell.rgcbAtexit[i])();
+                if (NULL != CdeAppIfShellW.rgcbAtexit[i]) {
+                    (*CdeAppIfShellW.rgcbAtexit[i])();
                 }
             }
 
@@ -543,7 +554,7 @@ _MainEntryPointShell(
             //    outp(0x42,0x7);
             //    outp(0x42,0x7);
             //    outp(0x61,0x7);
-            //    CdeAppIfShell.pCdeServices->pVwxPrintf(&CdeAppIfShell,&RomParmVWXPRINTF,&encstrings[IEVLUATION],CdeAppIfShell.pCdeServices->pPutConOut,&CdeAppIfShell,(unsigned)-1,NULL);
+            //    CdeAppIfShellW.pCdeServices->pVwxPrintf(&CdeAppIfShellW,&RomParmVWXPRINTF,&encstrings[IEVLUATION],CdeAppIfShellW.pCdeServices->pPutConOut,&CdeAppIfShellW,(unsigned)-1,NULL);
             //    outp(0x61,0x0);
             //}
 
@@ -559,11 +570,11 @@ _MainEntryPointShell(
             // free memory allocated during runtime
             //
             if (CDE_FREE_MEMORY_ALLOCATION_ON_EXIT) {
-                HEAPDESC* pHeap = &CdeAppIfShell.pCdeServices->HeapStart;
+                HEAPDESC* pHeap = &CdeAppIfShellW.pCdeServices->HeapStart;
                 do {
                     if (pHeap->qwMagic == ALLOCMEM) {
                         free(&pHeap[1]);
-                        pHeap = &CdeAppIfShell.pCdeServices->HeapStart;
+                        pHeap = &CdeAppIfShellW.pCdeServices->HeapStart;
                     }
                     pHeap = pHeap->pSucc;
                 } while (pHeap);
