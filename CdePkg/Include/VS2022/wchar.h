@@ -1,10 +1,10 @@
 /*++
 
-    toro C Library
-    https://github.com/KilianKegel/toro-C-Library#toro-c-library-formerly-known-as-torito-c-library
+    CdePkg for UEFI
+    https://github.com/KilianKegel/CdePkg
 
     Copyright (c) 2017-2021, Kilian Kegel. All rights reserved.
-    SPDX-License-Identifier: GNU General Public License v3.0
+    SPDX-License-Identifier: BSD-2-Clause-Patent
 
 Module Name:
 
@@ -12,7 +12,8 @@ Module Name:
 
 Abstract:
 
-    WCHAR.H for toro C Library
+    Implementation of the Standard C header file for the Microsoft C Compiler VS2022
+    http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=360
 
 Author:
 
@@ -24,7 +25,7 @@ Author:
 #include <stddef.h>
 #include <stdarg.h>
 
-//#pragma warning( disable : 4996 4311 4312 4101)
+typedef unsigned short wint_t;
 
 typedef struct _Mbstatet
 { // state of a multibyte translation
@@ -52,7 +53,7 @@ int wprintf( const wchar_t * format, ... );
 //not yet implemented int wscanf( const wchar_t * format, ... );
 int swprintf( wchar_t * s, size_t n, const wchar_t * format, ... );
 //not yet implemented int swscanf( const wchar_t * s, const wchar_t * format, ... );
-//not yet implemented int vfwprintf( FILE * stream, const wchar_t * format, va_list arg );
+int vfwprintf( FILE * stream, const wchar_t * format, va_list arg );
 //not yet implemented int vwprintf( const wchar_t * format, va_list arg );
 int vswprintf( wchar_t * s, size_t n, const wchar_t * format, va_list arg );
 //not yet implemented wint_t fgetwc( FILE *stream );
@@ -91,7 +92,7 @@ wchar_t *wmemmove( wchar_t *s1, const wchar_t *s2, size_t n );
 wchar_t *wmemset( wchar_t *s, wchar_t c, size_t n );
 //not yet implemented size_t wcsftime( wchar_t * s, size_t maxsize, const wchar_t * format, const struct tm * timeptr );
 //not yet implemented wint_t btowc( int c );
-//not yet implemented int wctob( wint_t c );
+int wctob( wint_t c );
 //not yet implemented int mbsinit( const mbstate_t *ps );
 //not yet implemented size_t mbrlen( const char * s, size_t n, mbstate_t * ps );
 //not yet implemented size_t mbrtowc( wchar_t * pwc, const char * s, size_t n, mbstate_t * ps );

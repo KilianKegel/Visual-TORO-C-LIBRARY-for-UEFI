@@ -1037,16 +1037,7 @@
     <ClCompile Include="Library\string_h\_StrEfiError.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LibAssist\__cdeWeakMainFunction.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LibAssist\__cdeWeakWmainFunction.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Library\wchar_h\Fgetws.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LibAssist\__cdeTraceNumCharsTransmitted.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPointEDKW.c">

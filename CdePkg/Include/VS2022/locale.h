@@ -1,18 +1,19 @@
 /*++
 
-    toro C Library
-    https://github.com/KilianKegel/toro-C-Library#toro-c-library-formerly-known-as-torito-c-library
+    CdePkg for UEFI
+    https://github.com/KilianKegel/CdePkg
 
     Copyright (c) 2017-2021, Kilian Kegel. All rights reserved.
-    SPDX-License-Identifier: GNU General Public License v3.0
+    SPDX-License-Identifier: BSD-2-Clause-Patent
 
 Module Name:
 
-    LOCALE.h
+    locale.h
 
 Abstract:
 
-    LOCALE.H for toro C Library
+    Implementation of the Standard C header file for the Microsoft C Compiler VS2022
+    http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=216
 
 Author:
 
@@ -54,14 +55,14 @@ struct lconv {
 	char     n_sep_by_space;
 	char     p_sign_posn;
 	char     n_sign_posn;
-	wchar_t* _W_decimal_point;          // Microsoft specific extention
-	wchar_t* _W_thousands_sep;          // Microsoft specific extention
-	wchar_t* _W_int_curr_symbol;        // Microsoft specific extention
-	wchar_t* _W_currency_symbol;        // Microsoft specific extention
-	wchar_t* _W_mon_decimal_point;      // Microsoft specific extention
-	wchar_t* _W_mon_thousands_sep;      // Microsoft specific extention
-	wchar_t* _W_positive_sign;          // Microsoft specific extention
-	wchar_t* _W_negative_sign;          // Microsoft specific extention
+	wchar_t* _W_decimal_point;
+	wchar_t* _W_thousands_sep;
+	wchar_t* _W_int_curr_symbol;
+	wchar_t* _W_currency_symbol;
+	wchar_t* _W_mon_decimal_point;
+	wchar_t* _W_mon_thousands_sep;
+	wchar_t* _W_positive_sign;
+	wchar_t* _W_negative_sign;
 };
 
 struct lconv* localeconv( void );

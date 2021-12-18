@@ -42,7 +42,6 @@
     <ClCompile Include="Intrinsics\__chkstk.c" />
     <ClCompile Include="Intrinsics\__iob_func.c" />
     <ClCompile Include="Intrinsics\__use_fma3_lib.c" />
-    <ClCompile Include="LibAssist\__cdeWeakMainFunction.c" />
     <ClCompile Include="LibAssist\_cdeConvertDevicePathToText.c" />
     <ClCompile Include="LibAssist\_CdeDbgCOMInit.c" />
     <ClCompile Include="LibAssist\_CdeDbgCOMReady2Send.c" />
@@ -72,7 +71,6 @@
     <ClCompile Include="LibAssist\__cdeTianocoreDEBUGEna.c" />
     <ClCompile Include="LibAssist\__cdeTianocoreDEBUGGet.c" />
     <ClCompile Include="LibAssist\__cdeTianocoreDebugPrintErrolevel2Str.c" />
-    <ClCompile Include="LibAssist\__cdeWeakWmainFunction.c" />
     <ClCompile Include="LibConfig\_gCdeCfgCmdLnParmPoolMemRetain.c" />
     <ClCompile Include="LibConfig\_gCdeCfgCmdLnParmReportStatusCodeSTDOUT.c" />
     <ClCompile Include="LibConfig\_gCdeCfgMofineRawSeparator.c" />

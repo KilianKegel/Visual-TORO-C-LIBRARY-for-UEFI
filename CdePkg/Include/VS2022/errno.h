@@ -1,15 +1,25 @@
-/*!
-@copyright
-    Copyright (c) 2020, Kilian Kegel. All rights reserved.<BR>
+/*++
+
+    CdePkg for UEFI
+    https://github.com/KilianKegel/CdePkg
+
+    Copyright (c) 2017-2021, Kilian Kegel. All rights reserved.
     SPDX-License-Identifier: BSD-2-Clause-Patent
 
-@file
-	errno.h
+Module Name:
 
-@brief
-	standard C header file for CdePkg
-@todo
-*/
+    errno.h
+
+Abstract:
+
+    Implementation of the Standard C header file for the Microsoft C Compiler VS2022
+    http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=198
+
+Author:
+
+    Kilian Kegel
+
+--*/
 #ifndef _CDE_ERRNO_H_
 #define _CDE_ERRNO_H_
 
