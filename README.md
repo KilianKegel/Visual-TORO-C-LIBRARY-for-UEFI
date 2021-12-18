@@ -14,7 +14,6 @@
     * `_cdeCRT0UefiShellW()`
     * `_cdeCRT0WinNTW()`
     NOTE: The `*env` pointer is not passed to `wmain()`
-
 ### 20211128
 * fixed: UEFI Shell overwrites the last line of text of a previously terminated application with its prompt
 * add: fgetws()
