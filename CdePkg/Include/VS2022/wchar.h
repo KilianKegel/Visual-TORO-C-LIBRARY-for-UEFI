@@ -3,7 +3,7 @@
     CdePkg for UEFI
     https://github.com/KilianKegel/CdePkg
 
-    Copyright (c) 2017-2021, Kilian Kegel. All rights reserved.
+    Copyright (c) 2017-2022, Kilian Kegel. All rights reserved.
     SPDX-License-Identifier: BSD-2-Clause-Patent
 
 Module Name:
@@ -47,25 +47,26 @@ typedef _Mbstatet mbstate_t;
 #endif//WEOF
 
 
-//not yet implemented int fwprintf( FILE * stream, const wchar_t * format, ... );
-//not yet implemented int fwscanf( FILE * stream, const wchar_t * format, ... );
+int fwprintf( FILE * stream, const wchar_t * format, ... );
+int fwscanf( FILE * stream, const wchar_t * format, ... );
 int wprintf( const wchar_t * format, ... );
 //not yet implemented int wscanf( const wchar_t * format, ... );
 int swprintf( wchar_t * s, size_t n, const wchar_t * format, ... );
-//not yet implemented int swscanf( const wchar_t * s, const wchar_t * format, ... );
+int swscanf( const wchar_t * s, const wchar_t * format, ... );
 int vfwprintf( FILE * stream, const wchar_t * format, va_list arg );
-//not yet implemented int vwprintf( const wchar_t * format, va_list arg );
+int vfwscanf(FILE* stream, const wchar_t* pwcsFormat, va_list ap)
+int vwprintf( const wchar_t * format, va_list arg );
 int vswprintf( wchar_t * s, size_t n, const wchar_t * format, va_list arg );
-//not yet implemented wint_t fgetwc( FILE *stream );
-//not yet implemented wchar_t *fgetws( wchar_t * s, int n, FILE * stream );
-//not yet implemented wint_t fputwc( wchar_t c, FILE *stream );
-//not yet implemented int fputws( const wchar_t * s, FILE * stream );
-//not yet implemented wint_t getwc( FILE *stream );
-//not yet implemented wint_t getwchar( void );
-//not yet implemented wint_t putwc( wchar_t c, FILE *stream );
-//not yet implemented wint_t putwchar( wchar_t c );
-//not yet implemented wint_t ungetwc( wint_t c, FILE *stream );
-//not yet implemented int fwide( FILE *stream, int mode );
+wint_t fgetwc( FILE *stream );
+wchar_t *fgetws( wchar_t * s, int n, FILE * stream );
+wint_t fputwc( wchar_t c, FILE *stream );
+int fputws( const wchar_t * s, FILE * stream );
+wint_t getwc( FILE *stream );
+wint_t getwchar( void );
+wint_t putwc( wchar_t c, FILE *stream );
+wint_t putwchar( wchar_t c );
+wint_t ungetwc( wint_t c, FILE *stream );
+int fwide( FILE *stream, int mode );
 //not yet implemented double wcstod( const wchar_t * nptr, wchar_t ** endptr );
 //not yet implemented long int wcstol( const wchar_t * nptr, wchar_t ** endptr, int base );
 //not yet implemented unsigned long int wcstoul( const wchar_t * nptr, wchar_t ** endptr, int base );
@@ -74,7 +75,7 @@ wchar_t *wcsncpy( wchar_t * s1, const wchar_t * s2, size_t n );
 wchar_t *wcscat( wchar_t * s1, const wchar_t * s2 );
 wchar_t *wcsncat( wchar_t * s1, const wchar_t * s2, size_t n );
 int wcscmp( const wchar_t *s1, const wchar_t *s2 );
-//not yet implemented int wcscoll( const wchar_t *s1, const wchar_t *s2 );
+int wcscoll( const wchar_t *s1, const wchar_t *s2 );
 int wcsncmp( const wchar_t *s1, const wchar_t *s2, size_t n );
 size_t wcsxfrm( wchar_t * s1, const wchar_t * s2, size_t n );
 wchar_t *wcschr( const wchar_t *s, wchar_t c );
@@ -91,7 +92,7 @@ wchar_t *wmemcpy( wchar_t * s1, const wchar_t * s2, size_t n );
 wchar_t *wmemmove( wchar_t *s1, const wchar_t *s2, size_t n );
 wchar_t *wmemset( wchar_t *s, wchar_t c, size_t n );
 //not yet implemented size_t wcsftime( wchar_t * s, size_t maxsize, const wchar_t * format, const struct tm * timeptr );
-//not yet implemented wint_t btowc( int c );
+wint_t btowc( int c );
 int wctob( wint_t c );
 //not yet implemented int mbsinit( const mbstate_t *ps );
 //not yet implemented size_t mbrlen( const char * s, size_t n, mbstate_t * ps );

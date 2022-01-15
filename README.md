@@ -3,11 +3,15 @@
 [**toro C Library**](https://github.com/KilianKegel/toro-C-Library#toro-c-library-formerly-known-as-torito-c-library)
 
 ```
-    Copyright (c) 2017-2021, Kilian Kegel. All rights reserved.
+    Copyright (c) 2017-2022, Kilian Kegel. All rights reserved.
     SPDX-License-Identifier: GNU General Public License v3.0
 ```
 
 ## Revision history
+### 20220115
+* update header files with recently added functions
+* change from solution relative to project relative build, adjust pathes
+* update copyright
 ### 20220109
 * add Standard C Library functions: strcoll(), strxfrm(), fgetwc(), fputwc, fputws(), fwide(), fwprintf(),
   fwscanf(), getwc, getwchar(), putwc(), putwchar(), swscanf(), ungetwc(), vfwscanf(), vswscanf(), wcscoll(),
