@@ -617,6 +617,8 @@ typedef struct tagCDEFILE {
         //      If CLEAN AND DIRTY are set simultanously, file writes inhibited
     unsigned char fEof;                         // EOF flag for file
     unsigned char fErr;                         // ERR flag for file
+    unsigned char fCtrlZ;                       // END OF TEXT FILE
+    int           cntSkipCtrlZChk;              // skip CtrlZ check if > 0
     char* tmpfilename;                          // initialized to NULL by fopen(), set to tmpfilename for tmpfiles
 #ifdef OS_EFI
     EFI_FILE_PROTOCOL* pRootProtocol;

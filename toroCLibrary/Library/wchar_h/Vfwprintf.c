@@ -26,8 +26,14 @@ Author:
 
 extern void* __cdeGetAppIf();
 
-static void __fputcpp(int b, void** pstream) {
-    fputc(b, *pstream);
+static void __fputcpp(int b, void** pstream) 
+{
+    CDEFILE* pCdeFile = *pstream;
+
+    if (O_TEXT == (pCdeFile->openmode & O_TEXT))
+        fputc(b, *pstream);
+    else
+        fputwc((wchar_t)b, *pstream);
 }
 
 /**

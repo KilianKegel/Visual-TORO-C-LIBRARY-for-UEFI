@@ -8,7 +8,7 @@
 
 Module Name:
 
-    Fputs.c
+    Fputws.c
 
 Abstract:
 
@@ -21,15 +21,15 @@ Author:
 
 --*/
 #include <stdio.h>
-#include <string.h>
+#include <wchar.h>
 
 /** fputs
 Synopsis
-    #include <stdio.h>
-    int fputs(const char * restrict s,FILE * restrict stream);
-    http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=309
+    #include <wchar.h>
+    int fputws(const wchar_t *str, FILE *stream);
 Description
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/fputs-fputws?view=msvc-160&viewFallbackFrom=vs-2019
+    http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=380
     The fputs function writes the string pointed to by s to the stream pointed to by
     stream. The terminating null character is not written.
 Returns
@@ -47,7 +47,21 @@ NOTE:   Seems, that Microsoft has not implemented any errorreporting.
     @retval EOF on error.
 
 **/
-int fputs(const char* s, FILE* stream) {
+int fputws(const wchar_t* str, FILE* stream) {
+    
+    int nRet = 0;
+    
+    while (*str)
+    {
+        wchar_t wRet = fputwc(*str, stream);
+        
+        if (wRet != *str) {
+            nRet = EOF;
+            break;
+        }
 
-    return EOF != fwrite(s, 1, strlen(s), stream) ? 0 : EOF;
+        str++;
+    }
+
+    return nRet;
 }

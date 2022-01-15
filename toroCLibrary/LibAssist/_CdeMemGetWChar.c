@@ -22,7 +22,7 @@ Author:
     Kilian Kegel
 
 --*/
-int _CdeMemGetWChar(void** ppSrc) 
+int _cdeMemGetWChar(void** ppSrc) 
 {
     unsigned short* pSrc = *ppSrc;
     int nRet;

@@ -3,7 +3,7 @@
     toro C Library
     https://github.com/KilianKegel/toro-C-Library#toro-c-library-formerly-known-as-torito-c-library
 
-    Copyright (c) 2017-2021, Kilian Kegel. All rights reserved.
+    Copyright (c) 2017-2022, Kilian Kegel. All rights reserved.
     SPDX-License-Identifier: GNU General Public License v3.0
 
 Module Name:
@@ -37,6 +37,7 @@ Synopsis
     size_t fread(void *ptr, size_t size, size_t nelem, FILE *stream);
 Description
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/fread?view=msvc-160&viewFallbackFrom=vs-2019
+    http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=313
     The function reads characters from the input stream stream and stores
     them in successive elements of the array whose first element has the
     address (char *)ptr until the function stores size*nelem characters or
@@ -55,7 +56,7 @@ size_t fread(const void* ptr, size_t size, size_t nelem, FILE* stream) {
     size_t lastnum;
     unsigned char fposoosync = TRUE; //file position out of sync
     unsigned char fLFexpected;/*line feed*/
-    unsigned char fCtrlZ;/*END OF TEXT FILE*/
+  
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
 
     while (__cdeIsFilePointer(pCdeFile))
@@ -72,18 +73,20 @@ size_t fread(const void* ptr, size_t size, size_t nelem, FILE* stream) {
             pCdeFile->Buffer = malloc(BUFSIZ);
             pCdeFile->bsiz = BUFSIZ;
             pCdeFile->bufPosEOF = LONG_MAX;// no EOF inside the buffer, yet
+            pCdeFile->fCtrlZ = FALSE;
+            pCdeFile->cntSkipCtrlZChk = 0;
         }
 
         provided = skipped = lastnum = 0;
         requested = size * nelem;
-        fLFexpected = fCtrlZ = FALSE;
+        fLFexpected = FALSE;
 
         pCdeFile->fEof = pCdeFile->bidx >= pCdeFile->bufPosEOF;
         if (O_CDESTDIN == (pCdeFile->openmode & (O_CDEREDIR + O_CDESTDIN)))
             if (pCdeFile->fEof)
                 rewind((FILE*)pCdeFile);
 
-        for (/* done above */; (provided + skipped) < requested && fCtrlZ == FALSE && pCdeFile->bidx < pCdeFile->bufPosEOF && 0 == pCdeFile->fEof; /* do nothing */)
+        for (/* done above */; (provided + skipped) < requested && pCdeFile->fCtrlZ == FALSE && pCdeFile->bidx < pCdeFile->bufPosEOF && 0 == pCdeFile->fEof; /* do nothing */)
         {
             if ((0 == pCdeFile->bvld) || pCdeFile->bidx >= pCdeFile->bvld)
             {
@@ -116,7 +119,7 @@ size_t fread(const void* ptr, size_t size, size_t nelem, FILE* stream) {
                     break;
             }
 
-            for (/* provided = 0 , requested = size * nelem */; (provided + skipped) < requested && pCdeFile->bidx < pCdeFile->bvld && fCtrlZ == FALSE; /* do nothing */)
+            for (/* provided = 0 , requested = size * nelem */; (provided + skipped) < requested && pCdeFile->bidx < pCdeFile->bvld && pCdeFile->fCtrlZ == FALSE; /* do nothing */)
             {
 
                 if (TRUE == fLFexpected) {
@@ -140,10 +143,16 @@ size_t fread(const void* ptr, size_t size, size_t nelem, FILE* stream) {
                         fLFexpected = TRUE;
                         continue;
                     }
-                    if (0x1A == ((char*)ptr)[provided]) {
-                        fCtrlZ = TRUE;
-                        break;
+
+                    if (0 == pCdeFile->cntSkipCtrlZChk)
+                    {
+                        if (0x1A == ((char*)ptr)[provided]) {
+                            pCdeFile->fCtrlZ = TRUE;
+                            break;
+                        }
                     }
+                    else
+                        pCdeFile->cntSkipCtrlZChk--;
                 }
                 provided++;
             }

@@ -158,7 +158,7 @@
     <ClCompile Include="LibAssist\_cdeMemGetChar.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LibAssist\_CdeMemGetWChar.c">
+    <ClCompile Include="LibAssist\_cdeMemGetWChar.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LibAssist\_CdeMemPutChar.c">
@@ -173,7 +173,7 @@
     <ClCompile Include="LibAssist\_cdeMemUngetChar.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LibAssist\_CdeMemUngetWChar.c">
+    <ClCompile Include="LibAssist\_cdeMemUngetWChar.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LibAssist\_CdeMoFiNe.c">
@@ -1047,6 +1047,63 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="OSInterface\WINNT\osifWinNTEntryPointW.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\Fgetwc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\Fputwc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\Fputws.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\Getwc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\Getwchar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\Putwc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\Putwchar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\Fwide.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\Ungetwc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\btowc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrColl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsColl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\Strxfrm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\Wcsxfrm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\Fwprintf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\Swscanf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\Vswscanf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\Vfwscanf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\Fwscanf.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

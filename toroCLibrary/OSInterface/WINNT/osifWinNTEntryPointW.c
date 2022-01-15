@@ -259,7 +259,7 @@ static CDE_APP_IF gCdeAppIfWinNT = {
   @retval other             Some error occurs when executing this entry point.
 
 **/
-int _MainEntryPointWinNT(void)
+int _MainEntryPointWinNTW(void)
 {
     int Status = 0;
 
@@ -423,5 +423,5 @@ Returns
 **/
 int _cdeCRT0WinNTW(void)
 {
-    return _MainEntryPointWinNT();
+    return _MainEntryPointWinNTW();
 }

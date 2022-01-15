@@ -3,7 +3,7 @@
     toro C Library
     https://github.com/KilianKegel/toro-C-Library#toro-c-library-formerly-known-as-torito-c-library
 
-    Copyright (c) 2017-2021, Kilian Kegel. All rights reserved.
+    Copyright (c) 2017-2022, Kilian Kegel. All rights reserved.
     SPDX-License-Identifier: GNU General Public License v3.0
 
 Module Name:
@@ -33,6 +33,7 @@ Author:
 
 #define WSPC 0x20       /*white space*/
 #define DNUM 9          /*decimal number*/
+#define EARLY_MATCHING_FAILURE -2
 
 #undef void
 #define void unsigned char
@@ -135,7 +136,7 @@ static int str2num(STRDESC* pParms, int (*pfnDevGetChar)(void** ppSrc), int (*pf
     unsigned char fBaseAuto/*detect*/ = pParms->nNumBase == 0;//base autodetction if pParms->nNumBase == 0
     int nMaxChars = pParms->nWidth;
     int nCharsProcessed = 0;
-    int nTokenScanned = -1;
+    int nTokenScanned = EOF;
     int nHexIDPecedingZeros = 0;
 
     char rgBuf[BUFFLEN];
@@ -158,9 +159,19 @@ static int str2num(STRDESC* pParms, int (*pfnDevGetChar)(void** ppSrc), int (*pf
         }
         switch (state) {
         case PROCESS_BLANKS:
+            if (c == EndMarker)
+            {
+                state = PROCESS_DONE; 
+                break;
+            }
+
             switch (c) {
-            case '\0':
-            case  EOF: state = PROCESS_DONE; break;
+            //case '\0':
+            //case  EOF: state = PROCESS_DONE; break;
+            case    0: nTokenScanned = EARLY_MATCHING_FAILURE; 
+                       state = PROCESS_DONE;    // '\x20','\0' found when reading
+                                                // blanks from wcs-style input
+                break;
             case 0x20:
             case '\r':
             case '\v':
@@ -177,10 +188,9 @@ static int str2num(STRDESC* pParms, int (*pfnDevGetChar)(void** ppSrc), int (*pf
                 nMaxChars = nMaxChars ? nMaxChars - 1 : 0;
                 nHexIDPecedingZeros += (c == '0' ? 1 : 0);
                 state = PROCESS_NUMBER;
-            }
-                   else {
+            } else {
                 UngetCharAndDecount(c, &nCharsProcessed, pfnDevUngetChar, ppSrc, EndMarker);
-                nTokenScanned = -1;
+                nTokenScanned = '\0' == c ? 0 : -1;
                 state = PROCESS_DONE;
             }break;
             }break;
@@ -329,10 +339,11 @@ _cdeVwxScanf(
         PROCESS_SCANSET_SCAN,
         PROCESS_SCANSET_END,
         PROCESS_END = 0x8000,
-        PROCESS_ERROR
+        PROCESS_ERROR,
+        PROCESS_EXIT
     }state = PROCESS_FORMATSTR;
 
-    for (i = 0; state != PROCESS_END; ) {
+    for (i = 0; state != PROCESS_EXIT; ) {
 
         if (!(state & PROCESS_END)) {   // if NOT  PROCESS_END and successors... (PROCESS_ERROR)
 
@@ -623,6 +634,12 @@ _cdeVwxScanf(
             nCharsProcessed = 0;
             o = 0;  // output index
             pVoid = stParms.fAsterix ? NULL : va_arg(ap, void*); // load output pointer dont get and use on asterisk
+            
+            if (DST8 == dstsize)        // check for "%hhs" that IS NOT supported
+            {                           // instead %hs, %ls and %lls ARE supported instead
+                state = PROCESS_END;
+                break;
+            }
 
             while (nMaxChars) {
                 c = GetCharAndCount(&nCharsProcessed, pfnDevGetChar, &pSrc, pFixParm->EndMarker);
@@ -638,7 +655,9 @@ _cdeVwxScanf(
                     }
                 }
                 else {
-                    fCharProcessed |= StoreTerminate(fWide, 1/*fTerminate*/, pVoid, INT_MAX, &o, c);
+                    unsigned char fStrWidth = DSTDFLT == dstsize ? fWide : DST16 != dstsize/*%hs == 16 -> fStrWidth = 0*/;
+
+                    fCharProcessed |= StoreTerminate(fStrWidth, 1/*fTerminate*/, pVoid, INT_MAX, &o, c);
                     nMaxChars--;
                 }
             }
@@ -685,13 +704,21 @@ _cdeVwxScanf(
             }
 
             nTmp = str2num(&stParms, pfnDevGetChar, pfnDevUngetChar, pOverallCount, &pSrc, pFixParm->EndMarker);
-            state = (nTmp < 1 ? PROCESS_END : PROCESS_FORMATSTR);  //set new state depending on error
+            state = (nTmp < 1 ? PROCESS_ERROR : PROCESS_FORMATSTR);  //set new state depending on error
 
             if (0 == stParms.fAsterix)
                 if (nTmp > 0)
                     nTokenScanned++;
 
-            if (state == PROCESS_END) break;
+            if (state == PROCESS_ERROR)
+            {
+                if (EARLY_MATCHING_FAILURE == nTmp) // "event of an early matching failure": 
+                                                    // http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=299
+                    nTokenScanned = 0;
+                else
+                    nTokenScanned = nTokenScanned == 0 ? -1 : nTokenScanned;
+                break;
+            }
 
             if (0 == stParms.fAsterix) {
                 pVoid = va_arg(ap, void*);
@@ -711,8 +738,12 @@ _cdeVwxScanf(
             *pInt = OverallCount;
             break;
         case PROCESS_ERROR:
-            nTokenScanned = -1;
-            state = PROCESS_END;
+            nTokenScanned = nTokenScanned == 0 ? 0 : nTokenScanned;
+            state = PROCESS_EXIT;
+            break;
+        case PROCESS_END:
+            //nTokenScanned = nTokenScanned == 0 ? EOF : nTokenScanned;
+            state = PROCESS_EXIT;
             break;
         }
     }//c = fWide ? pszFormatW[i] : pszFormat[i] != '\0')

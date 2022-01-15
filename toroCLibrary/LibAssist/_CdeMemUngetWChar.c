@@ -19,7 +19,7 @@ Author:
     Kilian Kegel
 
 --*/
-int _CdeMemUngetWChar(int c, void** ppSrc)
+int _cdeMemUngetWChar(int c, void** ppSrc)
 {
 	unsigned short* pDst = *ppSrc;
     //

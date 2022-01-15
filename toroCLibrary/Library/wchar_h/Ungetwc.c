@@ -3,7 +3,7 @@
     toro C Library
     https://github.com/KilianKegel/toro-C-Library#toro-c-library-formerly-known-as-torito-c-library
 
-    Copyright (c) 2017-2022, Kilian Kegel. All rights reserved.
+    Copyright (c) 2017-2021, Kilian Kegel. All rights reserved.
     SPDX-License-Identifier: GNU General Public License v3.0
 
 Module Name:
@@ -21,17 +21,18 @@ Author:
 
 --*/
 #include <stdio.h>
+#include <wchar.h>
 #include <CdeServices.h>
 
 extern unsigned char __cdeIsFilePointer(void* stream);
 
-/** ungetc
+/** ungetwc
 Synopsis
     #include <stdio.h>
-    int ungetc(int c, FILE *stream);
+    #include <wchar.h>
+    wint_t ungetwc(wint_t c, FILE *stream);
 Description
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/ungetc-ungetwc?view=msvc-160&viewFallbackFrom=vs-2019
-    http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=312
     The ungetc function pushes the character specified by c (converted to an unsigned
     char) back onto the input stream pointed to by stream. Pushed-back characters will be
     returned by subsequent reads on that stream in the reverse order of their pushing. A
@@ -59,43 +60,37 @@ Returns
 
 **/
 
-int ungetc(int c, FILE* stream) {
+wint_t ungetwc(wint_t c, FILE * stream) 
+{
     CDEFILE* pCdeFile = (CDEFILE*)stream;
-    unsigned int nRet = (size_t)EOF;
+    unsigned int nRet = (unsigned int)EOF;
 
-    do {
+    if (__cdeIsFilePointer(pCdeFile))                               // check file pointer valid
+    {
+        if (O_TEXT == (pCdeFile->openmode & O_TEXT))                // in text mode deal with single byte chars only
+        {
+            if (0x100 > c)
+                nRet = ungetc((int)c, stream);
+        }
+        else
+            do {
+                
+                if (WEOF == c)                                      // check c valid
+                    break;
 
-        if (!__cdeIsFilePointer(pCdeFile))                      // check file pointer valid
-            break;
+                if (2 > pCdeFile->bidx )                            // check buffer can receive one wide character
+                    break;
+                
+                pCdeFile->bidx -= (sizeof(wint_t));                 // decrement index
 
-        if (EOF == c)                                           // check c valid
-            break;
+                *((wint_t*)(&pCdeFile->Buffer[pCdeFile->bidx])) = c;// store char in the buffer
 
-        if (0 == pCdeFile->bidx)                                // check buffer can receive one character
-            break;
+                nRet = c;                                           // mark nRet for success with c
 
-        pCdeFile->Buffer[--pCdeFile->bidx] = (unsigned char)c;  // store the buffer
+                pCdeFile->fEof = FALSE;                             // clear EOF on success
 
-        nRet = (unsigned char)c;                                // mark nRet for success with c
+            } while (0);
 
-        pCdeFile->fEof = FALSE;                                 // clear EOF on success
-
-        if (O_TEXT != (pCdeFile->openmode & O_TEXT))            // check additional text mode handling required
-            break;
-
-        pCdeFile->cntSkipCtrlZChk++;                            // skip CtrlZ check for all ungot characters
-
-        if (0 == pCdeFile->bidx)                                // check buffer can receive one character
-            break;
-
-        if ('\n' == c)                                          // add '\n'
-            if ('\r' == pCdeFile->Buffer[pCdeFile->bidx - 1])
-            {
-                pCdeFile->bidx--;
-                pCdeFile->cntSkipCtrlZChk++;                    // skip CtrlZ check for all ungot characters
-            }
-
-    } while (0);
-
-    return nRet;
+    }
+    return nRet == EOF ? WEOF : (wint_t)nRet;
 }
