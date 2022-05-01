@@ -8,7 +8,7 @@
 
 Module Name:
 
-    Ftell.c
+    _Ftelli64.c
 
 Abstract:
 
@@ -25,12 +25,10 @@ Author:
 #include <errno.h>
 #include <CdeServices.h>
 
-extern __int64 _ftelli64(FILE* pCdeFile);
-
 /*
 Synopsis
     #include <stdio.h>
-    long int ftell(FILE *stream);
+    __int64 _ftelli64(FILE* pCdeFile);
 Description
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/ftell-ftelli64?view=msvc-160&viewFallbackFrom=vs-2019
     The ftell function obtains the current value of the file position indicator for the stream
@@ -45,8 +43,19 @@ Returns
     for the stream. On failure, the ftell function returns −1L and stores an
     implementation-defined positive value in errno.
 */
-long ftell(FILE* pCdeFile)
+__int64 _ftelli64(FILE* pCdeFile)
 {
-    return (long)_ftelli64(pCdeFile);
+    fpos_t pos;
+    long long nRet = -1L;
+
+    do {
+
+        if (fgetpos(pCdeFile, &pos))
+            break;
+
+        nRet = pos;
+
+    } while (0);
+    return nRet;
 }
 

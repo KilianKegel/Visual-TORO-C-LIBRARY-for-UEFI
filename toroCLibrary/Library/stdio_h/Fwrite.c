@@ -28,7 +28,7 @@ Author:
 #include <limits.h>
 #include <CdeServices.h>
 
-extern unsigned char __cdeIsFilePointer(void* stream);
+extern int __cdeIsFilePointer(void* stream);
 
 /**
 Synopsis
@@ -69,7 +69,6 @@ size_t fwrite(const void* ptr, size_t size, size_t nelem, FILE* stream) {
         //fpos_t fpos = pCdeFile->bpos; //memorize file position that is destroyed by a possible fwrite(NULL,EOF,0,stream)
 
         if (O_APPEND == (pCdeFile->openmode & O_APPEND)) {
-            //CDEMOFINE((MFNINF(1) "append\n"));
             pCdeFile->bpos = CDE_FPOS_SEEKEND; // force END OF FILE position
             pCdeFile->fEof = TRUE;
         }
@@ -89,7 +88,7 @@ size_t fwrite(const void* ptr, size_t size, size_t nelem, FILE* stream) {
                 //
                 // NOTE: If the buffer of a readonly-file is written, pCdeFile->bvld must not be updated
                 //
-                if (O_RDONLY != (pCdeFile->openmode & O_RDWRMSK)) {
+                if (O_RDONLY != (pCdeFile->openmode & (O_RDONLY | O_WRONLY | O_RDWR))) {
                     pCdeFile->bvld++;   //??? += pCdeFile->bvld < pCdeFile->bsiz ? 1 : 0;
                 }
                 pCdeFile->bdirty = TRUE;
@@ -107,7 +106,7 @@ size_t fwrite(const void* ptr, size_t size, size_t nelem, FILE* stream) {
                 provided++;
             }
 
-            if (O_RDONLY == (pCdeFile->openmode & O_RDWRMSK)) {
+            if (O_RDONLY == (pCdeFile->openmode & (O_RDONLY | O_WRONLY | O_RDWR))) {
                 //
                 // NOTE: If the buffer of a readonly-file is written, it only fails if:
                 //
@@ -147,7 +146,6 @@ size_t fwrite(const void* ptr, size_t size, size_t nelem, FILE* stream) {
                 pCdeFile->bvld = 0;//lastnum;
                 pCdeFile->bdirty = FALSE;
                 pCdeFile->bclean = FALSE;
-
             }
         }
         nRet = provided / (size == 0 ? 1 : size/*don't divide by zero*/);

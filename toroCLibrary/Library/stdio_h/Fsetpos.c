@@ -22,13 +22,16 @@ Author:
 --*/
 #include <uefi.h>
 #include <stdio.h>
+#include <string.h>
 #include <errno.h>
 #include <limits.h>
 #include <CdeServices.h>
 
-extern unsigned char __cdeIsFilePointer(void* stream);
+extern int __cdeIsFilePointer(void* stream);
 extern int __cdeOnErrSet_errno(CDE_STATUS Status, int Error);
-
+extern int __cdeIsCdeFposType(fpos_t fpos);
+extern int __cdeBiasCdeFposType(fpos_t fpos);
+extern fpos_t __cdeOffsetCdeFposType(fpos_t fpos);
 /*
 Synopsis
     #include <stdio.h>
@@ -48,28 +51,99 @@ Description
 Returns
     If successful, the fsetpos function returns zero; on failure, the fsetpos function
     returns nonzero and stores an implementation-defined positive value in errno.
+
+NOTE: Parameter fpos_t* pos is handled internally as CDEFPOS_T.
+
 */
 int fsetpos(FILE* stream, const fpos_t* pos)
 {
     CDEFILE* pCdeFile = (CDEFILE*)stream;
-    int nRet = EOF;
+    int nRet = EOF, nRetErr = EOF, *pRet = &nRet;
     EFI_STATUS Status = EFI_SUCCESS;
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
+    
+    CDEFPOS_T CdeFPos    = { .reg64 = *pos };
+
     do {
 
-        if (!__cdeIsFilePointer(pCdeFile)) {
-            __cdeOnErrSet_errno(Status, EBADF);
+        if (!__cdeIsFilePointer(pCdeFile))
+        {
+            errno = EBADF;
             break;
         }
-
+        
         if (pCdeFile->bdirty && !pCdeFile->bclean)
         {
             fflush(stream);
         }
+        
+        if (1/*KG20220419*/)
+        {
+            //
+            // check native erroneous negative offsets, BEFORE begin of file
+            //  NOTE: Microsoft reports errno 22 / EINVAL / "Invalid argument" but truly moves filepointer to EOF
+            //
+            //      
+            char fSetEINVAL = 0;
+            
+            //
+            //  SEEK_SET, begin of file. Every negative offset is erroneus!
+            //
+            if (SEEK_SET == __cdeBiasCdeFposType(*pos))
+            {
+                int64_t RequestedSeekPointer = __cdeOffsetCdeFposType(*pos);
 
-        pCdeFile->fEof = *pos & CDE_FPOS_SEEKEND ? TRUE : FALSE;
+                if (0 > RequestedSeekPointer)
+                    fSetEINVAL = 1;
+            }
 
-        nRet = pCdeAppIf->pCdeServices->pFsetpos(pCdeAppIf, pCdeFile, pos);
+            //
+            //  SEEK_END, end of file. Only negative offsets bigger (absolut value) that filesize are erroneus!
+            //
+            if (SEEK_END == __cdeBiasCdeFposType(*pos))
+            {
+                int64_t EOFPointer, RequestedSeekPointer = __cdeOffsetCdeFposType(*pos);
+             
+                if (0 > RequestedSeekPointer)
+                {
+                    //
+                    // get EOF position
+                    //
+                    CDEFPOS_T CdeFposEOF = { .reg64 = 0, .CdeFposBias.Bias = CDE_SEEK_BIAS_END };
+                    CDEFPOS_T CdeFposCurrent = { .reg64 = pCdeFile->bpos };
+
+                    nRet = pCdeAppIf->pCdeServices->pFsetpos(pCdeAppIf, pCdeFile, (fpos_t*)&CdeFposEOF);
+
+                    EOFPointer = pCdeFile->bpos;
+
+                    if (0 > (RequestedSeekPointer + EOFPointer))
+                        fSetEINVAL = 1;
+
+                    nRet = pCdeAppIf->pCdeServices->pFsetpos(pCdeAppIf, pCdeFile, (fpos_t*)&CdeFposCurrent);
+                }
+            }
+
+            if(1 == fSetEINVAL)
+            {
+                errno = EINVAL;
+
+                if (    CDE_SEEK_BIAS_SET == CdeFPos.CdeFposBias.Bias
+                    ||  CDE_SEEK_BIAS_END == CdeFPos.CdeFposBias.Bias)
+                {
+                    break;                                  // don't move the file pointer
+                }
+                else
+                {
+                    CdeFPos.reg64 = 0LL;
+                    CdeFPos.CdeFposBias.Bias = CDE_SEEK_BIAS_END;
+
+                    pRet = &nRetErr;                        // don't break, move the file pointer 
+                                                            // and continue but force erroneous return
+                }
+            }
+        }
+
+        nRet = pCdeAppIf->pCdeServices->pFsetpos(pCdeAppIf, pCdeFile,  (fpos_t*) &CdeFPos);     // move the file pointer
 
         // ----- reset data structure if not yet done by fflush(), bpos is set by pFsetpos();
 
@@ -80,8 +154,8 @@ int fsetpos(FILE* stream, const fpos_t* pos)
         pCdeFile->bufPosEOF = LONG_MAX;
         pCdeFile->fCtrlZ = FALSE;
         pCdeFile->cntSkipCtrlZChk = 0;
-
+        
     } while (0);
     //TODO: Add errno
-    return nRet;
+    return *pRet;
 }

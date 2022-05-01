@@ -19,7 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\CdeServices.h" />
+    <ClInclude Include="Include\CdeServices.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </ClInclude>
     <ClInclude Include="Include\_invparm.h" />
     <ClInclude Include="Include\_locale.h" />
     <ClInclude Include="Include\_wctype.h" />
@@ -122,9 +124,15 @@
     <ClCompile Include="Library\errno_h\_efierrno.c" />
     <ClCompile Include="Library\errno_h\__cdeOnErrSet_errno.c" />
     <ClCompile Include="Library\errno_h\__cdeOnErrSet_status.c" />
+    <ClCompile Include="Library\io_h\_Close.c" />
+    <ClCompile Include="Library\io_h\_Fdopen.c" />
+    <ClCompile Include="Library\io_h\_Fileno.c" />
     <ClCompile Include="Library\io_h\_findclose.c" />
     <ClCompile Include="Library\io_h\_findfirst.c" />
     <ClCompile Include="Library\io_h\_findnext.c" />
+    <ClCompile Include="Library\io_h\_Open.c" />
+    <ClCompile Include="Library\io_h\_Read.c" />
+    <ClCompile Include="Library\io_h\_Write.c" />
     <ClCompile Include="Library\io_h\__cdeSplitSearchNameExt2Upcase.c" />
     <ClCompile Include="Library\io_h\__cdeStrMatch.c" />
     <ClCompile Include="Library\locale_h\localeconv.c" />
@@ -183,6 +191,12 @@
     <ClCompile Include="Library\stdio_h\Vsnwprintf.c" />
     <ClCompile Include="Library\stdio_h\Vsprintf.c" />
     <ClCompile Include="Library\stdio_h\Vsscanf.c" />
+    <ClCompile Include="Library\stdio_h\_Fseeki64.c" />
+    <ClCompile Include="Library\stdio_h\_Ftelli64.c" />
+    <ClCompile Include="Library\stdio_h\_Wfopen.c" />
+    <ClCompile Include="Library\stdio_h\__cdeGetBiasCdeFposType.c" />
+    <ClCompile Include="Library\stdio_h\__cdeGetOffsetCdeFposType.c" />
+    <ClCompile Include="Library\stdio_h\__cdeIsCdeFposType.c" />
     <ClCompile Include="Library\stdio_h\__cdeIsFilePointer.c" />
     <ClCompile Include="Library\stdio_h\__cdsGetIOBuffer.c" />
     <ClCompile Include="Library\stdlib_h\abort.c" />
@@ -362,70 +376,26 @@
     <ClCompile Include="OSInterface\UEFIPEI\osifUefiPeiEntryPointEDK.c" />
     <ClCompile Include="OSInterface\UEFIPEI\osifUefiPeiMemAlloc.c" />
     <ClCompile Include="OSInterface\UEFIPEI\osifUefiPeiMemFree.c" />
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellCmdExec.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellCmdExec.c" />
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellDirectoryCreate.c" />
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellDirectoryRemove.c" />
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPoint.c" />
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPointEDK.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </AssemblerOutput>
-      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </AssemblerOutput>
-      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </AssemblerOutput>
-      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </AssemblerOutput>
-    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPointEDK.c" />
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPointEDKW.c" />
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPointW.c" />
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileClose.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileDelete.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileClose.c" />
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileDelete.c" />
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileFindAll.c" />
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileOpen.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileRead.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileRename.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileSetPos.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileGetStatus.c" />
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileWrite.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileOpen.c" />
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileRead.c" />
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileRename.c" />
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileSetPos.c" />
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileWrite.c" />
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellGetDrvCwd.c" />
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellGetEnv.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellMemAlloc.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellMemFree.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellGetEnv.c" />
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellMemAlloc.c" />
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellMemFree.c" />
     <ClCompile Include="OSInterface\UEFISMM\osifUefiSmmEntryPoint.c" />
     <ClCompile Include="OSInterface\UEFISMM\osifUefiSmmEntryPointEDK.c" />
     <ClCompile Include="OSInterface\UEFISMM\osifUefiSmmMemAlloc.c" />
@@ -565,6 +535,26 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="Intrinsics\__chkstk32.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="Intrinsics\__chkstk64.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="Intrinsics\__chkstkWin64.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
     </MASM>
     <MASM Include="Intrinsics\__ltod3.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -768,7 +758,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <ExternalWarningLevel>Level4</ExternalWarningLevel>
-      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706;4996</DisableSpecificWarnings>
       <OmitFramePointers>true</OmitFramePointers>
     </ClCompile>
     <Link>
@@ -828,7 +818,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <ExternalWarningLevel>Level4</ExternalWarningLevel>
-      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706;4996</DisableSpecificWarnings>
       <OmitFramePointers>true</OmitFramePointers>
     </ClCompile>
     <Link>
@@ -862,7 +852,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>MDEPKG_NDEBUG;NMOFINE;NDEBUG;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\CdePkg\include;$(ProjectDir)..\CdePkg\include\###VS2022###;$(ProjectDir)..\MdePkgInc\x64;$(ProjectDir)..\MdePkgInc</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -887,7 +877,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AssemblerOutput />
-      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706;4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -927,7 +917,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>MDEPKG_NDEBUG;NMOFINE;NDEBUG;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)include;$(SolutionDir)toroCLibrary\include;$(SolutionDir)CdePkg\include;$(SolutionDir)CdePkg\include\###VS2022###;$(SolutionDir)MdePkgInc\x64;$(SolutionDir)MdePkgInc</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -954,7 +944,8 @@
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AssemblerOutput>
       </AssemblerOutput>
-      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706;4996</DisableSpecificWarnings>
+      <UseFullPaths>false</UseFullPaths>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

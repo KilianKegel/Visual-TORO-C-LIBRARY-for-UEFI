@@ -259,7 +259,6 @@ EFI_STATUS EFIAPI _MainEntryPointSmm(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TA
     char* pLoadOptions, * pLoadOptionsRW = gEfiCallerBaseName;
     size_t eflags = __readeflags();
 
-    __cdeFatalCdeServicesNotAvailSmm(SystemTable);
     do {
 
         if (1)

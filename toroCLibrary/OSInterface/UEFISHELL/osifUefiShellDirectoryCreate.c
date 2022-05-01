@@ -50,7 +50,7 @@ int _osifUefiShellDirectoryCreate(IN CDE_APP_IF* pCdeAppIf, wchar_t* pwcsDirName
 
         //printf(/*__FILE__*/"(%d), "__FUNCTION__"()"">>> pwcsDirName -> %ls, pCdeFile %p\n", __LINE__, pwcsDirName, pCdeFile);
 
-        pCdeFile = pCdeAppIf->pCdeServices->pFopen(pCdeAppIf, pwcsDirName, "CdeMkDir", pCdeFile);
+        pCdeFile = pCdeAppIf->pCdeServices->pFopen(pCdeAppIf, pwcsDirName, "CdeMkDir", -1, pCdeFile);
 
         //printf(/*__FILE__*/"(%d), "__FUNCTION__"()""pCdeFile -> %p\n", __LINE__, pCdeFile);
 

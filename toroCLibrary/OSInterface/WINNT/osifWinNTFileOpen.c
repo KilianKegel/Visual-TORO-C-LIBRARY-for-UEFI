@@ -19,83 +19,14 @@ Author:
     Kilian Kegel
 
 --*/
+//#undef NCDETRACE
 #include <stdio.h>
 #include <windows.h>
 #include <cde.h>
-
+#include <fcntl.h>
+#include <CdeServices.h>
 
 #pragma warning( disable : 4101 )
-
-#define UINT64 unsigned long long
-#define UINT8 unsigned char
-#define CDE_APP_IF void
-
-#define _O_RDONLY       0x0000  /* open for reading only */
-#define _O_WRONLY       0x0001  /* open for writing only */
-#define _O_RDWR         0x0002  /* open for reading and writing */
-#define _O_APPEND       0x0008  /* writes done at fEof */
-
-#define _O_CREAT        0x0100  /* create and open file */
-
-/* O_TEXT files have <cr><lf> sequences translated to <lf> on read()'s,
-** and <lf> sequences translated to <cr><lf> on write()'s
-*/
-
-#define _O_TEXT         0x4000  /* file mode is text (translated) */
-#define _O_BINARY       0x8000  /* file mode is binary (untranslated) */
-
-/* Temporary file bit - file is deleted when last handle is closed */
-
-#define _O_TEMPORARY    0x0040  /* temporary file bit */
-
-/* Non-ANSI names for compatibility */
-#define O_RDONLY        _O_RDONLY
-#define O_WRONLY        _O_WRONLY
-#define O_RDWR          _O_RDWR
-#define O_RDWRMSK       (O_RDONLY | O_WRONLY | O_RDWR)
-#define O_APPEND        _O_APPEND
-#define O_CREAT         _O_CREAT
-#define O_TEXT          _O_TEXT
-#define O_BINARY        _O_BINARY
-#define O_TEMPORARY     _O_TEMPORARY
-
-typedef struct tagCDEFILE {
-    unsigned char fRsv;                       // 0 if free, 1 if taken /reserved / occupied / allocated
-    int     openmode;
-    void* emufp;                     // true FILE fp used for emulation in Windows. In true EFI it is the CDEFILE fp
-    //long   fpos;                      // fpos -> what ftell returns relative to SEEK_SET
-    char* Buffer;                    // internal buffer
-    long    bsiz;                       // sizeof internal buffer
-    fpos_t  bpos;                       // buffers position equivalent to file pointer position. bpos[63] == SEEK_END marker CDE_FPOS_SEEKEND!!!
-    long    bidx;                       // index into Buffer[] ranges from 0 .. bufsiz
-    long    bvld;                       // number of valid bytes in the buffer beginning from
-    unsigned char bdirty;               // buffer is dirty -> the buffer conatains unwritten characters
-    unsigned char bclean;               // buffer is clean -> the buffer conatains characters read from the stream
-        //NOTE: dirty and clean TRUE together, implements the microsoft strategy for common read/write data held in a buffer
-        //      If CLEAN AND DIRTY are set simoultanously, file writes inhibited
-    unsigned char fEof;                        // EOF flag for file
-    unsigned char fErr;                        // ERR flag for file
-    void* pRootProtocol;
-    void* pFileProtocol;
-    void* pwcsFileDrive;
-    void* pwcsFilePath;
-    void* pwcsFileName;
-}CDEFILE;
-
-// r                open text file for reading
-// rb               open binary file for reading
-// r+               open text file for update (reading and writing)
-// r+b or rb+       open binary file for update (reading and writing)
-
-// a                append; open or create text file for writing at end-of-file
-// ab               append; open or create binary file for writing at end-of-file
-// a+               append; open or create text file for update, writing at end-of-file
-// a+b or ab+       append; open or create binary file for update, writing at end-of-file
-
-// w                truncate to zero length or create text file for writing
-// wb               truncate to zero length or create binary file for writing
-// w+               truncate to zero length or create text file for update
-// w+b or wb+       truncate to zero length or create binary file for update
 
 static struct _tblMode {
     const char* pszMode;
@@ -137,65 +68,123 @@ Returns
     CDEFILE*: success
     NULL    : failure
 **/
-CDEFILE* _osifWinNTFileOpen(CDE_APP_IF* pCdeAppIf, const wchar_t* pwcsFileName, const char* szModeNoSpace, CDEFILE* pCdeFile)
+CDEFILE* _osifWinNTFileOpen(CDE_APP_IF* pCdeAppIf, const wchar_t* pwcsFileName, const char* szModeNoSpace, int fFileExists/* 0 no, 1 yes, -1 unk */, CDEFILE* pCdeFile)
 {
     HANDLE hFile = INVALID_HANDLE_VALUE;
     int i;
     BOOL f;
     const int _TRUE_ = 1, _FALSE_ = 0;
+    unsigned WinNTModeFlags = 0, *pWinNTModeFlags = &WinNTModeFlags;
+    int OpenMode = 0, *pOpenMode = &OpenMode;
+    uint32_t dwDesiredAccess;
 
     do {
-
-        // ----- search file attributes
-
+        //
+        // search file attributes
+        //
         for (i = 0; i < sizeof(tblMode) / sizeof(tblMode[0]); i++)
             if (0 == strcmp(tblMode[i].pszMode, szModeNoSpace))
                 break;
 
+        CDETRACE((TRCERR(i == sizeof(tblMode) / sizeof(tblMode[0])) "Attributes \"%s\" NOT found\n", szModeNoSpace));
 
-        CDEMOFINE((MFNERR(i == sizeof(tblMode) / sizeof(tblMode[0])) "Attributes \"%s\" NOT found\n", szModeNoSpace));
+        if (i == sizeof(tblMode) / sizeof(tblMode[0])) {
+            //
+            // reached end of table, check for open() backdoor signature "ctrwaxb"
+            //
+            if (0 != _stricmp("ctrwaxb", szModeNoSpace))
+                break;
+            //
+            // open() related handling -- NOT related to fopen()
+            //
+            OpenMode |= O_CREAT   * ('C' == szModeNoSpace[0]);  // get 'c' in "ctrwaxb"
+            OpenMode |= O_TRUNC   * ('T' == szModeNoSpace[1]);  // get 't' in "ctrwaxb"
+            OpenMode |= O_RDWR    * ('R' == szModeNoSpace[2]);  // get 'r' in "ctrwaxb"
+            OpenMode |= O_WRONLY  * ('W' == szModeNoSpace[3]);  // get 'w' in "ctrwaxb"
+            OpenMode |= O_APPEND  * ('A' == szModeNoSpace[4]);  // get 'a' in "ctrwaxb"
+            OpenMode |= O_TEXT    * ('X' == szModeNoSpace[5]);  // get 'x' in "ctrwaxb"
+            OpenMode |= O_BINARY  * ('B' == szModeNoSpace[6]);  // get 'b' in "ctrwaxb"
 
-        if (i == sizeof(tblMode) / sizeof(tblMode[0]))
-            break;
+            if (0 == fFileExists)
+            {
+                WinNTModeFlags |= OPEN_ALWAYS * ((O_CREAT) == ((O_CREAT)&OpenMode));
+                WinNTModeFlags |= OPEN_EXISTING * (0 == ((O_CREAT + O_TRUNC) & OpenMode));
+                WinNTModeFlags |= OPEN_ALWAYS * ((O_CREAT + O_APPEND) == ((O_CREAT + O_APPEND) & OpenMode));
+            }
+            else {
+                WinNTModeFlags |= OPEN_ALWAYS   * ((O_CREAT          )  == ((O_CREAT + O_TRUNC)  & OpenMode));    // CREATE_ALWAYS * 0 / * 1
+                WinNTModeFlags |= CREATE_ALWAYS * ((          O_TRUNC)  == ((          O_TRUNC)  & OpenMode));    // CREATE_ALWAYS * 0 / * 1
+                WinNTModeFlags |= CREATE_ALWAYS * ((O_CREAT + O_TRUNC)  == ((O_CREAT + O_TRUNC)  & OpenMode));    // CREATE_ALWAYS * 0 / * 1
+                WinNTModeFlags |= OPEN_EXISTING * (0 == ((O_CREAT + O_TRUNC) & OpenMode));                        // OPEN_EXISTING * 0 / * 1
+            }
 
-        CDEMOFINE((MFNINF(1) "Attributes \"%s\" found, dwCreationDisposition == %08X\n", szModeNoSpace, tblMode[i].WinNTModeFlags));
+        }
+        else {
+            pWinNTModeFlags = &tblMode[i].WinNTModeFlags;       // pointer to fopen() related WinNTModeFlags
+            pOpenMode = &tblMode[i].openmode;                   // pointer to fopen() related openmode
+        }
+
+        CDETRACE((TRCINF(1) "Attributes \"%s\" found, dwCreationDisposition == %08X\n", szModeNoSpace, tblMode[i].WinNTModeFlags));
+
+        //
+        // https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilew#parameters
+        //
+        dwDesiredAccess = GENERIC_READ + GENERIC_WRITE * (O_RDONLY != (*pOpenMode & (O_RDONLY | O_WRONLY | O_RDWR)));
 
         hFile = CreateFileW(
             pwcsFileName,               /*__in          LPCTSTR lpFileName,*/
-            GENERIC_READ | GENERIC_WRITE,/*__in          DWORD dwDesiredAccess,*/
+            dwDesiredAccess,            /*__in          O_RDONLY -> GENERIC_READ, otherwise GENERIC_READ + GENERIC_WRITE*/
             FILE_SHARE_WRITE | \
             FILE_SHARE_READ | \
             FILE_SHARE_DELETE,          /*__in          DWORD dwShareMode, set all to enable reopeneing of the same file in a child process for /log writing*/
             0,                          /*__in          LPSECURITY_ATTRIBUTES lpSecurityAttributes,*/
-            tblMode[i].WinNTModeFlags,  /*__in          DWORD dwCreationDisposition,*/
+            *pWinNTModeFlags,           /*__in          DWORD dwCreationDisposition,*/
             FILE_ATTRIBUTE_NORMAL,      /*__in          DWORD dwFlagsAndAttributes,*/
             0                           /*__in          HANDLE hTemplateFile*/
         );
 
-        CDEMOFINE((MFNINF(1) "hFile == %08lX\n", hFile));
-        CDEMOFINE((MFNERR(hFile == INVALID_HANDLE_VALUE) "Opening  \"%S\" failed, INVALID_HANDLE_VALUE == %08lX\n", pwcsFileName, INVALID_HANDLE_VALUE));
+        CDETRACE((TRCINF(1) "hFile == %p\n", hFile));
+        CDETRACE((TRCERR(hFile == INVALID_HANDLE_VALUE) "Opening  \"%S\" failed, INVALID_HANDLE_VALUE == %p\n", pwcsFileName, INVALID_HANDLE_VALUE));
 
-        //        if(hFile == INVALID_HANDLE_VALUE){
-        //            LPVOID lpMsgBuf;
-        //
-        //                FormatMessage(
-        //                        FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-        //                        FORMAT_MESSAGE_FROM_SYSTEM |
-        //                        FORMAT_MESSAGE_IGNORE_INSERTS,
-        //                        NULL,
-        //                        GetLastError(),
-        //                        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-        //                        (LPTSTR) &lpMsgBuf,
-        //                        0, NULL );
-        //
-        //                CDEMOFINE((MFNERR(1) "GetLastError() -> %s\n",lpMsgBuf));
-        //        }
+        if (hFile == INVALID_HANDLE_VALUE) {
+            LPVOID lpMsgBuf;
+            unsigned err = 0;
+
+            FormatMessage(
+                FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                FORMAT_MESSAGE_FROM_SYSTEM |
+                FORMAT_MESSAGE_IGNORE_INSERTS,
+                NULL,
+                err = GetLastError(),
+                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                (LPTSTR)&lpMsgBuf,
+                0, NULL);
+
+            CDETRACE((TRCERR(1) "GetLastError() %d -> %s\n", err, (char*)lpMsgBuf));
+        }
 
         if (hFile == INVALID_HANDLE_VALUE)
+        {
+            int e = GetLastError();
+            // GetLastError() 5 ERROR_ACCESS_DENIED  -> Access is denied
+            // GetLastError() 2 ERROR_FILE_NOT_FOUND -> The system cannot find the file specified.
+            // TODO add write protection
+            // FILE 0000000000000000, lasterror 2->No such file or directory
+            // FILE 00000255438A0C40, lasterror 0->No error
+            // FILE 0000000000000000, lasterror D->Permission denied
+            switch (e)
+            {
+                case ERROR_ACCESS_DENIED:   pCdeAppIf->nErrno = 13;  /* Permission denied */
+                    break;
+                case ERROR_FILE_NOT_FOUND:  pCdeAppIf->nErrno = 2;   /* No such file or directory */
+                    break;
+            }
             break;
+        }
+
         if (_TRUE_) {
             pCdeFile->emufp = (void*)hFile;
-            pCdeFile->openmode = tblMode[i].openmode;
+            pCdeFile->openmode = *pOpenMode;
         }
 
     } while (_FALSE_);

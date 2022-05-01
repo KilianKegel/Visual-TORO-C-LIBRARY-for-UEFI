@@ -24,7 +24,7 @@ Author:
 #include <stdio.h>
 #include <CdeServices.h>
 
-extern unsigned char __cdeIsFilePointer(void* stream);
+extern int _fseeki64(FILE* stream, __int64 offset, int mode);
 
 /** Synopsis
     #include <stdio.h>
@@ -51,33 +51,5 @@ Returns
 **/
 int fseek(FILE* stream, long offset, int mode) {
 
-    CDEFILE* pCdeFile = (CDEFILE*)stream;
-    int nRet = EOF/*0 == success*/;
-    fpos_t fposnew;
-
-    do {/*1. dowhile(0)*/
-
-        if (!__cdeIsFilePointer(pCdeFile))
-            break;
-
-        nRet = 0;
-        switch (mode) {
-        case    SEEK_SET:   fposnew = offset;
-            break;
-        case    SEEK_END:   fposnew = CDE_FPOS_SEEKEND + offset;
-            break;
-        case    SEEK_CUR:   fposnew = pCdeFile->bpos + pCdeFile->bidx + offset;
-            break;
-        default:
-            //TODO: ADD error handelr
-            nRet = EOF;
-            break;
-        }
-
-        nRet = fsetpos((FILE*)pCdeFile, &fposnew);
-
-        pCdeFile->fEof = 0; //TODO: check iffseek() to SEEK_END + x clear fEof too
-
-    } while (0)/*1. dowhile(0)*/;
-    return nRet;
+    return _fseeki64(stream, (long long)offset, mode);
 }

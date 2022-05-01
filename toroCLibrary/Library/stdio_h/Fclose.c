@@ -15,18 +15,22 @@ Abstract:
     Implementation of the Standard C function.
     Closes a stream (fclose).
 
+TODO:
+    1. invoke invalid parameter handler on NULL FILE pointer
+    2. check return value not to be a "EFI_STATUS"
+
 Author:
 
     Kilian Kegel
 
 --*/
-#pragma warning( disable : 4101 )
+//#undef NCDETRACE
 #include <uefi.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <CdeServices.h>
 
-extern unsigned char __cdeIsFilePointer(void* stream);
+extern int __cdeIsFilePointer(void* stream);
 
 /** fclose
 
@@ -55,7 +59,6 @@ Returns
 int fclose(FILE* stream) {
     CDEFILE* pCdeFile = (void*)stream;
     int nRet = EOF;
-    EFI_STATUS Status;
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
     //TODO add ERRNO
 

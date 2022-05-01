@@ -28,7 +28,7 @@ Author:
 #include <limits.h>
 #include <CdeServices.h>
 
-extern unsigned char __cdeIsFilePointer(void* stream);
+extern int __cdeIsFilePointer(void* stream);
 
 /** 
 Synopsis
@@ -63,7 +63,7 @@ size_t fread(const void* ptr, size_t size, size_t nelem, FILE* stream) {
     {
         fpos_t fpos = pCdeFile->bpos + pCdeFile->bvld; //memorize file position that is destroyed by a possible fwrite(NULL,EOF,0,pCdeFile)
 
-        if (O_WRONLY == (pCdeFile->openmode & O_RDWRMSK)) {
+        if (O_WRONLY == (pCdeFile->openmode & (O_RDONLY | O_WRONLY | O_RDWR))) {
             //DONT ADD ERRoR TO ERRNO
             pCdeFile->fErr = TRUE;
             break;
@@ -162,6 +162,9 @@ size_t fread(const void* ptr, size_t size, size_t nelem, FILE* stream) {
 
         if (TRUE == fLFexpected)
             provided++;
+
+        pCdeFile->fEof = pCdeFile->bufPosEOF == pCdeFile->bidx 
+                        && provided < requested;
 
         nRet = provided / (size == 0 ? 1 : size/*don't divide by zero*/);
 

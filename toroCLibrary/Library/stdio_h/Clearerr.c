@@ -23,7 +23,7 @@ Author:
 #include <cdeservices.h>
 #include <stdio.h>
 
-extern unsigned char __cdeIsFilePointer(void* stream);
+extern int __cdeIsFilePointer(void* stream);
 
 /** clearerr
 

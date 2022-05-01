@@ -1,3 +1,6 @@
 [submodule "MdePkgInc"]
 	path = MdePkgInc
 	url = https://github.com/KilianKegel/MdePkgInc
+[submodule "CdePkg"]
+	path = CdePkg
+	url = https://github.com/KilianKegel/CdePkg.git

@@ -21,7 +21,6 @@ Author:
 --*/
 #ifndef _CDE_SERVICES_H_
 #define _CDE_SERVICES_H_
-
 //
 // select, if neccesarry, one of definitions below BEFORE including this file
 //
@@ -44,10 +43,12 @@ Author:
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include <time.h>
 #include <io.h>
 #include <setjmp.h>
 #include <cde.h>
+#include <fcntl.h>
 
 extern void* __cdeGetIOBuffer(unsigned i);
 
@@ -116,6 +117,61 @@ typedef struct _CDE_APP_IF CDE_APP_IF;
 //----------------------------------------------------------------------------
 // Definition of helper structs CDE protocol
 //----------------------------------------------------------------------------
+//
+// NOTE KG20220419: "fpos_t" is used for fsetpos() as well as for fseek()/_fseeki64().
+// 
+//                  1.  "fpos_t" is a signed value "long long" in the Microsoft implementation.
+// 
+//                  2.  fsetpos() for negative seek positions values MOVES THE INTERNAL SEEK POINTER 
+//                      TO THE END OF FILE and reports errno 22 / EINVAL / "Invalid argument"
+// 
+//                  3.  fseek()/_fseeki64() uses "fpost_t *pos" as a true signed offset
+//
+//                      a) "fseek(fp,-1,SEEK_END)"
+//                      b) "fseek(fp,-1,SEEK_CUR)"
+//                      c) "fseek(fp,-1,SEEK_SET)"
+//                      
+//                      are valid arguments, as long as the requested seek position is not _before_ 
+//                      the begin of file, of course case c) will always fail.
+//
+//                      In case of failure (negative offset relative to begin of file) fseek()
+//                      reports errno 22 / EINVAL / "Invalid argument" and DOES NOT MOVE THE SEEK POINTER
+//                      in contrast to the fsetpos() counterpart
+//
+//                      UEFI supports FAT/FAT32 file system. File size is limited to 4GB == 32bit.
+//                      "fpos_t"/"long long" is a signed 64 bit integer.
+//                  
+//                  Since "unsigned" fsetpos() is internally used for "signed" fseek(), and there is
+//                  a different handling with seek positions with bit 63 set (negative value)
+//                  CDEFPOS_T/CDEFPOSTTYPE is introduced internally to pass additional the SEEK_SET/SEEK_END
+//                  (SEEK_CUR not needed) to the fsetpos() and the underlying OSIF 
+//                  osifUefiShellFileSetPos()/osifWinNTFileSetPos() function.
+//                  
+//                  * __cdeIsCdeFposType()
+//                  * __cdeGetBiasCdeFposType()
+//                  * __cdeGetOffsetCdeFposType()
+// 
+//                  The above functions deal correctly with original fpos_t and CDEFPOS_T seek pointers.
+//
+enum CDEFPOSTTYPE {
+    CDE_SEEK_BIAS_LESS_POS              /* 000b */,
+    CDE_SEEK_BIAS_SET = 4               /* 100b */,
+    CDE_SEEK_BIAS_CUR_DUMMY_NOT_USED    /* 101b */,
+    CDE_SEEK_BIAS_END                   /* 110b */,
+    CDE_SEEK_BIAS_LESS_NEG,             /* 111b */
+};
+
+typedef union tagCDEFPOS_T // CDE DEBUG FILE POINTER
+{
+    int64_t reg64;
+    struct {
+        uint64_t Offs : 60;
+        uint64_t Sign : 1;
+        uint64_t Bias : 3;
+    }CdeFposBias;
+
+}CDEFPOS_T;// CDE fpos_t + BIAS
+
 //
 // CDE_APP_IF CDE application interface provides for each driver in PEI and DXE/SMM the CdeServices and FileHandle,**PeiServices / ImageHandle,*pSystemTable
 //
@@ -344,7 +400,7 @@ typedef unsigned long long  OSIFGETTSC(IN CDE_APP_IF* pCdeAppIf);
 typedef HEAPDESC* OSIFMEMALLOC(IN CDE_APP_IF* pCdeAppIf, IN unsigned long Pages);
 typedef void        OSIFMEMFREE(IN CDE_APP_IF* pCdeAppIf, IN unsigned long long /*EFI_PHYSICAL_ADDRESS*/ Memory, IN unsigned long Pages);
 
-typedef CDEFILE*    OSIFFOPEN(IN CDE_APP_IF* pCdeAppIf, const wchar_t* filename, const char* mode, CDEFILE* pCdeFile);
+typedef CDEFILE*    OSIFFOPEN(IN CDE_APP_IF* pCdeAppIf, const wchar_t* filename, const char* mode, int fFileExists/*0 no, 1 yes, -1 unk */, CDEFILE* pCdeFile);
 typedef int         OSIFFCLOSE(IN CDE_APP_IF* pCdeAppIf, CDEFILE* pCdeFile);
 typedef int         OSIFFDELETE(IN CDE_APP_IF* pCdeAppIf, const char* filename, CDEFILE* pCdeFile);
 typedef size_t      OSIFFREAD(IN CDE_APP_IF* pCdeAppIf, void* ptr, size_t nelem, CDEFILE* pCdeFile);
@@ -462,19 +518,19 @@ typedef struct _CDE_SERVICES {
     REPORT_STATUS_CODE ReportStatusCode;
     //EFI_STATUS_CODE_PROTOCOL *pEfiStatusCodeProtocol;
 //KGtest remove    DRIVERPARM DriverParm;
-    CPUIOXYZ CpuIoXyz;                        //KG20160191_1
-//    FNDECL_MAINSTART(*pmainstart);          // the fjMainDxeEntryPoint/fjMainSmmEntryPoint loader
-//    FNDECL_SMMSTART(*psmmstart);            // wrapper for fjLoadDriverToSmm
-    _GETCHAR* pGetConIn;                  // FNDECL_GETSTDIN(*pgetstdin);            // STDIN  - COM1
-    _PUTCHAR* pPutConOut;                 // FNDECL_PUTSTDOUT(*pputstdout);          // STDOUT - COM1
-//    FNDECL_PUTSTDERR(*pputstderr);          // STDERR - COM1
-//    FNDECL_GETDBGIN(*pgetdbgin);            // DBGIN  - COM1
+    CPUIOXYZ CpuIoXyz;                      //KG20160191_1
+//    FNDECL_MAINSTART(*pmainstart);        // the fjMainDxeEntryPoint/fjMainSmmEntryPoint loader
+//    FNDECL_SMMSTART(*psmmstart);          // wrapper for fjLoadDriverToSmm
+    _GETCHAR* pGetConIn;                    // FNDECL_GETSTDIN(*pgetstdin);            // STDIN  - COM1
+    _PUTCHAR* pPutConOut;                   // FNDECL_PUTSTDOUT(*pputstdout);          // STDOUT - COM1
+//    FNDECL_PUTSTDERR(*pputstderr);        // STDERR - COM1
+//    FNDECL_GETDBGIN(*pgetdbgin);          // DBGIN  - COM1
     _PUTCHAR* pPutDebug;                    //    FNDECL_PUTDBGOUT(*pputdbgout);          // DBGOUT - COM1
     VWXPRINTF* pVwxPrintf;                  // protocol function 0
-    VWXSCANF* pVwxScanf;                   // protocol function 1
+    VWXSCANF* pVwxScanf;                    // protocol function 1
     MEMREALLOC* pMemRealloc;
-    MEMSTRXCPY* pMemStrxCpy;                 //    FNDECL_MEMSTRXNCPY(*pmemstrxncpy);
-    MEMSTRXCMP* pMemStrxCmp;                 //    FNDECL_MEMSTRXNCMP(*pmemstrxncmp);
+    MEMSTRXCPY* pMemStrxCpy;                //    FNDECL_MEMSTRXNCPY(*pmemstrxncpy);
+    MEMSTRXCMP* pMemStrxCmp;                //    FNDECL_MEMSTRXNCMP(*pmemstrxncmp);
 //    FNDECL_IOREADX(*pioreadx);
 //    FNDECL_IOWRITEX(*piowritex);
 //    FNDECL_MEMREADX(*pmemreadx);
@@ -533,57 +589,14 @@ typedef struct _CDE_SERVICES {
 
 }CDE_SERVICES;
 
-
-
 extern void _CdeMemPutWChar(int c, void** ppDest);
 extern void _CdeMemPutNada(int c, void** ppDest);
 extern void _CdeMemPutChar(int c, void** ppDest);
 extern void* __cdeGetAppIf(void);
-//
+
+
 // ----- definitions for file i/o
 //
-typedef struct {
-    const char* pszMode;
-    int openmode;
-    //        BYTE bmDOSAccType;  //  000 read only
-    //                            //  001 write only
-    //                            //  010 read/write
-    uint64_t UefiModeFlags;
-    uint64_t UefiAttribFlags;
-
-}FACCESSMODE;
-//
-//O_RDONLY|O_WRONLY|O_RDWR    |O_APPEND|O_CREAT   |O_TRUNC    |O_EXCL |O_TEXT |O_BINARY|O_WTEXT   |
-//
-
-#define _O_RDONLY       0x0000  /* open for reading only */
-#define _O_WRONLY       0x0001  /* open for writing only */
-#define _O_RDWR         0x0002  /* open for reading and writing */
-#define _O_APPEND       0x0008  /* writes done at fEof */
-
-#define _O_CREAT        0x0100  /* create and open file */
-
-/* O_TEXT files have <cr><lf> sequences translated to <lf> on read()'s,
-** and <lf> sequences translated to <cr><lf> on write()'s
-*/
-
-#define _O_TEXT         0x4000  /* file mode is text (translated) */
-#define _O_BINARY       0x8000  /* file mode is binary (untranslated) */
-
-/* Temporary file bit - file is deleted when last handle is closed */
-
-#define _O_TEMPORARY    0x0040  /* temporary file bit */
-
-/* Non-ANSI names for compatibility */
-#define O_RDONLY        _O_RDONLY
-#define O_WRONLY        _O_WRONLY
-#define O_RDWR          _O_RDWR
-#define O_RDWRMSK       (O_RDONLY | O_WRONLY | O_RDWR)
-#define O_APPEND        _O_APPEND
-#define O_CREAT         _O_CREAT
-#define O_TEXT          _O_TEXT
-#define O_BINARY        _O_BINARY
-#define O_TEMPORARY     _O_TEMPORARY
 
 #define O_CDEWCSZONLY   (1 << 16)/*Bug in FileHandleWrappers.c: FileInterfaceStdOutWrite() does not use BufferSize, instead it writes until ZERO*/
 #define O_CDENOSEEK     (1 << 17)/* file does't support seek/tell related functions*/
@@ -600,6 +613,7 @@ typedef struct {
 typedef long long fpos_t;
 #endif//fpos_t
 #define CDE_FPOS_SEEKEND (1LL << 63)
+
 typedef struct tagCDEFILE {
     unsigned char fRsv;                         // 0 if free, 1 if taken /reserved / occupied / allocated
     int     openmode;
@@ -633,6 +647,12 @@ typedef struct tagCDEFILE {
     void* pwcsFilePath;
     void* pwcsFileName;
 #endif//def OS_EFI
+    // KG20220418 gap of non-initialized disk space
+    // UEFI BUG: file positioning bug, if data written behind EOF, data range between old EOF and 
+    // new data contains medium data / garbage, instead of 0
+    //
+    fpos_t gappos;                              // gap position /*KG20220418 gap of non-initialized disk space*/
+    size_t gapsize;                             // gap size     /*KG20220418 gap of non-initialized disk space*/
 }CDEFILE;
 
 #ifdef OS_EFI
@@ -682,6 +702,6 @@ typedef struct tagCDESTAT64I32  // Microsofts "struct _stat64i32" analogon
 // externals
 //
 extern size_t __cdeOnErrSet_status(size_t num);
-extern char* strefierror(size_t errcode);
+extern char* _strefierror(size_t errcode);
 
 #endif//_CDE_SERVICES_H_

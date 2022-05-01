@@ -30,30 +30,384 @@ Author:
 VWXPRINTF _cdeVwxPrintf;
 extern void _CdeMemPutChar(int c, void** ppDest);
 extern int _cdeCoreSprintf(CDE_APP_IF* pCdeAppIf, char* pszDest, const char* pszFormat, ...);
+extern void* memset(void* s, int c, size_t n);
 
 #define BUFFLEN (64 + 2)
 #define XWORD unsigned long long
 #define SXWORD long long
+#define INTGRBCDLEN 310
+#define FRACTBCDLEN 1100
+#define EXPPOS 52
+#define SIGPOS 63
 
 #define STRLEN(pszStr) (fWide ? _wcslen((short*)pszStr) : _strlen(pszStr))
+#define STRCPY(dst,src)     do{                                     \
+                            char strcpy_c;                          \
+                            char* strcpy_dst = dst;                 \
+                            char *strcpy_src = src;                 \
+                            int strcpy_i = 0;                       \
+                            while (                                 \
+                                strcpy_c = strcpy_src[strcpy_i],    \
+                                strcpy_dst[strcpy_i++] = strcpy_c,  \
+                                (char)'\0' != strcpy_c              \
+                                );                                  \
+                            }while (0);
+
+typedef enum { STRING = 1, FIXEDPOINT, FLOATINGPOINT }num_t;
 
 typedef struct _NUMDESC {
+    IN num_t NumType;
     IN int nNumBase;
     IN short nZeroExtendedLen;
     IN unsigned char fSigned;
     IN unsigned char fLowerCase;
     IN SXWORD nNumber;
     IN char* pszNumber;
-    OUT char* pszSS; //Sign/Sharp
+    IN int nFloatIntgrLen;  // for "abc.def" FLOATINGPOINT length of "abc"
+    IN int nFloatFractLen;  // for "abc.def" FLOATINGPOINT length of "def"
+    OUT char* pszSignSharp;    //SignFieldOfDouble/Sharp
 } NUMDESC;
 
 typedef struct _FLAGS {
-    unsigned int fSharp, fLZero, fLBlank, fMinus, fPlus, fPrecision, fWideStringOvr;
+    unsigned int fSharp, fLZero, fLBlank, fMinus, fPlus, fPrecision, fWideStringOvr, fLZeroForNegativePrecisionAndTheNumberZero /*fPrecisionIsNegative*/;
     int nFieldsize, nPrecisionsize;//20111227 fixed wrong fieldsize if nPrecisionsize is unsigned
 } FLAGS;
 
+typedef struct _DOUBLEPRINTBUF {
+    int intgrlen;                               // index into intgrbcd
+    int fractlen;                               // index into fractbcd
+    //char intgrbcd[INTGRBCDLEN];               // BCD of integer part
+    //char fractbcd[FRACTBCDLEN];               // BCD of fraction part
+    char bcd[INTGRBCDLEN + FRACTBCDLEN];        // ASCII representation w/o decimal point
+    //
+    //
+    // | <----- INTGRBCDLEN -----> <------------------- FRACTBCDLEN -------------------> |
+    //                            ^
+    //                            |
 
-char gszEmpty[] = { "" };
+    //char szDouble[INTGRBCDLEN + FRACTBCDLEN];   // ASCII representation including decimal point
+}DOUBLEPRINTBUF;
+
+/** SignFieldOfDouble
+
+Synopsis
+    static char SignFieldOfDouble(double d);
+Description
+    Calculates the sign part of a double data type.
+
+Returns
+    It returns the sign bit.
+
+    @param[in] double d
+
+    @retval 1 - negative double d
+    @retval 0 - positive double d
+
+**/
+static char SignFieldOfDouble(double d) {
+    unsigned long long* pd = (void*)&d;
+    return !((0LL == ((1LL << SIGPOS) & *pd)));
+}
+
+/** ExpFieldOfDouble
+
+Synopsis
+    static signed ExpFieldOfDouble(double d);
+Description
+    Calculates the exponent part of a double data type.
+
+Returns
+    The value returned is the true exponent of double d.
+    The bias adjustment is taken from the value.
+
+    @param[in] double d
+
+    @retval exp
+
+**/
+static signed ExpFieldOfDouble(double d) {
+    unsigned long long* pd = (void*)&d;
+    unsigned mask = ((1LL << (SIGPOS - EXPPOS)) - 1);
+    unsigned bias = (1LL << (SIGPOS - EXPPOS - 1)) - 1;	//1023
+    signed exp = (*pd >> EXPPOS);
+
+    exp &= mask;
+
+    return exp - bias;
+}
+
+/** FractFieldOfDouble
+
+Synopsis
+    static unsigned long long FractFieldOfDouble(double d);
+Description
+    Isolating the fraction part from a double data type.
+
+Returns
+    It returns the fraction bit field.
+
+    @param[in] double d
+
+    @retval double d[51:0]
+
+**/
+static unsigned long long FractFieldOfDouble(double d) {
+    unsigned long long* pd = (void*)&d;
+
+    return ((1LL << EXPPOS) - 1) & *pd;
+}
+
+/** IntgrBinDigits
+
+Synopsis
+    static unsigned long long IntgrBinDigits(double d);
+Description
+    Function calculates/shifts the fraction bitfield
+    to represent the INTEGER part of a double only.
+    The "hidden" bit is outlined as non-hidden.
+
+Returns
+    It returns the integer part of a double precision value.
+
+    @param[in] double d
+
+    @retval integer part of a double precision value
+
+**/
+static unsigned long long IntgrBinDigits(double d) {	// integer digit
+    unsigned long long* pd = (void*)&d;
+    unsigned long long nRet = 0LL;
+    unsigned long long fractionplushidden = FractFieldOfDouble(d) + (1LL << EXPPOS); // place hidden bit into the mantisse
+    signed exp = ExpFieldOfDouble(d);
+    signed shift = 0;
+
+    exp = exp > EXPPOS ? EXPPOS : exp;
+
+    if (exp >= 0) {
+        shift = (EXPPOS - exp);
+        shift = shift >= 0 ? shift : 0;
+        nRet = fractionplushidden >> shift;
+    }
+    return nRet;
+}
+
+/** FractBinDigits
+
+Synopsis
+    static unsigned long long FractBinDigits(double d);
+Description
+    Function calculates/shifts the fraction bitfield
+    to represent the fraction/non-integer part of a double only.
+    The "hidden" bit is outlined as non-hidden.
+
+Returns
+    It returns the fraction part of a double precision value including "hidden" bit.
+
+    @param[in] double d
+
+    @retval fraction part of a double precision value value including "hidden" bit
+
+**/
+static unsigned long long FractBinDigits(double d) {
+
+    unsigned long long nRet = 0LL;
+    unsigned long long fractionplushidden = FractFieldOfDouble(d) + (1LL << EXPPOS); // place hidden bit into the mantisse
+    signed exp = ExpFieldOfDouble(d);
+    signed shift = 1 + exp;
+    unsigned long long mantissemask = ((1LL << (EXPPOS + 1)) - 1);
+
+    if (exp >= 0 && exp < EXPPOS) {
+        fractionplushidden <<= shift;
+        nRet = mantissemask & fractionplushidden;
+    }
+    else
+        if (0 > exp)
+            nRet = fractionplushidden;	// neg exponent doesn't contain integer part
+
+    //
+    // clear hidden bit for subnormals/denormals
+    //
+    if (-1023 == exp)
+        nRet &= ~(1LL << EXPPOS);
+
+    return nRet;
+
+}
+
+/** IntgrDigitNum
+
+Synopsis
+    static unsigned IntgrDigitNum(double d);
+Description
+    Function calculates the number of binary digits
+    for the integer part of a double precision value.
+    The "hidden" bit is considered to be non-hidden.
+
+Returns
+    It returns the number of binary digits of the integer part of a double precision value.
+
+    @param[in] double d
+
+    @retval number of binary digits of the integer part
+
+**/
+static unsigned IntgrDigitNum(double d) {
+    signed exp = ExpFieldOfDouble(d);
+    unsigned num = 0;
+
+    if (exp >= 0) {
+        exp = exp > EXPPOS ? EXPPOS : exp;
+        num = exp + 1;
+    }
+    return num;
+}
+
+///** FractDigitNum
+//
+//Synopsis
+//    static unsigned FractDigitNum(double d);
+//Description
+//    Function calculates the number of binary digits
+//    for the fraction/non-integer part of a double precision value.
+//    The "hidden" bit is considered to be non-hidden.
+//
+//Returns
+//    It returns the number of binary digits of the fraction part of a double precision value.
+//
+//    @param[in] double d
+//
+//    @retval number of binary digits of the fraction part
+//
+//**/
+//static unsigned FractDigitNum(double d) {
+//    unsigned long long* pd = (void*)&d;
+//    signed exp = ExpFieldOfDouble(d);
+//    unsigned max = EXPPOS + 1 - IntgrDigitNum(d);
+//    unsigned num, nRet = 0;
+//
+//    for (num = 0; num <= max; num++)
+//        if (*pd & (1LL << num)) {
+//            nRet = max - num;
+//            break;
+//        }
+//
+//    return nRet;
+//}
+
+/** intgr2bcd
+
+Synopsis
+    int intgr2bcd(double d, DOUBLEPRINTBUF *pDblData);
+Description
+    Function converts the integer part of a double precision value
+    to it's corresponding BCD representation and calculates the length
+
+Returns
+    length of BCD representation in bytes
+
+    @param[in] double d
+
+    @retval length of BCD representation in bytes
+
+**/
+static int intgr2bcd(double d, DOUBLEPRINTBUF* pDblData) {
+
+    //unsigned num = IntgrDigitNum(d);
+    unsigned long long ll = IntgrBinDigits(d);
+    int i = 0;
+    signed exp = ExpFieldOfDouble(d);
+    int shiftbcd = exp - EXPPOS;
+
+    pDblData->intgrlen = 0;                     // init length at startup processing
+    do {                                        // normal binary to decimal conversion
+        pDblData->bcd[INTGRBCDLEN - i++] = ll % 10LL;
+        ll = ll / 10LL;
+    } while (0 != ll);
+
+    pDblData->bcd[INTGRBCDLEN - i] = 0;         // terminate value behind with zero
+    pDblData->intgrlen = i;                     // save length of integer digits
+
+    while (shiftbcd-- > 0) {
+        int carry = 0, digit;
+        for (i = 0; i < pDblData->intgrlen; i++) {
+            digit = pDblData->bcd[INTGRBCDLEN - i];
+            digit <<= 1;
+            digit += carry;
+            if (digit > 9) {
+                carry = 1;
+                digit -= 10;
+            }
+            else
+                carry = 0;
+            pDblData->bcd[INTGRBCDLEN - i] = (char)digit;
+        }
+
+        if (carry) {
+            pDblData->intgrlen++;
+            pDblData->bcd[INTGRBCDLEN - i] = 1;
+        }
+    }
+
+    return pDblData->intgrlen;
+}
+
+/** fract2bcd
+
+Synopsis
+    int fract2bcd(double d, DOUBLEPRINTBUF* pDblData);
+Description
+    Function converts the fraction part of a double precision value
+    in it's corresponding BCD representation and calculates the length
+
+Returns
+    length of BCD representation in bytes
+
+    @param[in] double d
+
+    @retval length of BCD representation in bytes
+
+**/
+static int fract2bcd(double d, DOUBLEPRINTBUF* pDblData) {
+
+    unsigned long long ll = FractBinDigits(d);
+    unsigned long long mask52 = (1LL << EXPPOS) - 1;
+    int i = 0;
+    signed exp = ExpFieldOfDouble(d);
+    int shiftbcd = -1 - exp;
+
+    //
+    // adjust shift count for subnormals/denormals
+    //
+    if (-1023 == exp)
+        shiftbcd = 1021;
+
+    pDblData->fractlen = 0;
+    pDblData->bcd[INTGRBCDLEN + 1 + 0] = 0;
+
+    while (0 != ll) {
+
+        ll *= 5LL;
+        pDblData->bcd[INTGRBCDLEN + 1 + i++] = (char)(ll >> EXPPOS);
+        ll &= mask52;
+        ll <<= 1;
+
+    };
+
+    pDblData->bcd[INTGRBCDLEN + 1 + i] = 0;
+    pDblData->fractlen = i;
+
+    while (shiftbcd-- > 0) {
+        int carry = 0, digit;
+        for (i = 0; i <= pDblData->fractlen; i++) {
+            digit = pDblData->bcd[INTGRBCDLEN + 1 + i] + 10 * carry;
+            carry = digit & 1;
+            pDblData->bcd[INTGRBCDLEN + 1 + i] = (char)(digit / 2);
+        }
+        pDblData->fractlen++;
+        pDblData->bcd[INTGRBCDLEN + 1 + pDblData->fractlen] = 0;
+    }
+    return pDblData->fractlen;
+}
 
 unsigned int _strlen(const char* pszBuffer) {
     int i = 0;
@@ -113,10 +467,9 @@ static char* num2str(NUMDESC* pParms, unsigned char fWide) {
     short nZeroExtendedLen = pParms->nZeroExtendedLen;
     char c;
 
-    fWide ? (((short*)(pParms->pszNumber))[i--] = '\0') : (pParms->pszNumber[i--] = '\0');
+    fWide = 0;  // number strings are ASCII from now on
 
-    //            if(   (pParms->nNumBase != 16) && (pParms->nNumBase != 10) && (pParms->nNumBase != 8) && (pParms->nNumBase != 2))
-    //                break;
+    pParms->pszNumber[i--] = '\0';
 
     if (pParms->fSigned == TRUE && pParms->nNumber < 0) {
         fNegative = TRUE;
@@ -132,31 +485,27 @@ static char* num2str(NUMDESC* pParms, unsigned char fWide) {
         c = (char)(((XWORD)((nNumber) % (XWORD)pParms->nNumBase)) + '0');
         if (c > '9')                                                         // correct if hex
             c += (('A' - '9' - 1) | pParms->fLowerCase << 5);
-        fWide ? (((short*)(pParms->pszNumber))[i] = c) : (pParms->pszNumber[i] = c);
+        pParms->pszNumber[i] = c;
         nNumber = (nNumber) / pParms->nNumBase;
         nZeroExtendedLen--;
     } while (--i && (nNumber || ((nZeroExtendedLen) > 0)));
 
-    pParms->pszSS[0] = '\0';
-    pParms->pszSS[1] = '\0';
-    pParms->pszSS[2] = '\0';
+    //
+    // init sign/sharp - S/#
 
+    STRCPY(&pParms->pszSignSharp[0], "");   // clear sign/sharp string
     if (pParms->fSigned == TRUE) {
-        pParms->pszSS[0] = fNegative == TRUE ? '-' : '+';
+        STRCPY(&pParms->pszSignSharp[0],fNegative == TRUE ? "-" : "+");
     }
     else {
         if (nNumberoriginal) {
-            if (pParms->nNumBase == 16) {
-                pParms->pszSS[0] = '0';
-                pParms->pszSS[1] = 'X';
-                pParms->pszSS[1] |= pParms->fLowerCase << 5;
-            }
+            if (pParms->nNumBase == 16)
+                STRCPY(&pParms->pszSignSharp[0], pParms->fLowerCase ? "0x" : "0X");
             if (pParms->nNumBase == 8)
-                pParms->pszSS[0] = '0';
+                STRCPY(&pParms->pszSignSharp[0], "0");
         }
     }
-
-    return fWide ? (char*)&((short*)(pParms->pszNumber))[i + 1] : &pParms->pszNumber[i + 1];
+    return &pParms->pszNumber[i + 1];
 }
 
 
@@ -174,7 +523,7 @@ static int nfill(char c, int n, unsigned int* pCount, void** ppDest, void (*pfnD
 
 static int nprintfield(
     char* pszStr,
-    char* pszSSIn,
+    NUMDESC* pNumDesc,
     FLAGS* pFlags,
     void (*pfnDevPutChar)(int, void**),
     unsigned int* pCount,
@@ -185,31 +534,30 @@ static int nprintfield(
 
     int nRet = 0;
     char filler = pFlags->fLZero ? '0' : '\x20';
-    char* pszSS = &gszEmpty[0];
-    int nStrlen, nSSlen, nFillerlen, nPrecilen;
+    char szSignSharp[3];
+    int nStrlen = -1, nSSlen = -1, nFillerlen = -1, nPrecilen = -1;
     unsigned char fTrailingBlanks, fLeadingBlanks, fFillingZeros;
-    unsigned char fStringIsString = (pszSSIn == NULL);   // pszStr: is it a string or a number???
 
-    pszSS = pszSSIn == NULL ? pszSS : pszSSIn;                    // if number, set sign/sharp string
+    STRCPY(szSignSharp, STRING == pNumDesc->NumType ? "" : pNumDesc->pszSignSharp);
 
     if (pFlags->fLBlank && pFlags->fPlus)   // fix "%+ d" / "% +d"
         pFlags->fLBlank = 0;                // fix "%+ d" / "% +d"
     if (pFlags->fLZero && pFlags->fMinus)   // fix "%0-2i"
         pFlags->fLZero = 0;                 // fix "%0-2i"
 
-    if (pszSS[0] != '+' && pszSS[0] != '-') {                           // check for signed integer
-        pszSS[0] = (!pFlags->fSharp) ? '\0' : pszSS[0];                 // replace S/# by / if no #-flag is set
-                                                                        // (dont print 0x on hex if # is absent)!!!
+    if (szSignSharp[0] != '+' && szSignSharp[0] != '-') {                     // check for signed integer
+        if (0 == pFlags->fSharp && szSignSharp[0] != '\0')                    // replace S/# by / if no #-flag is set
+            szSignSharp[0] = '\0';                                            // (dont print 0x on hex if # is absent)!!!
     }
 
     pFlags->fLZero = (STRLEN(pszStr) >= (unsigned)pFlags->nFieldsize) ? 0 : pFlags->fLZero; //20111227 W/A printf("|%05d|\n",100000);
 
-    if (pszSS[0] == '+') {                                                // if signed, positive number, replace '+'  by space, '0' or cut to zero string
+    if (szSignSharp[0] == '+') {                                                // if signed, positive number, replace '+'  by space, '0' or cut to zero string
 //        pszSS[0] = (pFlags->fLBlank && !pFlags->fPlus) ? '\0' : pszSS[0];
-        pszSS[0] = (pFlags->fLBlank && !pFlags->fLZero) ? 0x20 : pszSS[0];
-        pszSS[0] = (pFlags->fLBlank &&  pFlags->fLZero) ? 0x20 : pszSS[0];    // fix "% 02i"
-        pszSS[0] = (!pFlags->fLBlank && pFlags->fLZero && !pFlags->fPlus) ? '0' : pszSS[0];
-        pszSS[0] = (!pFlags->fLBlank && !pFlags->fLZero && !pFlags->fPlus) ? '\0' : pszSS[0];
+        szSignSharp[0] = (pFlags->fLBlank && !pFlags->fLZero) ? 0x20 : szSignSharp[0];
+        szSignSharp[0] = (pFlags->fLBlank &&  pFlags->fLZero) ? 0x20 : szSignSharp[0];    // fix "% 02i"
+        szSignSharp[0] = (!pFlags->fLBlank && pFlags->fLZero && !pFlags->fPlus) ? '0' : szSignSharp[0];
+        szSignSharp[0] = (!pFlags->fLBlank && !pFlags->fLZero && !pFlags->fPlus) ? '\0' : szSignSharp[0];
     }
 
     fTrailingBlanks = pFlags->fMinus ? TRUE : FALSE;
@@ -218,31 +566,78 @@ static int nprintfield(
 
     // ----- W/A for precision on strings
 
-    if (fStringIsString) {                    // have string??? (no sign/sharp string)???
-        unsigned tmplen = STRLEN(pszStr);     // KG20170117 fixed: %c if char == '\0' doesn't print the '\0'
+    switch (pNumDesc->NumType) {
+        case STRING: {       // have string??? (no sign/sharp string)???
+
+        unsigned tmplen = STRLEN(pszStr);   // JC20170117 fixed: %c if char == '\0' doesn't print the '\0'
 
         if (IsSingle && '\0' == pszStr[0])   // KG20170117 fixed: %c if char == '\0' doesn't print the '\0'
             tmplen++;                       // KG20170117 fixed: %c if char == '\0' doesn't print the '\0'
         nStrlen = pFlags->fPrecision && (unsigned)pFlags->nPrecisionsize < tmplen ? pFlags->nPrecisionsize : tmplen;
         nPrecilen = 0;
+        break;
     }
-    else {
-        nStrlen = STRLEN(pszStr);
-        nPrecilen = pFlags->fPrecision && pFlags->nPrecisionsize - nStrlen > 0 ? pFlags->nPrecisionsize - nStrlen : 0;
-    }
+        case FIXEDPOINT: {
+            if (pFlags->nPrecisionsize == 0 && pNumDesc->nNumber == 0) {
+                STRCPY(&pszStr[0], "");  // number strings are ASCII from now on
+            }
+//--- 
+            // For "o" conversion,  it increases the precision, if and only if necessary, to force the first digit of the result
+            // to be a zero  (if  the  value  and  precision  are  both  0,  a  single  0  is  printed)
+            nStrlen = 0;
+            if (8 == pNumDesc->nNumBase)
+                if (1 == pFlags->fSharp)
+                    if (0 == pNumDesc->nNumber) {
+                        if (0 == pFlags->nPrecisionsize)
+                            STRCPY(&pszStr[0],"0");  // number strings are ASCII from now on
+                    }//if (0 == pNumDesc->nNumber){
+                    else {
+                        //szSignSharp[0] = '\0';      // (dont print 0 on octal if # is absent)!!!
+                    }
+                    
+//---
+            nStrlen += STRLEN(pszStr);
+            if (1) {
+                int OctalSharpPreciNonZeroCorrection = ((8 == pNumDesc->nNumBase) && (1 == pFlags->fSharp) && (1 < pFlags->nPrecisionsize) && (0 != pNumDesc->nNumber));
 
-    // ----- W/A for Zero precision on ZERO printf("|%5.0d|\n",0);
+                nPrecilen = pFlags->fPrecision && pFlags->nPrecisionsize - nStrlen > 0 ? pFlags->nPrecisionsize - nStrlen - OctalSharpPreciNonZeroCorrection : 0;
 
-    if (0 == fStringIsString && pFlags->fPrecision && (pFlags->nPrecisionsize == 0)) {                // have a number???
-        if (('0' == (fWide ? ((short*)pszStr)[0] : pszStr[0])) && ('\0' == (fWide ? ((short*)pszStr)[1] : pszStr[1]))) {
-            if (fWide)
-                ((short*)pszStr)[0] = 0x20;
-            else
-                pszStr[0] = 0x20;
+            }
+            //if ((8 == pNumDesc->nNumBase) && (1 == pFlags->fSharp) && (1 < pFlags->nPrecisionsize) && (0 != pNumDesc->nNumber))
+            //    nPrecilen = pFlags->fPrecision && pFlags->nPrecisionsize - nStrlen > 0 ? pFlags->nPrecisionsize - nStrlen - 1 : 0;
+
+        break;
+        }
+		
+        case FLOATINGPOINT: {
+            int offsIntgr = 0;
+            int offsFract = pNumDesc->nFloatIntgrLen;
+            int addPreciZeros = pFlags->nPrecisionsize - pNumDesc->nFloatFractLen;
+
+            addPreciZeros = addPreciZeros < 0 ? 0 : addPreciZeros;
+
+            nStrlen = _strlen(&pszStr[offsIntgr]) + 1/*_strlen(".")*/;  // INTGR.FRACT, entire possible string
+            if (0 == pNumDesc->nFloatFractLen)
+                nStrlen--;                                              // substract the "."
+            nPrecilen = 0;                                              // precision zero are appended separately
+
+            fFillingZeros = FALSE;
+            break;
         }
     }
 
-    nSSlen = _strlen(pszSS);
+//    // ----- W/A for Zero precision on ZERO printf("|%5.0d|\n",0);
+//    
+//    if (FIXEDPOINT == pNumDesc->NumType && pFlags->fPrecision && (pFlags->nPrecisionsize == 0)) {                // have a number???
+//        if (('0' == (fWide ? ((short*)pszStr)[0] : pszStr[0])) && ('\0' == (fWide ? ((short*)pszStr)[1] : pszStr[1]))) {
+//            if (fWide)
+//                ((short*)pszStr)[0] = '\0';
+//            else
+//                pszStr[0] = '\0';
+//        }
+//    }
+
+    nSSlen = _strlen(szSignSharp);
     nFillerlen = pFlags->nFieldsize - nStrlen - nSSlen - nPrecilen < 0 ? 0 : pFlags->nFieldsize - nStrlen - nSSlen - nPrecilen;
 
     //
@@ -252,25 +647,47 @@ static int nprintfield(
 
         // ----- W/A for leading 0 on octals
 
-    if (pszSS[0] == '0' && pszSS[1] == '\0' && nPrecilen != 0) {
-        pszSS[0] = '\0';            // cut string (leading '0')
-        nFillerlen++;
-    }
+    //if (szSignSharp[0] == '0' && szSignSharp[1] == '\0' && nPrecilen != 0) {
+    //    szSignSharp[0] = '\0';            // cut string (leading '0')
+    //    nFillerlen++;
+    //}
 
-    if (fLeadingBlanks)                                  // (L)
+    if (fLeadingBlanks  /* ###### (L) ###### */)
         nRet += nfill(0x20, nFillerlen, pCount, ppDest, pfnDevPutChar);
 
-    nRet += str2dev(pfnDevPutChar, pszSS, pCount, ppDest, (unsigned int)-1, 0, 0);      // S/#
+    if (1               /* ###### (S/#) ###### */) {
+        nRet += str2dev(pfnDevPutChar, szSignSharp, pCount, ppDest, (unsigned int)-1, 0, 0);
+    }
 
-    if (fFillingZeros)                                   // (Z)
+    if (fFillingZeros   /* ###### (Z) ###### */)
         nRet += nfill(filler, nFillerlen, pCount, ppDest, pfnDevPutChar);
 
-    if (pFlags->fPrecision && fStringIsString == 0)      // P
+    if (pFlags->fPrecision && pNumDesc->NumType != STRING/* ###### P ###### */)
         nRet += nfill('0', nPrecilen, pCount, ppDest, pfnDevPutChar);
 
-    nRet += str2dev(pfnDevPutChar, pszStr, pCount, ppDest, nStrlen, fWide, IsSingle);    // Str
+    if (1               /* ###### Str ###### */) {
+        if (FLOATINGPOINT == pNumDesc->NumType) {
+            int offsIntgr = 0;
+            int offsFract = pNumDesc->nFloatIntgrLen;
 
-    if (fTrailingBlanks)                                 // (T)
+            nRet += str2dev(pfnDevPutChar, &pszStr[offsIntgr], pCount, ppDest, pNumDesc->nFloatIntgrLen, 0/*fWide*/, IsSingle);      // "123" part of "123.456"
+            if (pNumDesc->nFloatFractLen) {
+                nRet += str2dev(pfnDevPutChar, ".", pCount, ppDest, 1, 0/*fWide*/, IsSingle);                                        // "."
+                nRet += str2dev(pfnDevPutChar, &pszStr[offsFract], pCount, ppDest, pNumDesc->nFloatFractLen, 0/*fWide*/, IsSingle);  // "456" part of "123.456"
+            }
+            //TODO: if (pFlags->fPrecision) {
+            //TODO:     int diff = pFlags->nPrecisionsize - pNumDesc->nFloatFractLen - pNumDesc->nFloatIntgrLen;
+            //TODO: 
+            //TODO:     if (0 < diff)
+            //TODO:         nRet += nfill('0', (unsigned)diff, pCount, ppDest, pfnDevPutChar);
+            //TODO: }
+
+        }
+        else
+            nRet += str2dev(pfnDevPutChar, pszStr, pCount, ppDest, nStrlen, fWide, IsSingle);
+    }
+
+    if (fTrailingBlanks /* ###### (T) ###### */)
         nRet += nfill(0x20, nFillerlen, pCount, ppDest, pfnDevPutChar);
 
     return nRet;
@@ -293,11 +710,22 @@ _cdeVwxPrintf(
     unsigned char fWide = pFixParm->fWide;
     unsigned char fDes = 2 == (pFixParm->fForceToDataSeg & 2);
     int i, t;
-    NUMDESC numdesc = { (unsigned char)-1,(short)-1,(unsigned char)-1,(unsigned char)-1,(SXWORD)-1,NULL,NULL };
+    NUMDESC numdesc = { 
+        .NumType = -1,
+        .nNumBase = (unsigned char)-1,
+        .nZeroExtendedLen = (short)-1,
+        .fSigned = (unsigned char)-1,
+        .fLowerCase = (unsigned char)-1,
+        .nNumber = (SXWORD)-1,
+        .pszNumber = NULL,
+        .nFloatIntgrLen = 0,
+        .nFloatFractLen = 0,
+        .pszSignSharp = NULL
+    };
     FLAGS flags;
     unsigned char bIntOrLongOrInt64 = (unsigned char)-1;
     char rgbBuffer[sizeof(short) * BUFFLEN];
-    char rgSS[3];               // -,+,0,0x,0X         Sign/Sharp#
+    char szSignSharp[3];               // -,+,0,0x,0X         SignFieldOfDouble/Sharp#
     char fieldsizebuf[8];
     int  ifieldsizebuf = -1;
     int* pSize = &flags.nFieldsize;    //pointer to eighter  flags.nFieldsize or flags.nPrecisionsize
@@ -312,19 +740,21 @@ _cdeVwxPrintf(
         PROCESS_BASE,
         PROCESS_PRECISION,
         PROCESS_FIELDSIZE,
-        PROCESS_THE_NUMBER_ITSELF,
-        PROCESS_THE_PRECISITION_ITSELF,
+        PROCESS_THE_NUMBER,
         PROCESS_CHARSSTRING,
         PROCESS_PERCENT,
         PROCESS_WRITECHARS,
         PROCESS_COUNT,
         PROCESS_ERROR,
-        PROCESS_THE_POINTER_ITSELF,
+        PROCESS_THE_POINTER,
         PROCESS_GUID,
         PROCESS_TIME,
         PROCESS_STATUS,
-        PROCESS_DONT_WRITE_ANYMORE/*kg20150210_00*/
+        PROCESS_DONT_WRITE_ANYMORE/*kg20150210_00*/,
+        PROCESS_THE_DOUBLE_G_SPECIFIER_LIBXLSXWRITER_HACK
     }state = PROCESS_WRITECHARS;
+
+    DOUBLEPRINTBUF* pDblData = NULL;
 
     //int snprintf( char *buffer,size_t count,  const char *format [,argument] ... );
     //int sprintf(  char *buffer,               const char *format [,argument] ... );
@@ -334,7 +764,7 @@ _cdeVwxPrintf(
 
 
     numdesc.pszNumber = rgbBuffer;
-    numdesc.pszSS = rgSS;
+    numdesc.pszSignSharp = &szSignSharp[0];
 
     pszFormatW = (short*)pszFormat;
 #define CHAR816(IX) fWide ? pszFormatW[IX] : ((char*)pszFormat)[IX]
@@ -405,13 +835,26 @@ _cdeVwxPrintf(
             case 'o':
             case 'u':
             case 'x':
-            case 'X':   i--; state = PROCESS_THE_NUMBER_ITSELF; break;
+            case 'X':   i--; state = PROCESS_THE_NUMBER; break;
 
-            case 'p':   i--; state = PROCESS_THE_POINTER_ITSELF; break;
+            case 'p':   i--; state = PROCESS_THE_POINTER; break;
 
-            case 'g':   i--;numdesc.fLowerCase = 1;state = PROCESS_GUID;break;  /* EFI_SPECIFIC*/
-            case 'G':   i--;numdesc.fLowerCase = 0;state = PROCESS_GUID;break;  /* EFI_SPECIFIC*/
-            case 't':   
+            case 'g':   if (1 == pFixParm->fUEFIFormat) {                               /* EFI_SPECIFIC*/
+                            i--; numdesc.fLowerCase = 1;                                /* EFI_SPECIFIC*/
+                            state = PROCESS_GUID;                                       /* EFI_SPECIFIC*/
+                            break;                                                      /* EFI_SPECIFIC*/
+                        }                                                               /* EFI_SPECIFIC*/
+                        state = PROCESS_WRITECHARS;
+                        break;
+
+            case 'G':   if (1 == pFixParm->fUEFIFormat) {                               /* EFI_SPECIFIC*/
+                            i--; numdesc.fLowerCase = 0;                                /* EFI_SPECIFIC*/
+                            state = PROCESS_GUID;                                       /* EFI_SPECIFIC*/
+                            break;                                                      /* EFI_SPECIFIC*/
+                        }                                                               /* EFI_SPECIFIC*/
+                        i--; state = PROCESS_THE_DOUBLE_G_SPECIFIER_LIBXLSXWRITER_HACK; break;
+                        break;
+            case 't':
                         //
                         // NOTE:    't' is ANSI C 99
                         // 
@@ -511,7 +954,63 @@ _cdeVwxPrintf(
             }
             break;//PROCESS_OPSIZE
         case PROCESS_BASE:
-        case PROCESS_PRECISION:
+        case PROCESS_PRECISION: // http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1124.pdf#page=287
+//TODO kg20220402            //short c;
+//TODO kg20220402            // check character following the "."
+//TODO kg20220402            // it is allowed to be:
+//TODO kg20220402            //  1. string of decimal number 0..9
+//TODO kg20220402            //      in this case the real precesion is calculated
+//TODO kg20220402            //  2. optinally a length modifier h,l,j,z,t,L
+//TODO kg20220402            //      int this case precision is 0
+//TODO kg20220402            //  3. conversion specifier d,i,o,u,x,X f,F,e,E,g,G (c,s,p,n)???
+//TODO kg20220402            //      int this case precision is 0
+//TODO kg20220402            //  everthing else is just skipped...
+//TODO kg20220402            switch (t = i++, c = ydes(fDes, t, CHAR816(t))) {
+//TODO kg20220402            case '0':   // "." follows a decimal number
+//TODO kg20220402            case '1':
+//TODO kg20220402            case '2':
+//TODO kg20220402            case '3':
+//TODO kg20220402            case '4':
+//TODO kg20220402            case '5':
+//TODO kg20220402            case '6':
+//TODO kg20220402            case '7':
+//TODO kg20220402            case '8':
+//TODO kg20220402            case '9':
+//TODO kg20220402                i--;
+//TODO kg20220402                state = PROCESS_FIELDSIZE;
+//TODO kg20220402                break;
+//TODO kg20220402
+//TODO kg20220402            case 'h':   // "." follows a length modifiers
+//TODO kg20220402            case 'l':
+//TODO kg20220402            case 'j':
+//TODO kg20220402            case 'z':
+//TODO kg20220402            case 't':
+//TODO kg20220402            case 'L':
+//TODO kg20220402
+//TODO kg20220402            case 'd':   // "." follows a conversion specifiers
+//TODO kg20220402            case 'i':
+//TODO kg20220402            case 'o':
+//TODO kg20220402            case 'u':
+//TODO kg20220402            case 'x':
+//TODO kg20220402            case 'X':
+//TODO kg20220402            case 'f':
+//TODO kg20220402            case 'F':
+//TODO kg20220402            case 'e':
+//TODO kg20220402            case 'E':
+//TODO kg20220402            case 'g':
+//TODO kg20220402            case 'G':   *pSize = 0;
+//TODO kg20220402            //case 'c': //case 's'://case 'p'://case 'n': 
+//TODO kg20220402                // fall through
+//TODO kg20220402            case '*':
+//TODO kg20220402                i--;
+//TODO kg20220402                state = PROCESS_FLAGS;
+//TODO kg20220402                break;
+//TODO kg20220402            default:
+//TODO kg20220402                i--;
+//TODO kg20220402                state = PROCESS_WRITECHARS;
+//TODO kg20220402                break;
+//TODO kg20220402            }
+//TODO kg20220402            break;
         case PROCESS_FIELDSIZE:
             switch (t = i++, ydes(fDes, t, CHAR816(t))) {
             case '0':
@@ -682,7 +1181,12 @@ _cdeVwxPrintf(
                 else
                     ((char*)singlecharbuf)[0] = va_arg(ap, char);
                 break;
-            case 'a': bIntOrLongOrInt64 = 8 * sizeof(short);    /* in UEFI %a == ASCII STRING, in STDC float print */
+            case 'a': if (1 == pFixParm->fUEFIFormat) { 			/* EFI_SPECIFIC*/
+							bIntOrLongOrInt64 = 8 * sizeof(short);  /* EFI_SPECIFIC*/	/* in UEFI %a == ASCII STRING, in STDC float print */
+                        }                                           /* EFI_SPECIFIC*/
+						else
+						break;
+			
             case 's':
             case 'S':   IsSingle = FALSE;
                 pStr = 32 == bIntOrLongOrInt64 ? (char*)va_arg(ap, wchar_t*) : va_arg(ap, char*);
@@ -691,22 +1195,119 @@ _cdeVwxPrintf(
                 break;
             }
 
-
-            nprintfield(pStr, NULL, &flags, pfnDevPutChar, (unsigned int*)&dwCount, &pDest, 32 == bIntOrLongOrInt64, IsSingle/*is/not single*/);
+            numdesc.NumType = STRING;
+            nprintfield(pStr, &numdesc, &flags, pfnDevPutChar, (unsigned int*)&dwCount, &pDest, 32 == bIntOrLongOrInt64, IsSingle/*is/not single*/);
 
             state = dwCount ? PROCESS_WRITECHARS : PROCESS_DONT_WRITE_ANYMORE;  //set state before decrement dwCount    /*kg20150210_00*/
             break;// PROCESS_CHARSSTRING
         }// PROCESS_CHARSSTRING
 
-        case PROCESS_THE_POINTER_ITSELF:
+        case PROCESS_THE_POINTER:
             bIntOrLongOrInt64 = sizeof(void*) * 8;
             flags.fLZero = 0;
             flags.fPrecision = 0;
             flags.fPlus = 0;
             numdesc.nZeroExtendedLen = sizeof(void*) * 2;   //forced lenght of a pointer including leading zeros
             //numdesc.fSigned = 0;
-            state = PROCESS_THE_NUMBER_ITSELF; break;
-        case PROCESS_THE_NUMBER_ITSELF: {
+            state = PROCESS_THE_NUMBER; break;
+        case PROCESS_THE_DOUBLE_G_SPECIFIER_LIBXLSXWRITER_HACK: {
+            double d;
+            unsigned long long* pd = (void*)&d;
+            int n;
+            int cIntgr, cFract/*count*/;
+            static DOUBLEPRINTBUF DblData;
+            char* pszDbl, * pBCD;
+            int nPrecisionsize = flags.nPrecisionsize > FRACTBCDLEN ? FRACTBCDLEN : flags.nPrecisionsize; // range check
+            
+            nPrecisionsize = 0 == flags.fPrecision ? 6 : nPrecisionsize;    // set default precision size
+            
+            //
+            // allocate the double print buffer for processing (1418 bytes)
+            //
+            if (NULL == pDblData)
+            {
+                pDblData = pCdeAppIf->pCdeServices->pMemRealloc(
+                    pCdeAppIf,
+                    NULL,                       // IN void *ptr,   /* input pointer for realloc */
+                    sizeof(DOUBLEPRINTBUF),     // IN size_t size, /*  input size for realloc   */
+                    &pCdeAppIf->pCdeServices->HeapStart
+                );
+            }
+            memset(&pDblData->bcd, 0xff, INTGRBCDLEN + FRACTBCDLEN);
+            state = PROCESS_WRITECHARS;
+
+            if (nPrecisionsize < 0) {
+                break;                                                      // format error, don't do it! print format specifier "f" and continue
+            }else
+                i++;                                                        // suppress printing of the format specifier
+
+            if (0 == flags.fPrecision) {
+                flags.nPrecisionsize = nPrecisionsize;                      // update default 6 for nprintfield()
+                flags.fPrecision = 1;                                       // update default 6 for nprintfield()
+            }                                   
+
+            d = va_arg(ap, double);
+
+            memset(&DblData.bcd[0], 0xFF, sizeof(DblData.bcd));
+//            __debugbreak();
+
+            cIntgr = intgr2bcd(d, pDblData);                                    // convert INTGR part to BCD
+            cFract = fract2bcd(d, pDblData);                                    // convert FRACT part to BCD
+            
+            if (cIntgr + cFract > nPrecisionsize)
+                n = nPrecisionsize;
+            else
+                n =  cIntgr + cFract;// round FRACT part
+
+
+            //if (pDblData->bcd[INTGRBCDLEN - cFract + 1 + n] >= 5)                    	// round FRACT part
+            //    pDblData->bcd[INTGRBCDLEN - cFract + 1 + n - 1]++;                       // round FRACT part
+            //
+            //pDblData->bcd[INTGRBCDLEN - cFract + 1 + n] = '\0';                          // terminate the ASCII string
+            //pDblData->bcd[INTGRBCDLEN - cFract - cIntgr] = '\0';                         // terminate the ASCII string at the beginning
+
+            if (1) {
+                int carry = 0 /*rounding carry*/;
+                int startIntgrASCII/*depending on rounding result 99.xxx -> 100.yyy */;
+                char* pBcdLsdFract = &pDblData->bcd[INTGRBCDLEN - cIntgr + n];  // end of FRACT part Least Significant Digit
+                char* pBcdMsdIntgr = &pDblData->bcd[INTGRBCDLEN - cIntgr];      // begin of INTGR part Most Significant Digit
+
+                // 
+                // TODO: round FRACT part
+                // 
+                //if (pBcdLsdFract[1] >= 5)
+                //    pBcdLsdFract[0]++;
+                
+                //
+                // make it BCD to ASCII
+                //
+                for (pBCD = pBcdLsdFract; pBCD >= pBcdMsdIntgr; pBCD--) {
+                    int val;
+                    val = pBCD[0] + carry;
+                    carry = val == 9 + 1;
+                    if (carry)
+                        val = 0;
+                    pBCD[0] = (char)(val + '0');
+                }
+                
+                startIntgrASCII = '0' == pBcdMsdIntgr[0] ? 1 : 0;                               // offset of start of string
+                pBcdMsdIntgr = &pBcdMsdIntgr[startIntgrASCII];                                  // start of string
+
+                numdesc.nFloatIntgrLen = cIntgr + 1 - startIntgrASCII;                          // strlen of INTGR part
+                numdesc.nFloatFractLen = (int)(&pBcdLsdFract[0] - &pDblData->bcd[INTGRBCDLEN]);
+                numdesc.NumType = FLOATINGPOINT;
+
+                pszDbl = pBcdMsdIntgr;
+            }
+            memset(&numdesc.pszSignSharp[0], 0, 3);
+
+            numdesc.pszSignSharp[0] = (1LL << 63) & *pd ? '-' : '+';               // check sign of double d
+
+            nprintfield(pszDbl, &numdesc, &flags, pfnDevPutChar, (unsigned int*)&dwCount, &pDest, 0/*fWide*/, 0/*is not single*/);
+            state = dwCount ? PROCESS_WRITECHARS : PROCESS_DONT_WRITE_ANYMORE;          //set state before decrement dwCount    /*kg20150210_00*/
+            break;
+        }
+        case PROCESS_THE_NUMBER: {
             char* pszNum;
             ///bIntOrLongOrInt64 = (bIntOrLongOrInt64 == 0 ? 8 * sizeof(int) : bIntOrLongOrInt64);
             switch (bIntOrLongOrInt64) {
@@ -729,10 +1330,11 @@ _cdeVwxPrintf(
             case 'X': numdesc.nNumBase = 16; numdesc.fLowerCase = 0; break;
             }
             //for(x = 0 ; x < sizeof(rgbBuffer) ; x++) rgbBuffer[x] = 0xFF;
-            pszNum = num2str(&numdesc, fWide);
-            nprintfield(pszNum, numdesc.pszSS, &flags, pfnDevPutChar, (unsigned int*)&dwCount, &pDest, fWide, 0/*is not single*/);
+            numdesc.NumType = FIXEDPOINT;
+            pszNum = num2str(&numdesc, 0 /*fWide*/);
+            nprintfield(pszNum, &numdesc, &flags, pfnDevPutChar, (unsigned int*)&dwCount, &pDest, 0/*fWide*/, 0/*is not single*/);
             state = dwCount ? PROCESS_WRITECHARS : PROCESS_DONT_WRITE_ANYMORE;  //set state before decrement dwCount    /*kg20150210_00*/
-            break;// PROCESS_THE_NUMBER_ITSELF
+            break;// PROCESS_THE_NUMBER
         }
         case PROCESS_COUNT: {   void* p;
             state = PROCESS_WRITECHARS;
@@ -764,6 +1366,12 @@ _cdeVwxPrintf(
             break;
         }//switch(state)
     }//while( ((char*)pszFormat)[i] != '\0'){
+    
+    //
+    // free the floating point data buffer
+    //
+    if(NULL != pDblData)
+        pCdeAppIf->pCdeServices->pMemRealloc(pCdeAppIf, pDblData, 0, &pCdeAppIf->pCdeServices->HeapStart);
 
     return dwInitialCount - dwCount;
 }

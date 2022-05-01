@@ -61,11 +61,6 @@ int vfprintf(FILE* stream, const char* pszFormat, va_list ap) {
 
         if (CDEDBGMAGIC == (CDEDBGMAGICMASK & (size_t)stream))
         {
-            if (0 == (CDEDBG_EN & (size_t)stream))
-                break;
-            
-            RomParm.fUEFIFormat = 0 != (CDEDBG_EFIFMT & (size_t)stream);    // use EFI format specifiers?
-
             pfnOutput = pCdeAppIf->pCdeServices->pPutDebug;
             stream = (void*)pCdeAppIf;
         }

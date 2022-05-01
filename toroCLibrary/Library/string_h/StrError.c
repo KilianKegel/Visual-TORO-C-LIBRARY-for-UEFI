@@ -15,6 +15,8 @@ Abstract:
     Implementation of the Standard C function.
     Gets a system error message string
 
+TODO: BUGBUG In the Microsoft implementation successive calls overwrite previeous error strings.
+
 Author:
 
     Kilian Kegel

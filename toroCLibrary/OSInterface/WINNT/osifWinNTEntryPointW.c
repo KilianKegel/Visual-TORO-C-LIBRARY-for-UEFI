@@ -70,7 +70,6 @@ char* gszCdeDriverName;
 //
 extern void free(void*);
 
-extern _PUTCHAR  _CdeDbgPutChar;
 extern VWXPRINTF _cdeVwxPrintf;
 extern VWXSCANF _cdeVwxScanf;
 extern WCSSTRTOK _cdeWcsStrTok;

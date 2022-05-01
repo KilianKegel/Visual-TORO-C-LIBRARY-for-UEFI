@@ -45,11 +45,11 @@ Parameters
 
 Returns
 
-    1 on SUCCESS
-    0 on FAILURE
+    (1 + fd)    on SUCCESS fdplusone
+    0           on FAILURE
 
 **/
-unsigned char __cdeIsFilePointer(void* stream) {
+int __cdeIsFilePointer(void* stream) {
     int j;
     void* pCdeFile;
     EFI_STATUS Status = (EFI_STATUS)-1;
@@ -64,5 +64,5 @@ unsigned char __cdeIsFilePointer(void* stream) {
 
     __cdeOnErrSet_errno(Status, EBADF);
 
-    return EFI_SUCCESS == Status;
+    return EFI_SUCCESS == Status ? 1 + j : 0;
 }

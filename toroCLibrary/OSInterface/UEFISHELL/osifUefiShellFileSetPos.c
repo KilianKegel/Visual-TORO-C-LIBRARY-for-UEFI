@@ -19,6 +19,7 @@ Author:
     Kilian Kegel
 
 --*/
+//#undef NCDETRACE
 #define OS_EFI
 #include <PiPei.h>
 #include <Base.h>
@@ -26,6 +27,9 @@ Author:
 #include <stdio.h>
 #include <errno.h>
 #include <cde.h>
+
+extern fpos_t __cdeOffsetCdeFposType(fpos_t fpos);
+extern int __cdeBiasCdeFposType(fpos_t fpos);
 
 /**
 Synopsis
@@ -41,32 +45,44 @@ Returns
     CDEFILE*: success
     NULL    : failure
 **/
-int _osifUefiShellFileSetPos(IN CDE_APP_IF* pCdeAppIf, CDEFILE* pCdeFile, const fpos_t* pos)
+int _osifUefiShellFileSetPos(IN CDE_APP_IF* pCdeAppIf, CDEFILE* pCdeFile, CDEFPOS_T* pos)
 {
     EFI_STATUS Status = EFI_SUCCESS;
-    fpos_t eofpos, newpos = *pos;
+    fpos_t eofpos = 0LL, newpos = __cdeOffsetCdeFposType(pos->reg64);
 
     do {
-        if (pCdeFile->openmode & O_CDENOSEEK/* if e.g. the file is a console, don't try to seek that will fail */)
+        if (pCdeFile->openmode & O_CDENOSEEK    /* if e.g. the file is a console, don't try to seek that will fail */)
             break;
 
-        if (*pos & CDE_FPOS_SEEKEND) {     // SEEK_END flag set?
+        if (SEEK_END == __cdeBiasCdeFposType(pos->reg64)) {     // SEEK_END flag set?
 
             Status = __cdeOnErrSet_status(pCdeFile->pRootProtocol->SetPosition(pCdeFile->pFileProtocol, 0xFFFFFFFFFFFFFFFFULL));
-
-            //CDEFAULT( (CDEFINE_FATALSTATUS "%s\n",strefierror(efierrno)) );
 
             if (EFI_SUCCESS != Status) break;
 
             Status = __cdeOnErrSet_status(pCdeFile->pRootProtocol->GetPosition(pCdeFile->pFileProtocol, &eofpos));
-            //CDEFAULT( (CDEFINE_FATALSTATUS "%s\n",strefierror(efierrno)) );
 
             if (EFI_SUCCESS != Status) break;
 
-            newpos = eofpos + (~CDE_FPOS_SEEKEND & *pos);
-
+            newpos = eofpos + __cdeOffsetCdeFposType(pos->reg64);
         }
 
+        //
+        // UEFI BUG: file positioning bug, if data written behind EOF, data range between old EOF and 
+        // new data contains medium data / garbage, instead of 0
+        //
+        if (1/*KG20220418 gap of non-initialized disk space*/)
+        {
+            if (    EFI_SUCCESS == pCdeFile->pRootProtocol->SetPosition(pCdeFile->pFileProtocol, 0xFFFFFFFFFFFFFFFFULL)
+                &&  EFI_SUCCESS == pCdeFile->pRootProtocol->GetPosition(pCdeFile->pFileProtocol, &pCdeFile->gappos))
+            {
+                pCdeFile->gapsize = (newpos > pCdeFile->gappos) ? (size_t)(newpos - pCdeFile->gappos) : 0;
+                CDETRACE((TRCINF(1) "gappos %016llX, gapsize %zd\n", pCdeFile->gappos, pCdeFile->gapsize));
+            }
+            else
+                CDETRACE((TRCERR(1) "Get/SetPosition terminated erronously\n"));
+
+        }
         Status = __cdeOnErrSet_status(pCdeFile->pRootProtocol->SetPosition(pCdeFile->pFileProtocol, newpos));
         pCdeFile->bpos = newpos;
 

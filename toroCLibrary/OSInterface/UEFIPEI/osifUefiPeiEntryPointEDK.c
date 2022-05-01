@@ -216,7 +216,7 @@ EFI_STATUS EFIAPI _cdeCRT0UefiPeiEDK(IN EFI_PEI_FILE_HANDLE FileHandle, IN CONST
         if (1)
         {
             //
-            // allocate HOB space to get a small amount of r/w memory in PEI for placing the CDE protocol into that
+            // allocate HOB space to get a small amount of r/w memory in PEI for placing the CDE protocol in there
             //
             Status = (*PeiServices)->CreateHob(PeiServices, EFI_HOB_TYPE_GUID_EXTENSION, sizeof(CDE_APP_IF_HOB), &pCdeAppIfHob);
             if (EFI_SUCCESS != Status)

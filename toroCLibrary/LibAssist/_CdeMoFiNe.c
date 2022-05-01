@@ -32,16 +32,16 @@ int _CdeMofine(char* pszDriver, char* pszFile, int nLine, char* pszFunction, cha
     int nRet = 0;
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
 
-    if(pCdeAppIf) do {
-        if ((fTraceEn & 1) == 1) 
+    if (pCdeAppIf) do {
+        if ((fTraceEn & 1) == 1)
         {
             va_list ap;
 
-        va_start(ap, pszFormat);
+            va_start(ap, pszFormat);
 
-        nRet = pCdeAppIf->pCdeServices->pVMofine(pCdeAppIf, pszDriver, pszFile, nLine, pszFunction, pszClass, fTraceEn, pszFormat, ap);
+            nRet = pCdeAppIf->pCdeServices->pVMofine(pCdeAppIf, pszDriver, pszFile, nLine, pszFunction, pszClass, fTraceEn, pszFormat, ap);
 
-        va_end(ap);
+            va_end(ap);
 
         }//if(fTraceEn == 1;
     } while (0);

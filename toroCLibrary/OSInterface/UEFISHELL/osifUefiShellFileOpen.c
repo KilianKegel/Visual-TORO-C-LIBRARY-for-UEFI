@@ -19,7 +19,7 @@ Author:
     Kilian Kegel
 
 --*/
-#pragma warning( disable : 4101 )
+//#undef NCDETRACE
 #define OS_EFI
 #include <CdeServices.h>
 #include <cde.h>
@@ -32,102 +32,8 @@ Author:
 #include <Protocol\Shell.h>
 #include "Protocol\DevicePathToText.h"
 
+
 extern int _wcsicmp(const wchar_t* pszDst, const wchar_t* pszSrc);
-
-//
-// ----- prototypes
-//
-FACCESSMODE rgFACCESSMODE[];
-
-static EFI_GUID _gEfiDevicePathProtocolGuid = { 0x09576E91, 0x6D3F, 0x11D2, { 0x8E, 0x39, 0x00, 0xA0, 0xC9, 0x69, 0x72, 0x3B } };
-static EFI_GUID _gEfiSimpleFileSystemProtocolGuid = { 0x964E5B22, 0x6459, 0x11D2, { 0x8E, 0x39, 0x00, 0xA0, 0xC9, 0x69, 0x72, 0x3B } };
-static EFI_GUID _gEfiDevicePathToTextProtocolGuid = { 0x8B843E20, 0x8132, 0x4852, { 0x90, 0xCC, 0x55, 0x1A, 0x4E, 0x4A, 0x7F, 0x1C } };
-
-static EFI_STATUS efifopen(const char* mode, CDEFILE* pCdeFile)
-{
-    CDEFILE* pRet = NULL;
-    int i;
-    EFI_STATUS Status = (EFI_STATUS)-1;
-    UINT64 UefiModeFlags;
-    do {
-        for (i = 0; *rgFACCESSMODE[i].pszMode != '\0'/*End Of Table is "" */; i++) {
-            if (!strcmp(&rgFACCESSMODE[i].pszMode[0], mode)) {
-                break;
-            }
-        }
-
-        //CDETRACE((CDEFINE"Mode \'%s\' %s \n", mode, *rgFACCESSMODE[i].pszMode == '\0' ? "NOT found" : "found",i));
-        //printf(/*__FILE__*/"(%d), "__FUNCTION__"()""Mode \'%s\' %s \n", __LINE__, mode , * rgFACCESSMODE[i].pszMode == '\0' ? "NOT found" : "found");
-
-        if (*rgFACCESSMODE[i].pszMode == '\0') {
-            //mode string not supported
-            //TODO: add error "errno" here
-            break;
-        }
-
-        pCdeFile->openmode = rgFACCESSMODE[i].openmode;
-
-        //CDETRACE((CDEFINE"Filname: %S, flags: %016llX\n", pCdeFile->pwcsFilePath,rgFACCESSMODE[i].UefiModeFlags));
-        //printf(/*__FILE__*/"(%d), "__FUNCTION__"()""Filname: %S, flags: %016llX, Attribs %016llX\n", __LINE__, pCdeFile->pwcsFilePath, rgFACCESSMODE[i].UefiModeFlags, rgFACCESSMODE[i].UefiAttribFlags);
-
-        Status = __cdeOnErrSet_status(pCdeFile->pRootProtocol->Open(
-            pCdeFile->pRootProtocol, 
-            &pCdeFile->pFileProtocol, 
-            pCdeFile->pwcsFilePath, 
-            rgFACCESSMODE[i].UefiModeFlags, 
-            rgFACCESSMODE[i].UefiAttribFlags
-        ));
-        //CDEFAULT( (CDEFINE_ERRORSTATUS "%s\n",strefierror(efierrno)) );
-        
-        //printf(/*__FILE__*/"(%d), "__FUNCTION__"()""%s\n",__LINE__, strefierror(Status));
-
-        if (EFI_SUCCESS != Status) 
-            break;
-
-        if (O_APPEND == (O_APPEND & rgFACCESSMODE[i].openmode))           // for append, dont't truncate to zero!!!
-            break;
-
-        if (0 == (EFI_FILE_MODE_CREATE & rgFACCESSMODE[i].UefiModeFlags)) // EFI_FILE_MODE_CREATE set for create or truncate to zero
-            break;
-
-        //CDETRACE((CDEFINE"Truncate file \"%S\" to ZERO\n", pCdeFile->pwcsFilePath));
-        //printf(/*__FILE__*/"(%d), "__FUNCTION__"()""Truncate file \"%S\" to ZERO\n", __LINE__, pCdeFile->pwcsFilePath);
-
-        Status = __cdeOnErrSet_status(pCdeFile->pRootProtocol->Delete(pCdeFile->pFileProtocol));   // truncate to zero by delete ...
-        //CDEFAULT( (CDEFINE_ERRORSTATUS "%s\n",strefierror(efierrno)) );
-        //printf(/*__FILE__*/"(%d), "__FUNCTION__"()""%s\n", __LINE__, strefierror(Status));
-
-        if (EFI_SUCCESS != Status) 
-            break;
-
-        Status = __cdeOnErrSet_status(pCdeFile->pRootProtocol->Open(
-            pCdeFile->pRootProtocol, 
-            &pCdeFile->pFileProtocol, 
-            pCdeFile->pwcsFilePath, 
-            rgFACCESSMODE[i].UefiModeFlags, 
-            rgFACCESSMODE[i].UefiAttribFlags
-        )); // ... and recreate
-
-        //CDEFAULT( (CDEFINE_ERRORSTATUS "%s\n",strefierror(efierrno)) );
-
-        if (EFI_SUCCESS != Status)
-            break;
-
-        //CDETRACE((CDEFINE"File \"%S\" is SUCESSFULLY opened\n", pCdeFile->pwcsFilePath));
-
-    } while (0);
-
-    //pRet = EFI_SUCCESS == Status ? pCdeFile : NULL;
-
-    //printf(/*__FILE__*/"(%d), "__FUNCTION__"()""Status -> %llX %s\n", __LINE__, Status, strefierror(Status));
-
-    return Status;  // return Status instead od NULL/pCdeFile to return last Status code to the caller
-}
-
-
-//
-// ----- externs
-//
 extern CDESYSTEMVOLUMES gCdeSystemVolumes;
 extern void* _CdeLocateProtocol(IN EFI_GUID* Protocol, IN void* Registration OPTIONAL/*,OUT void **Interface*/);
 
@@ -136,38 +42,175 @@ extern CHAR16* _cdeConvertDevicePathToText(IN const EFI_DEVICE_PATH_PROTOCOL* De
 extern CHAR16* _CdeGetMapFromDevicePath(IN OUT EFI_DEVICE_PATH_PROTOCOL** DevicePath);
 extern const CHAR16* _CdeGetCurDir(IN const CHAR16* FileSystemMapping OPTIONAL);
 extern  EFI_SHELL_PROTOCOL* pEfiShellProtocol;
-extern  EFI_GUID                _gEfiSimpleFileSystemProtocolGuid;
+extern  EFI_GUID _gEfiSimpleFileSystemProtocolGuid, _gEfiDevicePathToTextProtocolGuid, _gEfiDevicePathProtocolGuid;
 extern  EFI_BOOT_SERVICES* _cdegBS;                              // Pointer to boot services
 
 //
 // ----- globals
 //
-extern EFI_GUID _gCdeEfiShellProtocolGuid;
 
-FACCESSMODE rgFACCESSMODE[] = {
+EFI_DEVICE_PATH_TO_TEXT_PROTOCOL* pCdeEfiDevicePathToTextProtocol;
+
+//
+// ----- definitions for file i/o
+//
+static struct _tblMode {
+    const char* pszMode;
+    int openmode;
+    //        BYTE bmDOSAccType;  //  000 read only
+    //                            //  001 write only
+    //                            //  010 read/write
+    uint64_t UefiModeFlags;
+    uint64_t UefiAttribFlags;
+
+}tblMode[] = {
 //           O_RDONLY   O_APPEND    O_CREAT     O_TEXT
 //           O_WRONLY                           O_BINARY
 //           O_RDWR|                    
+    {"r"        ,O_RDONLY |                         O_TEXT      ,EFI_FILE_MODE_READ                                              , EFI_FILE_ARCHIVE},
+    {"rb"       ,O_RDONLY |                         O_BINARY    ,EFI_FILE_MODE_READ                                              , EFI_FILE_ARCHIVE},
+    {"r+"       ,O_RDWR   |                         O_TEXT      ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE                        , EFI_FILE_ARCHIVE},
+    {"r+b"      ,O_RDWR   |                         O_BINARY    ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE                        , EFI_FILE_ARCHIVE},
+    {"rb+"      ,O_RDWR   |                         O_BINARY    ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE                        , EFI_FILE_ARCHIVE},
+    {"w"        ,O_WRONLY | O_TRUNC  |  O_CREAT |   O_TEXT      ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE},
+    {"wb"       ,O_WRONLY | O_TRUNC  |  O_CREAT |   O_BINARY    ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE}, /*NOTE: WinNtSimpleFileSystemOpen does not support EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE only*/
+    {"w+"       ,O_RDWR   | O_TRUNC  |  O_CREAT |   O_TEXT      ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE},
+    {"w+b"      ,O_RDWR   | O_TRUNC  |  O_CREAT |   O_BINARY    ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE},
+    {"wb+"      ,O_RDWR   | O_TRUNC  |  O_CREAT |   O_BINARY    ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE},
+    {"a"        ,O_WRONLY | O_APPEND |  O_CREAT |   O_TEXT      ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE},
+    {"ab"       ,O_WRONLY | O_APPEND |  O_CREAT |   O_BINARY    ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE}, /*NOTE: WinNtSimpleFileSystemOpen does not support EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE only*/
+    {"a+"       ,O_RDWR   | O_APPEND |  O_CREAT |   O_TEXT      ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE},
+    {"a+b"      ,O_RDWR   | O_APPEND |  O_CREAT |   O_BINARY    ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE},
+    {"ab+"      ,O_RDWR   | O_APPEND |  O_CREAT |   O_BINARY    ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE},
+    {"CdeMkDir" ,O_WRONLY | O_APPEND |  O_CREAT |   O_TEXT      ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE | EFI_FILE_DIRECTORY},
+};
 
-{"r"        ,O_RDONLY |                         O_TEXT      ,EFI_FILE_MODE_READ                                              , EFI_FILE_ARCHIVE},
-{"rb"       ,O_RDONLY |                         O_BINARY    ,EFI_FILE_MODE_READ                                              , EFI_FILE_ARCHIVE},
-{"r+"       ,O_RDWR   |                         O_TEXT      ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE                        , EFI_FILE_ARCHIVE},
-{"r+b"      ,O_RDWR   |                         O_BINARY    ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE                        , EFI_FILE_ARCHIVE},
-{"rb+"      ,O_RDWR   |                         O_BINARY    ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE                        , EFI_FILE_ARCHIVE},
-{"w"        ,O_WRONLY |             O_CREAT |   O_TEXT      ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE},
-{"wb"       ,O_WRONLY |             O_CREAT |   O_BINARY    ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE}, /*NOTE: WinNtSimpleFileSystemOpen does not support EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE only*/
-{"w+"       ,O_RDWR   |             O_CREAT |   O_TEXT      ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE},
-{"w+b"      ,O_RDWR   |             O_CREAT |   O_BINARY    ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE},
-{"wb+"      ,O_RDWR   |             O_CREAT |   O_BINARY    ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE},
-{"a"        ,O_WRONLY | O_APPEND |  O_CREAT |   O_TEXT      ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE},
-{"ab"       ,O_WRONLY | O_APPEND |  O_CREAT |   O_BINARY    ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE}, /*NOTE: WinNtSimpleFileSystemOpen does not support EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE only*/
-{"a+"       ,O_RDWR   | O_APPEND |  O_CREAT |   O_TEXT      ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE},
-{"a+b"      ,O_RDWR   | O_APPEND |  O_CREAT |   O_BINARY    ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE},
-{"ab+"      ,O_RDWR   | O_APPEND |  O_CREAT |   O_BINARY    ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE},
-{"CdeMkDir" ,O_WRONLY | O_APPEND |  O_CREAT |   O_TEXT      ,EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE , EFI_FILE_ARCHIVE | EFI_FILE_DIRECTORY},
-{""/*EOT*/,0,0} };
+static EFI_STATUS efifopen(const char* szModeNoSpace, int fFileExists/* 0 no, 1 yes, -1 unk */, CDEFILE* pCdeFile)
+{
+    CDEFILE* pRet = NULL;
+    int i;
+    EFI_STATUS Status = (EFI_STATUS)-1;
+    int OpenMode = 0, * pOpenMode = &OpenMode;
+    uint64_t UefiAttribFlags = EFI_FILE_ARCHIVE, * pUefiAttribFlags = &UefiAttribFlags;
+    uint64_t UefiModeFlags = 0, * pUefiModeFlags = &UefiModeFlags;
+    int fFinalOpenStatus = 1;
 
-EFI_DEVICE_PATH_TO_TEXT_PROTOCOL* pCdeEfiDevicePathToTextProtocol;
+    CDETRACE((TRCINF(EFI_SUCCESS != Status) "szModeNoSpace \"%s\", fFileExists %d, pCdeFile %p\n", szModeNoSpace, fFileExists, pCdeFile));
+
+    do {
+
+        // ----- search file attributes
+
+        for (i = 0; i < sizeof(tblMode) / sizeof(tblMode[0]); i++)
+            if (0 == strcmp(tblMode[i].pszMode, szModeNoSpace))
+                break;
+
+
+        CDETRACE((TRCERR(i == sizeof(tblMode) / sizeof(tblMode[0])) "Attributes \"%s\" NOT found\n", szModeNoSpace));
+        CDETRACE((TRCINF(i != sizeof(tblMode) / sizeof(tblMode[0])) "Attributes \"%s\" found at index %d\n", szModeNoSpace,i));
+
+
+        if (i == sizeof(tblMode) / sizeof(tblMode[0]))
+        {
+            //
+            // reached end of table, check for open() backdoor signature "ctrwaxb"
+            //
+            if (0 != _stricmp("ctrwaxb", szModeNoSpace))
+                break;
+            //
+            // open() related handling -- NOT related to fopen()
+            //
+            OpenMode |= O_CREAT  * ('C' == szModeNoSpace[0]);  // get 'c' in "ctrwaxb"
+            OpenMode |= O_TRUNC  * ('T' == szModeNoSpace[1]);  // get 't' in "ctrwaxb"
+            OpenMode |= O_RDWR   * ('R' == szModeNoSpace[2]);  // get 'r' in "ctrwaxb"
+            OpenMode |= O_WRONLY * ('W' == szModeNoSpace[3]);  // get 'w' in "ctrwaxb"
+            OpenMode |= O_APPEND * ('A' == szModeNoSpace[4]);  // get 'a' in "ctrwaxb"
+            OpenMode |= O_TEXT   * ('X' == szModeNoSpace[5]);  // get 'x' in "ctrwaxb"
+            OpenMode |= O_BINARY * ('B' == szModeNoSpace[6]);  // get 'b' in "ctrwaxb"
+
+            if (0 == fFileExists)
+            {
+                CDETRACE((TRCINF(1) "UefiModeFlags %0llX\n", UefiModeFlags));
+                UefiModeFlags |= (EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE) * ((O_CREAT) == ((O_CREAT) & OpenMode));
+                //UefiModeFlags |= (EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE) * (0 == ((O_CREAT + O_TRUNC) & OpenMode));
+                //UefiModeFlags |= (EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE) * ((O_CREAT + O_APPEND) == ((O_CREAT + O_APPEND) & OpenMode));
+            }
+            else {
+                UefiModeFlags  = (EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE);
+                UefiModeFlags |= (EFI_FILE_MODE_CREATE) * ((O_CREAT) == ((O_CREAT) & OpenMode));
+                UefiModeFlags |= (EFI_FILE_MODE_CREATE) * ((O_TRUNC) == ((O_TRUNC) & OpenMode));
+            }
+        }
+        else
+        {
+            pUefiAttribFlags = &tblMode[i].UefiAttribFlags;             // pointer to fopen() related UefiAttribFlags
+            pUefiModeFlags = &tblMode[i].UefiModeFlags;                 // pointer to fopen() related openmode
+            pOpenMode = &tblMode[i].openmode;
+            CDETRACE((TRCINF(1) "pUefiModeFlags -> %016llX pOpenMode -> %08X\n", *pUefiModeFlags, *pOpenMode));
+        }
+
+        pCdeFile->openmode = *pOpenMode;
+
+        CDETRACE((TRCINF(1) "pUefiModeFlags -> %016llX pOpenMode -> %08X\n", *pUefiModeFlags, *pOpenMode));
+        
+        //
+        // _open()/fopen() the file
+        //
+        while (1) {
+            Status = __cdeOnErrSet_status(pCdeFile->pRootProtocol->Open(
+                pCdeFile->pRootProtocol,
+                &pCdeFile->pFileProtocol,
+                pCdeFile->pwcsFilePath,
+                *pUefiModeFlags,
+                *pUefiAttribFlags
+            ));
+
+            //
+            // for _open() on w/o files check retry for that particular settings:
+            //  1. Status == RETURN_ACCESS_DENIED (file is write protected)
+            //  2. szModeNoSpace "?trw??" within "ctrwaxb"
+            //  In such case retry with (EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE) cleared
+            //
+            if (Status == RETURN_ACCESS_DENIED \
+                && 't' == szModeNoSpace[1]\
+                && 'r' == szModeNoSpace[2]\
+                && 'w' == szModeNoSpace[3]\
+                && 0 != ((EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE) & *pUefiModeFlags))
+            {
+                *pUefiModeFlags &= ~(EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE);
+            }
+            else
+            {
+                break;
+            }
+
+        }
+
+        CDETRACE((TRCERR(0 && EFI_SUCCESS != Status) "pRootProtocol->Open -> \"%s\"\n", _strefierror(Status)));
+
+        if (EFI_SUCCESS != Status) 
+            break;
+
+        if (O_TRUNC != (O_TRUNC & *pOpenMode))                              // for append, dont't truncate to zero!!!
+            break;
+
+        Status = __cdeOnErrSet_status(pCdeFile->pRootProtocol->Delete(pCdeFile->pFileProtocol));   // truncate to zero by delete ...
+
+        if (EFI_SUCCESS != Status) 
+            break;
+
+        Status = __cdeOnErrSet_status(pCdeFile->pRootProtocol->Open(
+            pCdeFile->pRootProtocol, 
+            &pCdeFile->pFileProtocol, 
+            pCdeFile->pwcsFilePath, 
+            *pUefiModeFlags, 
+            *pUefiAttribFlags
+        )); // ... and recreate
+
+    } while (0);
+
+    return Status;  // return Status instead od NULL/pCdeFile to return last Status code to the caller
+}
 
 static unsigned char __CdeIsFsEnum(void) {
     return gCdeSystemVolumes.nVolumeCount != -1 ? TRUE : FALSE;
@@ -223,10 +266,8 @@ static EFI_STATUS __CdeFsEnum(void) {
             //CDEFAULT((CDEFINE_ERRORSTATUS "%s\n",strefierror(Status)));
 
             pFsVolume[i].pwcsDevicePathText = _cdeConvertDevicePathToText(/*IN DevicePath*/pFsVolume[i].pDevicePathProtocol,/*IN DisplayOnly*/FALSE,/*IN AllowShortcuts*/ FALSE);
-            //CDETRACE((CDEFINE"%S \n",pFsVolume[i].pwcsDevicePathText));
 
             pFsVolume[i].pwcsMap = _CdeGetMapFromDevicePath(&pFsVolume[i].pDevicePathProtocol);
-            //CDETRACE((CDEFINE"%S\n",pFsVolume[i].pwcsMap ? pFsVolume[i].pwcsMap : L"leer"));
 
 //
 // initialize rgpVolumeMap[0] .. rgpVolumeMap[CDE_MAPV_MAX - 1] to pointer to '\0'
@@ -238,7 +279,6 @@ static EFI_STATUS __CdeFsEnum(void) {
                     pFsVolume[i].rgpVolumeMap[pFsVolume[i].nVolumeMap] = NULL;
                     break;
                 }
-                //CDETRACE((CDEFINE"map[%d]: %S\n", pFsVolume[i].nVolumeMap, pFsVolume[i].rgpVolumeMap[ pFsVolume[i].nVolumeMap]));
             }
 
         }
@@ -262,20 +302,21 @@ Returns
     CDEFILE*: success
     NULL    : failure
 **/
-CDEFILE* _osifUefiShellFileOpen(IN CDE_APP_IF* pCdeAppIf, const wchar_t* pwcsFileName, const char* szModeNoSpace, CDEFILE* pCdeFile) {
+CDEFILE* _osifUefiShellFileOpen(IN CDE_APP_IF* pCdeAppIf, const wchar_t* pwcsFileName, const char* szModeNoSpace, int fFileExists/* 0 no, 1 yes, -1 unk */, CDEFILE* pCdeFile) {
 
     CDEFILE* pRet = NULL;
     int i, j;
     unsigned char TODO = 1;
     EFI_STATUS Status;
 
-    //printf(/*__FILE__*/"(%d), "__FUNCTION__"()"">>>\n", __LINE__);
+    //CDETRACE((TRCINF(1) "pCdeAppIf %p, pwcsFileName \"%S\", szModeNoSpace \"%s\", fFileExists %d, pCdeFile %p\n", pCdeAppIf, pwcsFileName, szModeNoSpace, fFileExists, pCdeFile));
     
     do {/*1. dowhile(0)*/
 
         if (!__CdeIsFsEnum()) {
 
             if (EFI_SUCCESS != __CdeFsEnum()) {
+                //CDETRACE((TRCERR(1) "EFI_SUCCESS != __CdeFsEnum()\n"));
                 break;
             }
         }
@@ -304,7 +345,7 @@ CDEFILE* _osifUefiShellFileOpen(IN CDE_APP_IF* pCdeAppIf, const wchar_t* pwcsFil
             if (fIsFileDrv) {                                                       // get current directory of remote drive
                 wcsncpy(wcsDrive2, wcsFileName, &pColon[1] - wcsFileName);
                 pwcsCurDir2 = (wchar_t*)_CdeGetCurDir(wcsDrive2);
-                //CDETRACE((CDEFINE"wcsDrive2 == %S, pwcsCurDir2 == %S\n", wcsDrive2, pwcsCurDir2));
+                ////CDETRACE((CDEFINE"wcsDrive2 == %S, pwcsCurDir2 == %S\n", wcsDrive2, pwcsCurDir2));
             }
 
             pwcsTargetDir = fIsFileDrv ? (0 == wcsncmp(wcsFileName, pwcsCurDir, &pColon[1] - wcsFileName) ? pwcsCurDir : pwcsCurDir2) : pwcsCurDir;
@@ -325,7 +366,7 @@ CDEFILE* _osifUefiShellFileOpen(IN CDE_APP_IF* pCdeAppIf, const wchar_t* pwcsFil
                 wcscat(wcsFilePath, L"\\");
                 wcscat(wcsFilePath, pFilePath);
             }
-            //CDETRACE((CDEFINE"fIsFileAbs == %d, fIsFileDrv == %d, Drive == %S, wcsFilePath == %S\n", fIsFileAbs, fIsFileDrv, wcsDrive, wcsFilePath));
+            ////CDETRACE((CDEFINE"fIsFileAbs == %d, fIsFileDrv == %d, Drive == %S, wcsFilePath == %S\n", fIsFileAbs, fIsFileDrv, wcsDrive, wcsFilePath));
         //
         // ----- find the volume that drive map is provided in
         //
@@ -341,31 +382,35 @@ CDEFILE* _osifUefiShellFileOpen(IN CDE_APP_IF* pCdeAppIf, const wchar_t* pwcsFil
 
             if (i == gCdeSystemVolumes.nVolumeCount) 
             {
-                //printf(/*__FILE__*/"(%d), "__FUNCTION__"()""ERROR: drive map not found, gCdeSystemVolumes.nVolumeCount %d\n", __LINE__, (int)gCdeSystemVolumes.nVolumeCount);
-                errno = ENOENT;
+                //CDETRACE((TRCERR(1) "errno = ENOENT\n"));
+                pCdeAppIf->nErrno = ENOENT;
                 break;/*1. dowhile(0)*/ //drive map not found, return
             }
 
             pCdeFile->pwcsFileDrive = wcsDrive;
-            pCdeFile->pwcsFilePath = wcsFilePath;
+            pCdeFile->pwcsFilePath  = wcsFilePath;
             pCdeFile->pRootProtocol = gCdeSystemVolumes.rgFsVolume[i].pRootProtocol;
 
-            Status = efifopen(szModeNoSpace, pCdeFile);            // get emulation file pointer, that is the Windows FP (CDE4WIN) or pCdeFile or NULL in error case
+            //CDETRACE((TRCINF(1) "\npCdeFile->pwcsFileDrive \"%S\"\npCdeFile->pwcsFilePath \"%S\"\n pCdeFile->pRootProtocol %p\n", pCdeFile->pwcsFileDrive, pCdeFile->pwcsFilePath, pCdeFile->pRootProtocol));
+
+            Status = efifopen(szModeNoSpace, fFileExists, pCdeFile);            // get emulation file pointer, that is the Windows FP (CDE4WIN) or pCdeFile or NULL in error case
+            
+            CDETRACE((TRCERR(EFI_SUCCESS != Status) "efifopen() -> \"%s\"\n", _strefierror(Status)));
             if (EFI_SUCCESS != Status) {
                 pRet = NULL;
-                //printf(/*__FILE__*/"(%d), "__FUNCTION__"()""%s\n", __LINE__, strefierror(Status));
                 /*
                     todo:
                     ERRNO EACCES 13: Permission denied		    write protect
                     ERRNO ENOENT 2 : No such file or directory	drive not present
                 */
-                errno = EFI_WRITE_PROTECTED == Status ? EACCES : errno;
-                //printf(/*__FILE__*/"(%d), "__FUNCTION__"()""%s\n", __LINE__, strerror(errno));
+                pCdeAppIf->nErrno = EFI_ACCESS_DENIED   == Status ? EACCES : pCdeAppIf->nErrno;
+                pCdeAppIf->nErrno = EFI_WRITE_PROTECTED == Status ? EACCES : pCdeAppIf->nErrno;
+                pCdeAppIf->nErrno = EFI_NOT_FOUND       == Status ? ENOENT : pCdeAppIf->nErrno;
+                
                 break;
             }
             else {
                 pRet = pCdeFile;
-                //printf(/*__FILE__*/"(%d), "__FUNCTION__"()""%s\n", __LINE__, strefierror(Status));
             }
         }
 

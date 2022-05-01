@@ -54,17 +54,12 @@ int _osifUefiShellFileGetStatus(IN CDE_APP_IF* pCdeAppIf, void* pFpOrFname, CDES
     EFI_FILE_INFO* pFileInfo = pWorkBuf400;
     int nRet = -1;
 
-    //printf(__FILE__"(%d)\\"__FUNCTION__"(): \n", __LINE__);
     do {
 
         Status = pCdeFile->pFileProtocol->GetInfo(pCdeFile->pFileProtocol, &_gEfiFileInfoIdGuid, &FileInfoSize, pFileInfo);
 
-        //printf(__FILE__"(%d)\\"__FUNCTION__"(): Status %llX\n", __LINE__, Status);
-
         if (EFI_SUCCESS != Status)
             break;
-
-        //printf("Status %s\n", strefierror(Status));
 
         //
         // st_dev, st_rdev: convert FSx: to integer drive number, 0 based
@@ -76,11 +71,9 @@ int _osifUefiShellFileGetStatus(IN CDE_APP_IF* pCdeAppIf, void* pFpOrFname, CDES
             wcstombs(drivename, pCdeFile->pwcsFileDrive, sizeof(drivename));  // convert wcs to str since
                 // regrettably a "wcstol()" function is _NOT_ yet implemented
             pColon = strstr(drivename, ":");
-            //printf("startstr %s %p, startnum: %p, colon: %p\n", &drivename[0], &drivename[0], &drivename[strlen("FS")], pColon);
 
             pStat64i32->st_dev = (int)strtol(&drivename[strlen("FS")], &pColon, 10);
             pStat64i32->st_rdev = pStat64i32->st_dev;
-            //printf("pStat64i32->st_dev %d\n", pStat64i32->st_dev);
         }
         pStat64i32->st_nlink = 1;
         pStat64i32->st_ino = 0;
@@ -97,11 +90,7 @@ int _osifUefiShellFileGetStatus(IN CDE_APP_IF* pCdeAppIf, void* pFpOrFname, CDES
         pStat64i32->st_mode |= ((_S_IFDIR + _S_IREAD + _S_IEXEC + 0x2D/*undocumented flags*/) * (0 != (EFI_FILE_DIRECTORY & pFileInfo->Attribute)));
         pStat64i32->st_mode |= ((_S_IWRITE + 0x32/*undocumented flags*/) * (0 == (EFI_FILE_READ_ONLY & pFileInfo->Attribute)));
 
-        //printf(__FILE__"(%d)\\"__FUNCTION__"(): \n", __LINE__);
-
     } while (0 != (nRet = 0));
     
-    //printf(__FILE__"(%d)\\"__FUNCTION__"(): \n", __LINE__);
-
     return nRet;
 }

@@ -538,22 +538,21 @@ _MainEntryPointShell(
                 }
             }
 
-            //if(sizeof(void*) == 8 && 0 == (0x1F & __rdtsc()) ){
-            //    outp(0x43,0xB6);
-            //    outp(0x42,0x7);
-            //    outp(0x42,0x7);
-            //    outp(0x61,0x7);
-            //    CdeAppIfShell.pCdeServices->pVwxPrintf(&CdeAppIfShell,&RomParmVWXPRINTF,&encstrings[IEVLUATION],CdeAppIfShell.pCdeServices->pPutConOut,&CdeAppIfShell,(unsigned)-1,NULL);
-            //    outp(0x61,0x0);
-            //}
-
-    //
-    // close open files
-    //
-            fwrite(NULL, (size_t)EOF, 0, (FILE*)CDE_STDOUT);    // NULL,EOF,0,stream == flush parameter
-            fwrite(NULL, (size_t)EOF, 0, (FILE*)CDE_STDERR);    // NULL,EOF,0,stream == flush parameter
+            //
+            // close open files
+            //
             for (i = 3/*skip stdin,stdout,stderr*/; i < CDE_FILEV_MAX; i++)
                 fclose((FILE*)&_iob[i]);
+
+            //
+            // flush and close stdout + stderr, if redirected
+            //
+            fwrite(NULL, (size_t)EOF, 0, (FILE*)CDE_STDOUT);    // NULL,EOF,0,stream == flush parameter
+            fwrite(NULL, (size_t)EOF, 0, (FILE*)CDE_STDERR);    // NULL,EOF,0,stream == flush parameter
+
+            for (i = 1/*skip stdin*/; i <= 2; i++)
+                if (O_CDEREDIR & _iob[i].openmode)
+                    fclose((FILE*)&_iob[i]);
 
             //
             // free memory allocated during runtime

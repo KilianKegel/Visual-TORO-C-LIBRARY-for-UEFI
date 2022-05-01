@@ -69,8 +69,9 @@ char* gszCdeDriverName;
 // externs
 //
 extern void free(void*);
+extern void (*__cdeChkStkAddr)(size_t);
+extern void __chkstkWindows(size_t);
 
-extern _PUTCHAR  _CdeDbgPutChar;
 extern VWXPRINTF _cdeVwxPrintf;
 extern VWXSCANF _cdeVwxScanf;
 extern WCSSTRTOK _cdeWcsStrTok;
@@ -263,7 +264,8 @@ int _MainEntryPointWinNT(void)
 {
     int Status = 0;
 
-    //	__debugbreak();
+    __cdeChkStkAddr = __chkstkWindows;
+    
     if (1)
         do {
             int i;

@@ -40,7 +40,7 @@ int snprintf(char* pszDest, size_t dwCount, const char* pszFormat, ...) {
     va_list ap;
     int nRet;
 
-    va_start(ap, pszFormat);
+     va_start(ap, pszFormat);
 
     nRet = vsnprintf(pszDest, dwCount, pszFormat, ap);
 

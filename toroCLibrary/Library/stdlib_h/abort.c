@@ -71,5 +71,5 @@ void abort(void) {
         //_iob[i].bdirty = 0;
     }
 
-    exit(3); //NOTE: Return 3 as documented by Microsoft
+    exit(0xC0000409/*STATUS_STACK_BUFFER_OVERRUN*/); //NOTE: Returnvalue of 3 documented by Microsoft instead
 }

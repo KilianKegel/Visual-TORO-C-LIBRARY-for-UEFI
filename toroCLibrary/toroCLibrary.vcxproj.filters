@@ -110,9 +110,6 @@
     <ClCompile Include="Intrinsics\__CheckForDebuggerJustMyCode.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intrinsics\__chkstk.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Intrinsics\__iob_func.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -605,42 +602,6 @@
     <ClCompile Include="OSInterface\IBMAT\osifIbmAtSetTime.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellCmdExec.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPointEDK.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileClose.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileDelete.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileOpen.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileRead.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileRename.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileSetPos.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileWrite.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellGetEnv.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellMemAlloc.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellMemFree.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="OSInterface\WINNT\osifWinNTCmdExec.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -902,9 +863,6 @@
     <ClCompile Include="Library\wchar_h\wctob.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPoint.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="LibAssist\__cdeTianocoreDEBUGDis.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -977,12 +935,6 @@
     <ClCompile Include="Library\string_h\_StrDup.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileFindAll.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellGetDrvCwd.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="OSInterface\WINNT\osifWinNTFileFindAll.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -990,9 +942,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LibAssist\_cdeEfiTime2TimeT.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileGetStatus.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Guids\EFI_FILE_INFO_ID_GUID.c">
@@ -1016,12 +965,6 @@
     <ClCompile Include="Library\direct_h\_mkdir.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellDirectoryCreate.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellDirectoryRemove.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="OSInterface\WINNT\osifWinNTDirectoryCreate.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1038,12 +981,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Library\wchar_h\Fgetws.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPointEDKW.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPointW.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="OSInterface\WINNT\osifWinNTEntryPointW.c">
@@ -1104,6 +1041,105 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Library\wchar_h\Fwscanf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellCmdExec.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellDirectoryCreate.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellDirectoryRemove.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPoint.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPointEDK.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPointEDKW.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPointW.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileClose.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileDelete.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileFindAll.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileGetStatus.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileRead.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileRename.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileSetPos.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileWrite.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellGetDrvCwd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellGetEnv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellMemAlloc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellMemFree.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileOpen.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\io_h\_Close.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\io_h\_Fileno.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\io_h\_Open.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\io_h\_Read.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\io_h\_Write.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\io_h\_Fdopen.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\_Fseeki64.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\_Ftelli64.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\_Wfopen.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Intrinsics\__chkstk.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\__cdeIsCdeFposType.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\__cdeGetOffsetCdeFposType.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\__cdeGetBiasCdeFposType.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1171,6 +1207,15 @@
       <Filter>Source Files</Filter>
     </MASM>
     <MASM Include="Intrinsics\__ltod3.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="Intrinsics\__chkstkWin64.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="Intrinsics\__chkstk64.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="Intrinsics\__chkstk32.asm">
       <Filter>Source Files</Filter>
     </MASM>
   </ItemGroup>
