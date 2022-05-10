@@ -37,11 +37,28 @@
 * change from solution relative to project relative build, adjust pathes
 * update copyright
 ### 20220109
-* add Standard C Library functions: strcoll(), strxfrm(), fgetwc(), fputwc, fputws(), fwide(), fwprintf(),
-  fwscanf(), getwc, getwchar(), putwc(), putwchar(), swscanf(), ungetwc(), vfwscanf(), vswscanf(), wcscoll(),
-  wcsxfrm(), btowc()
+* add Standard C Library functions: 
+    - `strcoll()
+    - `strxfrm()`
+    - `fgetwc()`
+    - `fputwc()`
+    - `fputws()`
+    - `fwide()`
+    - `fwprintf()`
+    - `fwscanf()`
+    - `getwc()`
+    - `getwchar()`
+    - `putwc()`
+    - `putwchar()`
+    - `swscanf()`
+    - `ungetwc()`
+    - `vfwscanf()`
+    - `vswscanf()`
+    - `wcscoll()`
+    - `wcsxfrm()`
+    - `btowc()`
 * fix "BINARY MODE" for wide printf()/scanf() family functions
-* imitate funny Microsoft behaviour when replacing and pushing back  -ungetc()- a character by CTRL-Z to a stream (in that case the stream *is not terminated*)
+* imitate funny Microsoft behaviour when replacing and pushing back  -`ungetc()`- a character by CTRL-Z to a stream (in that case the stream *is not terminated*)
 * fix fscanf() family return value for "event of an early matching failure" http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=299
     
 ### 20211218
