@@ -104,6 +104,10 @@
     <ClCompile Include="LibCore\_cdeCoreSprintf.c" />
     <ClCompile Include="Library\assert_h\_assert.c" />
     <ClCompile Include="Library\assert_h\_wassert.c" />
+    <ClCompile Include="Library\c++\delete.cpp" />
+    <ClCompile Include="Library\c++\deletea.cpp" />
+    <ClCompile Include="Library\c++\new.cpp" />
+    <ClCompile Include="Library\c++\newa.cpp" />
     <ClCompile Include="Library\ctype_h\isalnum.c" />
     <ClCompile Include="Library\ctype_h\isalpha.c" />
     <ClCompile Include="Library\ctype_h\iscntrl.c" />

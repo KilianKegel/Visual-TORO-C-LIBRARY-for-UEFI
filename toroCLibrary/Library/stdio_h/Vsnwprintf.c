@@ -27,8 +27,8 @@ Author:
 #include <limits.h>
 
 extern void* __cdeGetAppIf();
-extern void _MemPutWChar(int c, void** ppDest);
-extern void _MemPutNada(int c, void** ppDest);
+extern void _CdeMemPutWChar(int c, void** ppDest);
+extern void _CdeMemPutNada(int c, void** ppDest);
 
 static ROMPARM_VWXPRINTF RomParm = { \
 /*fForceToDataSeg       */ 1 ,\
@@ -58,12 +58,12 @@ int _vsnwprintf(wchar_t* pszDest, size_t dwCount, const wchar_t* pszFormat, va_l
     unsigned nRet = UINT_MAX;
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
     unsigned dwUsedCount = (unsigned)dwCount;
-    void (*pfnPutXxx)(int c, void** ppDest) = &_MemPutWChar;
+    void (*pfnPutXxx)(int c, void** ppDest) = &_CdeMemPutWChar;
 
     do {
         if (pszDest == NULL)
             if (dwCount == 0)
-                dwUsedCount = UINT_MAX, pfnPutXxx = &_MemPutNada;  // count only, don't write
+                dwUsedCount = UINT_MAX, pfnPutXxx = &_CdeMemPutNada;  // count only, don't write
             else
                 break;
         nRet = (int)pCdeAppIf->pCdeServices->pVwxPrintf(

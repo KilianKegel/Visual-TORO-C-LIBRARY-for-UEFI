@@ -8,6 +8,13 @@
 ```
 
 ## Revision history
+### 20220522
+* add  C++ minimum support
+    - `void* operator new(size_t size)`
+    - `void* operator new[](size_t size)`
+    - `void operator delete[](void* ptr)`
+    - `void operator delete(void* ptr, unsigned __int64 size)`
+
 ### 20220501
 * add Microsoft/POSIX C Library functions: 
     - `_open()`

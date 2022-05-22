@@ -1142,6 +1142,18 @@
     <ClCompile Include="Library\stdio_h\__cdeGetBiasCdeFposType.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Library\c++\new.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\c++\newa.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\c++\delete.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\c++\deletea.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Tools\PostBuildEvent.bat">
