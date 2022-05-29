@@ -189,30 +189,33 @@ void* _cdeMemRealloc(
             // free()
             //
             pThis = &((HEAPDESC*)ptr)[-1];
-
+            //
             //todo: add validity check!!!
-            if (pThis->qwMagic == ALLOCMEM) {/*KG20170815_1 don't do anything if not own memory */
-                pThis->qwMagic = FREEMEM;
+            //
+            if (0 < (ptrdiff_t)pThis)/*KG20220529_1 pointer < 0 always wrong*/{
+                if (pThis->qwMagic == ALLOCMEM) {/*KG20170815_1 don't do anything if not own memory */
+                    pThis->qwMagic = FREEMEM;
 
-                if (pThis->pSucc->qwMagic == FREEMEM/*ree*/) {								// fuse with successor
-                    pThis->pSucc = pThis->pSucc->pSucc;
-                    pThis->pSucc->pPred = pThis;
-                }
-
-                if (pThis->pPred != NULL && pThis->pPred->qwMagic == FREEMEM) {			// fuse with predessor -> remove pThis
-                    pThis->pPred->pSucc = pThis->pSucc;
-                    pThis->pSucc->pPred = pThis->pPred;
-
-                    pThis = pThis->pPred;
-                }
-                if (FALSE == pThis->fInalterable && (pThis->pPred->qwMagic == ENDOFMEM) && (pThis->pSucc->qwMagic == ENDOFMEM)) {	//free pages
-                    pThis->pPred->pSucc = pThis->pSucc->pSucc;
-                    if (NULL != pThis->pSucc->pSucc) {
-                        pThis->pSucc->pSucc->pPred = pThis->pPred;
+                    if (pThis->pSucc->qwMagic == FREEMEM/*ree*/) {								// fuse with successor
+                        pThis->pSucc = pThis->pSucc->pSucc;
+                        pThis->pSucc->pPred = pThis;
                     }
-                    pCdeAppIf->pCdeServices->pMemFree(pCdeAppIf, pThis->PageBase, (unsigned int)pThis->Pages);
-                }
-            }/*KG20170815_1 don't do anything if not own memory */
+
+                    if (pThis->pPred != NULL && pThis->pPred->qwMagic == FREEMEM) {			// fuse with predessor -> remove pThis
+                        pThis->pPred->pSucc = pThis->pSucc;
+                        pThis->pSucc->pPred = pThis->pPred;
+
+                        pThis = pThis->pPred;
+                    }
+                    if (FALSE == pThis->fInalterable && (pThis->pPred->qwMagic == ENDOFMEM) && (pThis->pSucc->qwMagic == ENDOFMEM)) {	//free pages
+                        pThis->pPred->pSucc = pThis->pSucc->pSucc;
+                        if (NULL != pThis->pSucc->pSucc) {
+                            pThis->pSucc->pSucc->pPred = pThis->pPred;
+                        }
+                        pCdeAppIf->pCdeServices->pMemFree(pCdeAppIf, pThis->PageBase, (unsigned int)pThis->Pages);
+                    }
+                }/*KG20170815_1 don't do anything if not own memory */
+            }
             pThis = NULL;
             break;
         }

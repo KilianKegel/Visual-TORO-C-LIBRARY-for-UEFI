@@ -8,6 +8,9 @@
 ```
 
 ## Revision history
+### 20220529
+* fixed: `free()` and C++ operator `delete()`  crash to free `NULL` pointer
+
 ### 20220522
 * add  C++ minimum support
     - `void* operator new(size_t size)`
