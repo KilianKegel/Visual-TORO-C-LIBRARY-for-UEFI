@@ -48,7 +48,7 @@
 * update copyright
 ### 20220109
 * add Standard C Library functions: 
-    - `strcoll()
+    - `strcoll()`
     - `strxfrm()`
     - `fgetwc()`
     - `fputwc()`
