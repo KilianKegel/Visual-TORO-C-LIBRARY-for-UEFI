@@ -8,12 +8,12 @@
 
 Module Name:
 
-    strtol.c
+    wcstol.c
 
 Abstract:
 
     Implementation of the Standard C function.
-    Convert strings to an long-integer value.
+    Convert a wide string to an long-integer value.
 
 Author:
 
@@ -21,35 +21,39 @@ Author:
 
 --*/
 #include <CdeServices.h>
+#include <limits.h>
+#include <stdio.h>
+#include <stdarg.h>
 
 extern void* __cdeGetAppIf();
-extern int _cdeSscanf(const char* pszBuffer, char** endptr, const char* pszFormat, ...);
+extern int _cdeSwscanf(const wchar_t* pwcsBuffer, wchar_t** endptr, const wchar_t* pwcsFormat, ...);
 
 /**
 
 Synopsis
-    #include <stdlib.h>
-    unsigned long strtoul(const char *strSource, char **endptr, int base);
+    #include <wchar.h>
+    long wcstol(const wchar_t* string, wchar_t** end_ptr, int base);
 Description
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/strtol-wcstol-strtol-l-wcstol-l?view=msvc-160&viewFallbackFrom=vs-2019
+    https://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=387
 Paramaters
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/strtol-wcstol-strtol-l-wcstol-l?view=msvc-160#parameters
 Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/strtol-wcstol-strtol-l-wcstol-l?view=msvc-160#return-value
 
 **/
-long strtol(const char* s, char** endptr, int base) {
+long wcstol(const wchar_t* s, wchar_t** endptr, int base) {
     long long l = 0;        // NOTE: initialize to 0 because in error case 0 is returned
     long lx = LONG_MAX;
     long ln = LONG_MIN;
     long long max = lx;
     long long min = ln;
-    char Format[] = { "%ll`00b" };
+    wchar_t Format[] = { L"%ll`00b" };
 
     Format[5] = (base /= 1) % 10 + '0';
     Format[4] = (base /= 10) % 10 + '0';
 
-    _cdeSscanf((char*)s, endptr, Format, &l);
+    _cdeSwscanf(s, endptr, Format, &l);
 
     return (long)(l > 0 ? (max < l ? max : l) : (min > l ? min : l));
 }

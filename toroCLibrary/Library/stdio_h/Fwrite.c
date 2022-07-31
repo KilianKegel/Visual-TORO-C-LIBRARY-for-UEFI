@@ -62,14 +62,11 @@ size_t fwrite(const void* ptr, size_t size, size_t nelem, FILE* stream) {
     unsigned char flushbuf = ptr == NULL && size == (size_t)EOF && nelem == 0;
     unsigned char fCRinserted;/*carriage return*/
 
-//    CDEMOFINE((MFNINF(1) "ptr %p, size %d,nelem %d, fp %p\n",ptr,(int)size,(int)nelem,stream));
-
     if (__cdeIsFilePointer(stream))
     {
-        //fpos_t fpos = pCdeFile->bpos; //memorize file position that is destroyed by a possible fwrite(NULL,EOF,0,stream)
-
         if (O_APPEND == (pCdeFile->openmode & O_APPEND)) {
-            pCdeFile->bpos = CDE_FPOS_SEEKEND; // force END OF FILE position
+            
+            ((CDEFPOS_T*)&pCdeFile->bpos)->CdeFposBias.Bias = CDE_SEEK_BIAS_APPEND; // initialize bpos with CDE_SEEK_BIAS_APPEND, this is always "SEEK_END + 0"
             pCdeFile->fEof = TRUE;
         }
 
@@ -83,6 +80,7 @@ size_t fwrite(const void* ptr, size_t size, size_t nelem, FILE* stream) {
 
             for (/* provided = 0 , requested = size * nelem */; provided < requested && pCdeFile->bidx < pCdeFile->bsiz; /* do nothing */)
             {
+                
                 pCdeFile->Buffer[pCdeFile->bidx] = ((char*)ptr)[provided];
                 pCdeFile->bidx++;
                 //
@@ -126,7 +124,7 @@ size_t fwrite(const void* ptr, size_t size, size_t nelem, FILE* stream) {
             if ((flushbuf || pCdeFile->bidx >= pCdeFile->bsiz) && pCdeFile->bvld != 0/*don't write 0 bytes*/)
             {
                 if (fposoosync) {
-                    pCdeAppIf->pCdeServices->pFsetpos(pCdeAppIf, pCdeFile, &pCdeFile->bpos);
+                    pCdeAppIf->pCdeServices->pFsetpos(pCdeAppIf, pCdeFile, (CDEFPOS_T*) &pCdeFile->bpos);
                     fposoosync = FALSE;
                 }
 
@@ -158,6 +156,13 @@ size_t fwrite(const void* ptr, size_t size, size_t nelem, FILE* stream) {
                 if (0 == (O_CDEREDIR & pCdeFile->openmode)) // skip flushing if file is redirected to speed up
                     fwrite(NULL, (size_t)EOF, 0, stream);   // flush the write buffer on each byte
     }
+
+    //
+    // clear CDE_SEEK_BIAS_APPEND bias outside of fwrite(), assign bpos instantly with current EOF seek pointer, that ftell() can report correct position
+    //
+    if (O_APPEND == (pCdeFile->openmode & O_APPEND))
+        pCdeAppIf->pCdeServices->pFsetpos(pCdeAppIf, pCdeFile, (CDEFPOS_T*)&pCdeFile->bpos),
+        ((CDEFPOS_T*)&pCdeFile->bpos)->CdeFposBias.Bias = CDE_SEEK_BIAS_LESS_POS/* 0 */;
 
     return nRet;
 }

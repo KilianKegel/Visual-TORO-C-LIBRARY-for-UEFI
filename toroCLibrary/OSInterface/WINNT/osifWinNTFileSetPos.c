@@ -47,25 +47,29 @@ Returns
 int _osifWinNTFileSetPos(IN CDE_APP_IF* pCdeAppIf, CDEFILE* pCdeFile, CDEFPOS_T* pos) {
 
     BOOL f = 1;
-    LARGE_INTEGER ofs = { .QuadPart = __cdeOffsetCdeFposType(pos->reg64) };
-    uint32_t dwMoveMethod = __cdeBiasCdeFposType(pos->reg64);
+    LARGE_INTEGER ofs = { .QuadPart = __cdeOffsetCdeFposType(pos->fpos64) };
+    uint32_t dwMoveMethod = __cdeBiasCdeFposType(pos->fpos64);
 
 
     do {
 
         if (pCdeFile->openmode & O_CDENOSEEK/* if e.g. the file is a console, don't try to seek that will fail */)
             break;
+        
+        if ((CDE_SEEK_BIAS_APPEND & CDE_SEEK_BIAS_MSK) == dwMoveMethod)
+            ofs.QuadPart = 0LL,
+            dwMoveMethod = FILE_END/*SEEK_END*/;
 
         f = SetFilePointerEx(
-            (HANDLE)pCdeFile->emufp,                            /*__in          HANDLE hFile,*/
-            ofs,                                                /*__in          LARGE_INTEGER liDistanceToMove,*/
-            &ofs,                                               /*__out_opt     PLARGE_INTEGER lpNewFilePointer,*/
-            dwMoveMethod                                        /*__in          DWORD dwMoveMethod*/
+            (HANDLE)pCdeFile->emufp,    /*__in          HANDLE hFile,*/
+            ofs,                        /*__in          LARGE_INTEGER liDistanceToMove,*/
+            &ofs,                       /*__out_opt     PLARGE_INTEGER lpNewFilePointer,*/
+            dwMoveMethod                /*__in          DWORD dwMoveMethod*/
             );
 
     } while (0);
 
-    pCdeFile->bpos = ofs.QuadPart;
+    pCdeFile->bpos = ofs.QuadPart;                                  
 
     return f ? 0 : EOF;
 }

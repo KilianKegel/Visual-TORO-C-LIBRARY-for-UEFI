@@ -48,13 +48,18 @@ Returns
 int _osifUefiShellFileSetPos(IN CDE_APP_IF* pCdeAppIf, CDEFILE* pCdeFile, CDEFPOS_T* pos)
 {
     EFI_STATUS Status = EFI_SUCCESS;
-    fpos_t eofpos = 0LL, newpos = __cdeOffsetCdeFposType(pos->reg64);
+    fpos_t eofpos = 0LL, newpos = __cdeOffsetCdeFposType(pos->fpos64);
+    uint32_t dwMoveMethod = __cdeBiasCdeFposType(pos->fpos64);
 
     do {
         if (pCdeFile->openmode & O_CDENOSEEK    /* if e.g. the file is a console, don't try to seek that will fail */)
             break;
 
-        if (SEEK_END == __cdeBiasCdeFposType(pos->reg64)) {     // SEEK_END flag set?
+        if ((CDE_SEEK_BIAS_APPEND & CDE_SEEK_BIAS_MSK) == dwMoveMethod)
+            newpos = 0LL,
+            dwMoveMethod = SEEK_END;
+
+        if (SEEK_END == dwMoveMethod) {     // SEEK_END flag set?
 
             Status = __cdeOnErrSet_status(pCdeFile->pRootProtocol->SetPosition(pCdeFile->pFileProtocol, 0xFFFFFFFFFFFFFFFFULL));
 
@@ -64,7 +69,7 @@ int _osifUefiShellFileSetPos(IN CDE_APP_IF* pCdeAppIf, CDEFILE* pCdeFile, CDEFPO
 
             if (EFI_SUCCESS != Status) break;
 
-            newpos = eofpos + __cdeOffsetCdeFposType(pos->reg64);
+            newpos += eofpos;
         }
 
         //

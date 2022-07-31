@@ -40,6 +40,7 @@ Author:
 
 extern int ComputeFieldSize(char* pfieldsizebuf);
 extern int isspace(int c);
+extern uint64_t _cdeUMUL128(uint64_t a, uint64_t b, uint64_t* pHigh);
 
 static int StoreTerminate(int fWide, int fTerminate, void* pVoid, int nMaxChars, int* pIndex, int c) {
     int fWritten = 0;
@@ -252,17 +253,50 @@ static int str2num(STRDESC* pParms, int (*pfnDevGetChar)(void** ppSrc), int (*pf
                     }
             break;
         case PROCESS_THE_END: {
-            XWORD nWeight = 1, xwNumber = 0;
+            XWORD xwWeight = 1, xwNumber = 0, xwNumOld, xwSummand;
+            char fOvl = 0;
 
-            while (--i != -1) {
-                xwNumber += nWeight * rgBuf[i];
-                nWeight *= pParms->nNumBase;
+            while (--i != -1 && 0 == fOvl) 
+            {
+                uint64_t qwOvl = 0;
+
+                xwSummand = _cdeUMUL128/*_umul128*/(xwWeight, (uint64_t)rgBuf[i], &qwOvl);
+                if (0LL != qwOvl)
+                    fOvl |= 1;
+
+                xwNumOld = xwNumber;
+                xwNumber += xwSummand;
+                if(xwNumber < xwNumOld)
+                    fOvl |= 1;
+
+                if (0 != i)
+                {
+                    xwWeight = _cdeUMUL128/*_umul128*/(xwWeight, (uint64_t)pParms->nNumBase, &qwOvl);
+                    if (0LL != qwOvl)
+                        fOvl |= 1;
+                }
             }
             //
             // signed %d / %i can not be greater then LLONG_MAX and not be smaller then LLONG_MIN, if signed, limit to LLONG_MAX / LLONG_MIN
             //
-            xwNumber = pParms->fSigned ? (xwNumber > LLONG_MAX ? (fNegativ ? LLONG_MIN : LLONG_MAX) : xwNumber) : xwNumber;
-            pParms->xwNumber = fNegativ ? -((long long)xwNumber) : xwNumber; //sign
+            //xwNumber = pParms->fSigned ? (fOvl || (xwNumber > LLONG_MAX) ? (fNegativ ? LLONG_MIN : LLONG_MAX) : xwNumber) : (xwNumber);
+            if (pParms->fSigned)
+            {
+                if (fOvl || (xwNumber > LLONG_MAX))
+                {
+                    if (fNegativ)
+                        xwNumber = (XWORD)LLONG_MIN;
+                    else
+                        xwNumber = (XWORD)LLONG_MAX;
+                }
+            }
+            else {
+                if (fOvl)
+                    xwNumber = ULLONG_MAX;
+            }
+            
+            pParms->xwNumber = (fNegativ && 0 == fOvl) ? -((long long)xwNumber) : xwNumber; //sign
+
             state = PROCESS_DONE;
             break;
         }
@@ -308,6 +342,7 @@ _cdeVwxScanf(
     int OverallCount = 0, * pOverallCount = &OverallCount;
     int* pWidth = &stParms.nWidth;
     int nMaxChars;
+    unsigned char* pSrcOriginal = pSrc; // memorize for error handling 
 
     int len = 0, iSSstart = 0/*i at scanset start*/, o = 0/* output index to destination pointer*/;
     void* pSSRngStart = NULL/*range start*/, * pSSRngEnd = NULL/*range end*/;        // used together with '-' operator in scan sets
@@ -564,7 +599,7 @@ _cdeVwxScanf(
             case 'c':   state = PROCESS_CHAR; i--; break;
             case 's':   state = PROCESS_STRING; i--; break;
 
-            case 'd': case 'i': case 'b': case 'o': case 'u': case 'x': case 'p':
+            case 'd': case 'i': case 'b': case 'B': case 'o': case 'u': case 'x': case 'p':
             case 'X':   i--; state = PROCESS_INT; break;
             case '%':   i--; state = PROCESS_END; break;
             case '[':   state = PROCESS_SCANSET_BEGIN_CKINV; break;
@@ -695,7 +730,8 @@ _cdeVwxScanf(
             switch (format) {
             case 'd': stParms.nNumBase = 10; stParms.fSigned = 1; break;
             case 'i': stParms.nNumBase = 0; stParms.fSigned = 1; break;
-            case 'b': /*stParms.nNumBase = 2*/; stParms.fSigned = 0; break;
+            case 'b': /*stParms.nNumBase = 2*/; stParms.fSigned = 0; break; // programable base unsigned
+            case 'B': /*stParms.nNumBase = 2*/; stParms.fSigned = 1; break; // programable base   signed
             case 'o': stParms.nNumBase = 8; stParms.fSigned = 0; break;
             case 'u': stParms.nNumBase = 10; stParms.fSigned = 0; break;
             case 'x': stParms.nNumBase = 16; stParms.fSigned = 0; break;
@@ -749,7 +785,7 @@ _cdeVwxScanf(
     }//c = fWide ? pszFormatW[i] : pszFormat[i] != '\0')
 
     if (NULL != (void*)ppEnd) {
-        *ppEnd = &pSrc[OverallCount];
+        *ppEnd = -1 == nTokenScanned ? pSrcOriginal : &pSrc[OverallCount];
     }
 
     return nTokenScanned;

@@ -53,7 +53,6 @@
       </AssemblerOutput>
     </ClCompile>
     <ClCompile Include="Intrinsics\__CheckForDebuggerJustMyCode.c" />
-    <ClCompile Include="Intrinsics\__chkstk.c" />
     <ClCompile Include="Intrinsics\__iob_func.c" />
     <ClCompile Include="Intrinsics\__use_fma3_lib.c" />
     <ClCompile Include="LibAssist\_cdeConvertDevicePathToText.c" />
@@ -79,6 +78,7 @@
     <ClCompile Include="LibAssist\_CdePoolWcs2AppWcs.c" />
     <ClCompile Include="LibAssist\_CdeSetCurDir.c" />
     <ClCompile Include="LibAssist\_cdeStr2Argcv.c" />
+    <ClCompile Include="LibAssist\_cdeUMUL128.c" />
     <ClCompile Include="LibAssist\_CdeXDump2.c" />
     <ClCompile Include="LibAssist\__cdeGetPeiServices.c" />
     <ClCompile Include="LibAssist\__cdeTianocoreDEBUGDis.c" />
@@ -128,6 +128,10 @@
     <ClCompile Include="Library\errno_h\_efierrno.c" />
     <ClCompile Include="Library\errno_h\__cdeOnErrSet_errno.c" />
     <ClCompile Include="Library\errno_h\__cdeOnErrSet_status.c" />
+    <ClCompile Include="Library\inttypes_h\strtoimax.c" />
+    <ClCompile Include="Library\inttypes_h\strtoumax.c" />
+    <ClCompile Include="Library\inttypes_h\wcstoimax.c" />
+    <ClCompile Include="Library\inttypes_h\wcstoumax.c" />
     <ClCompile Include="Library\io_h\_Close.c" />
     <ClCompile Include="Library\io_h\_Fdopen.c" />
     <ClCompile Include="Library\io_h\_Fileno.c" />
@@ -215,7 +219,13 @@
     <ClCompile Include="Library\stdlib_h\getenv.c" />
     <ClCompile Include="Library\stdlib_h\Labs.c" />
     <ClCompile Include="Library\stdlib_h\Ldiv.c" />
-    <ClCompile Include="Library\stdlib_h\_cdeSnscanf.c" />
+    <ClCompile Include="Library\stdlib_h\strtoll.c" />
+    <ClCompile Include="Library\stdlib_h\strtoull.c" />
+    <ClCompile Include="Library\stdlib_h\_cdeSscanf.c" />
+    <ClCompile Include="Library\stdlib_h\_i64toa.c" />
+    <ClCompile Include="Library\stdlib_h\_i64tow.c" />
+    <ClCompile Include="Library\stdlib_h\_itoa.c" />
+    <ClCompile Include="Library\stdlib_h\_itow.c" />
     <ClCompile Include="Library\stdlib_h\_ltoa.c" />
     <ClCompile Include="Library\stdlib_h\Malloc.c" />
     <ClCompile Include="Library\stdlib_h\mblen.c" />
@@ -231,6 +241,11 @@
     <ClCompile Include="Library\stdlib_h\wcstombs.c" />
     <ClCompile Include="Library\stdlib_h\wctomb.c" />
     <ClCompile Include="Library\stdlib_h\_cdeAbort.c" />
+    <ClCompile Include="Library\stdlib_h\_ltow.c" />
+    <ClCompile Include="Library\stdlib_h\_ui64toa.c" />
+    <ClCompile Include="Library\stdlib_h\_ui64tow.c" />
+    <ClCompile Include="Library\stdlib_h\_ultoa.c" />
+    <ClCompile Include="Library\stdlib_h\_ultow.c" />
     <ClCompile Include="Library\string_h\MemChr.c" />
     <ClCompile Include="Library\string_h\MemCmp.c" />
     <ClCompile Include="Library\string_h\MemCpy.c" />
@@ -308,6 +323,10 @@
     <ClCompile Include="Library\wchar_h\WcsSpn.c" />
     <ClCompile Include="Library\wchar_h\WcsStr.c" />
     <ClCompile Include="Library\wchar_h\WcsTok.c" />
+    <ClCompile Include="Library\wchar_h\Wcstol.c" />
+    <ClCompile Include="Library\wchar_h\Wcstoll.c" />
+    <ClCompile Include="Library\wchar_h\Wcstoul.c" />
+    <ClCompile Include="Library\wchar_h\Wcstoull.c" />
     <ClCompile Include="Library\wchar_h\Wcsxfrm.c" />
     <ClCompile Include="Library\wchar_h\wctob.c" />
     <ClCompile Include="Library\wchar_h\WMemChr.c" />
@@ -316,6 +335,7 @@
     <ClCompile Include="Library\wchar_h\WMemMove.c" />
     <ClCompile Include="Library\wchar_h\WMemSet.c" />
     <ClCompile Include="Library\wchar_h\Wprintf.c" />
+    <ClCompile Include="Library\wchar_h\_cdeSwscanf.c" />
     <ClCompile Include="Library\wchar_h\_WcsDup.c" />
     <ClCompile Include="Library\wchar_h\_WcsICmp.c" />
     <ClCompile Include="Library\wchar_h\_WcsNICmp.c" />
@@ -545,6 +565,8 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
     </MASM>
     <MASM Include="Intrinsics\__chkstk64.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -553,6 +575,14 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="Intrinsics\__chkstkWin32.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
     </MASM>
     <MASM Include="Intrinsics\__chkstkWin64.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -737,7 +767,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>NMOFINE;NDEBUG;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;MDEPKG_NDEBUG;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\CdePkg\include;$(ProjectDir)..\CdePkg\include\###VS2022###;$(ProjectDir)..\MdePkgInc\IA32;$(ProjectDir)..\MdePkgInc</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>

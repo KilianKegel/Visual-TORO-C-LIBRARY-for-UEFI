@@ -43,27 +43,28 @@ Description
             666 6
             321 0
         --------------------------
-            000 x	CDE_SEEK_BIAS-less positive offset
-            100 S	CDE_SEEK_BIAS	-4 -> SEEK_SET
-
-            110 S	CDE_SEEK_BIAS	-4 -> SEEK_END
-            111 x	CDE_SEEK_BIAS-less negative offset
+            000 x   CDE_SEEK_BIAS-less positive offset
+            100 S   CDE_SEEK_BIAS           4 & 11b -> SEEK_SET
+            101 S   CDE_SEEK_BIAS_APPEND    5 & 11b -> SEEK_CUR unused in CDE, instead it is APPEND
+            110 S   CDE_SEEK_BIAS           6 & 11b -> SEEK_END
+            111 x   CDE_SEEK_BIAS-less negative offset
 
 Parameters
 
     fpos_t fpos  :   file position
 
 Returns
-    bias    :   SEEK_SET 0
-                SEEK_END 2
+    bias    :   SEEK_SET    0
+                SEEK_END    2
+                SEEK_APPEND 1   this is CDE specific
 **/
 int __cdeBiasCdeFposType(fpos_t fpos)
 {
-    CDEFPOS_T CdeFPos = { .reg64 = fpos };
-    int bias = SEEK_SET;                        // normal case for non-CdeFPos type fpos_t
+    CDEFPOS_T CdeFPos = { .fpos64 = fpos };
+    int bias = SEEK_SET;                                            // normal case for non-CdeFPos type fpos_t
 
     if (__cdeIsCdeFposType(fpos))
-        bias = (int)CdeFPos.CdeFposBias.Bias & 0x3;     // clear highest bit
+        bias = (int)CdeFPos.CdeFposBias.Bias & CDE_SEEK_BIAS_MSK;   // clear highest bit
 
     return bias;
 }

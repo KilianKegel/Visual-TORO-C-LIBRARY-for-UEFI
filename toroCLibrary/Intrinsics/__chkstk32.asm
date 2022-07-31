@@ -8,7 +8,7 @@
 ;
 ;Module Name:
 ;
-;    __chkstk32.asm
+;    __chkstk64.asm
 ;
 ;Abstract:
 ;
@@ -17,13 +17,26 @@
 ;   Adjusted for CDE usage.
 ;
 ;--*/
-
-    .386
+    public ___chkstk
+    public ___cdeChkStkAddr
     .model flat
-.code
-__chkstk proc near public
+    .data
 
-        ret
+    ;
+    ; NOTE: __chkstkWindows is filled here by the Windows64 _MainEntryPointWinNT
+    ;
+___cdeChkStkAddr dword 0         
+    
+    .code
 
-__chkstk endp
+___chkstk proc
+
+    cmp [___cdeChkStkAddr], 0
+    je  exit
+    jmp [___cdeChkStkAddr]
+exit:
+    ret
+
+___chkstk endp
+
 end

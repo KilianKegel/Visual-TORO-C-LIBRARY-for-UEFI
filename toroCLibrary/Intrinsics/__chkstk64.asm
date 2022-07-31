@@ -23,7 +23,7 @@
     .data
 
     ;
-    ; NOTE: __chkstkWindows is stored here by the Windows64 _MainEntryPointWinNT
+    ; NOTE: __chkstkWindows is filled here by the Windows64 _MainEntryPointWinNT
     ;
 __cdeChkStkAddr qword 0         
     

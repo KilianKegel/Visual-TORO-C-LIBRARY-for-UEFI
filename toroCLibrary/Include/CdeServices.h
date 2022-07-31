@@ -155,15 +155,16 @@ typedef struct _CDE_APP_IF CDE_APP_IF;
 //
 enum CDEFPOSTTYPE {
     CDE_SEEK_BIAS_LESS_POS              /* 000b */,
+    CDE_SEEK_BIAS_MSK = 3               /* 011b */,
     CDE_SEEK_BIAS_SET = 4               /* 100b */,
-    CDE_SEEK_BIAS_CUR_DUMMY_NOT_USED    /* 101b */,
+    CDE_SEEK_BIAS_APPEND                /* 101b */, /* NOTE: This is the APPEND marker in "bpos". Despite the bpos offset, ALL WRITES ARE DONE TO EOF*/
     CDE_SEEK_BIAS_END                   /* 110b */,
     CDE_SEEK_BIAS_LESS_NEG,             /* 111b */
 };
 
 typedef union tagCDEFPOS_T // CDE DEBUG FILE POINTER
 {
-    int64_t reg64;
+    int64_t fpos64;
     struct {
         uint64_t Offs : 60;
         uint64_t Sign : 1;
@@ -405,7 +406,7 @@ typedef int         OSIFFCLOSE(IN CDE_APP_IF* pCdeAppIf, CDEFILE* pCdeFile);
 typedef int         OSIFFDELETE(IN CDE_APP_IF* pCdeAppIf, const char* filename, CDEFILE* pCdeFile);
 typedef size_t      OSIFFREAD(IN CDE_APP_IF* pCdeAppIf, void* ptr, size_t nelem, CDEFILE* pCdeFile);
 typedef size_t      OSIFFWRITE(IN CDE_APP_IF* pCdeAppIf, void* ptr, size_t nelem, CDEFILE* pCdeFile);
-typedef int         OSIFFSETPOS(IN CDE_APP_IF* pCdeAppIf, CDEFILE* pCdeFile, const long long* pos);
+typedef int         OSIFFSETPOS(IN CDE_APP_IF* pCdeAppIf, CDEFILE* pCdeFile, CDEFPOS_T* pos);
 typedef int         OSIFFRENAME(IN CDE_APP_IF* pCdeAppIf, wchar_t* pwcsOld, wchar_t* pwcsNew);
 typedef CDEFILEINFO*OSIFFFINDALL(IN CDE_APP_IF* pCdeAppIf, IN  char* pstrDrvPthDir, IN OUT int* pCountOrError);
 typedef int         OSIFFGETSTATUS(IN CDE_APP_IF* pCdeAppIf, void* pFpOrFname, CDESTAT64I32* pStat64i32, void* pBuf400);
@@ -602,17 +603,20 @@ extern void* __cdeGetAppIf(void);
 #define O_CDENOSEEK     (1 << 17)/* file does't support seek/tell related functions*/
 #define O_CDEREDIR      (1 << 18)/* this is STDIN/STDOUT/STDERR redirected to file (<>|). If NOT SET, EOF is NOT THE END OF THE STREAM, It is a real keyboard */
                                  /* O_CDEREDIR is only used with STDIN/STDOUT/STDERR */
-#define O_CDESTDIN      (1 << 19)/* this is STDIN  */
-#define O_CDESTDOUT     (2 << 19)/* this is STDOUT */
-#define O_CDESTDERR     (3 << 19)/* this is STDERR */
-#define O_CDESTDMASK    (3 << 19)/* this is mask stdin/out/err */
-#define O_CDEWIDTH16    (1 << 21)/* width of the stream 0 = 8 Bit, 1 = 16 Bit */
-#define O_CDEDETECTED   (1 << 22)/* stream width detected */
+                                 /* NOTE: A REDIRected file is provided by the OS shell when using one of  > < | "operators" from outside. It can not be closed */
+#define O_CDEREOPEN     (1 << 19)/* this is STDOUT/STDERR "freopen()"-ed */
+                                 /* NOTE: A REOPENED file is provided by the freopen() internally by the program. It must be closed on exit */
+#define O_CDESTDIN      (1 << 20)/* this is STDIN  */
+#define O_CDESTDOUT     (2 << 20)/* this is STDOUT */
+#define O_CDESTDERR     (3 << 20)/* this is STDERR */
+#define O_CDESTDMASK    (3 << 20)/* this is mask stdin/out/err */
+#define O_CDEWIDTH16    (1 << 22)/* width of the stream 0 = 8 Bit, 1 = 16 Bit */
+#define O_CDEDETECTED   (1 << 23)/* stream width detected */
 
 #ifndef fpos_t
 typedef long long fpos_t;
 #endif//fpos_t
-#define CDE_FPOS_SEEKEND (1LL << 63)
+//#define CDE_FPOS_SEEKEND (1LL << 63)
 
 typedef struct tagCDEFILE {
     unsigned char fRsv;                         // 0 if free, 1 if taken /reserved / occupied / allocated
@@ -622,7 +626,7 @@ typedef struct tagCDEFILE {
     char* Buffer;                               // internal buffer
     int   bufPosEOF;                            // buffer EOF: If buffer isn't filled completely by the read operation, EOF appears in the buffer at position X
     int    bsiz;                                // sizeof internal buffer
-    fpos_t  bpos;                               // buffers position equivalent to file pointer position. bpos[63] == SEEK_END marker CDE_FPOS_SEEKEND!!!
+    fpos_t  bpos;                               // buffers position equivalent to file pointer position. bpos[63] == CDE_SEEK_BIAS_APPEND marker CDE_FPOS_SEEKEND!!!
     long    bidx;                               // index into Buffer[] ranges from 0 .. bufsiz
     long    bvld;                               // number of valid bytes in the buffer beginning from
     unsigned char bdirty;                       // buffer is dirty -> the buffer conatains unwritten characters

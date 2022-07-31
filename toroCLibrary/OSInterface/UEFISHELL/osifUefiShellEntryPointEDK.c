@@ -551,7 +551,7 @@ _MainEntryPointShell(
             fwrite(NULL, (size_t)EOF, 0, (FILE*)CDE_STDERR);    // NULL,EOF,0,stream == flush parameter
 
             for (i = 1/*skip stdin*/; i <= 2; i++)
-                if (O_CDEREDIR & _iob[i].openmode)
+                if (O_CDEREOPEN & _iob[i].openmode)
                     fclose((FILE*)&_iob[i]);
 
             //

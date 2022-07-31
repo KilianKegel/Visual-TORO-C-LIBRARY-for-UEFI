@@ -47,11 +47,11 @@ Description
             666 6
             321 0
         --------------------------
-            000 x	CDE_SEEK_BIAS-less positive offset
-            100 S	CDE_SEEK_BIAS	-4 -> SEEK_SET
-            
-            110 S	CDE_SEEK_BIAS	-4 -> SEEK_END
-            111 x	CDE_SEEK_BIAS-less negative offset
+            000 x   CDE_SEEK_BIAS-less positive offset
+            100 S   CDE_SEEK_BIAS           4 & 11b -> SEEK_SET
+            101 S   CDE_SEEK_BIAS_APPEND    5 & 11b -> SEEK_CUR unused in CDE, instead it is APPEND
+            110 S   CDE_SEEK_BIAS           6 & 11b -> SEEK_END
+            111 x   CDE_SEEK_BIAS-less negative offset
 
 Parameters
 
@@ -62,7 +62,7 @@ Returns
 **/
 fpos_t __cdeOffsetCdeFposType(fpos_t fpos)
 {
-    CDEFPOS_T CdeFPos = { .reg64 = fpos };
+    CDEFPOS_T CdeFPos = { .fpos64 = fpos };
 
     if (__cdeIsCdeFposType(fpos))                       // if CdeFpos_Type:
         if (1 == CdeFPos.CdeFposBias.Sign)              // if negative number == sign bit set...
@@ -70,6 +70,6 @@ fpos_t __cdeOffsetCdeFposType(fpos_t fpos)
         else
             CdeFPos.CdeFposBias.Bias = (uint64_t)0;     // ...copy the sign == 0 from bit 60 to bits 61..63
 
-    return CdeFPos.reg64;
+    return CdeFPos.fpos64;
 }
 

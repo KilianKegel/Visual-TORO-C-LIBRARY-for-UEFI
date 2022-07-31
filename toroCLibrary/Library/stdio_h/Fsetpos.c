@@ -62,7 +62,7 @@ int fsetpos(FILE* stream, const fpos_t* pos)
     EFI_STATUS Status = EFI_SUCCESS;
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
     
-    CDEFPOS_T CdeFPos    = { .reg64 = *pos };
+    CDEFPOS_T CdeFPos = { .fpos64 = *pos };
 
     do {
 
@@ -76,7 +76,7 @@ int fsetpos(FILE* stream, const fpos_t* pos)
         {
             fflush(stream);
         }
-        
+
         if (1/*KG20220419*/)
         {
             //
@@ -109,17 +109,17 @@ int fsetpos(FILE* stream, const fpos_t* pos)
                     //
                     // get EOF position
                     //
-                    CDEFPOS_T CdeFposEOF = { .reg64 = 0, .CdeFposBias.Bias = CDE_SEEK_BIAS_END };
-                    CDEFPOS_T CdeFposCurrent = { .reg64 = pCdeFile->bpos };
+                    CDEFPOS_T CdeFposEOF = { .fpos64 = 0, .CdeFposBias.Bias = CDE_SEEK_BIAS_END };
+                    CDEFPOS_T CdeFposCurrent = { .fpos64 = pCdeFile->bpos };
 
-                    nRet = pCdeAppIf->pCdeServices->pFsetpos(pCdeAppIf, pCdeFile, (fpos_t*)&CdeFposEOF);
+                    nRet = pCdeAppIf->pCdeServices->pFsetpos(pCdeAppIf, pCdeFile, &CdeFposEOF);
 
                     EOFPointer = pCdeFile->bpos;
 
                     if (0 > (RequestedSeekPointer + EOFPointer))
                         fSetEINVAL = 1;
 
-                    nRet = pCdeAppIf->pCdeServices->pFsetpos(pCdeAppIf, pCdeFile, (fpos_t*)&CdeFposCurrent);
+                    nRet = pCdeAppIf->pCdeServices->pFsetpos(pCdeAppIf, pCdeFile, &CdeFposCurrent);
                 }
             }
 
@@ -134,7 +134,7 @@ int fsetpos(FILE* stream, const fpos_t* pos)
                 }
                 else
                 {
-                    CdeFPos.reg64 = 0LL;
+                    CdeFPos.fpos64 = 0LL;
                     CdeFPos.CdeFposBias.Bias = CDE_SEEK_BIAS_END;
 
                     pRet = &nRetErr;                        // don't break, move the file pointer 
@@ -143,7 +143,7 @@ int fsetpos(FILE* stream, const fpos_t* pos)
             }
         }
 
-        nRet = pCdeAppIf->pCdeServices->pFsetpos(pCdeAppIf, pCdeFile,  (fpos_t*) &CdeFPos);     // move the file pointer
+        nRet = pCdeAppIf->pCdeServices->pFsetpos(pCdeAppIf, pCdeFile, &CdeFPos);                // move the file pointer
 
         // ----- reset data structure if not yet done by fflush(), bpos is set by pFsetpos();
 

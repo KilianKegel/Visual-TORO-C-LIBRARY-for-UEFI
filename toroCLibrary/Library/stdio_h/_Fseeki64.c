@@ -54,14 +54,14 @@ int _fseeki64(FILE* stream, __int64 offset, int bias) {
 
     CDEFILE* pCdeFile = (CDEFILE*)stream;
     int nRet = EOF/*0 == success*/;
-    CDEFPOS_T fposnew = { .reg64 = offset };
+    CDEFPOS_T fposnew = { .fpos64 = offset };
     //
-    //NOTE: writing to CDEFPOS_T.reg64 overwrites all bitfields.
+    //NOTE: writing to CDEFPOS_T.fpos64 overwrites all bitfields.
     //      AFTERWARDS CDEFPOS_T.Bias mus be initialized and keeps the CDEFPOS_T.Sign
     // 
     //typedef union tagCDEFPOS_T // CDE DEBUG FILE POINTER
     //{
-    //    int64_t reg64;
+    //    int64_t fpos64;
     //    struct {
     //        uint64_t Offs : 60;
     //        uint64_t Sign : 1;
@@ -89,8 +89,8 @@ int _fseeki64(FILE* stream, __int64 offset, int bias) {
             break;
         case    SEEK_END:   fposnew.CdeFposBias.Bias = CDE_SEEK_BIAS_END;
             break;
-        case    SEEK_CUR:   fposnew.reg64 = pCdeFile->bpos + pCdeFile->bidx + offset;   // NOTE: UEFI SetPosition() dosn't support different origins/bias
-                            fposnew.CdeFposBias.Bias = CDE_SEEK_BIAS_SET;              // https://uefi.org/sites/default/files/resources/UEFI_Spec_2_9_2021_03_18.pdf#page=600
+        case    SEEK_CUR:   fposnew.fpos64 = pCdeFile->bpos + pCdeFile->bidx + offset;      // NOTE: UEFI SetPosition() dosn't support different origins/bias
+                            fposnew.CdeFposBias.Bias = CDE_SEEK_BIAS_SET;                   // https://uefi.org/sites/default/files/resources/UEFI_Spec_2_9_2021_03_18.pdf#page=600
             break;
         default:
             //TODO: ADD error handler

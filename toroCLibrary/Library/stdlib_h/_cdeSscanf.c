@@ -8,12 +8,12 @@
 
 Module Name:
 
-    _cdeSnscanf.c
+    _cdeSscanf.c
 
 Abstract:
 
     Toro C Library specific implementation
-    Read formatted data from a length limited string.
+    Read formatted data from a string and return pointer to character that terminates the string.
 
 Author:
 
@@ -43,7 +43,7 @@ static ROMPARM_VWXSCANF RomParm = { \
 /**
 
 Synopsis
-    int _cdeSnscanf(const char* pszBuffer, char** endptr, const char* pszFormat, ...);
+    int _cdeSscanf(const char* pszBuffer, char** endptr, const char* pszFormat, ...);
 Description
     Function processes formatted string as sscanf() does, but additionally 
     provides e entptr.
@@ -56,7 +56,7 @@ Returns
     number of tokens
 
 **/
-int _cdeSnscanf(const char* pszBuffer, char** endptr, const char* pszFormat, ...) {
+int _cdeSscanf(const char* pszBuffer, char** endptr, const char* pszFormat, ...) {
     va_list ap;
     int nRet;
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();

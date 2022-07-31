@@ -61,7 +61,7 @@ size_t fread(const void* ptr, size_t size, size_t nelem, FILE* stream) {
 
     while (__cdeIsFilePointer(pCdeFile))
     {
-        fpos_t fpos = pCdeFile->bpos + pCdeFile->bvld; //memorize file position that is destroyed by a possible fwrite(NULL,EOF,0,pCdeFile)
+        fpos_t fpos = pCdeFile->bpos + pCdeFile->bvld;                                  //memorize file position that is destroyed by a possible fwrite(NULL,EOF,0,pCdeFile)
 
         if (O_WRONLY == (pCdeFile->openmode & (O_RDONLY | O_WRONLY | O_RDWR))) {
             //DONT ADD ERRoR TO ERRNO
@@ -97,7 +97,7 @@ size_t fread(const void* ptr, size_t size, size_t nelem, FILE* stream) {
                 }
 
                 if (fposoosync) {
-                    pCdeAppIf->pCdeServices->pFsetpos(pCdeAppIf, pCdeFile, &fpos);
+                    pCdeAppIf->pCdeServices->pFsetpos(pCdeAppIf, pCdeFile, (CDEFPOS_T*) & fpos);
                     fposoosync = FALSE;
                 }
 

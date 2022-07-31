@@ -27,8 +27,13 @@ Author:
 #include <CdeServices.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <uefi.h>
 extern char _gSTDOUTMode;   /* 0 == UEFI Shell default, 1 == ASCII only */
 
+//EFI_SYSTEM_TABLE* _cdegST;
+//extern char trcen;
+//short wcsbuf[512];
+//extern int swprintf(short* pszDest, size_t dwCount, const short* pszFormat, ...);
 /**
 
 Synopsis
@@ -59,7 +64,6 @@ size_t _osifUefiShellFileWrite(IN CDE_APP_IF* pCdeAppIf, void* ptr, size_t nelem
     unsigned char* pUni = (unsigned char*)&pCdeFile->pFileProtocol->OpenEx;
 
 #define OPENMODE pCdeFile->openmode
-
     do {
         if (OPENMODE & O_CDESTDOUT || OPENMODE & O_CDESTDERR)
         {
@@ -103,15 +107,26 @@ size_t _osifUefiShellFileWrite(IN CDE_APP_IF* pCdeAppIf, void* ptr, size_t nelem
             // UEFI BUG: file positioning bug, if data written behind EOF, data range between old EOF and 
             // new data contains medium data / garbage, instead of 0
             //
+//            if (trcen == 2)swprintf(wcsbuf, INT_MAX, L"%hs(), Line %d\r\n", __FUNCTION__, __LINE__), _cdegST->ConOut->OutputString(_cdegST->ConOut, wcsbuf);
             if (0 != pCdeFile->gapsize)
             {
                 static char zBuf64k[64 * 1024];                                                                 // reserve static 64k buffer initialized to 0 in .bss
                 EFI_STATUS Status1, Status2;
-                uint64_t sGapSize = (long long)pCdeFile->gapsize;                                              // convert size to signed type
-                uint64_t sBufSiz;
+                int64_t sGapSize = (long long)pCdeFile->gapsize;                                                // convert size to signed type
+                int64_t sBufSiz;
 
+//                if (trcen == 2)swprintf(wcsbuf, INT_MAX, L"%hs(), Line %d\r\n", __FUNCTION__, __LINE__), _cdegST->ConOut->OutputString(_cdegST->ConOut, wcsbuf);
                 Status1 = pCdeFile->pRootProtocol->SetPosition(pCdeFile->pFileProtocol, pCdeFile->gappos);      // set position
+/*                if (trcen == 2)
+                    swprintf(wcsbuf, INT_MAX, L"%hs(), Line %d Status %hs, pCdeFile->gappos %lld, sGapSize %lld\r\n", 
+                    __FUNCTION__, 
+                    __LINE__, 
+                    _strefierror(Status1), 
+                    pCdeFile->gappos,
+                        sGapSize),
 
+                    _cdegST->ConOut->OutputString(_cdegST->ConOut, wcsbuf);
+*/
                 CDETRACE((TRCINF(1) "gappos %016llX, Status %s\n\n", pCdeFile->gappos, _strefierror(Status1)));
 
                 do
@@ -119,13 +134,19 @@ size_t _osifUefiShellFileWrite(IN CDE_APP_IF* pCdeAppIf, void* ptr, size_t nelem
                     sGapSize -= sizeof(zBuf64k);                                                                // subtract buffer size
                     sBufSiz = sGapSize > 0 ? sizeof(zBuf64k) : sGapSize + sizeof(zBuf64k);                      // write full buffersize of zeros / write remaining zeros
 
+//                    if (trcen == 2)swprintf(wcsbuf, INT_MAX, L"%hs(), Line %d, sGapSize %lld, sBufSiz %lld\r\n", __FUNCTION__, __LINE__, sGapSize, sBufSiz), _cdegST->ConOut->OutputString(_cdegST->ConOut, wcsbuf);
+
                     Status2 = pCdeFile->pRootProtocol->Write(pCdeFile->pFileProtocol, (UINTN*) &sBufSiz, zBuf64k);       // initialize file gap with zeros
 
                     CDETRACE((TRCINF(1) "gapsize %lld, Status %s\n\n", sGapSize, _strefierror(Status2)));
 
+//                    if (trcen == 2)swprintf(wcsbuf, INT_MAX, L"%hs(), Line %d, sGapSize %lld, sBufSiz %lld\r\n", __FUNCTION__, __LINE__, sGapSize, sBufSiz), _cdegST->ConOut->OutputString(_cdegST->ConOut, wcsbuf);
+
                 } while (sGapSize > 0);                                                                         // untile nothing to to anymore
+//                if (trcen == 2)swprintf(wcsbuf, INT_MAX, L"%hs(), Line %d\r\n", __FUNCTION__, __LINE__), _cdegST->ConOut->OutputString(_cdegST->ConOut, wcsbuf);
             }
         }
+//        if (trcen == 2)swprintf(wcsbuf, INT_MAX, L"%hs(), Line %d\n", __FUNCTION__, __LINE__), _cdegST->ConOut->OutputString(_cdegST->ConOut, wcsbuf);
         BufferSize = nelem * elmsize;
         Status = __cdeOnErrSet_status(pCdeFile->pRootProtocol->Write(pCdeFile->pFileProtocol, &BufferSize, p));
         count = BufferSize / elmsize;
@@ -133,6 +154,7 @@ size_t _osifUefiShellFileWrite(IN CDE_APP_IF* pCdeAppIf, void* ptr, size_t nelem
         *pUni = 'T' == *pUni ? 0 : *pUni;
 
     } while (0);
+//    if (trcen == 2)swprintf(wcsbuf, INT_MAX, L"%hs(), Line %d\n", __FUNCTION__, __LINE__), _cdegST->ConOut->OutputString(_cdegST->ConOut, wcsbuf);
 
     return  EFI_SUCCESS == Status ? (size_t)count : 0;
 }
