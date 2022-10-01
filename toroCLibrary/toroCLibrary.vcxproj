@@ -749,14 +749,14 @@
     <CustomBuildAfterTargets>
     </CustomBuildAfterTargets>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
     <CustomBuildBeforeTargets />
     <CustomBuildAfterTargets />
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -933,7 +933,7 @@
 	</Command>
     </PreBuildEvent>
     <Lib>
-      <OutputFile>$(SolutionDir)$(Platform)\$(Configuration)\toroCLibrary.lib</OutputFile>
+      <OutputFile>$(SolutionDir)lib\toroC$(PlatformArchitecture).lib</OutputFile>
       <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <AdditionalOptions>/IGNORE:4006 %(AdditionalOptions)</AdditionalOptions>
@@ -953,7 +953,7 @@
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;$(SolutionDir)toroCLibrary\include;$(SolutionDir)CdePkg\include;$(SolutionDir)CdePkg\include\###VS2022###;$(SolutionDir)MdePkgInc\x64;$(SolutionDir)MdePkgInc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\toroCLibrary\include;$(ProjectDir)..\CdePkg\include;$(ProjectDir)..\CdePkg\include\###VS2022###;$(ProjectDir)..\MdePkgInc\x64;$(ProjectDir)..\MdePkgInc</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <ExceptionHandling>false</ExceptionHandling>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
@@ -1001,7 +1001,7 @@
 	</Command>
     </PreBuildEvent>
     <Lib>
-      <OutputFile>$(SolutionDir)$(Platform)\$(Configuration)\toroCLibrary.lib</OutputFile>
+      <OutputFile>$(SolutionDir)lib\toroC$(PlatformArchitecture).lib</OutputFile>
       <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <AdditionalOptions>/IGNORE:4006 %(AdditionalOptions)</AdditionalOptions>

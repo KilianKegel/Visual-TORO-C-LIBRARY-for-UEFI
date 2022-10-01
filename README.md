@@ -8,6 +8,12 @@
 ```
 
 ## Revision history
+### 20221001
+* simplify interaction of various **VISUAL-xyz** components, unitize directory structure 
+  and import/export interface for those solutions
+    * output folder for **Configuration Type: static Library** is commonly **$(SolutionPath)**\\***lib***
+      to share one single *library folder* for all imported subprojects
+    * adjust include path to be **$(ProjectDir)** relative
 ### 20220731
 * add Standard C90 Library functions: 
     - `wcstoul()`
