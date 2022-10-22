@@ -8,6 +8,10 @@
 ```
 
 ## Revision history
+### 20221022
+* add O_TEMPORARY support to Microsoft/POSIX _open()
+* fixed "fall time bug" (autumn). Broken time calculation on 
+  two digit month number (Oct, Nov, Dec).
 ### 20221001
 * simplify interaction of various **VISUAL-xyz** components, unitize directory structure 
   and import/export interface for those solutions

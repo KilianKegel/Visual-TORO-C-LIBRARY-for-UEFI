@@ -2,4 +2,6 @@
 x64/
 Win32/
 toroCLibrary/$trash/
+toroCLibrary/Tools/$trash/
 toroCLibrary/x86/
+lib/

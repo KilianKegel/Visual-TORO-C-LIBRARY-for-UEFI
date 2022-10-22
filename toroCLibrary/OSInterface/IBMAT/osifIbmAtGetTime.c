@@ -70,7 +70,7 @@ long long _osifIbmAtGetTime(IN CDE_APP_IF* pCdeAppIf) {
     tm.tm_min = bcd2int(rtcrd8(0x02));                  // minutes after the hour (from 0)
     tm.tm_hour = bcd2int(rtcrd8(0x04));                 // hour of the day (from 0)
     tm.tm_mday = bcd2int(rtcrd8(0x07));                 // day of the month (from 1)
-    tm.tm_mon = bcd2int(rtcrd8(0x08) - 1);              // month of the year (from 0)
+    tm.tm_mon = bcd2int(rtcrd8(0x08)) - 1;              // month of the year (from 0)
     tm.tm_year = bcd2int(rtcrd8(0x09));                 // years since 1900 (from 0)
     tm.tm_year += (100 * bcd2int(rtcrd8(0x32)) - 1900); // add century
     tm.tm_wday = 0;                                     // days since Sunday (from 0)

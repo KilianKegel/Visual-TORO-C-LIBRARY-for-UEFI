@@ -118,6 +118,16 @@ int _open(const char* filename, int oflag, ...) {
         if (NULL == fp)
             break;
 
+        //
+        // O_TEMPORARY
+        //  NOTE: If pCdeFile->tmpfilename != NULL, on fclose() file is deleted
+        if (O_TEMPORARY & oflag)
+        {
+            CDEFILE* pCdeFile = (void*)fp;
+            pCdeFile->tmpfilename = malloc(sizeof('\0') + strlen(filename));
+            strcpy(pCdeFile->tmpfilename, filename);
+        }
+
         fd = _fileno(fp);
 
     } while (0);
