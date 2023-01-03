@@ -28,7 +28,7 @@ extern void longjmp(jmp_buf env, int val);
 
 Synopsis
     #include <stdlib.h>
-    div_t div(int number, int denom);
+    void exit(int status);
 Description
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/exit-exit-exit?view=msvc-160&viewFallbackFrom=vs-2019
 Parameters

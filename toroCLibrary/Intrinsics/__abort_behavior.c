@@ -19,4 +19,6 @@ Author:
     Kilian Kegel
 
 --*/
-char __abort_behavior;
+#define _WRITE_ABORT_MSG  0x1 // debug only, has no effect in release
+#define _CALL_REPORTFAULT 0x2
+char __abort_behavior = 2;

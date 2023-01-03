@@ -35,9 +35,7 @@ Synopsis
 Description
     
     Toro C Library internal helperfunction that validates, if a FILE* pointer 
-    belongs to the internal I/O buffer AND is allocated.
-
-    It set errno to EBADF on fail.
+    belongs to the internal I/O buffer. Allocation-state is not checked.
 
 Parameters
 
@@ -49,20 +47,18 @@ Returns
     0           on FAILURE
 
 **/
-int __cdeIsFilePointer(void* stream) {
+int __cdeIsIOBuffer(void* stream) {
     int j;
     void* pCdeFile;
     EFI_STATUS Status = (EFI_STATUS)-1;
 
     for (j = 0, pCdeFile = __cdeGetIOBuffer(0)/*&_iob[0]*/; NULL != pCdeFile; pCdeFile = __cdeGetIOBuffer(++j))
     {
-        if (pCdeFile == stream && TRUE == ((CDEFILE*)pCdeFile)->fRsv) {
+        if (pCdeFile == stream /* && TRUE == ((CDEFILE*)pCdeFile)->fRsv*/) {
             Status = EFI_SUCCESS;
             break;
         }
     }
-
-    __cdeOnErrSet_errno(Status, EBADF);
 
     return EFI_SUCCESS == Status ? 1 + j : 0;
 }

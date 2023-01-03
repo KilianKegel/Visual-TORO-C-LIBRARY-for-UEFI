@@ -48,6 +48,7 @@ static void invalid_parameter_handler(const wchar_t * expression,const wchar_t *
     if(NULL != file)
     {
         fprintf(stderr,"invalid parameter: %S(%d) %S() %S \n",file,line, function, expression);
+        abort();
     }
     else
     {

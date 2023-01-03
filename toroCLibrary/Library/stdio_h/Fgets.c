@@ -21,7 +21,7 @@ Author:
 
 --*/
 #include <stdio.h>
-
+#include <cdeservices.h>
 extern void (*pinvalid_parameter_handler)(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);
 
 /** fgets
@@ -59,7 +59,7 @@ char* fgets(char* s, int n, FILE* stream) {
     if (    NULL == stream
         ||  NULL == s
         ||  0 > n)
-        (*pinvalid_parameter_handler)(NULL, NULL, NULL, 0, 0);
+        (*pinvalid_parameter_handler)(L"\"NULL == stream || NULL == s || 0 > n\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
     else
         do {
 

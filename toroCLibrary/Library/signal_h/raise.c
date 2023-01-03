@@ -55,7 +55,7 @@ int raise(int sig) {
 
     do {
         if (idx < 0)
-            (*pinvalid_parameter_handler)(NULL, NULL, NULL, 0, 0);
+            (*pinvalid_parameter_handler)(L"\"idx < 0\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
 
         sighnd = pCdeAppIf->rgfnSignal[idx];
 

@@ -168,6 +168,7 @@ CDEFILE* _osifWinNTFileOpen(CDE_APP_IF* pCdeAppIf, const wchar_t* pwcsFileName, 
             int e = GetLastError();
             // GetLastError() 5 ERROR_ACCESS_DENIED  -> Access is denied
             // GetLastError() 2 ERROR_FILE_NOT_FOUND -> The system cannot find the file specified.
+            // GetLastError() 3 ERROR_PATH_NOT_FOUND
             // TODO add write protection
             // FILE 0000000000000000, lasterror 2->No such file or directory
             // FILE 00000255438A0C40, lasterror 0->No error
@@ -177,6 +178,8 @@ CDEFILE* _osifWinNTFileOpen(CDE_APP_IF* pCdeAppIf, const wchar_t* pwcsFileName, 
                 case ERROR_ACCESS_DENIED:   pCdeAppIf->nErrno = 13;  /* Permission denied */
                     break;
                 case ERROR_FILE_NOT_FOUND:  pCdeAppIf->nErrno = 2;   /* No such file or directory */
+                    break;
+                default:
                     break;
             }
             break;

@@ -8,6 +8,21 @@
 ```
 
 ## Revision history
+### 20230103
+* add Microsoft/POSIX C Library functions: 
+    - `_isatty()`
+* imitate funny/buggy Microsoft behaviour for `fopen()` with `fmode` parameter `w+` or `a`:<br>
+  function terminates successfully with `errno` set to 22, `Invalid argument`
+* imitate funny/buggy Microsoft behaviour for `_fileno()` with invalid filepointer:<br>
+  MSFT: `_fileno(-1)` just crashes by an invalid memory access<br>
+  This behaviour is imitated by an `exit(3)` invocation
+* fixed application crash at termination when a redirected I/O stream `STDERR` is reopened with `reopen()`
+* improve existing invalidate parameter handling; enable file name string, function name string, line number string and expression string
+  at RELEASE runtime  
+  NOTE: Microsoft enables this feature only when using DEBUG version of LIBCMT.LIB.
+* internal: add **toro C Library** specific library extentions
+    - `wchar_t* _wcsefierror(EFI_STATUS Status)`, according to Standard C `char* strerror(int errnum)`
+    - `char* _strefierror(EFI_STATUS Status)`, according to Standard C `char* strerror(int errnum)`
 ### 20221022
 * add O_TEMPORARY support to Microsoft/POSIX _open()
 * fixed "fall time bug" (autumn). Broken time calculation on 

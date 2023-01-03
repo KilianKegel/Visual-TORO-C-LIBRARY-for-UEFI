@@ -52,8 +52,12 @@ FILE* freopen(const char* filename, const char* mode, FILE* stream) {
 
     fp = (CDEFILE*)fopen(filename, mode);
 
-    if (NULL != fp) {
-        fclose(stream);
+    if (NULL != fp) 
+    {
+        if(O_CDEREDIR & sp->openmode)   // don't close redirected I/O, just flush
+            fflush(stream);
+        else
+            fclose(stream);
 
         *sp = *fp;
 

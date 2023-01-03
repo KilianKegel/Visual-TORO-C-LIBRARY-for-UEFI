@@ -138,6 +138,7 @@
     <ClCompile Include="Library\io_h\_findclose.c" />
     <ClCompile Include="Library\io_h\_findfirst.c" />
     <ClCompile Include="Library\io_h\_findnext.c" />
+    <ClCompile Include="Library\io_h\_isatty.c" />
     <ClCompile Include="Library\io_h\_Open.c" />
     <ClCompile Include="Library\io_h\_Read.c" />
     <ClCompile Include="Library\io_h\_Write.c" />
@@ -206,6 +207,7 @@
     <ClCompile Include="Library\stdio_h\__cdeGetOffsetCdeFposType.c" />
     <ClCompile Include="Library\stdio_h\__cdeIsCdeFposType.c" />
     <ClCompile Include="Library\stdio_h\__cdeIsFilePointer.c" />
+    <ClCompile Include="Library\stdio_h\__cdeIsIOBuffer.c" />
     <ClCompile Include="Library\stdio_h\__cdsGetIOBuffer.c" />
     <ClCompile Include="Library\stdlib_h\abort.c" />
     <ClCompile Include="Library\stdlib_h\Abs.c" />
@@ -337,6 +339,7 @@
     <ClCompile Include="Library\wchar_h\Wprintf.c" />
     <ClCompile Include="Library\wchar_h\_cdeSwscanf.c" />
     <ClCompile Include="Library\wchar_h\_WcsDup.c" />
+    <ClCompile Include="Library\wchar_h\_WcsEfiError.c" />
     <ClCompile Include="Library\wchar_h\_WcsICmp.c" />
     <ClCompile Include="Library\wchar_h\_WcsNICmp.c" />
     <ClCompile Include="Library\wctype_h\iswalnum.c" />
@@ -732,15 +735,17 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)lib\</OutDir>
     <IntDir>x86\$(Configuration)\</IntDir>
     <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+    <TargetName>toroC$(PlatformArchitecture)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)lib\</OutDir>
     <IntDir>x86\$(Configuration)\</IntDir>
-    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
+    <TargetName>toroC$(PlatformArchitecture)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -748,15 +753,17 @@
     </CustomBuildBeforeTargets>
     <CustomBuildAfterTargets>
     </CustomBuildAfterTargets>
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)lib\</OutDir>
     <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+    <TargetName>toroC$(PlatformArchitecture)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
     <CustomBuildBeforeTargets />
     <CustomBuildAfterTargets />
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)lib\</OutDir>
     <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
+    <TargetName>toroc$(PlatformArchitecture)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -872,8 +879,8 @@
       <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
     </Lib>
     <PostBuildEvent>
-      <Command>COPY /y $(SolutionDir)$(Platform)\$(Configuration)\toroCLibrary.lib $(SolutionDir)CdePkg\toroC32.lib</Command>
-      <Message>COPY /y $(SolutionDir)$(Platform)\$(Configuration)\toroCLibrary.lib $(SolutionDir)CdePkg\toroC32.lib</Message>
+      <Command>COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\toroC32.lib</Command>
+      <Message>COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\toroC32.lib</Message>
     </PostBuildEvent>
     <PreLinkEvent>
       <Command>cmd /C tools\PreLinkEvent.bat $(IntDir) $(ProjectDir) $(Configuration) $(PlatformShortName)</Command>
@@ -914,6 +921,7 @@
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AssemblerOutput />
       <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706;4996</DisableSpecificWarnings>
+      <UseFullPaths>false</UseFullPaths>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -995,15 +1003,15 @@
       <Message>Performing Custom Build Step before!</Message>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>COPY /y $(SolutionDir)$(Platform)\$(Configuration)\toroCLibrary.lib $(SolutionDir)CdePkg\toroC64.lib</Command>
-      <Message>COPY /y $(SolutionDir)$(Platform)\$(Configuration)\toroCLibrary.lib $(SolutionDir)CdePkg\toroC64.lib</Message>
+      <Command>COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\toroc64.lib</Command>
+      <Message>COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\toroc64.lib</Message>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>cmd /C tools\PreBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformShortName)
 	</Command>
     </PreBuildEvent>
     <Lib>
-      <OutputFile>$(SolutionDir)lib\toroC$(PlatformArchitecture).lib</OutputFile>
+      <OutputFile>$(SolutionDir)lib\toroc$(PlatformArchitecture).lib</OutputFile>
       <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <AdditionalOptions>/IGNORE:4006 %(AdditionalOptions)</AdditionalOptions>

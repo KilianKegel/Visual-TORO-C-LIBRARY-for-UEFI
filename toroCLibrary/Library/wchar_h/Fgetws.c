@@ -49,7 +49,7 @@ wchar_t* fgetws(wchar_t* s, int n, FILE* stream) {
     if (    NULL == stream
         ||  NULL == s
         ||  0 > n)
-        (*pinvalid_parameter_handler)(NULL, NULL, NULL, 0, 0);
+        (*pinvalid_parameter_handler)(L"\"NULL == stream || NULL == s || 0 > n\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
     else
         do {
 

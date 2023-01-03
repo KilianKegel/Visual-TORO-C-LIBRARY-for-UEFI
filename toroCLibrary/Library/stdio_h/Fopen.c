@@ -137,8 +137,16 @@ FILE* fopen(const char* filename, const char* mode) {
             //          The flag matrix contains all combinations of O_CREATE, O_APPEND, O_TRUNC, O_WRONLY and O_RDWR
             //
             CDEFILE CdeFileTmp, * pCdeFileTmp = memset(&CdeFileTmp, 0, sizeof(CDEFILE));
+            int errnoorg = errno;                                                                   // preserve errno across existance check
 
-            pCdeFileTmp->emufp = pCdeAppIf->pCdeServices->pFopen(pCdeAppIf, pwcsFileName, "r", 0/*no matter 0 or 1*/, pCdeFileTmp); // check existance of file
+            int fFileExists = NULL != (pCdeFileTmp->emufp = pCdeAppIf->pCdeServices->pFopen(        // check existance of file
+                pCdeAppIf, 
+                pwcsFileName, 
+                "r", 
+                0/*no matter 0 or 1*/, 
+                pCdeFileTmp)); 
+
+            errno = errnoorg;                                                                       // preserve errno across existance check
 
             CDETRACE((TRCERR(NULL == pCdeFileTmp->emufp) "NULL == pCdeFileTmp->emufp\n"));
 
@@ -150,13 +158,24 @@ FILE* fopen(const char* filename, const char* mode) {
                 pCdeAppIf,
                 pwcsFileName,
                 szModeNoSpace,
-                NULL != pCdeFileTmp->emufp,  /* 1 == file present, 0 == file not present*/
+                fFileExists,  /* 1 == file present, 0 == file not present*/
                 pCdeFile);// get emulation file pointer, that is the Windows FP (CDE4WIN) or pCdeFile or NULL in error case
 
             CDETRACE((TRCERR(NULL == pCdeFileTmp->emufp) "NULL == pCdeFileTmp->emufp\n"));
 
             if (pCdeFile->emufp == NULL)
                 pCdeFile->fRsv = 0;
+
+            //
+            // MSFT UNDEFIND BEHAVIOUR POST PROCESSING:
+            //  errno:=22 == "Invalid argument" set even on successful fopen() with the conditions below:
+            if (1) 
+            {
+                if (NULL != pCdeFile->emufp)
+                    if(     (0 == strcmp("w+", szModeNoSpace))
+                        ||  (0 == strcmp("a+", szModeNoSpace) && 0 == fFileExists))
+                    errno = EINVAL;/*"Invalid argument - UNDOCUMENTED IN ERRNO.H"*/
+            }
         }
 
     } while (0)/*1. dowhile(0)*/;
