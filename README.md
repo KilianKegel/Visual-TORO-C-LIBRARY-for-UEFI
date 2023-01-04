@@ -8,6 +8,8 @@
 ```
 
 ## Revision history
+### 20230104
+* fixed `strftime()` parameter: `%I`, `%m`, `%x`
 ### 20230103
 * add Microsoft/POSIX C Library functions: 
     - `_isatty()`
