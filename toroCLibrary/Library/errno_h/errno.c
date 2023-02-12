@@ -20,7 +20,6 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <errno.h>
 
 /**
 

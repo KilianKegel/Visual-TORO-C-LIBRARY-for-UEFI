@@ -27,7 +27,8 @@ Author:
 
 extern char _cdeChkIsWxTbl(ISWX_TRUTH_TABLE* pIswxTbl, wint_t c);
 
-extern ISWX_TRUTH_TABLE iswpunct_dflt_tbl[];
+extern ISWX_TRUTH_TABLE __cdeIswpunct_dflt_tbl[];
+static ISWX_TRUTH_TABLE* gpTBLiswpunct = __cdeIswpunct_dflt_tbl;
 
 /** Brief description of the function’s purpose.
 
@@ -46,7 +47,6 @@ Description
 @retval 0 if not
 
 **/
-ISWX_TRUTH_TABLE* gpTBLiswpunct = iswpunct_dflt_tbl;
 int iswpunct(wint_t c) {
 
     return _PUNCT * _cdeChkIsWxTbl(gpTBLiswpunct, c);

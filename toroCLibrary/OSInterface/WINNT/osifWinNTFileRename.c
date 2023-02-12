@@ -43,8 +43,6 @@ int _osifWinNTFileRename(IN void* pCdeAppIf, wchar_t* pwcsOld, wchar_t* pwcsNew)
 {
     int nRet;
 
-    CDEMOFINE((MFNINF(1) "%S -> %S\n", pwcsOld, pwcsNew));
-
     nRet = MoveFileW(pwcsOld, pwcsNew);
     //
     // translet WinNT GetLastError()-code to errno-code
@@ -58,8 +56,6 @@ int _osifWinNTFileRename(IN void* pCdeAppIf, wchar_t* pwcsOld, wchar_t* pwcsNew)
             break;
         }
     }
-
-    CDEMOFINE((MFNINF(1) "MoveFileW() returned %d\n", nRet));
 
     return nRet;
 }

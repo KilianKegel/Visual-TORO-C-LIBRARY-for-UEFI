@@ -20,10 +20,9 @@ Author:
 
 --*/
 //#undef NCDETRACE
-#include <stdio.h>
 #include <windows.h>
+
 #include <cde.h>
-#include <fcntl.h>
 #include <CdeServices.h>
 
 #pragma warning( disable : 4101 )

@@ -21,7 +21,6 @@ Author:
 --*/
 //#undef NCDETRACE
 #define OS_EFI
-#include <PiPei.h>
 #include <Base.h>
 #include <CdeServices.h>
 #include <stdio.h>
@@ -42,7 +41,6 @@ Returns
 int _osifUefiShellFileClose(IN CDE_APP_IF* pCdeAppIf, CDEFILE* pCdeFile)
 {
     EFI_STATUS Status;
-    CDETRACE((TRCINF(1) ">>> pCdeFile->openmode & (O_RDONLY | O_WRONLY | O_RDWR)> %08X\n", pCdeFile->openmode & (O_RDONLY | O_WRONLY | O_RDWR)));
 
     do {
 
@@ -50,14 +48,10 @@ int _osifUefiShellFileClose(IN CDE_APP_IF* pCdeAppIf, CDEFILE* pCdeFile)
         {
             Status = __cdeOnErrSet_status(pCdeFile->pRootProtocol->Flush(pCdeFile->pFileProtocol));
 
-            CDETRACE((TRCERR(Status != EFI_SUCCESS) "flushing failed\n"));
-
             if (Status != EFI_SUCCESS)break;
         }
 
         Status = __cdeOnErrSet_status(pCdeFile->pRootProtocol->Close(pCdeFile->pFileProtocol));
-
-        CDETRACE((TRCERR(Status != EFI_SUCCESS) "closinging failed\n"));
 
         if (Status != EFI_SUCCESS)break;
 

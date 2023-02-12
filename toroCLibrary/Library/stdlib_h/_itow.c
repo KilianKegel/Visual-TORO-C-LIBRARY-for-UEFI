@@ -22,7 +22,6 @@ Author:
 --*/
 #include <stdio.h>
 #include <limits.h>
-extern int swprintf(wchar_t* pszBuffer, size_t dwCount, const wchar_t* pszFormat, ...);
 
 /**
 

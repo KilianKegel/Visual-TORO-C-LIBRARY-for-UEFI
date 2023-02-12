@@ -24,7 +24,7 @@ Author:
 #include <wctype.h>
 #include <_wctype.h>
 
-ISWX_TRUTH_TABLE iswxdigit_dflt_tbl[] = { \
+ISWX_TRUTH_TABLE __cdeIswxdigit_dflt_tbl[] = { \
 {0x0030, 0x0039}, \
 {0x0041, 0x0046}, \
 {0x0061, 0x0066}, \

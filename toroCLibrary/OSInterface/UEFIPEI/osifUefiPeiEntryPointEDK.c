@@ -20,14 +20,11 @@ Author:
 
 --*/
 #define OS_EFI
-#include <CdeServices.h>
-#include <cde.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <setjmp.h>
-#include <string.h>
+#include <stddef.h>
 
+#undef NULL
+#include <cde.h>
+#include <CdeServices.h>
 //
 // prototypes
 //
@@ -45,6 +42,13 @@ extern int _cdeStr2Argcv(char** argv, char* szCmdline);
 extern char __cdeGetCurrentPrivilegeLevel(void);
 extern void* __cdeGetPeiServices(void);
 
+extern __declspec(dllimport) void* malloc(size_t size);
+extern __declspec(dllimport) void free(void* ptr);
+extern __declspec(dllimport) void* memset(void* s, int c, size_t n);
+extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
+extern __declspec(dllimport) char* strcpy(char* pszDst, const char* pszSrc);
+#undef setjmp
+extern __declspec(dllimport) int setjmp(jmp_buf);
 //
 // 
 //

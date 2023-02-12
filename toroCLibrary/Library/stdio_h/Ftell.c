@@ -20,9 +20,7 @@ Author:
     Kilian Kegel
 
 --*/
-#include <uefi.h>
 #include <stdio.h>
-#include <errno.h>
 #include <CdeServices.h>
 
 extern __int64 _ftelli64(FILE* pCdeFile);

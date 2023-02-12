@@ -41,7 +41,3 @@ char* _strdup(const char* s1)
     
     return strcpy(pRet, s1);
 }
-char* strdup(const char* s1)
-{
-    return _strdup(s1);
-}

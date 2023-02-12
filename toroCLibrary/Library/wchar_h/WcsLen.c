@@ -21,8 +21,6 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <stddef.h>
-#include <stdio.h>
 
 /**
 Synopsis
@@ -35,7 +33,7 @@ Parameters
 Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/strlen-wcslen-mbslen-mbslen-l-mbstrlen-mbstrlen-l?view=msvc-160#return-value
 **/
-size_t wcslen(const short* pszBuffer) {
+size_t wcslen(const wchar_t* pszBuffer) {
     int i = 0;
 
     while (pszBuffer[i] != '\0')

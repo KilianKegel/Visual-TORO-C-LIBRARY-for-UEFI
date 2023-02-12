@@ -8,9 +8,31 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BF85C66E-FDAC-4AE1-8078-79761913BC30}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		CdePkg\Include\VS2022\assert.h = CdePkg\Include\VS2022\assert.h
 		CdePkg\Include\CDE.h = CdePkg\Include\CDE.h
 		clean.bat = clean.bat
+		CdePkg\Include\VS2022\ctype.h = CdePkg\Include\VS2022\ctype.h
+		CdePkg\Include\VS2022\errno.h = CdePkg\Include\VS2022\errno.h
+		CdePkg\Include\VS2022\fcntl.h = CdePkg\Include\VS2022\fcntl.h
+		CdePkg\Include\VS2022\float.h = CdePkg\Include\VS2022\float.h
+		CdePkg\Include\VS2022\inttypes.h = CdePkg\Include\VS2022\inttypes.h
+		CdePkg\Include\VS2022\io.h = CdePkg\Include\VS2022\io.h
+		CdePkg\Include\VS2022\limits.h = CdePkg\Include\VS2022\limits.h
+		CdePkg\Include\VS2022\locale.h = CdePkg\Include\VS2022\locale.h
+		CdePkg\Include\VS2022\math.h = CdePkg\Include\VS2022\math.h
 		README.md = README.md
+		CdePkg\Include\VS2022\setjmp.h = CdePkg\Include\VS2022\setjmp.h
+		CdePkg\Include\VS2022\signal.h = CdePkg\Include\VS2022\signal.h
+		CdePkg\Include\VS2022\standardHeader.cif = CdePkg\Include\VS2022\standardHeader.cif
+		CdePkg\Include\VS2022\stdarg.h = CdePkg\Include\VS2022\stdarg.h
+		CdePkg\Include\VS2022\stddef.h = CdePkg\Include\VS2022\stddef.h
+		CdePkg\Include\VS2022\stdint.h = CdePkg\Include\VS2022\stdint.h
+		CdePkg\Include\VS2022\stdio.h = CdePkg\Include\VS2022\stdio.h
+		CdePkg\Include\VS2022\stdlib.h = CdePkg\Include\VS2022\stdlib.h
+		CdePkg\Include\VS2022\string.h = CdePkg\Include\VS2022\string.h
+		CdePkg\Include\VS2022\time.h = CdePkg\Include\VS2022\time.h
+		CdePkg\Include\VS2022\wchar.h = CdePkg\Include\VS2022\wchar.h
+		CdePkg\Include\VS2022\wctype.h = CdePkg\Include\VS2022\wctype.h
 	EndProjectSection
 EndProject
 Global

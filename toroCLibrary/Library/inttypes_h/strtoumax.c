@@ -20,19 +20,14 @@ Author:
     Kilian Kegel
 
 --*/
-#include <CdeServices.h>
-#include <limits.h>
-#include <stdio.h>
-#include <stdarg.h>
+#include <stdint.h>
 #include <stdlib.h>
-
-extern void* __cdeGetAppIf();
 
 /**
 
 Synopsis
     #include <inttypes.h>
-    intmax_t strtoimax(const char *strSource,char **endptr,int base);
+    uintmax_t strtoumax(const char* strSource, char** endptr, int base);
 Description
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/strtoumax-strtoumax-l-wcstoumax-wcstoumax-l
     https://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=212

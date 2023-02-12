@@ -19,8 +19,6 @@ Author:
     Kilian Kegel
 
 --*/
-#include <stdio.h>
-#include <string.h>
 #include <windows.h>
 #include <cde.h>
 #define ALIENOS
@@ -58,8 +56,6 @@ int _osifWinNTCmdExec(void* pCdeAppIf, char* szCommand) {
     int nRet = 1;
     //    int nSize = -1;
     //
-    CDEMOFINE((MFNINF(1) "-->\n"));
-
     do {
 
         // ----- detect verify and validate COMSPEC environment variable
@@ -83,8 +79,6 @@ int _osifWinNTCmdExec(void* pCdeAppIf, char* szCommand) {
         strcpy(szSlashCExtendetCommand, "/c ");
         strcpy(&szSlashCExtendetCommand[strlen(szSlashCExtendetCommand)], szCommand);
 
-        CDEMOFINE((MFNINF(1) "%s\n", szSlashCExtendetCommand));
-
         memset(&si, 0, sizeof(si));
         memset(&pi, 0, sizeof(pi));
 
@@ -92,7 +86,6 @@ int _osifWinNTCmdExec(void* pCdeAppIf, char* szCommand) {
 
         //        if(!CreateProcessA(szShell,szSlashCExtendetCommand,NULL,NULL,0,NORMAL_PRIORITY_CLASS,NULL,NULL,&si,&pi)){
         if (!CreateProcessA(szShell, szSlashCExtendetCommand, NULL, NULL, 0, NORMAL_PRIORITY_CLASS, NULL, NULL, &si, &pi)) {
-            CDEMOFINE((MFNERR(1) "Can not run \"%s\"\n", szCommand));
             nRet = 1;
             break;
         }
@@ -101,8 +94,6 @@ int _osifWinNTCmdExec(void* pCdeAppIf, char* szCommand) {
         WaitForSingleObject(pi.hProcess, INFINITE);
 
         u = GetExitCodeProcess(pi.hProcess, &exit_code);
-
-        CDEMOFINE((MFNINF(1) "\"%s\" returned ERRORCODE %d, u == %d\n", szCommand, exit_code, u));
 
         //printf("the execution of: \"%s\"\nreturns: %d\n", commandLine, exit_code);
         // Close process and thread handles.

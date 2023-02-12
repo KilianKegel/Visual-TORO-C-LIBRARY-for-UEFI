@@ -22,6 +22,7 @@ Author:
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <time.h>
 #include <io.h>
 #include <windows.h>
 //#undef NMOFINE
@@ -69,7 +70,6 @@ CDEFILEINFO* _osifWinNTFileFindAll(IN CDE_APP_IF* pCdeAppIf, IN char* pstrDrvPth
     do
     {
         bool fFileFound = true;
-        CDEMOFINE((MFNINF(1)    ">>> pstrDrvPthDirStar %s\n", pstrDrvPthDirStar));
         
         memset((void*)&FindData, 0, sizeof(FindData));
         hFind = FindFirstFileA(pstrDrvPthDirStar, &FindData);
@@ -139,14 +139,6 @@ CDEFILEINFO* _osifWinNTFileFindAll(IN CDE_APP_IF* pCdeAppIf, IN char* pstrDrvPth
             if (NULL != pCountOrError)
                 (*pCountOrError)++;
 
-            /*CDEMOFINE((MFNINF(true) "---> size %8d, Att:%02X, time:%016llX %08X:%08X %s\n",
-                pCdeFileInfoEnd->size,
-                pCdeFileInfoEnd->attrib,
-                pCdeFileInfoEnd->time_write,
-                FindData.ftLastWriteTime.dwHighDateTime,
-                FindData.ftLastWriteTime.dwLowDateTime,
-                pCdeFileInfoEnd->strFileName
-                ));*/
 
             memset((void*)&FindData, 0, sizeof(FindData));
             fFileFound =  FindNextFileA(hFind, &FindData);

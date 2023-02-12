@@ -21,8 +21,6 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <stddef.h>
-extern void* __cdeGetAppIf();
 
 /**
 
@@ -44,7 +42,6 @@ Returns
     @retval size_t, lenght of block
 
 **/
-
 wchar_t* wcspbrk(const wchar_t* pszStr, const wchar_t* pszSet) {
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
     wchar_t* p;

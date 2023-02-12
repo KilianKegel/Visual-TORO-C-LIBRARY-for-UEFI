@@ -8,7 +8,7 @@
 
 Module Name:
 
-    _wcproperty.c
+    __cdeWcproperty.c
 
 Abstract:
 
@@ -24,7 +24,7 @@ Author:
 #include <wctype.h>
 #include <_wctype.h>
 
-WCPROPERTY _wcproperty[] = { \
+WCPROPERTY __cdeWcproperty[] = { \
                     {/*0x0157*/_ALPHA |        _BLANK |            _PUNCT |          _DIGIT | _LOWER | _UPPER, iswprint ,"print" },\
                     {/*0x0117*/_ALPHA |                            _PUNCT |          _DIGIT | _LOWER | _UPPER, iswgraph ,"graph" },\
                     {/*0x0107*/_ALPHA |                                              _DIGIT | _LOWER | _UPPER, iswalnum ,"alnum" },\

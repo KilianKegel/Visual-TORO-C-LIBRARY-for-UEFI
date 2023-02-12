@@ -27,7 +27,7 @@ Author:
 #include <string.h>
 
 #define ELC(x)/*element count*/ (sizeof(x) / sizeof(x[0]))
-extern WCPROPERTY _wcproperty[];
+extern WCPROPERTY __cdeWcproperty[];
 
 /** Brief description of the function’s purpose.
 
@@ -74,18 +74,16 @@ int iswctype(wint_t wc, wctype_t desc) {
             if (!(mask & desc))
                 continue;
 
-            for (j = 0; NULL != _wcproperty[j].szProperty; j++) {
+            for (j = 0; NULL != __cdeWcproperty[j].szProperty; j++) {
 
-                if (mask & _wcproperty[j].type) {
+                if (mask & __cdeWcproperty[j].type) {
 
-                    if (0 != (mask & (_wcproperty[j].fun)(wc)))
+                    if (0 != (mask & (__cdeWcproperty[j].fun)(wc)))
                         nRet |= mask;
                     break;
                 }
             }
         }
     }
-
-
     return nRet;
 }

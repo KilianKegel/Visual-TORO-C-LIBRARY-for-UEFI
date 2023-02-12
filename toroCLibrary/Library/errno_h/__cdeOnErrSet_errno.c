@@ -19,8 +19,22 @@ Author:
     Kilian Kegel
 
 --*/
-#include <CdeServices.h>
-#include <errno.h>
+//
+// CdeServices.h
+//
+#if   defined(_M_AMD64)
+    typedef unsigned long long size_t;
+#else
+    typedef unsigned int size_t;
+#endif
+#define CDE_STATUS size_t
+#define CDE_SUCCESS 0
+//
+// errno.h
+//
+#define errno (*_errno())
+
+extern __declspec(dllimport) int* _errno(void);
 
 int __cdeOnErrSet_errno(CDE_STATUS Status, int Error) {
 

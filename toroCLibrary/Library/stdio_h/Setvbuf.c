@@ -55,12 +55,7 @@ Returns
                 2. check the other parms, return 0/EOF as required
 
 **/
-int (setvbuf)(
-    FILE* stream,
-    char* buf,
-    int     mode,
-    size_t  size
-    )
+int setvbuf(FILE* stream, char* buf, int mode, size_t size)
 {
     CDEFILE* pCdeFile = (CDEFILE*)stream;
     int nRet = 0;   //todo check on real windows

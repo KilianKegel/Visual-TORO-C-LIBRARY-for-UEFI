@@ -22,6 +22,8 @@ Author:
 --*/
 #include <stdio.h>
 #include <wchar.h>
+
+#include <cde.h>
 #include <CdeServices.h>
 
 extern void* __cdeGetAppIf();

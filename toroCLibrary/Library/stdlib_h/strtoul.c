@@ -20,7 +20,7 @@ Author:
     Kilian Kegel
 
 --*/
-#include <CdeServices.h>
+#include <limits.h>
 
 extern int _cdeSscanf(const char* pszBuffer, char** endptr, const char* pszFormat, ...);
 

@@ -20,7 +20,7 @@ Author:
     Kilian Kegel
 
 --*/
-#include <stddef.h>
+#include <stdlib.h>
 /**
 
 Synopsis
@@ -33,8 +33,6 @@ Parameters
 Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/malloc?view=msvc-160#return-value
 **/
-extern void* realloc(void* ptr, size_t size);
-
 void* malloc(size_t size) {
     return realloc(0, size);
 }

@@ -21,9 +21,6 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <string.h>
-#include <stdarg.h>
-#include <stddef.h>
 #include <limits.h>
 
 extern int vsnprintf(char* pszDest, size_t dwCount, const char* pszFormat, va_list ap);

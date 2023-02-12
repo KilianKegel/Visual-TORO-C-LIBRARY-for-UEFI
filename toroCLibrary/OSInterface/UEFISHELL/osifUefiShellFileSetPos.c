@@ -21,12 +21,13 @@ Author:
 --*/
 //#undef NCDETRACE
 #define OS_EFI
-#include <PiPei.h>
-#include <Base.h>
-#include <CdeServices.h>
+#include <uefi.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <errno.h>
-#include <cde.h>
+
+//#include <cde.h>
+#include <CdeServices.h>
 
 extern fpos_t __cdeOffsetCdeFposType(fpos_t fpos);
 extern int __cdeBiasCdeFposType(fpos_t fpos);
@@ -82,10 +83,9 @@ int _osifUefiShellFileSetPos(IN CDE_APP_IF* pCdeAppIf, CDEFILE* pCdeFile, CDEFPO
                 &&  EFI_SUCCESS == pCdeFile->pRootProtocol->GetPosition(pCdeFile->pFileProtocol, &pCdeFile->gappos))
             {
                 pCdeFile->gapsize = (newpos > pCdeFile->gappos) ? (size_t)(newpos - pCdeFile->gappos) : 0;
-                CDETRACE((TRCINF(1) "gappos %016llX, gapsize %zd\n", pCdeFile->gappos, pCdeFile->gapsize));
             }
-            else
-                CDETRACE((TRCERR(1) "Get/SetPosition terminated erronously\n"));
+            else {
+            }
 
         }
         Status = __cdeOnErrSet_status(pCdeFile->pRootProtocol->SetPosition(pCdeFile->pFileProtocol, newpos));

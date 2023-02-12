@@ -21,7 +21,7 @@ Author:
 
 --*/
 
-#include <CdeServices.h>
+#include <stdio.h>
 
 extern void* __cdeGetIOBuffer(unsigned i);
 

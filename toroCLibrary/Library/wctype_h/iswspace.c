@@ -27,7 +27,8 @@ Author:
 
 extern char _cdeChkIsWxTbl(ISWX_TRUTH_TABLE* pIswxTbl, wint_t c);
 
-extern ISWX_TRUTH_TABLE iswspace_dflt_tbl[];
+extern ISWX_TRUTH_TABLE __cdeIswspace_dflt_tbl[];
+static ISWX_TRUTH_TABLE* gpTBLiswspace = __cdeIswspace_dflt_tbl;
 
 /** Brief description of the function’s purpose.
 
@@ -47,7 +48,6 @@ Description
 @retval 0 if not
 
 **/
-ISWX_TRUTH_TABLE* gpTBLiswspace = iswspace_dflt_tbl;
 int iswspace(wint_t c) {
 
     return _SPACE * _cdeChkIsWxTbl(gpTBLiswspace, c);

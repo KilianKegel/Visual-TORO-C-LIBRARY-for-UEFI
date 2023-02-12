@@ -80,8 +80,6 @@ CDEFILEINFO* _osifUefiShellFileFindAll(IN CDE_APP_IF* pCdeAppIf, IN char* pstrDr
     char* pstrFilePath = malloc(320);                                           // can hold 258 bytes max. length of filename
     void* freelist[] = { pwcsCurDir, pstrFilePath };
 
-    CDEMOFINE((MFNINF(1)    ">>> %s\n", pstrDrvPthDirStar));
-    
     if (NULL != pCountOrError)
         *pCountOrError = 0;
 
@@ -145,10 +143,6 @@ CDEFILEINFO* _osifUefiShellFileFindAll(IN CDE_APP_IF* pCdeAppIf, IN char* pstrDr
 
         pFilePath = (fIsFileDrv ? 1 + strchr(pstrDrvPthDirStar, ':') : pstrDrvPthDirStar);
 
-        CDEMOFINE((MFNINF(1)    "pFilePath %p \"%s\"\n", pFilePath, pFilePath));
-        CDEMOFINE((MFNINF(1)    "pCurPath  %p \"%s\"\n", pCurPath, pCurPath));
-        CDEMOFINE((MFNINF(1)    "fIsFileAbs %d\n", fIsFileAbs));
-
         if (fIsFileAbs) {                       // if absolute path ...
             strcpy(pstrFilePath, pFilePath);    // ... just copy the entire path\file
         }
@@ -163,16 +157,12 @@ CDEFILEINFO* _osifUefiShellFileFindAll(IN CDE_APP_IF* pCdeAppIf, IN char* pstrDr
         strcpy(pstrDrvPthDirStar, strDrive);
         strcat(pstrDrvPthDirStar, pstrFilePath);
 
-        CDEMOFINE((MFNINF(true) "SEARCH PATH == %s\n", pstrDrvPthDirStar));
-
         //
         // read the UEFI directory structure and convert to CDEFILEINFO
         //
         pCdeFileInfo = __cdeReadDirectory(pstrDrvPthDirStar, pCountOrError);
 
     } while (0);
-
-    CDEMOFINE((MFNINF(1)    "<<< pRet %p\n", pCdeFileInfo));
 
     for (i = 0; i < (int)ELC(freelist); i++)
         free(freelist[i]);
@@ -193,15 +183,11 @@ static CDEFILEINFO* __cdeReadDirectory(IN char* strFileName, OUT int* pcntDirEnt
     int cntDirEntries = 0;                                      // count directory entries
     size_t sizeFileName;
 
-    CDEMOFINE((MFNINF(true) "%p strFileName %s\n", fp, strFileName));
-
     pCdeFileInfo->time_write = -1LL;
 
     if (NULL != fp) do
     {
         do {
-            CDEMOFINE((MFNFAT(NULL == fp) "fp --> %p\n", fp));
-
             while (
                 sizeFileInfo = 1024,
                 sizeFileInfo = fread(FileInfo, 1, sizeFileInfo, fp),
@@ -236,8 +222,6 @@ static CDEFILEINFO* __cdeReadDirectory(IN char* strFileName, OUT int* pcntDirEnt
                 }
                 fseek(fp, (long)sizeFileInfo, SEEK_SET);
 
-                //CDEMOFINE((MFNINF(true) "---> size %zd, Att:%016zX, Size:%016zX, PhysSize:%016zX %ls\n", sizeFileInfo, FileInfo->Attribute, FileInfo->FileSize, FileInfo->PhysicalSize, FileInfo->FileName));
-
                 cntDirEntries++;
 
                 sizeFileName = 1 + wcslen(FileInfo->FileName);
@@ -270,13 +254,6 @@ static CDEFILEINFO* __cdeReadDirectory(IN char* strFileName, OUT int* pcntDirEnt
  
                 if (NULL != pcntDirEntries)
                     *pcntDirEntries++;
-
-                CDEMOFINE((MFNINF(true) "---> size %zd, Att:%016zX, Size:%016zX, time:%016llX, %s\n",
-                    pCdeFileInfoEnd->size,
-                    pCdeFileInfoEnd->attrib,
-                    pCdeFileInfoEnd->strFileName,
-                    pCdeFileInfoEnd->time_write,
-                    pCdeFileInfoEnd->strFileName));
 
             }
         } while (0);

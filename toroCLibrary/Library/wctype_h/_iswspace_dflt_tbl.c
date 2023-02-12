@@ -24,7 +24,7 @@ Author:
 #include <wctype.h>
 #include <_wctype.h>
 
-ISWX_TRUTH_TABLE iswspace_dflt_tbl[] = { \
+ISWX_TRUTH_TABLE __cdeIswspace_dflt_tbl[] = { \
 {0x0009, 0x000D}, \
 {0x2000, 0x200A}, \
 {0x2028, 0x2029}, \

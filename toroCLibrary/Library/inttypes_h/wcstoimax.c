@@ -8,7 +8,7 @@
 
 Module Name:
 
-    strtoimax.c
+    wcstoimax.c
 
 Abstract:
 
@@ -20,9 +20,8 @@ Author:
     Kilian Kegel
 
 --*/
-#include <CdeServices.h>
-
-extern void* __cdeGetAppIf();
+#include <stdint.h>
+#include <wchar.h>
 
 /**
 

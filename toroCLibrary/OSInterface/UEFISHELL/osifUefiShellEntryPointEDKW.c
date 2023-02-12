@@ -20,21 +20,28 @@ Author:
 
 --*/
 #define OS_EFI
-#include <CdeServices.h>
+
+#include <stddef.h>
+#include <limits.h>
+//
+// stdio.h
+//
+#define EOF    (-1)
+//
+// signal.h
+//
+#define SIGINT          2
+
+#undef NULL
 #include <cde.h>
+#include <CdeServices.h>
+
 #include <Library/DebugLib.h>
 #include <Protocol\LoadedImage.h>
 #include <Protocol\ShellParameters.h>
 #include "Pi\PiStatusCode.h"
 #include "Protocol\StatusCode.h"
 #include <Protocol\Shell.h>
-#include <stdio.h>
-#include <signal.h>
-#include <STDLIB.h>
-#include <string.h>
-#include <setjmp.h>
-#include <errno.h>
-
 //
 // C++/"C with classes" for the Microsoft compiler
 //
@@ -98,8 +105,6 @@ extern OSIFDIRCREATE    _osifUefiShellDirectoryCreate;   /*pDirCreate    */
 extern OSIFCMDEXEC      _osifUefiShellCmdExec;           /*pCmdExec      */
 extern OSIFGETENV       _osifUefiShellGetEnv;            /*pGetEnv       */
 extern OSIFGETDCWD      _osifUefiShellGetDrvCwd;         /*pGetDrvCwd    current working directory*/
-extern DIAGTRACE        _cdeVMofine;
-extern DIAGXDUMP        _cdeXDump;
 
 // Microsoft specific C++ initialization support
 typedef int(__cdecl* _PIFV)(void);
@@ -120,7 +125,6 @@ extern int wmain(int argc, wchar_t** argv);
 extern EFI_STATUS EFIAPI OemHookStatusCodeInitialize(void);
 extern void* _CdeLocateProtocol(IN EFI_GUID* Protocol, IN void* Registration OPTIONAL/*,OUT void **Interface*/);
 
-extern void* memset(void* s, int c, size_t n);  //test
 extern int _cdeStr2Argcv(char** argv, char* szCmdline);
 extern void _cdeSigDflt(int sig);
 extern struct _CDE_LCONV_LANGUAGE _locale_C_;
@@ -133,6 +137,20 @@ extern void _disable(void);
 extern void _enable(void);
 
 #pragma intrinsic (_disable, _enable)
+
+extern __declspec(dllimport) size_t mbstowcs(wchar_t* wcstr, const char* mbstr, size_t count);
+extern __declspec(dllimport) int sprintf(char* pszBuffer, const char* pszFormat, ...);
+extern __declspec(dllimport) int fclose(FILE* stream);
+extern __declspec(dllimport) int raise(int sig);
+extern __declspec(dllimport) int fgetc(FILE* stream);
+extern __declspec(dllimport) size_t fwrite(const void* ptr, size_t size, size_t nelem, FILE* stream);
+extern __declspec(dllimport) void* malloc(size_t size);
+extern __declspec(dllimport) void free(void* ptr);
+extern __declspec(dllimport) void* memset(void* s, int c, size_t n);
+extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
+extern __declspec(dllimport) char* strcpy(char* pszDst, const char* pszSrc);
+#undef setjmp
+extern __declspec(dllimport) int setjmp(jmp_buf);
 
 //
 // globals
@@ -262,11 +280,6 @@ static CDE_SERVICES gCdeServicesShell = {/*CDE_PROTOCOL*/
         .pGetDrvCwd = _osifUefiShellGetDrvCwd,       /* OSIFGETDCWD      *pGetDrvCwd */
         .pDirCreate = _osifUefiShellDirectoryCreate, /* OSIFDIRCREATE    *pDirCreate */
         .pDirRemove = NULL,                         /* OSIFDIRCREATE    *pDirCreate */
-    //
-    // diagnostic
-    //
-        .pVMofine = _cdeVMofine,
-        .pXDump = _cdeXDump,
 };
 
 CDE_APP_IF CdeAppIfShellW = {
@@ -415,8 +428,6 @@ _MainEntryPointShellW(
                 memset(&_iob[0], 0, sizeof(_iob));                          // clear entire structure
 
                 Status = SystemTable->BootServices->HandleProtocol(ImageHandle, &EfiShellParametersProtocolGuid, &pEfiShellParametersProtocol);
-
-                CDEMOFINE((MFNFAT(1 | EFI_SUCCESS != Status) "%s\n", strefierror(Status)));
 
                 CDE_STDIN->pRootProtocol = pEfiShellParametersProtocol->StdIn;
 

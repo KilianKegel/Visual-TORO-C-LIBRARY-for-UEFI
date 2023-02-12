@@ -22,6 +22,8 @@ Author:
 --*/
 #include <stdio.h>
 #include <errno.h>
+
+#include <cde.h>
 #include <CdeServices.h>
 
 extern void* __cdeGetAppIf();
@@ -32,7 +34,7 @@ static void __fputcpp(int b, void** pstream) {
 /**
 Synopsis
     #include <stdio.h>
-    int fprintf(FILE *stream, const char *format [,   argument ]...);
+    int vfprintf(FILE *stream, const char *format, va_list argptr);
 Description
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/vfprintf-vfprintf-l-vfwprintf-vfwprintf-l?view=msvc-160&viewFallbackFrom=vs-2019
 Parameters

@@ -8,7 +8,7 @@
 
 Module Name:
 
-    strtol.c
+    strtoll.c
 
 Abstract:
 
@@ -21,11 +21,7 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <limits.h>
-#include <stdio.h>
-#include <stdarg.h>
 
-extern void* __cdeGetAppIf();
 extern int _cdeSscanf(const char* pszBuffer, char** endptr, const char* pszFormat, ...);
 
 /**

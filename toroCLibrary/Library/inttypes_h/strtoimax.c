@@ -20,9 +20,8 @@ Author:
     Kilian Kegel
 
 --*/
-#include <CdeServices.h>
-
-extern void* __cdeGetAppIf();
+#include <stdint.h>
+#include <stdlib.h>
 
 /**
 

@@ -27,8 +27,6 @@ Author:
 
 extern void* __cdeGetAppIf();
 extern struct tm* _cdeGmltime(const long long* timep, struct tm* ptm);
-extern signed long long _cdeGreg2Day(unsigned long long y, unsigned long long m, unsigned long long d);
-extern void _cdeDay2Greg(long long r, unsigned long long* y, unsigned long long* m, unsigned long long* d);
 
 /**
 Synopsis

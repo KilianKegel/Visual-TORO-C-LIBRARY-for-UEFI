@@ -22,9 +22,6 @@ Author:
 --*/
 
 #include <CdeServices.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <wchar.h>
 
 static ROMPARM_MEMSTRXCMP ROMPARM = {
     /*fForceToDataSeg*/ 1 ,\

@@ -24,7 +24,7 @@ Author:
 #include <wctype.h>
 #include <_wctype.h>
 
-ISWX_TRUTH_TABLE iswalphacaseless_dflt_tbl[] = { \
+ISWX_TRUTH_TABLE __cdeIswalphacaseless_dflt_tbl[] = { \
 {0x01C0, 0x01C3}, \
 {0x02B0, 0x02B8}, \
 {0x02BB, 0x02C1}, \

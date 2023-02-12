@@ -21,9 +21,6 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <limits.h>
-#include <stdio.h>
-#include <stdarg.h>
 
 extern void* __cdeGetAppIf();
 extern int _cdeMemGetChar(void** ppSrc);
@@ -38,7 +35,6 @@ static ROMPARM_VWXSCANF RomParm = { \
 /*fWide                 */ 0 ,\
 /*EndMarker             */'\0'\
 };
-
 
 /**
 

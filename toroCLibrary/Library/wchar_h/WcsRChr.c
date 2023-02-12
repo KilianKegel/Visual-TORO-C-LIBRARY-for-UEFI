@@ -21,7 +21,6 @@ Author:
 
 --*/
 #include <wchar.h>
-#include <stddef.h>
 #include <CdeServices.h>
 
 /** wcsrchr()

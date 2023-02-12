@@ -20,9 +20,7 @@ Author:
     Kilian Kegel
 
 --*/
-#include <uefi.h>
 #include <stdio.h>
-#include <errno.h>
 #include <CdeServices.h>
 
 extern int __cdeIsFilePointer(void* stream);

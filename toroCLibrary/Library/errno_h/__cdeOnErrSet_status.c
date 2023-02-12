@@ -20,9 +20,7 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <errno.h>
 
-//extern CDE_STATUS efierrno;    // last CDE_STATUS before returning to calling function
 extern CDE_STATUS/*EFI_STATUS*/* _efierrno(void);
 
 CDE_STATUS __cdeOnErrSet_status(CDE_STATUS Status) {    //NOTE: This function is published in CdeServices.h, since it is my own invention and not defined in ERRNO.H per specification

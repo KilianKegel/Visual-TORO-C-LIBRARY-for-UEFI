@@ -22,8 +22,6 @@ Author:
 --*/
 #include <CdeServices.h>
 
-extern void* __cdeGetAppIf(void);
-
 /**
 
 Synopsis

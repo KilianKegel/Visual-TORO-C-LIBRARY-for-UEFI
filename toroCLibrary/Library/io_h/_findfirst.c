@@ -75,14 +75,12 @@ intptr_t _findfirst64i32(char const* pstrFileName, struct _finddata64i32_t* pFin
 
     void* freelist[] = { pstrSearchAllBuffer,pstrSearchPatExt,pstrUpperDir };
 
-    CDEMOFINE((MFNINF(1)    ">>> %s\n", pstrFileName));
     //
     // get upper directory directory "." / ".."
     // 
     if (NULL != pstrUpperDir)
     {
         pCdeAppIf->pCdeServices->pGetDrvCwd(pCdeAppIf, pstrUpperDir);
-        CDEMOFINE((MFNINF(1)    "CurrentWorkingDirectory --> %s\n", pstrUpperDir));
 
         if (0 == strcmp(pstrFileName, ".."))
         {
@@ -151,7 +149,6 @@ intptr_t _findfirst64i32(char const* pstrFileName, struct _finddata64i32_t* pFin
             switch (pathtype)
             {
             case PATTERNONLY        :                       // "pat"
-                CDEMOFINE((MFNINF(1)    "PATTERNONLY\n"));
                 nCpy = 0;
                 pstrSearchPat = (char*)&pstrFileNameOrCWD[nCpy];
                 break;
@@ -159,17 +156,14 @@ intptr_t _findfirst64i32(char const* pstrFileName, struct _finddata64i32_t* pFin
             case BSLASH             :                       // index of '\' is != 0 e.g. "..\dir\pat" or ".\pat" BUT NOT "\pat"
             case BSLASH + COLON:                            // index of '\' is != 0 e.g. "x:\dir\pat" or "x:dir\pat" or "x:\pat"
             case BSLASH + BSLASHAT0:                        // index of '\' is == 0 e.g. "\dir\pat" or "\pat"
-                CDEMOFINE((MFNINF(1)    "BSLASH++\n"));
                 nCpy = idxBSlash + 1;
                 pstrSearchPat = (char*)&pstrFileNameOrCWD[nCpy];
                 break;
             case COLON:                                     // e.g. "x:pat"
-                CDEMOFINE((MFNINF(1)    "COLON\n"));
                 nCpy = idxColon + 1;
                 pstrSearchPat = (char*)&pstrFileNameOrCWD[nCpy];
                 break;
             case UPPERDIR:
-                CDEMOFINE((MFNINF(1)    "UPPERDIR\n"));
                 nCpy = idxBSlash + 1;
                 pstrSearchPat = (char*)&pstrFileNameOrCWD[nCpy];
             }
@@ -201,8 +195,6 @@ intptr_t _findfirst64i32(char const* pstrFileName, struct _finddata64i32_t* pFin
                     strcat(pstrSearchPatExt, ".*");
                 }
             }
-            CDEMOFINE((MFNINF(1)    "pstrSearchAllBuffer --> %s\n", pstrSearchAllBuffer));
-            CDEMOFINE((MFNINF(1)    "pstrSearchPatExt    --> %s\n", pstrSearchPatExt));
 
             //
             // read the entire directory content
@@ -217,8 +209,6 @@ intptr_t _findfirst64i32(char const* pstrFileName, struct _finddata64i32_t* pFin
             // TODO: CHECK RETURN VALUE
             ///////////////////////////////////////////////////////////////////////////
 
-            CDEMOFINE((MFNFAT(NULL == pCdeFileInfo)    "pCdeFileInfo %p\n\n", pCdeFileInfo));
-            CDEMOFINE((MFNINF(NULL != pCdeFileInfo)    "pCdeFileInfo %p\n\n", pCdeFileInfo));
 
             if (    NULL != pCdeFileInfo
                 && -1LL != pCdeFileInfo->time_write/*end marker*/)
@@ -252,8 +242,6 @@ intptr_t _findfirst64i32(char const* pstrFileName, struct _finddata64i32_t* pFin
         }
 
     } while (0);
-
-    CDEMOFINE((MFNINF(1)    "<<< nRet %zd\n",nRet));
 
     
     if (1)// free allocated memory

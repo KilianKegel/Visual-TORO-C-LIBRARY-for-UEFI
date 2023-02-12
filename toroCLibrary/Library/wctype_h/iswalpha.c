@@ -26,8 +26,10 @@ Author:
 #include <_wctype.h>
 
 extern char _cdeChkIsWxTbl(ISWX_TRUTH_TABLE* pIswxTbl, wint_t c);
+extern ISWX_TRUTH_TABLE __cdeIswalphacaseless_dflt_tbl[];
 
-extern ISWX_TRUTH_TABLE iswalphacaseless_dflt_tbl[];
+static ISWX_TRUTH_TABLE* gpTBLiswalphacaseless = __cdeIswalphacaseless_dflt_tbl;
+
 
 /** Brief description of the function’s purpose.
 
@@ -47,8 +49,6 @@ Description
     @retval 0 if not
 
 **/
-ISWX_TRUTH_TABLE* gpTBLiswalphacaseless = iswalphacaseless_dflt_tbl;
-
 int iswalpha(wint_t c) {
 
     int nRet0 = 0, nRet1 = 0, nRet2 = 0;

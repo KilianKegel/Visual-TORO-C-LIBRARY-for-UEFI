@@ -20,10 +20,10 @@ Author:
     Kilian Kegel
 
 --*/
+#include <stdio.h>
+
+#include <cde.h>
 #include <CdeServices.h>
-#include <string.h>
-#include <stdarg.h>
-#include <stddef.h>
 
 extern void* __cdeGetAppIf();
 extern int fgetc(FILE* stream);

@@ -21,8 +21,6 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <stddef.h>
-extern void* __cdeGetAppIf();
 
 static ROMPARM_WCSSTRTOK ROMPARM = {    
     /*fForceToDataSeg       */ 1 ,\

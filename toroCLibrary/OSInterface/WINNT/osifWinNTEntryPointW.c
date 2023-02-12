@@ -24,13 +24,12 @@ Author:
 #include <windows.h>
 #pragma warning( disable : 4702 )
 #define ALIENOS
-#include <cde.h>
 
-#include <CdeServices.h>
 #include <signal.h>
-#include <string.h>
-#include <setjmp.h>
-#include <errno.h>
+
+#include <cde.h>
+#include <CdeServices.h>
+
 
 const char _1 = 1;
 const char _0 = 0;
@@ -96,8 +95,6 @@ extern OSIFDIRCREATE    _osifWinNTDirectoryCreate;   /*pDirCreate    */
 extern OSIFCMDEXEC      _osifWinNTCmdExec;           /*pCmdExec      */
 extern OSIFGETENV       _osifWinNTGetEnv;            /*pGetEnv           */
 extern OSIFGETDCWD      _osifWinNTGetDrvCwd;         /*pGetDrvCwd    current working directory   */
-extern DIAGTRACE        _cdeVMofine;
-extern DIAGXDUMP        _cdeXDump;
 
 extern int wmain(int argc, wchar_t** argv);
 extern int _cdeStr2Argcv(char** argv, char* szCmdline);
@@ -214,11 +211,6 @@ static CDE_SERVICES gCdeServicesWinNT = {/*CDE_PROTOCOL*/
     .pGetDrvCwd = _osifWinNTGetDrvCwd,       /* OSIFGETDCWD      *pGetDrvCwd */
     .pDirCreate = _osifWinNTDirectoryCreate, /* OSIFDIRCREATE    *pDirCreate */
     .pDirRemove = NULL,                     /* OSIFDIRCREATE    *pDirCreate */
-//
-// diagnostic
-//
-    .pVMofine = _cdeVMofine,
-    .pXDump = _cdeXDump,
 };
 
 static CDE_APP_IF gCdeAppIfWinNT = {

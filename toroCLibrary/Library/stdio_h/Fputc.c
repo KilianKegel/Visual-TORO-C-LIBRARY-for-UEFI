@@ -20,7 +20,6 @@ Author:
     Kilian Kegel
 
 --*/
-#include <uefi.h>
 #include <stdio.h>
 #include <CdeServices.h>
 

@@ -20,10 +20,10 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-
+//
+// stdlib.h
+//
+extern __declspec(dllimport) void exit(int status);
 /**
 
 Synopsis

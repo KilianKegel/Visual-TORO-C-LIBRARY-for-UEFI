@@ -20,8 +20,8 @@ Author:
     Kilian Kegel
 
 --*/
-#include <uefi.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <CdeServices.h>
 
 extern int __cdeIsFilePointer(void* stream);
@@ -41,7 +41,7 @@ Returns
 */
 int fgetpos(FILE* fp, fpos_t* pos)
 {
-    EFI_STATUS Status = EFI_DEVICE_ERROR;
+    int Status = EXIT_FAILURE;
     CDEFILE* pCdeFile = (CDEFILE*)fp;
     do {
 
@@ -50,10 +50,10 @@ int fgetpos(FILE* fp, fpos_t* pos)
 
         *pos = pCdeFile->bpos + pCdeFile->bidx;
 
-        Status = EFI_SUCCESS;
+        Status = EXIT_SUCCESS;
 
     } while (0);
 
     //TODO: Add errno
-    return EFI_SUCCESS == __cdeOnErrSet_status(Status) ? 0 : EOF;
+    return EXIT_SUCCESS == __cdeOnErrSet_status(Status) ? 0 : EOF;
 }

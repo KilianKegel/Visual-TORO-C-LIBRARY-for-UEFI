@@ -136,13 +136,10 @@ int _osifUefiShellCmdExec(CDE_APP_IF* pCdeAppIf, char* szCommand) {
     static wchar_t wcsCommand[CDE_SLASHCEXTENDETCOMMAND_LEN];
     size_t i;
     size_t len = strlen(szCommand);
-    CDEMOFINE((MFNINF(1) ">>> szCommand->\"%s\"\n", szCommand));
 
     do {
 
         if (CDE_SLASHCEXTENDETCOMMAND_LEN < 1 + len) {
-
-            CDEMOFINE((MFNERR(1) "buffer too small to hold the command line\n"));
 
         }
 
@@ -171,10 +168,7 @@ int _osifUefiShellCmdExec(CDE_APP_IF* pCdeAppIf, char* szCommand) {
             _cdegST->ConOut->OutputString = pConIOPutStr;
         }
 
-        CDEMOFINE((MFNINF(1) "\n"));
-
     } while (0);
 
-    CDEMOFINE((MFNINF(1) "<<<\n"));
     return (int)nRetStatus;
 }

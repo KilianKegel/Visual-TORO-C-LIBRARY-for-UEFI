@@ -20,18 +20,10 @@ Author:
 
 --*/
 #define OS_EFI
-#include <Base.h>
-#include <cde.h>
-#include <wchar.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+
+#undef NULL
 #include <CdeServices.h>
-#include <errno.h>
-#include <Protocol\SimpleFileSystem.h>
-#include <CdeServices.h>
-#include <Protocol\Shell.h>
-#include "Protocol\DevicePathToText.h"
 
 /**
 Synopsis

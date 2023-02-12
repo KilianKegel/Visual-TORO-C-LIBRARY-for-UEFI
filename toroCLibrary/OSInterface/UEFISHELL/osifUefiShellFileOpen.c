@@ -21,17 +21,18 @@ Author:
 --*/
 //#undef NCDETRACE
 #define OS_EFI
-#include <CdeServices.h>
-#include <cde.h>
-#include <wchar.h>
-#include <stdio.h>
-#include <stdlib.h>
+
 #include <string.h>
 #include <errno.h>
+
+#undef NULL
+#include <uefi.h>
 #include <Protocol\SimpleFileSystem.h>
 #include <Protocol\Shell.h>
 #include "Protocol\DevicePathToText.h"
 
+#include <cde.h>
+#include <CdeServices.h>
 
 extern int _wcsicmp(const wchar_t* pszDst, const wchar_t* pszSrc);
 extern CDESYSTEMVOLUMES gCdeSystemVolumes;
@@ -95,7 +96,6 @@ static EFI_STATUS efifopen(const char* szModeNoSpace, int fFileExists/* 0 no, 1 
     uint64_t UefiModeFlags = 0, * pUefiModeFlags = &UefiModeFlags;
     int fFinalOpenStatus = 1;
 
-    CDETRACE((TRCINF(EFI_SUCCESS != Status) "szModeNoSpace \"%s\", fFileExists %d, pCdeFile %p\n", szModeNoSpace, fFileExists, pCdeFile));
 
     do {
 
@@ -104,10 +104,6 @@ static EFI_STATUS efifopen(const char* szModeNoSpace, int fFileExists/* 0 no, 1 
         for (i = 0; i < sizeof(tblMode) / sizeof(tblMode[0]); i++)
             if (0 == strcmp(tblMode[i].pszMode, szModeNoSpace))
                 break;
-
-
-        CDETRACE((TRCERR(i == sizeof(tblMode) / sizeof(tblMode[0])) "Attributes \"%s\" NOT found\n", szModeNoSpace));
-        CDETRACE((TRCINF(i != sizeof(tblMode) / sizeof(tblMode[0])) "Attributes \"%s\" found at index %d\n", szModeNoSpace,i));
 
 
         if (i == sizeof(tblMode) / sizeof(tblMode[0]))
@@ -130,7 +126,6 @@ static EFI_STATUS efifopen(const char* szModeNoSpace, int fFileExists/* 0 no, 1 
 
             if (0 == fFileExists)
             {
-                CDETRACE((TRCINF(1) "UefiModeFlags %0llX\n", UefiModeFlags));
                 UefiModeFlags |= (EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE) * ((O_CREAT) == ((O_CREAT) & OpenMode));
                 //UefiModeFlags |= (EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE) * (0 == ((O_CREAT + O_TRUNC) & OpenMode));
                 //UefiModeFlags |= (EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE) * ((O_CREAT + O_APPEND) == ((O_CREAT + O_APPEND) & OpenMode));
@@ -146,13 +141,10 @@ static EFI_STATUS efifopen(const char* szModeNoSpace, int fFileExists/* 0 no, 1 
             pUefiAttribFlags = &tblMode[i].UefiAttribFlags;             // pointer to fopen() related UefiAttribFlags
             pUefiModeFlags = &tblMode[i].UefiModeFlags;                 // pointer to fopen() related openmode
             pOpenMode = &tblMode[i].openmode;
-            CDETRACE((TRCINF(1) "pUefiModeFlags -> %016llX pOpenMode -> %08X\n", *pUefiModeFlags, *pOpenMode));
         }
 
         pCdeFile->openmode = *pOpenMode;
 
-        CDETRACE((TRCINF(1) "pUefiModeFlags -> %016llX pOpenMode -> %08X\n", *pUefiModeFlags, *pOpenMode));
-        
         //
         // _open()/fopen() the file
         //
@@ -185,8 +177,6 @@ static EFI_STATUS efifopen(const char* szModeNoSpace, int fFileExists/* 0 no, 1 
             }
 
         }
-
-        CDETRACE((TRCERR(0 && EFI_SUCCESS != Status) "pRootProtocol->Open -> \"%s\"\n", _strefierror(Status)));
 
         if (EFI_SUCCESS != Status) 
             break;
@@ -309,14 +299,11 @@ CDEFILE* _osifUefiShellFileOpen(IN CDE_APP_IF* pCdeAppIf, const wchar_t* pwcsFil
     unsigned char TODO = 1;
     EFI_STATUS Status;
 
-    //CDETRACE((TRCINF(1) "pCdeAppIf %p, pwcsFileName \"%S\", szModeNoSpace \"%s\", fFileExists %d, pCdeFile %p\n", pCdeAppIf, pwcsFileName, szModeNoSpace, fFileExists, pCdeFile));
-    
     do {/*1. dowhile(0)*/
 
         if (!__CdeIsFsEnum()) {
 
             if (EFI_SUCCESS != __CdeFsEnum()) {
-                //CDETRACE((TRCERR(1) "EFI_SUCCESS != __CdeFsEnum()\n"));
                 break;
             }
         }
@@ -345,7 +332,6 @@ CDEFILE* _osifUefiShellFileOpen(IN CDE_APP_IF* pCdeAppIf, const wchar_t* pwcsFil
             if (fIsFileDrv) {                                                       // get current directory of remote drive
                 wcsncpy(wcsDrive2, wcsFileName, &pColon[1] - wcsFileName);
                 pwcsCurDir2 = (wchar_t*)_CdeGetCurDir(wcsDrive2);
-                ////CDETRACE((CDEFINE"wcsDrive2 == %S, pwcsCurDir2 == %S\n", wcsDrive2, pwcsCurDir2));
             }
 
             pwcsTargetDir = fIsFileDrv ? (0 == wcsncmp(wcsFileName, pwcsCurDir, &pColon[1] - wcsFileName) ? pwcsCurDir : pwcsCurDir2) : pwcsCurDir;
@@ -366,7 +352,6 @@ CDEFILE* _osifUefiShellFileOpen(IN CDE_APP_IF* pCdeAppIf, const wchar_t* pwcsFil
                 wcscat(wcsFilePath, L"\\");
                 wcscat(wcsFilePath, pFilePath);
             }
-            ////CDETRACE((CDEFINE"fIsFileAbs == %d, fIsFileDrv == %d, Drive == %S, wcsFilePath == %S\n", fIsFileAbs, fIsFileDrv, wcsDrive, wcsFilePath));
         //
         // ----- find the volume that drive map is provided in
         //
@@ -382,7 +367,6 @@ CDEFILE* _osifUefiShellFileOpen(IN CDE_APP_IF* pCdeAppIf, const wchar_t* pwcsFil
 
             if (i == gCdeSystemVolumes.nVolumeCount) 
             {
-                //CDETRACE((TRCERR(1) "errno = ENOENT\n"));
                 pCdeAppIf->nErrno = ENOENT;
                 break;/*1. dowhile(0)*/ //drive map not found, return
             }
@@ -391,11 +375,8 @@ CDEFILE* _osifUefiShellFileOpen(IN CDE_APP_IF* pCdeAppIf, const wchar_t* pwcsFil
             pCdeFile->pwcsFilePath  = wcsFilePath;
             pCdeFile->pRootProtocol = gCdeSystemVolumes.rgFsVolume[i].pRootProtocol;
 
-            //CDETRACE((TRCINF(1) "\npCdeFile->pwcsFileDrive \"%S\"\npCdeFile->pwcsFilePath \"%S\"\n pCdeFile->pRootProtocol %p\n", pCdeFile->pwcsFileDrive, pCdeFile->pwcsFilePath, pCdeFile->pRootProtocol));
-
             Status = efifopen(szModeNoSpace, fFileExists, pCdeFile);            // get emulation file pointer, that is the Windows FP (CDE4WIN) or pCdeFile or NULL in error case
             
-            CDETRACE((TRCERR(EFI_SUCCESS != Status) "efifopen() -> \"%s\"\n", _strefierror(Status)));
             if (EFI_SUCCESS != Status) {
                 pRet = NULL;
                 /*

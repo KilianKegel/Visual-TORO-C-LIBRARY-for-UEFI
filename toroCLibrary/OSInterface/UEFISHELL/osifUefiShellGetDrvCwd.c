@@ -20,10 +20,11 @@ Author:
 
 --*/
 #define OS_EFI
-#include <Base.h>
-#include <CdeServices.h>
+#include <uefi.h>
 #include <Protocol\Shell.h>
 #include <wchar.h>
+
+#include <CdeServices.h>
 
 extern EFI_SHELL_PROTOCOL* pEfiShellProtocol;
 extern CDESYSTEMVOLUMES gCdeSystemVolumes;
@@ -57,8 +58,6 @@ char* _osifUefiShellGetDrvCwd(IN CDE_APP_IF* pCdeAppIf, IN OUT char* pstrDrvCwdB
         //pwcsPool = (wchar_t*)pEfiShellProtocol->GetCurDir(NULL == pstrDrvCwdBuf ? NULL : (const wchar_t*) &wcsDrive[0]);
         
         pwcsPool = (wchar_t*)pEfiShellProtocol->GetCurDir(NULL);
-
-        CDEMOFINE((MFNINF(1) "pwcsPool %p\n", pwcsPool));
 
         if (NULL != pwcsPool)
         {

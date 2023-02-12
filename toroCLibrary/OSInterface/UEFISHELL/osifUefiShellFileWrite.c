@@ -21,13 +21,11 @@ Author:
 --*/
 //#undef NCDETRACE
 #define OS_EFI
-#include <PiPei.h>
-
+#include <uefi.h>
 #include <Base.h>
 #include <CdeServices.h>
 #include <stdio.h>
 #include <stdint.h>
-#include <uefi.h>
 extern char _gSTDOUTMode;   /* 0 == UEFI Shell default, 1 == ASCII only */
 
 //EFI_SYSTEM_TABLE* _cdegST;
@@ -127,8 +125,6 @@ size_t _osifUefiShellFileWrite(IN CDE_APP_IF* pCdeAppIf, void* ptr, size_t nelem
 
                     _cdegST->ConOut->OutputString(_cdegST->ConOut, wcsbuf);
 */
-                CDETRACE((TRCINF(1) "gappos %016llX, Status %s\n\n", pCdeFile->gappos, _strefierror(Status1)));
-
                 do
                 {
                     sGapSize -= sizeof(zBuf64k);                                                                // subtract buffer size
@@ -137,8 +133,6 @@ size_t _osifUefiShellFileWrite(IN CDE_APP_IF* pCdeAppIf, void* ptr, size_t nelem
 //                    if (trcen == 2)swprintf(wcsbuf, INT_MAX, L"%hs(), Line %d, sGapSize %lld, sBufSiz %lld\r\n", __FUNCTION__, __LINE__, sGapSize, sBufSiz), _cdegST->ConOut->OutputString(_cdegST->ConOut, wcsbuf);
 
                     Status2 = pCdeFile->pRootProtocol->Write(pCdeFile->pFileProtocol, (UINTN*) &sBufSiz, zBuf64k);       // initialize file gap with zeros
-
-                    CDETRACE((TRCINF(1) "gapsize %lld, Status %s\n\n", sGapSize, _strefierror(Status2)));
 
 //                    if (trcen == 2)swprintf(wcsbuf, INT_MAX, L"%hs(), Line %d, sGapSize %lld, sBufSiz %lld\r\n", __FUNCTION__, __LINE__, sGapSize, sBufSiz), _cdegST->ConOut->OutputString(_cdegST->ConOut, wcsbuf);
 

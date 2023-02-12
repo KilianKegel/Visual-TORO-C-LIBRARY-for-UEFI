@@ -21,11 +21,8 @@ Author:
     Kilian Kegel
 
 --*/
-#include <uefi.h>
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
-#include <limits.h>
 #include <CdeServices.h>
 
 extern int __cdeIsFilePointer(void* stream);

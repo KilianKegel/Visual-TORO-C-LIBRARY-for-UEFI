@@ -20,14 +20,15 @@ Author:
     Kilian Kegel
 
 --*/
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <cde.h>
 #include <CdeServices.h>
 
 extern void* __cdeGetAppIf(void);
 extern int _strnicmp(const char* pszDst, const char* pszSrc, size_t count);
+extern int swprintf(wchar_t* pszDest, size_t dwCount, const wchar_t* pszFormat, ...);
+extern size_t strlen(const char* pszBuffer);
+extern char* strrchr(const char* str, int c);
+extern void* malloc(size_t size);
+extern void free(void* ptr);
 
 static char* chkpath(const char* pOld, const char* pNew); // prototype
 
@@ -55,9 +56,6 @@ int rename(const char* pszOld, const char* pszNew) {
         if (NULL == pszOld || NULL == pszNew)
             break;
 
-        CDEMOFINE((MFNINF(1) "Old: %s, New: %s\n", pszOld, pszNew));
-
-
         if (NULL != chkpath(pszOld, pszNew)) { // check, if criterias are matched, e.g.: renaming inside the same directory
 
             size_t oldsize = sizeof(wchar_t) * (1 + strlen(pszOld));
@@ -69,8 +67,6 @@ int rename(const char* pszOld, const char* pszNew) {
             swprintf(pwcsOld, oldsize, L"%S", pszOld);
             swprintf(pwcsNew, newsize, L"%S", pszNew);
 
-            CDEMOFINE((MFNINF(1) "pwcsOld: %S, pwcsNew: %S\n", pwcsOld, pwcsNew));
-
             nRet = pCdeAppIf->pCdeServices->pFrename(pCdeAppIf, pwcsOld, pwcsNew);
 
             {
@@ -79,7 +75,7 @@ int rename(const char* pszOld, const char* pszNew) {
             free(pwcsOld);
             free(pwcsNew);
         }
-        CDEMOFINE((MFNINF(1) "%d\n", nRet));
+
     } while (0);
     return nRet;
 

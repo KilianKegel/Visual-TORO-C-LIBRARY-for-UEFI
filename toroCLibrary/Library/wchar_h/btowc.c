@@ -8,7 +8,7 @@
 
 Module Name:
 
-    wctob.c
+    btowc.c
 
 Abstract:
 
@@ -21,7 +21,6 @@ Author:
 
 --*/
 #include <stdio.h>
-#include <wchar.h>
 
 /**
 Synopsis

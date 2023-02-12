@@ -20,12 +20,8 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <assert.h>
-#include <stddef.h>
-#include <stdio.h>
 
 extern int printf(const char* pszFormat, ...);
-extern int _CdeFineTrace(char* pszFile, int nLine, char* pszFunction, char* pszFormat, ...);
 
 void __cdecl _assert(char* pszExpession, char* pszFile, unsigned dwLine) {
 

@@ -173,9 +173,6 @@
     <ClCompile Include="LibAssist\_cdeMemUngetWChar.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LibAssist\_CdeMoFiNe.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="LibAssist\_CdeDbgCOMInit.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -791,22 +788,13 @@
     <ClCompile Include="Guids\EFI_SHELL_PROTOCOL_GUID.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LibCore\_cdeVMofine.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="LibCore\_cdeCoreSprintf.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LibCore\_cdeXDump.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LibCore\_cdeCoreClock.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LibCore\_cdeCoreExit.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LibCore\_cdeCoreMofine.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Library\stdlib_h\system.c">
@@ -1223,6 +1211,651 @@
     <ClCompile Include="Library\wchar_h\_WcsEfiError.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Intrinsics\_invalid_parameter_handlerCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Intrinsics\_set_invalid_parameter_handlerCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\assert_h\_assertCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\assert_h\_wassertCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\isalnumCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\isalphaCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\iscntrlCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\isdigitCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\isgraphCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\islowerCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\isprintCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\ispunctCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\isspaceCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\isupperCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\isxdigitCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\tolowerCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ctype_h\toupperCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\errno_h\errnoCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\inttypes_h\strtoimaxCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\inttypes_h\strtoumaxCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\inttypes_h\wcstoimaxCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\inttypes_h\wcstoumaxCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\locale_h\localeconvCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\locale_h\setlocaleCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\signal_h\raiseCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\signal_h\signalCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\clearerrCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\FcloseCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\FeofCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\FerrorCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\FflushCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\FgetcCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\FgetposCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\FgetsCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\FopenCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\FprintfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\FputcCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\FputsCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\FreadCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\FreopenCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\FscanfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\FseekCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\FsetposCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\FtellCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\FwriteCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\GetcCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\GetcharCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\GetsCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\PerrorCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\PrintfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\PutcCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\PutcharCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\PutsCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\RemoveCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\RenameCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\RewindCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\ScanfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\SetbufCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\SetvbufCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\SnprintfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\SprintfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\SscanfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\TmpfileCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\TmpnamCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\UngetcCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\VfprintfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\VfscanfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\VprintfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\VscanfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\VsnprintfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\VsnwprintfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\VsprintfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdio_h\VsscanfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\_i64toaCDEABI.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\_i64towCDEABI.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\_itoaCDEABI.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\_itowCDEABI.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\_ltoaCDEABI.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\_ltowCDEABI.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\_ui64toaCDEABI.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\_ui64towCDEABI.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\_ultoaCDEABI.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\_ultowCDEABI.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\abortCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\atoiCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\atolCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\CallocCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\DivCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\exitCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\FreeCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\getenvCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\LabsCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\LdivCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\MallocCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\mblenCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\mbstowcsCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\mbtowcCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\QsortCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\randCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\ReallocCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\srandCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\strtolCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\strtollCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\strtoulCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\strtoullCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\systemCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\wcstombsCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\wctombCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\_StrDupCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\_StrICmpCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\_StrNICmpCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\MemChrCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\MemCmpCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\MemCpyCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\MemMoveCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\MemSetCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrCatCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrChrCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrCmpCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrCollCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrCpyCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrCSpnCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrErrorCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrLenCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrNCatCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrNCmpCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrNCpyCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrNLenCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrPbrkCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrRChrCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrSpnCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrStrCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrTokCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrxfrmCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time_h\asctimeCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time_h\clockCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time_h\ctimeCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time_h\difftimeCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time_h\gmtimeCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time_h\localtimeCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time_h\mktimeCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time_h\strftimeCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time_h\timeCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\_WcsDupCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\_WcsEfiErrorCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\_WcsICmpCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\_WcsNICmpCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\btowcCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\FgetwcCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\FgetwsCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\FputwcCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\FputwsCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\FwideCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\FwprintfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\FwscanfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\GetwcCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\GetwcharCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\PutwcCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\PutwcharCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\SwprintfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\SwscanfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\UngetwcCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\VfwprintfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\VfwscanfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\VswprintfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\VswscanfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\VwprintfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsCatCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsChrCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsCmpCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsCollCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsCpyCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsCSpnCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsLenCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsNCatCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsNCmpCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsNCpyCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsNLenCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsPbrkCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsRChrCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsSpnCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsStrCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsTokCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcstolCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcstollCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcstoulCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcstoullCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WcsxfrmCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\wctobCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WMemChrCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WMemCmpCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WMemCpyCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WMemMoveCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WMemSetCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wchar_h\WprintfCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswalnumCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswalphaCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswblankCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswcntrlCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswctypeCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswdigitCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswgraphCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswlowerCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswprintCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswpunctCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswspaceCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswupperCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\iswxdigitCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\towctransCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\towlowerCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\towupperCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\wctransCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\wctypeCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\AbsCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdlib_h\atexitCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Tools\PostBuildEvent.bat">
@@ -1300,6 +1933,18 @@
       <Filter>Source Files</Filter>
     </MASM>
     <MASM Include="Intrinsics\__chkstkWin32.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="Library\setjmp_h\longjmp32CDEABI.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="Library\setjmp_h\longjmp64CDEABI.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="Library\setjmp_h\setjmp32CDEABI.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="Library\setjmp_h\setjmp64CDEABI.asm">
       <Filter>Source Files</Filter>
     </MASM>
   </ItemGroup>

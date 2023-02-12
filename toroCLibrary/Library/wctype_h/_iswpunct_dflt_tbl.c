@@ -23,7 +23,7 @@ Author:
 #include <wctype.h>
 #include <_wctype.h>
 
-ISWX_TRUTH_TABLE iswpunct_dflt_tbl[] = { \
+ISWX_TRUTH_TABLE __cdeIswpunct_dflt_tbl[] = { \
 {0x0021, 0x002F}, \
 {0x003A, 0x0040}, \
 {0x005B, 0x0060}, \
@@ -109,4 +109,4 @@ ISWX_TRUTH_TABLE iswpunct_dflt_tbl[] = { \
 {0xFF3F, 0xFE68}, \
 {0xFF5D, 0xFF5B}, \
 {0xFFFF, 0xFFFF} \
-};//iswpunct_dflt_tbl[]
+};//__cdeIswpunct_dflt_tbl[]

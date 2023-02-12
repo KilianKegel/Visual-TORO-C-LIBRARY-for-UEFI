@@ -21,16 +21,13 @@ Author:
 --*/
 #define OS_EFI
 
-#include <CdeServices.h>
-#include <cde.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <setjmp.h>
-#include <string.h>
+#undef NULL
 
+#include <uefi.h>
 #include <Protocol/smmbase2.h>
 
+#include <cde.h>
+#include <CdeServices.h>
 //
 // prototypes
 //
@@ -52,7 +49,6 @@ extern struct _CDE_LCONV_LANGUAGE _locale_C_;
 extern GUID gEfiCallerIdGuid;
 extern char* gEfiCallerBaseName;
 extern EFI_STATUS EFIAPI OemHookStatusCodeInitialize(void);
-extern void free(void* ptr);
 extern int _cdeStr2Argcv(char** argv, char* szCmdline);
 extern char __cdeGetCurrentPrivilegeLevel(void);
 
@@ -63,6 +59,13 @@ extern void _disable(void);
 extern void _enable(void);
 
 #pragma intrinsic (_disable, _enable)
+
+extern __declspec(dllimport) void* malloc(size_t size);
+extern __declspec(dllimport) void free(void* ptr);
+extern __declspec(dllimport) void* memset(void* s, int c, size_t n);
+extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
+extern __declspec(dllimport) char* strcpy(char* pszDst, const char* pszSrc);
+
 
 //
 // globals

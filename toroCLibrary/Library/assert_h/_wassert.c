@@ -20,9 +20,6 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <assert.h>
-#include <stddef.h>
-#include <stdio.h>
 
 extern int printf(const char* pszFormat, ...);
 

@@ -25,7 +25,6 @@ Author:
 
 --*/
 //#undef NCDETRACE
-#include <uefi.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <CdeServices.h>

@@ -44,10 +44,7 @@ Author:
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include <time.h>
-#include <io.h>
 #include <setjmp.h>
-#include <cde.h>
 #include <fcntl.h>
 
 extern void* __cdeGetIOBuffer(unsigned i);
@@ -431,27 +428,6 @@ typedef char*       OSIFGETDCWD(IN CDE_APP_IF* pCdeAppIf, IN OUT char* pstrDrvCw
 #   define COREMOFINE(cond_msg) ((void)0)
 #endif//ndef NMOFINE
 
-typedef int DIAGTRACE(
-    CDE_APP_IF* pCdeAppIf, 
-    char* pszDriver, 
-    char* pszFile, 
-    int nLine, 
-    char* pszFunction, 
-    char* pszClass, 
-    int fTraceEn, 
-    char* pszFormat, 
-    va_list ap);
-
-typedef int DIAGXDUMP(
-    CDE_APP_IF* pCdeAppIf, 
-    XDUMPPARM ctrl, 
-    unsigned elmcount, 
-    unsigned long long startaddr, 
-    unsigned long long(*pfnGetElm)(unsigned long long qwAddr), 
-    unsigned (*pfnWriteStr)(char* szLine), 
-    char* pBuf, 
-    unsigned size);
-
 typedef struct _CDE_APP_IF
 {
     //
@@ -578,11 +554,6 @@ typedef struct _CDE_SERVICES {
     //void* pOSIFR4FX5; // R4FX: reserved for furure extentions
     //void* pOSIFR4FX6; // R4FX: reserved for furure extentions
     //void* pOSIFR4FX7; // R4FX: reserved for furure extentions
-//
-// DIAG - diagnostic support
-//
-    DIAGTRACE*  pVMofine;
-    DIAGXDUMP*  pXDump;
     //void* pDIAGR4FX0; // R4FX: reserved for furure extentions
     //void* pDIAGR4FX1; // R4FX: reserved for furure extentions
     //void* pDIAGR4FX2; // R4FX: reserved for furure extentions
@@ -707,5 +678,44 @@ typedef struct tagCDESTAT64I32  // Microsofts "struct _stat64i32" analogon
 //
 extern size_t __cdeOnErrSet_status(size_t num);
 extern char* _strefierror(size_t errcode);
+
+//
+//  CDE helper macros
+//
+#ifndef CDEELC
+#   define CDEELC/* CDE ELEMENT COUNT */(x) (sizeof(x)/sizeof(x[0]))
+#endif//CDEELC
+#ifndef ___WIDE2
+#   define ___WIDE2(x) L##x
+#endif//___WIDE2
+#ifndef ___WIDE1
+#   define ___WIDE1(x) ___WIDE2(x)
+#endif//___WIDE1
+#ifndef __CDEWCSFILE__
+#   define __CDEWCSFILE__ ___WIDE1(__FILE__)
+#endif//__CDEWCSFILE__
+#ifndef __CDEWCSFUNCTION__
+#   define __CDEWCSFUNCTION__ ___WIDE1(__FUNCTION__)
+#endif//__CDEWCSFUNCTION__
+#ifndef CDESTRINGIFY
+#   define CDESTRINGIFY(n) #n
+#endif//___STRINGIFY
+#ifndef CDENUMTOSTR
+#   define CDENUMTOSTR(n) CDESTRINGIFY(n)
+#endif//CDENUMTOSTR
+#ifndef CDENUMTOWCS
+#   define CDENUMTOWCS(n) ___WIDE1(CDESTRINGIFY(n))
+#endif//CDENUMTOWCS
+
+//
+//  NOTE: To simplify a unified DLLIMPORT interface generation, the interface type is void*
+//          except for vfprintf(), that is already declared in CDE.H a full interface type
+//          is needed.
+// 
+#if   defined(_M_AMD64)
+#   define MKCDEABI(fn) void* __imp_##fn = (void*)fn##CDEABI/* CDE MAKE DLL IMPORT */
+#else//   defined(_M_AMD64)
+#   define MKCDEABI(fn) void* _imp__##fn = (void*)fn##CDEABI/* CDE MAKE DLL IMPORT */
+#endif//  defined(_M_AMD64)
 
 #endif//_CDE_SERVICES_H_

@@ -25,7 +25,7 @@ Author:
 #include <wctype.h>
 #include <_wctype.h>
 
-ISWX_TRUTH_TABLE iswlower_dflt_tbl[] = { \
+ISWX_TRUTH_TABLE __cdeIswlower_dflt_tbl[] = { \
 {0x0061, 0x007A}, \
 {0x00DF, 0x00F6}, \
 {0x00F8, 0x00FF}, \
@@ -344,4 +344,4 @@ ISWX_TRUTH_TABLE iswlower_dflt_tbl[] = { \
 {0xA785, 0xA783}, \
 {0xA78C, 0xA787}, \
 {0xFFFF, 0xFFFF} \
-};//iswlower_dflt_tbl[]
+};//__cdeIswlower_dflt_tbl[]

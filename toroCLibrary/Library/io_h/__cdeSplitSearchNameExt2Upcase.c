@@ -20,12 +20,9 @@ Author:
 
 --*/
 #undef NMOFINE
-#define MOFINE_CONFIG       MOFINE_STDOUT  | MOFINE_NDRIVER | MOFINE_NFILE |/* MOFINE_NLINE | /*MOFINE_NFUNCTION | */MOFINE_NCLOCK /*| MOFINE_NCLASS | MOFINE_RAWFORMAT */
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 #include <ctype.h>
-#include <CdeServices.h>
 
 /**
 

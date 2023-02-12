@@ -22,8 +22,6 @@ Author:
 --*/
 #include <stdio.h>
 
-extern int sprintf(char* pszBuffer, const char* pszFormat, ...);
-
 /**
 
 Synopsis

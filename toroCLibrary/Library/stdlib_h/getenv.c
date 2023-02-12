@@ -21,9 +21,6 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <Cde.h>
-
-extern void* __cdeGetAppIf(void);
 
 /*++
 
@@ -51,13 +48,9 @@ char* getenv(const char* pszEnvarCmd) {
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
     char* pRet = NULL;
 
-    CDEMOFINE((MFNINF(1) "%s\n", pszEnvarCmd));
-
     if (NULL != pszEnvarCmd) {
         pRet = pCdeAppIf->pCdeServices->pGetEnv(pCdeAppIf, pszEnvarCmd);
     }
-
-    CDEMOFINE((MFNINF(1) "%s\n", pRet));
 
     return pRet;
 }

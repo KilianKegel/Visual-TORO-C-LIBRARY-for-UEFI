@@ -70,7 +70,7 @@ int _osifUefiShellFileRename(IN CDE_APP_IF* pCdeAppIf, wchar_t* pwcsOldName, wch
         // open the file using the internal function _osifUefiShellFileOpen(), since file to rename must be open
         //
         pTemp = _osifUefiShellFileOpen(pCdeAppIf, pwcsOldName, "r+", pCdeFile);          // get emulation file pointer, that is the Windows FP (CDE4WIN) or pCdeFile or NULL in error case
-        CDEMOFINE((MFNERR(NULL == pTemp) "Can not open file \"%S\"\n", pwcsOldName));
+
         if (NULL == pTemp) {
             errno = ENOENT; //errno -> 2 == No such file or directory, GetLastError() 2
             break;
@@ -81,7 +81,7 @@ int _osifUefiShellFileRename(IN CDE_APP_IF* pCdeAppIf, wchar_t* pwcsOldName, wch
         //
         pFileProtocol = CdeFile.pFileProtocol;                                                      // there is the FileProtocol to get the FileInfo
         Status = pFileProtocol->GetInfo(pFileProtocol, &FileInfoGuid, &FileInfoSize, pFileInfo);    // detect required buffer size
-        CDEMOFINE((MFNERR(EFI_SUCCESS != Status) "Status: %s, FileInfoSize == %d, sizeof(EFI_FILE_INFO) == %d\n", strefierror(Status), FileInfoSize, sizeof(EFI_FILE_INFO)));
+
         if (EFI_SUCCESS != Status)
             break;
 
@@ -102,7 +102,7 @@ int _osifUefiShellFileRename(IN CDE_APP_IF* pCdeAppIf, wchar_t* pwcsOldName, wch
 
         FileInfoSize = sizeof(EFI_FILE_INFO) + sizeof(wchar_t) * (1/*termination zero*/ + wcslen(pFileInfo->FileName));
         Status = pFileProtocol->SetInfo(pFileProtocol, &FileInfoGuid, FileInfoSize, pFileInfo);
-        CDEMOFINE((MFNERR(EFI_SUCCESS != Status) "Status: %s, FileInfoSize == %d, sizeof(EFI_FILE_INFO) == %d\n", strefierror(Status), FileInfoSize, sizeof(EFI_FILE_INFO)));
+
         if (EFI_SUCCESS != Status) {
             errno = EEXIST; //errno -> 17 == File exists, GetLastError() 183
             break;

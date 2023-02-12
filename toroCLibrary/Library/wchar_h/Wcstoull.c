@@ -22,7 +22,6 @@ Author:
 --*/
 #include <CdeServices.h>
 
-extern void* __cdeGetAppIf();
 extern int _cdeSwscanf(const wchar_t* pwcsBuffer, wchar_t** endptr, const wchar_t* pwcsFormat, ...);
 
 /**

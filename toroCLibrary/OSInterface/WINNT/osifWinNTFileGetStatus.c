@@ -19,12 +19,12 @@ Author:
     Kilian Kegel
 
 --*/
-#include <stdio.h>
-#include <ctype.h>
+#include <io.h>
 #include <sys/stat.h>
 #include <windows.h>
-#include <CdeServices.h>
+
 #include <cde.h>
+#include <CdeServices.h>
 
 #define UINT64 unsigned long long
 #define UINT8 unsigned char

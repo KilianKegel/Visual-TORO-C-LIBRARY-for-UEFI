@@ -24,7 +24,7 @@ Author:
 #include <wctype.h>
 #include <_wctype.h>
 
-ISWX_TRUTH_TABLE iswupper_dflt_tbl[] = { \
+ISWX_TRUTH_TABLE __cdeIswupper_dflt_tbl[] = { \
 {0x0041, 0x005A}, \
 {0x00C0, 0x00D6}, \
 {0x00D8, 0x00DE}, \
