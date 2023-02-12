@@ -10,10 +10,10 @@
 ## Revision history
 ### 20230212
 * introduce `CDEABI`, an additional application binary interface ABI to ease coexistance of `CdePkg` based BIOS 
-    drivers with incomplete (tianocore EDK2)[https://github.com/tianocore/edk2] `C Library` 
-    (fragments)[https://github.com/tianocore/edk2/blob/master/CryptoPkg/Library/BaseCryptLib/SysCall/CrtWrapper.c#L603]
+    drivers with incomplete [tianocore EDK2](https://github.com/tianocore/edk2) `C Library` 
+    [fragments](https://github.com/tianocore/edk2/blob/master/CryptoPkg/Library/BaseCryptLib/SysCall/CrtWrapper.c#L603)
 
-    NOTE: `CDEABI` uses the Microsoft DLL interface (`__declspec(dllimport)`)[https://learn.microsoft.com/en-us/cpp/build/importing-into-an-application-using-declspec-dllimport?view=msvc-170] for EDK2-built drivers .
+    NOTE: `CDEABI` uses the Microsoft DLL interface [`__declspec(dllimport)`](https://learn.microsoft.com/en-us/cpp/build/importing-into-an-application-using-declspec-dllimport?view=msvc-170) for EDK2-built drivers .
     Technically this uses *indirect function calls* on machine code level.
 * promote `CDETRACE()`, remove former, alternate trace method (`CDEMOFINE()`) completely
 * internally remove unused diagnostic interface
