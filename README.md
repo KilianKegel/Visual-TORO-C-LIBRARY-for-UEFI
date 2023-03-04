@@ -8,6 +8,8 @@
 ```
 
 ## Revision history
+### 20230304
+* fixed `strtok()`, `wcstok()`
 ### 20230212
 * introduce `CDEABI`, an additional application binary interface ABI to ease coexistance of `CdePkg` based BIOS 
     drivers with incomplete [tianocore EDK2](https://github.com/tianocore/edk2) `C Library` 

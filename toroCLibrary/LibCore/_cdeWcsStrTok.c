@@ -52,16 +52,18 @@ void* _cdeWcsStrTok(CDE_APP_IF* pCdeAppIf, IN void* pvoidStr, IN const void* psz
             }
         }
 
-        //	    pNew = (*pwcsstrpbrk)(pszStr, pszSet);                  //find end of substring
+        //	    pNew = (*pwcsstrpbrk)(pszStr, pszSet);                                                          // find end of substring
 
         pNew = pCdeAppIf->pCdeServices->pWcsStrPbrkSpn(pParm->fWide ? WID : 0, (void*)pszStr, (void*)pszSet);   // find end of substring
                                                                                                                 // find end of substring
-        if (pParm->fWide)                                                                                       // find end of substring
+        if (pParm->fWide) {                                                                                     // find end of substring
             if ('\0' == *((short*)pNew))                                                                        // find end of substring
                 pNew = NULL;                                                                                    // find end of substring
-            else                                                                                                // find end of substring
-                if ('\0' == *((char*)pNew))                                                                     // find end of substring
-                    pNew = NULL;                                                                                // find end of substring
+        }                                                                                                       // find end of substring
+        else {                                                                                                  // find end of substring
+            if ('\0' == *((char*)pNew))                                                                         // find end of substring
+                pNew = NULL;                                                                                    // find end of substring
+        }
 
         if (pNew) {                                             // if found...
             if (pParm->fWide)                                   // terminate string/wide character string
