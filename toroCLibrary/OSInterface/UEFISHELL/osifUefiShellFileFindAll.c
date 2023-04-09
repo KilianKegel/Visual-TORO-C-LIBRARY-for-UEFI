@@ -20,17 +20,62 @@ Author:
 
 --*/
 #define OS_EFI
-#include <stdio.h>
-#include <string.h>
-#include <stdint.h>
-#include <stdlib.h>
+#include <CdeServices.h>
+#include <cde.h>
+#include <stddef.h>
 #include <stdbool.h>
-#include <time.h>
 #include <io.h>
-#undef NULL
+//
+// stdio.h
+//
+extern __declspec(dllimport) FILE* fopen(const char* filename, const char* mode);
+extern __declspec(dllimport) size_t fread(const void* ptr, size_t size, size_t nelem, FILE* stream);
+extern __declspec(dllimport) int fseek(FILE* stream, long offset, int mode);
+#define SEEK_SET    0
+// 
+// string.h
+// 
+extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
+extern __declspec(dllimport) char* strchr(const char* str, int c);
+//#include <stdint.h>
+// stdlib.h
+// 
+extern __declspec(dllimport) void* malloc(size_t size);
+extern __declspec(dllimport) void free(void* ptr);
+extern __declspec(dllimport) void* realloc(void* ptr, size_t size);
+extern __declspec(dllimport) size_t wcstombs(char* mbstr, const wchar_t* wcstr, size_t count);
+extern __declspec(dllimport) size_t mbstowcs(wchar_t* wcstr, const char* mbstr, size_t count);
+//#include <stdbool.h>
+// time.h
+// 
+struct tm
+{
+    int tm_sec;      /* seconds after the minute — [0, 60]	*/
+    int tm_min;      /* minutes after the hour — [0, 59]	*/
+    int tm_hour;     /* hours since midnight — [0, 23]		*/
+    int tm_mday;     /* day of the month — [1, 31]			*/
+    int tm_mon;      /* months since January — [0, 11]		*/
+    int tm_year;     /* years since 1900					*/
+    int tm_wday;     /* days since Sunday — [0, 6]			*/
+    int tm_yday;     /* days since January 1 — [0, 365]		*/
+    int tm_isdst;    /* Daylight Saving Time flag			*/
+};
+extern __declspec(dllimport) time_t mktime(struct tm* ptm);
+//
+// string.h
+//
+extern __declspec(dllimport) char* strncpy(char* pszDst, const char* pszSrc, size_t n);
+extern __declspec(dllimport) int strncmp(const char* pszDst, const char* pszSrc, size_t count);
+extern __declspec(dllimport) char* strcpy(char* pszDst, const char* pszSrc);
+extern __declspec(dllimport) char* strcat(char* s1, const char* s2);
+//
+// wchar.h
+//
+extern __declspec(dllimport) int _wcsicmp(const wchar_t* pszDst, const wchar_t* pszSrc);
+extern __declspec(dllimport) size_t wcslen(const wchar_t* pszBuffer);
+
 #include <uefi.h>
 #include <Protocol\Shell.h>
-#include <CdeServices.h>
 #define UINT64 unsigned long long
 #define UINT8 unsigned char
 #define CDE_APP_IF void

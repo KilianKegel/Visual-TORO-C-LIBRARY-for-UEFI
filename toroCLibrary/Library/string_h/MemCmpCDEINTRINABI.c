@@ -8,11 +8,11 @@
 
 Module Name:
 
-    MemCmpCDEABI.c
+    MemCmpCDEINTRINABI.c
 
 Abstract:
 
-    Import Library version
+    Monolithic COMDAT __declspec(dllimport) and __cdecl Library version
 
     Implementation of the Standard C function.
     Compares characters in two buffers.
@@ -43,11 +43,17 @@ Parameters
 Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/memcmp-wmemcmp?view=msvc-160#return-value
 **/
-static int memcmpCDEABI(const void* pszDst, const void* pszSrc, size_t count) {
+int memcmp(const void* pszDst, const void* pszSrc, size_t count) {
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
 
     return pCdeAppIf->pCdeServices->pMemStrxCmp(&ROMPARM, pszDst, pszSrc, count);
 
 }
 
-MKCDEABI(memcmp);
+#if   defined(_M_AMD64)
+void* __imp_memcmp = (void*)memcmp;/* CDE MAKE DLL IMPORT */
+#else//   defined(_M_AMD64)
+void* _imp__memcmp = (void*)memcmp;/* CDE MAKE DLL IMPORT */
+#endif//  defined(_M_AMD64)
+
+char __cdeMemCmpCDEINTRINABIAnchor;

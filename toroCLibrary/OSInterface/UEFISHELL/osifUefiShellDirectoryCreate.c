@@ -20,12 +20,27 @@ Author:
 
 --*/
 #define OS_EFI//parameter for CdeServices.h
+#define _INC_STDDEF         // exclude MSFT STDDEF.H, that conflicts with errno
 #include <CdeServices.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <string.h>
-#include <errno.h>
+//
+// stdlib.h
+//
+#define EXIT_SUCCESS 0
+#define EXIT_FAILURE 1
+
+//
+// string.h
+// 
+extern __declspec(dllimport) void* memset(void* s, int c, size_t n);
+
+//
+// errno.h
+//
+#define errno   (*_errno())
+#define ENOENT  2
+#define EEXIST  17
+extern __declspec(dllimport) int* _errno(void);
+
 /*++
 Synopsis
     #include <CdeServices.h>

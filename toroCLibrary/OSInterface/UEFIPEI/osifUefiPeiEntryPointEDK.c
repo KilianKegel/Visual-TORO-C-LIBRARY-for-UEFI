@@ -35,7 +35,7 @@ static void __cdeFatalCdeServicesNotAvailPEI(const EFI_PEI_SERVICES** PeiService
 //
 extern int main(int argc, char** argv);
 extern void _cdeSigDflt(int sig);
-extern struct _CDE_LCONV_LANGUAGE _locale_C_;
+extern struct _CDE_LCONV_LANGUAGE _cdeCLocale;
 extern GUID gEfiCallerIdGuid;
 extern char* gEfiCallerBaseName;
 extern int _cdeStr2Argcv(char** argv, char* szCmdline);
@@ -45,6 +45,7 @@ extern void* __cdeGetPeiServices(void);
 extern __declspec(dllimport) void* malloc(size_t size);
 extern __declspec(dllimport) void free(void* ptr);
 extern __declspec(dllimport) void* memset(void* s, int c, size_t n);
+extern __declspec(dllimport) void* memcpy(void* s1, const void* s2, size_t n);
 extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
 extern __declspec(dllimport) char* strcpy(char* pszDst, const char* pszSrc);
 #undef setjmp
@@ -74,7 +75,7 @@ static CDE_APP_IF_HOB CdeAppIfHobRomDflt =
     .CdeAppIf.pIob = (CDEFILE*)-1,
     .CdeAppIf.cIob = 0,
     .CdeAppIf.bmRuntimeFlags = TIANOCOREDEBUG,
-    .CdeAppIf.pActiveLocale = &_locale_C_,
+    .CdeAppIf.pActiveLocale = &_cdeCLocale,
 };
 ///
 // globals
@@ -101,7 +102,6 @@ Description
 **/
 void* __cdeGetAppIf(void)
 {
-    EFI_GUID AppIfGuid = gEfiCallerIdGuid;
     EFI_PEI_SERVICES** PeiServices;
     CDE_APP_IF* pCdeAppIfPei/*return NULL in case of CdeAppIf is n/a*/;
     EFI_STATUS Status;
@@ -125,14 +125,14 @@ void* __cdeGetAppIf(void)
     //
     // ... to be able to locate the CdeAppIf protocol
     //
-    Status = (*PeiServices)->LocatePpi(PeiServices, &AppIfGuid, 0, NULL, (void**)&pCdeAppIfPei);
+    Status = (*PeiServices)->LocatePpi(PeiServices, &gEfiCallerIdGuid, 0, NULL, (void**)&pCdeAppIfPei);
 
     if (Status != EFI_SUCCESS)
     {
         volatile int deadloop = 0;
     
         _outp(0x80, 0xCA/*TASTROPHE*/);
-
+        _outp(0x81, 0xCA/*TASTROPHE*/);
         while (0 == deadloop)
             ;
     }
@@ -163,6 +163,7 @@ void* __cdeGetAppIf(void)
 //          * DebugCodeEnabled()
 //          * DebugClearMemoryEnabled()
 //          * DebugPrintLevelEnabled()
+#include "..\EDK2ObjBlocker\_cdeStdCIntrinsics_c.h"
 #include "..\EDK2ObjBlocker\PeimEntryPoint_c.h"
 #include "..\EDK2ObjBlocker\DebugLib_c.h"
 
@@ -193,10 +194,9 @@ Description
 EFI_STATUS EFIAPI _cdeCRT0UefiPeiEDK(IN EFI_PEI_FILE_HANDLE FileHandle, IN CONST EFI_PEI_SERVICES** PeiServices)
 {
     EFI_STATUS Status = EFI_SUCCESS;
-    CDE_APP_IF* pCdeAppIf;
+    CDE_APP_IF* pCdeAppIf = NULL;
     CDE_SERVICES* pCdeServices;
     CDE_APP_IF_HOB* pCdeAppIfHob = &CdeAppIfHobRomDflt;
-    int i;
 
     do {
 
@@ -215,47 +215,48 @@ EFI_STATUS EFIAPI _cdeCRT0UefiPeiEDK(IN EFI_PEI_FILE_HANDLE FileHandle, IN CONST
             gPeiServices4EMULATION = (EFI_PEI_SERVICES**)PeiServices; // static memory is writeable
 
         //
-        // allocate HOB space, copy and initialize the CdeAppIf to publish as protocol
+        // allocate HOB space (if not yet before for that particular "gEfiCallerIdGuid"), copy and initialize the CdeAppIf to publish as protocol
         //
         if (1)
         {
             //
-            // allocate HOB space to get a small amount of r/w memory in PEI for placing the CDE protocol in there
+            // check if pCdeAppIf for that particular driver (AppIfGuid == gEfiCallerIdGuid) is already installed by a previous call
             //
-            Status = (*PeiServices)->CreateHob(PeiServices, EFI_HOB_TYPE_GUID_EXTENSION, sizeof(CDE_APP_IF_HOB), &pCdeAppIfHob);
-            if (EFI_SUCCESS != Status)
-                break;
-            //pCdeAppIfHob->HobGuidType.Name = gEfiCallerIdGuid;
+            Status = (*PeiServices)->LocatePpi(PeiServices, &gEfiCallerIdGuid, 0, NULL, (void**)&pCdeAppIf);
 
-            //
-            // initialize that memory / copy predefined settings from ROM to CAR cache as ram
-            //
-            for (i = 0; i < sizeof(CdeAppIfHobRomDflt); i++)
-                ((char*)pCdeAppIfHob)[i] = ((char*)&CdeAppIfHobRomDflt)[i];
+            if (NULL == pCdeAppIf)
+            {
+                //
+                // allocate HOB space to get a small amount of r/w memory in PEI for placing the CDE protocol in there
+                //
+                Status = (*PeiServices)->CreateHob(PeiServices, EFI_HOB_TYPE_GUID_EXTENSION, sizeof(CDE_APP_IF_HOB), &pCdeAppIfHob);
+                if (EFI_SUCCESS != Status)
+                    break;
 
-            pCdeAppIfHob->PpiDesc.Ppi = &pCdeAppIfHob->CdeAppIf;
+                //
+                // initialize that memory / copy predefined settings from ROM to CAR cache as ram
+                //
+                memcpy(pCdeAppIfHob, &CdeAppIfHobRomDflt, sizeof(CdeAppIfHobRomDflt));
 
-            //
-            // initialize remaining CdeAppIf structure in runtime HOB space
-            //
-            pCdeAppIf = &pCdeAppIfHob->CdeAppIf;
-            pCdeAppIf->pCdeServices = pCdeServices;
+                pCdeAppIfHob->PpiDesc.Ppi = &pCdeAppIfHob->CdeAppIf;
 
+                //
+                // initialize remaining CdeAppIf structure in runtime HOB space
+                //
+                pCdeAppIf = &pCdeAppIfHob->CdeAppIf;
+
+                //
+                // install the CdeAppIfProtocol (CDE application interface protocol)
+                //
+                Status = (*PeiServices)->InstallPpi(PeiServices, &pCdeAppIfHob->PpiDesc);
+                if (EFI_SUCCESS != Status)
+                    break;
+            }
+
+            pCdeAppIf->pCdeServices = pCdeServices;     // pCdeServices changes location from MemoryNonDiscovered to MemoryDiscovered
             pCdeAppIf->DriverParm.PeimParm.FileHandle = FileHandle;
             pCdeAppIf->DriverParm.PeimParm.PeiServices = (EFI_PEI_SERVICES**)PeiServices;
 
-            //
-            // patch the .PpiDesc.Guid to CDEA1Fxx.xxxx.xxxx.xx.xx.xx.xx.xx.xx.xx.xx
-            //
-            //pCdeAppIfHob->PpiDesc.Guid->Data1 &= 0xFF;          //kgtest
-            //pCdeAppIfHob->PpiDesc.Guid->Data1 |= 0xCDEA1F00;    //kgtest
-
-            //
-            // install the CdeAppIfProtocol (CDE application interface protocol)
-            //
-            Status = (*PeiServices)->InstallPpi(PeiServices, &pCdeAppIfHob->PpiDesc);
-            if (EFI_SUCCESS != Status)
-                break;
             pCdeAppIf = __cdeGetAppIf();
         }
 
@@ -279,7 +280,8 @@ _MainEntryPointPei(
 )
 {
     EFI_STATUS Status = EFI_SUCCESS;
-    void* argvex[CDE_ARGV_MAX + 2] = { (void*)FileHandle, (void*)PeiServices };//ADD SUPPORT FOR argv[-1] argv[-2]
+    void* argvex[CDE_ARGV_MAX + 2];         // DON'T INITIALIZE HERE, BECAUSE C COMPILER inserts memset()!!!
+
     //
     // LoadOptions / command line interface
     //
@@ -289,6 +291,12 @@ _MainEntryPointPei(
     int argc,i;
     CDE_SERVICES*pCdeServices;
     CDE_APP_IF* pCdeAppIf;
+    void* MemoryDiscoveredPpi;
+    static EFI_GUID EfiPeiMemoryDiscoveredPpiGuid = { 0xf894643d, 0xc449, 0x42d1, {0x8e, 0xa8, 0x85, 0xbd, 0xd8, 0xc6, 0x5b, 0xde } };
+
+    memset(argvex, 0, sizeof(argvex));      // instead do dedicated initialization that invokes __imp__memset()
+    argvex[0] = (void*)FileHandle;          // instead do dedicated initialization that invokes __imp__memset()
+    argvex[1] = (void*)PeiServices;         // instead do dedicated initialization that invokes __imp__memset()
 
     do {
 
@@ -303,6 +311,18 @@ _MainEntryPointPei(
 
         pCdeAppIf = __cdeGetAppIf();
 
+        //
+        // check memory discovered
+        //
+        Status = (*PeiServices)->LocatePpi(PeiServices, &EfiPeiMemoryDiscoveredPpiGuid, 0, NULL, (void**)&MemoryDiscoveredPpi);
+
+        if (EFI_SUCCESS == Status)
+        {
+            if (0 == pCdeServices->fMemoryDiscovered) {
+                pCdeServices->fMemoryDiscovered = 1;
+                pCdeServices->HeapStart = (HEAPDESC){ (void*)-1,ENDOFMEM,1,NULL,NULL,0,0,(void*)-1 };
+            }
+        }
         //
         // get the LoadOptions / command line from the LoadOptions driver
         //
@@ -341,8 +361,7 @@ _MainEntryPointPei(
         //
         argc = _cdeStr2Argcv((char**)&argvex[0 + 2], pLoadOptionsRW);
 
-        for (i = 0; i < CDE_ATEXIT_REGISTRATION_NUM; i++)
-            pCdeAppIf->rgcbAtexit[i] = NULL;
+        memset(&pCdeAppIf->rgcbAtexit[0], 0, CDE_ATEXIT_REGISTRATION_NUM * sizeof(pCdeAppIf->rgcbAtexit[0]));
 
         Status = setjmp(pCdeAppIf->exit_buf) ? pCdeAppIf->exit_status : main(argc, (char**)&argvex[0 + 2]);
 

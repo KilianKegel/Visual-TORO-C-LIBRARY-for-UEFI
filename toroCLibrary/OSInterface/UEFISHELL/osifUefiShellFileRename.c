@@ -20,16 +20,37 @@ Author:
 
 --*/
 #define OS_EFI
+#define _INC_STDDEF         // exclude MSFT STDDEF.H, that conflicts with errno
+#include <CdeServices.h>
 #include <PiPei.h>
 #include <Base.h>
-#include <CdeServices.h>
 #include <Protocol\Shell.h>
 #include <guid\FileInfo.h>
+#include <stddef.h>
+//
+// string.h
+// 
+extern __declspec(dllimport) void* memset(void* s, int c, size_t n);
+// 
+// stdlib.h
+//
+extern __declspec(dllimport) void* malloc(size_t size);
+extern __declspec(dllimport) void free(void* ptr);
+// 
+// wchar.h
+//
+extern __declspec(dllimport) size_t wcslen(const wchar_t* pszBuffer);
+extern __declspec(dllimport) wchar_t* wcsrchr(const wchar_t* wcs, wchar_t c);
+extern __declspec(dllimport) wchar_t* wcscpy(wchar_t* pszDst, const wchar_t* pszSrc);
+//
+// errno.h
+//
+#define errno   (*_errno())
+#define ENOENT  2
+#define EEXIST  17
+extern __declspec(dllimport) int* _errno(void);
+
 #include <cde.h>
-#include <string.h>
-#include <stdlib.h>
-#include <wchar.h>
-#include <errno.h>
 
 #define ELC(x) sizeof(x) / sizeof(x[0])
 

@@ -22,10 +22,18 @@ Author:
     Kilian Kegel
 
 --*/
-//#undef NCDETRACE
-//#include <stdlib.h>
-#include <string.h>
+#define _INC_STDDEF         // exclude MSFT STDDEF.H, that conflicts with errno
 #include <CdeServices.h>
+// 
+// string.h
+// 
+extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
+extern __declspec(dllimport) int strcmp(const char* pszDst, const char* pszSrc);
+extern __declspec(dllimport) char* strcpy(char* pszDst, const char* pszSrc);
+extern __declspec(dllimport) char* strncpy(char* pszDst, const char* pszSrc, size_t n);
+extern __declspec(dllimport) char* strtok(char* pszStr, const char* pszSet);
+extern __declspec(dllimport) int _stricmp(const char* pszDst, const char* pszSrc);
+extern __declspec(dllimport) void* memset(void* s, int c, size_t n);
 
 //
 // stdio.h
@@ -35,6 +43,13 @@ Author:
 extern void* __cdeGetIOBuffer(unsigned i);
 __declspec(dllimport) void* malloc(size_t size);
 __declspec(dllimport) void free(void* ptr);
+
+//
+// ERRNO.H
+//
+#define EINVAL  22
+#define errno   (*_errno())
+extern __declspec(dllimport) int* _errno(void);
 
 /** fopen
 Synopsis

@@ -19,7 +19,9 @@
 
     .model flat, C
     .code
+    public longjmp
     public _imp__longjmp
+    public __cdeLONGJMPCDEINTRINABIAnchor
 REGISTERS struct
     _ebx    DWORD ?
     _ecx    DWORD ?
@@ -30,7 +32,7 @@ REGISTERS struct
     _ret    DWORD ?
 REGISTERS ends
 
-longjmpCDEABI proc near pBuf:DWORD,val:DWORD
+longjmp proc near pBuf:DWORD,val:DWORD
 
     mov edx,[pBuf]
     mov eax,[val]
@@ -47,8 +49,10 @@ longjmpCDEABI proc near pBuf:DWORD,val:DWORD
     mov edx,[edx + REGISTERS._ret]
     jmp edx
    ret
-longjmpCDEABI endp
+longjmp endp
 
-_imp__longjmp dd longjmpCDEABI
+_imp__longjmp dd longjmp
+
+__cdeLONGJMPCDEINTRINABIAnchor LABEL NEAR
 
 end

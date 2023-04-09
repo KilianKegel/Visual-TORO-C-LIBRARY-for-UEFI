@@ -24,12 +24,11 @@ Author:
 #define _CTYPE_DISABLE_MACROS
 #include <CdeServices.h>
 
-#include <wctype.h>
-#include <_wctype.h>
+#include <_wctypeCDEABI.h>
 #include <string.h>
 
 #define ELC(x)/*element count*/ (sizeof(x) / sizeof(x[0]))
-extern WCPROPERTY __cdeWcproperty[];
+extern WCPROPERTYCDEABI __cdeWcpropertyCDEABI[];
 
 /** Brief description of the function’s purpose.
 
@@ -81,11 +80,11 @@ static int iswctypeCDEABI(wint_t wc, wctype_t desc) {
             if (!(mask & desc))
                 continue;
 
-            for (j = 0; NULL != __cdeWcproperty[j].szProperty; j++) {
+            for (j = 0; NULL != __cdeWcpropertyCDEABI[j].szProperty; j++) {
 
-                if (mask & __cdeWcproperty[j].type) {
+                if (mask & __cdeWcpropertyCDEABI[j].type) {
 
-                    if (0 != (mask & (__cdeWcproperty[j].fun)(wc)))
+                    if (0 != (mask & (*__cdeWcpropertyCDEABI[j].fun)(wc)))
                         nRet |= mask;
                     break;
                 }

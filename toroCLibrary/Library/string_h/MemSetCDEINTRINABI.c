@@ -8,9 +8,11 @@
 
 Module Name:
 
-    MemSet.c
+    MemSetCDEABI.c
 
 Abstract:
+
+    Monolithic COMDAT __declspec(dllimport) and __cdecl Library version
 
     Implementation of the Standard C function.
     Sets buffers to a specified character.
@@ -21,6 +23,7 @@ Author:
 
 --*/
 #include <stddef.h>
+#include <CdeServices.h>
 
 /**
 
@@ -49,3 +52,11 @@ void* memset(void* s, int c, size_t n) {
         p[i] = (unsigned char)c;
     return s;
 }
+
+#if   defined(_M_AMD64)
+void* __imp_memset = (void*)memset;/* CDE MAKE DLL IMPORT */
+#else//   defined(_M_AMD64)
+void* _imp__memset = (void*)memset;/* CDE MAKE DLL IMPORT */
+#endif//  defined(_M_AMD64)
+
+char __cdeMemSetCDEINTRINABIAnchor;

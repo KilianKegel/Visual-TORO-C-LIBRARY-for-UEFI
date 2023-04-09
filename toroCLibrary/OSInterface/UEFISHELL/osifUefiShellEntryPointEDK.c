@@ -20,9 +20,18 @@ Author:
 
 --*/
 #define OS_EFI
-#include <stdio.h>
-#include <signal.h>
-#include <setjmp.h>
+//
+// stdio.h
+//
+#define EOF    (-1)
+//
+// signal.h
+//
+#define SIGINT  2
+//
+// setjmp.h
+//
+
 #include <errno.h>
 
 #undef NULL
@@ -120,7 +129,7 @@ extern void* _CdeLocateProtocol(IN EFI_GUID* Protocol, IN void* Registration OPT
 
 extern int _cdeStr2Argcv(char** argv, char* szCmdline);
 extern void _cdeSigDflt(int sig);
-extern struct _CDE_LCONV_LANGUAGE _locale_C_;
+extern struct _CDE_LCONV_LANGUAGE _cdeCLocale;
 extern char _gSTDOUTMode;   /* 0 == UEFI Shell default, 1 == ASCII only */
 extern char __cdeGetCurrentPrivilegeLevel(void);
 extern EFI_GUID _gCdeDxeProtocolGuid;
@@ -136,8 +145,13 @@ extern __declspec(dllimport) void free(void* ptr);
 extern __declspec(dllimport) void* memset(void* s, int c, size_t n);
 extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
 extern __declspec(dllimport) char* strcpy(char* pszDst, const char* pszSrc);
-#undef setjmp
-extern __declspec(dllimport) int setjmp(jmp_buf);
+extern __declspec(dllimport) int fclose(FILE* stream);
+extern __declspec(dllimport) int fgetc(FILE* stream);
+extern __declspec(dllimport) size_t fwrite(const void* ptr, size_t size, size_t nelem, FILE* stream);
+extern __declspec(dllimport) int sprintf(char* pszDest, const char* pszFormat, ...);
+extern __declspec(dllimport) int raise(int sig);
+//#undef setjmp
+//extern __declspec(dllimport) int setjmp(jmp_buf);
 
 //
 // globals
@@ -155,6 +169,7 @@ static EFI_GUID _gEfiStatusCodeRuntimeProtocolGuid = { 0xD2B2B828, 0x0826, 0x48A
 //
 // include the original tianocore/UEFI DriverEntryPoint.c
 //
+#include "..\EDK2ObjBlocker\_cdeStdCIntrinsics_c.h"
 #include "..\EDK2ObjBlocker\ApplicationEntryPoint_c.h"
 #include "..\EDK2ObjBlocker\DebugLib_c.h"
 
@@ -293,7 +308,7 @@ CDE_APP_IF CdeAppIfShell = {
     .pIob = &_iob[0],
     .cIob = CDE_FILEV_MAX,
     .bmRuntimeFlags = 0,    /* clear all runtimeflags   */
-    .pActiveLocale = &_locale_C_
+    .pActiveLocale = &_cdeCLocale
 };
 
 void __CdeChkCtrlC(void) {
@@ -325,7 +340,7 @@ _MainEntryPointShell(
     IN EFI_SYSTEM_TABLE* SystemTable
 )
 {
-    void* argvex[CDE_ARGV_MAX + 2] = { NULL,NULL };//ADD SUPPORT FOR argv[-1] argv[-2]
+    void* argvex[CDE_ARGV_MAX + 2];         // DON'T INITIALIZE HERE, BECAUSE C COMPILER inserts memset()!!!
     static char szDelims[] = { " \t" };
     wchar_t* pwcsCmdLine;
     char szCmdLine[CDE_CMD_LINE_LEN];
@@ -354,8 +369,9 @@ _MainEntryPointShell(
             _cdegST = SystemTable;
             _cdegBS = SystemTable->BootServices;
 
-            argvex[0] = (void*)ImageHandle;
-            argvex[1] = (void*)SystemTable;//ADD SUPPORT FOR argv[-1] argv[-2]
+            memset(argvex, 0, sizeof(argvex));      // instead do dedicated initialization that invokes __imp__memset()
+            argvex[0] = (void*)ImageHandle;         // instead do dedicated initialization that invokes __imp__memset()
+            argvex[1] = (void*)SystemTable;         // instead do dedicated initialization that invokes __imp__memset()
 
             CdeAppIfShell.DriverParm.BsDriverParm.ImageHandle = ImageHandle;
             CdeAppIfShell.DriverParm.BsDriverParm.pSystemTable = SystemTable;

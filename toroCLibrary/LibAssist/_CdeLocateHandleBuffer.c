@@ -19,10 +19,21 @@ Author:
     Kilian Kegel
 
 --*/
+#include <stddef.h>
+#undef NULL
 #include <uefi.h>
-#include <stdlib.h>
-#include <string.h>
+// 
+// stdlib.h
+//
+extern __declspec(dllimport) void* malloc(size_t size);
+//extern __declspec(dllimport) void free(void* ptr);
+//
+// string.h
+//
+extern __declspec(dllimport) void* memcpy(void* s1, const void* s2, size_t n);
 #include <CdeServices.h>
+#include <cde.h>
+
 #include <Protocol\Shell.h>
 #include <Protocol\DevicePathToText.h>
 

@@ -19,26 +19,28 @@ Author:
     Kilian Kegel
 
 --*/
-//#undef NMOFINE
-//#define MOFINE_CONFIG       MOFINE_STDOUT  | MOFINE_NDRIVER | MOFINE_NFILE |/* MOFINE_NLINE | /*MOFINE_NFUNCTION | */MOFINE_NCLOCK /*| MOFINE_NCLASS | MOFINE_RAWFORMAT */
 #define OS_EFI
+#define _INC_STDDEF         // exclude MSFT STDDEF.H, that conflicts with errno
 #include <CdeServices.h>
 #include <cde.h>
-#include <wchar.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
+//
+// wchar.h
+//
+extern __declspec(dllimport) int wcsncmp(const wchar_t* pszDst, const wchar_t* pszSrc, size_t count);
+
+//
+// string.h
+//
+extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
+
 #include <Protocol\SimpleFileSystem.h>
 #include <CdeServices.h>
 #include <Protocol\Shell.h>
 #include "Protocol\DevicePathToText.h"
 # define ELC(x)/*ELementCount*/ (sizeof(x) / sizeof(x[0]))
-//#undef NMOFINE
-#include <cde.h>
 
 extern EFI_SHELL_PROTOCOL* pEfiShellProtocol;
 extern EFI_SYSTEM_TABLE* _cdegST;
-extern int wcsncmp(const wchar_t* pszDst, const wchar_t* pszSrc, size_t count);
 
 EFI_TEXT_CLEAR_SCREEN   pConIOClr;
 EFI_TEXT_STRING         pConIOPutStr;

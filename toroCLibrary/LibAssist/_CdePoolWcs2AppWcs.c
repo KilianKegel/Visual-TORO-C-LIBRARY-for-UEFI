@@ -20,9 +20,20 @@ Author:
     Kilian Kegel
 
 --*/
+#include <stddef.h>
+#undef NULL
 #include <uefi.h>
-#include <wchar.h>
-#include <stdlib.h>
+//
+// wchar.h
+//
+extern __declspec(dllimport) wchar_t* wcscpy(wchar_t* pszDst, const wchar_t* pszSrc);
+extern __declspec(dllimport) size_t wcslen(const wchar_t* pszBuffer);
+
+//
+// stdlib.h
+//
+extern __declspec(dllimport) void* malloc(size_t size);
+
 #include <CdeServices.h>
 
 extern EFI_SYSTEM_TABLE* _cdegST;

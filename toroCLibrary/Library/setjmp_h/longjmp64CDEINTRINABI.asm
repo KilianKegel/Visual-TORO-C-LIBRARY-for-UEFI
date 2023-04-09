@@ -16,7 +16,9 @@
 ;
 ;--*/
     .code
+    public longjmp
     public __imp_longjmp
+    public __cdeLONGJMPCDEINTRINABIAnchor
 REGISTERS struct
 
     _xmm6   XMMWORD ?
@@ -55,7 +57,7 @@ REGISTERS ends
 ;000000014001A9AE  fnclex  
 ;000000014001A9B0  fldcw       word ptr [rcx+5Ch]  
 
-longjmpCDEABI proc
+longjmp proc
 
 ;pBuf:QWORD,val:QWORD
 
@@ -93,39 +95,10 @@ longjmpCDEABI proc
     mov rdx,[rcx + REGISTERS._ret]
     jmp rdx
 
-longjmpCDEABI endp
+longjmp endp
 
-__imp_longjmp dq longjmpCDEABI
+__imp_longjmp dq longjmp
+
+__cdeLONGJMPCDEINTRINABIAnchor LABEL NEAR
 
 end
-
-;   mov rcx,[pBuf]
-;   mov rdx,[val]
-;
-;   mov ebx,[edx + REGISTERS._ebx]
-;   mov ecx,[edx + REGISTERS._ecx]
-;   mov edi,[edx + REGISTERS._edi]
-;   mov esi,[edx + REGISTERS._esi]
-;   mov ebp,[edx + REGISTERS._ebp]
-;   mov esp,[edx + REGISTERS._esp]
-;   .if eax == 0
-;       mov eax,1
-;   .endif
-;   mov rdx,[rdx + REGISTERS._ret]
-;   jmp rdx
-
-
-;.if rdx == 0
-;   inc rdx
-;.endif
-;
-;.if [edx + REGISTERS._eax] == 0
-;never run here
-;
-;000000014001A977  test        rdx,rdx  
-;000000014001A97A  jne         LJ10 (014001A97Fh)  
-;000000014001A97C  inc         rdx  
-;000000014001A97F  xor         r10,r10  
-;000000014001A982  cmp         qword ptr [rcx],r10  
-;000000014001A985  jne         LJ10+94h (014001AA13h)  
-;000000014001A98B  mov         rax,rdx  

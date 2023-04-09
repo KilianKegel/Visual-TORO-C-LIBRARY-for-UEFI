@@ -21,8 +21,17 @@ Author:
 
 --*/
 
-#include <stdio.h>
+#include <cde.h>
 #include <CdeServices.h>
+//
+// stdio.h
+//
+#define SEEK_CUR    1
+#define SEEK_END    2
+#define SEEK_SET    0
+#define EOF    (-1)
+extern __declspec(dllimport) int fsetpos(FILE* stream, const fpos_t* pos);
+
 
 extern int __cdeIsFilePointer(void* stream);
 

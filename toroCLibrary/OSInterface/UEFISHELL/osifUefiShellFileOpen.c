@@ -21,8 +21,19 @@ Author:
 --*/
 //#undef NCDETRACE
 #define OS_EFI
-
-#include <string.h>
+#include <stddef.h>
+//
+// string.h
+//
+extern __declspec(dllimport) wchar_t* wcschr(const wchar_t* wcs, wchar_t c);
+extern __declspec(dllimport) wchar_t* wcscat(wchar_t* s1, const wchar_t* s2);
+extern __declspec(dllimport) wchar_t* wcscpy(wchar_t* pszDst, const wchar_t* pszSrc);
+extern __declspec(dllimport) int wcsncmp(const wchar_t* pszDst, const wchar_t* pszSrc, size_t count);
+extern __declspec(dllimport) wchar_t* wcsncpy(wchar_t* pszDst, const wchar_t* pszSrc, size_t n);
+extern __declspec(dllimport) wchar_t* wcstok(wchar_t* pszStr, const wchar_t* pszSet, wchar_t** ppLast);
+extern __declspec(dllimport) int _wcsicmp(const wchar_t* pszDst, const wchar_t* pszSrc);
+extern __declspec(dllimport) int strcmp(const char* pszDst, const char* pszSrc);
+extern __declspec(dllimport) int _stricmp(const char* pszDst, const char* pszSrc);
 #include <errno.h>
 
 #undef NULL
@@ -34,7 +45,6 @@ Author:
 #include <cde.h>
 #include <CdeServices.h>
 
-extern int _wcsicmp(const wchar_t* pszDst, const wchar_t* pszSrc);
 extern CDESYSTEMVOLUMES gCdeSystemVolumes;
 extern void* _CdeLocateProtocol(IN EFI_GUID* Protocol, IN void* Registration OPTIONAL/*,OUT void **Interface*/);
 

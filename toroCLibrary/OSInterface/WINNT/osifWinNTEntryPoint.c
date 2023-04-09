@@ -113,7 +113,7 @@ extern _PVFV* __xt_a; // C terminators (first)
 extern _PVFV* __xt_z; // C terminators (last)
 
 extern void _cdeSigDflt(int sig);
-extern struct _CDE_LCONV_LANGUAGE _locale_C_;
+extern struct _CDE_LCONV_LANGUAGE _cdeCLocale;
 
 static void _StdOutPutChar(int c, void** ppDest) {
     if (c == EOF)
@@ -237,7 +237,7 @@ static CDE_APP_IF gCdeAppIfWinNT = {
     .pIob = &_iob[0],
     .cIob = CDE_FILEV_MAX,
     .bmRuntimeFlags = TIANOCOREDEBUG,
-    .pActiveLocale = &_locale_C_
+    .pActiveLocale = &_cdeCLocale
 };
 
 /**

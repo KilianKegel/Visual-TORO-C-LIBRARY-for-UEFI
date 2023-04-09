@@ -25,7 +25,17 @@ Author:
 #include <CdeServices.h>
 #include <stdio.h>
 #include <limits.h>
-#include <ctype.h>
+//
+// ctype.h
+//
+extern __declspec(dllimport) int isspace(int c);
+extern __declspec(dllimport) int isdigit(int c);
+extern __declspec(dllimport) int isxdigit(int c);
+//
+// string.h
+//
+extern __declspec(dllimport) void* memset(void* s, int c, size_t n);
+
 #include <stdarg.h>
 
 #define XWORD unsigned long long
@@ -39,7 +49,6 @@ Author:
 #define void unsigned char
 
 extern int ComputeFieldSize(char* pfieldsizebuf);
-extern int isspace(int c);
 extern uint64_t _cdeUMUL128(uint64_t a, uint64_t b, uint64_t* pHigh);
 
 static int StoreTerminate(int fWide, int fTerminate, void* pVoid, int nMaxChars, int* pIndex, int c) {
@@ -151,7 +160,7 @@ static int str2num(STRDESC* pParms, int (*pfnDevGetChar)(void** ppSrc), int (*pf
         PROCESS_ERROR
     }state = PROCESS_BLANKS;
 
-    for (i = 0; i < sizeof(rgBuf); i++)rgBuf[i] = -1;
+    memset(rgBuf, -1, sizeof(rgBuf));
     i = 0;
     while (state != PROCESS_DONE) {
 

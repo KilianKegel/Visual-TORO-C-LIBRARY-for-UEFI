@@ -22,7 +22,7 @@ Author:
 
 --*/
 #define _CTYPE_DISABLE_MACROS
-#include <_wctype.h>
+#include <_wctypeCDEABI.h>
 #include <CdeServices.h>
 
 //

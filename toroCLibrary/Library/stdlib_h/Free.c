@@ -35,5 +35,7 @@ Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/free?view=msvc-160#remarks
 **/
 void free(void* ptr) {
-    realloc(ptr, 0);
+
+    if(NULL != ptr)
+        realloc(ptr, 0);
 }

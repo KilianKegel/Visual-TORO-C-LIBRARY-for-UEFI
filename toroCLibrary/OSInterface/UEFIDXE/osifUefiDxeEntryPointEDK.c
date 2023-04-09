@@ -45,7 +45,7 @@ EFI_RUNTIME_SERVICES*    _cdegRT;
 
 extern int main(int argc, char** argv);
 extern void _cdeSigDflt(int sig);
-extern struct _CDE_LCONV_LANGUAGE _locale_C_;
+extern struct _CDE_LCONV_LANGUAGE _cdeCLocale;
 extern GUID gEfiCallerIdGuid;
 extern int _cdeStr2Argcv(char** argv, char* szCmdline);
 extern char __cdeGetCurrentPrivilegeLevel(void);
@@ -63,8 +63,6 @@ extern __declspec(dllimport) void free(void* ptr);
 extern __declspec(dllimport) void* memset(void* s, int c, size_t n);
 extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
 extern __declspec(dllimport) char* strcpy(char* pszDst, const char* pszSrc);
-#undef setjmp
-extern __declspec(dllimport) int setjmp(jmp_buf);
 
 //
 // globals
@@ -90,7 +88,7 @@ static CDE_APP_IF CdeAppIfDxe = {
     .pIob = NULL,   // &_iob[0],
     .cIob = 0,      //CDE_FILEV_MIN,  /* _iobCnt,                 */
     .bmRuntimeFlags = TIANOCOREDEBUG,
-    .pActiveLocale = &_locale_C_
+    .pActiveLocale = &_cdeCLocale
 };
 
 /** __cdeGetAppIf()
@@ -138,6 +136,7 @@ void* __cdeGetAppIf(void)
 //          * DebugCodeEnabled()
 //          * DebugClearMemoryEnabled()
 //          * DebugPrintLevelEnabled()
+#include "..\EDK2ObjBlocker\_cdeStdCIntrinsics_c.h"
 #include "..\EDK2ObjBlocker\DriverEntryPoint_c.h"
 #include "..\EDK2ObjBlocker\DebugLib_c.h"
 
@@ -260,8 +259,7 @@ EFI_STATUS EFIAPI _MainEntryPointDxe(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TA
         //
         argc = _cdeStr2Argcv((char**)&argvex[0 + 2], pLoadOptionsRW);
 
-        for (i = 0; i < CDE_ATEXIT_REGISTRATION_NUM; i++)
-            CdeAppIfDxe.rgcbAtexit[i] = NULL;
+        memset(&CdeAppIfDxe.rgcbAtexit[0], 0, CDE_ATEXIT_REGISTRATION_NUM * sizeof(CdeAppIfDxe.rgcbAtexit[0]));
 
         if (0 == __cdeGetCurrentPrivilegeLevel())       // running in RING0
             _enable();

@@ -96,18 +96,6 @@ void* _cdeMemRealloc(
 #define TBS ((unsigned)((PBYTE)&pThis->pSucc[0] - (PBYTE)&pThis[1]))    /* THIS BLOCK SIZE */
 #define XBS (pThis->pSucc->qwMagic == FREEMEM ? ((unsigned)((PBYTE)&pThis->pSucc->pSucc[0] - (PBYTE)&pThis[1])) : 0) /* EXTENDABLE BLOCK SIZE */
 
-    //
-    // restart memory allocation if switched from Pre-Memory-PEI to Post-Memory-PEI
-    //
-    if (1/**/) {
-        long long start = (long long)pHeapStart;
-        long long succ = (long long)pHeapStart->pSucc;
-
-        if (start > 0 && succ < 0) {
-
-            pCdeAppIf->pCdeServices->HeapStart = (HEAPDESC){ (void*)-1,ENDOFMEM,1,NULL,NULL,0,0,(void*)-1 };//heapdesc;
-        }
-    }
     do {
 
         if (ptr != NULL) 
@@ -192,30 +180,28 @@ void* _cdeMemRealloc(
             //
             //todo: add validity check!!!
             //
-            if (0 < (ptrdiff_t)pThis)/*KG20220529_1 pointer < 0 always wrong*/{
-                if (pThis->qwMagic == ALLOCMEM) {/*KG20170815_1 don't do anything if not own memory */
-                    pThis->qwMagic = FREEMEM;
+            if (pThis->qwMagic == ALLOCMEM) {/*KG20170815_1 don't do anything if not own memory */
+                pThis->qwMagic = FREEMEM;
 
-                    if (pThis->pSucc->qwMagic == FREEMEM/*ree*/) {								// fuse with successor
-                        pThis->pSucc = pThis->pSucc->pSucc;
-                        pThis->pSucc->pPred = pThis;
-                    }
+                if (pThis->pSucc->qwMagic == FREEMEM/*ree*/) {								// fuse with successor
+                    pThis->pSucc = pThis->pSucc->pSucc;
+                    pThis->pSucc->pPred = pThis;
+                }
 
-                    if (pThis->pPred != NULL && pThis->pPred->qwMagic == FREEMEM) {			// fuse with predessor -> remove pThis
-                        pThis->pPred->pSucc = pThis->pSucc;
-                        pThis->pSucc->pPred = pThis->pPred;
+                if (pThis->pPred != NULL && pThis->pPred->qwMagic == FREEMEM) {			// fuse with predessor -> remove pThis
+                    pThis->pPred->pSucc = pThis->pSucc;
+                    pThis->pSucc->pPred = pThis->pPred;
 
-                        pThis = pThis->pPred;
+                    pThis = pThis->pPred;
+                }
+                if (FALSE == pThis->fInalterable && (pThis->pPred->qwMagic == ENDOFMEM) && (pThis->pSucc->qwMagic == ENDOFMEM)) {	//free pages
+                    pThis->pPred->pSucc = pThis->pSucc->pSucc;
+                    if (NULL != pThis->pSucc->pSucc) {
+                        pThis->pSucc->pSucc->pPred = pThis->pPred;
                     }
-                    if (FALSE == pThis->fInalterable && (pThis->pPred->qwMagic == ENDOFMEM) && (pThis->pSucc->qwMagic == ENDOFMEM)) {	//free pages
-                        pThis->pPred->pSucc = pThis->pSucc->pSucc;
-                        if (NULL != pThis->pSucc->pSucc) {
-                            pThis->pSucc->pSucc->pPred = pThis->pPred;
-                        }
-                        pCdeAppIf->pCdeServices->pMemFree(pCdeAppIf, pThis->PageBase, (unsigned int)pThis->Pages);
-                    }
-                }/*KG20170815_1 don't do anything if not own memory */
-            }
+                    pCdeAppIf->pCdeServices->pMemFree(pCdeAppIf, pThis->PageBase, (unsigned int)pThis->Pages);
+                }
+            }/*KG20170815_1 don't do anything if not own memory */
             pThis = NULL;
             break;
         }

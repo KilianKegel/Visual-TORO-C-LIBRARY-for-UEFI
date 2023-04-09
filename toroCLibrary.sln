@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		CdePkg\Include\VS2022\assert.h = CdePkg\Include\VS2022\assert.h
 		CdePkg\Include\CDE.h = CdePkg\Include\CDE.h
+		CdePkg\Include\CdeServices.h = CdePkg\Include\CdeServices.h
 		clean.bat = clean.bat
 		CdePkg\Include\VS2022\ctype.h = CdePkg\Include\VS2022\ctype.h
 		CdePkg\Include\VS2022\errno.h = CdePkg\Include\VS2022\errno.h

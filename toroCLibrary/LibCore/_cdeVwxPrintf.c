@@ -23,6 +23,10 @@ Author:
 #include <CdeServices.h>
 #include <stdarg.h>
 #include <stdint.h>
+//
+// string.h
+//
+extern __declspec(dllimport) void* memset(void* s, int c, size_t n);
 
 //
 // prototype
@@ -30,7 +34,6 @@ Author:
 VWXPRINTF _cdeVwxPrintf;
 extern void _CdeMemPutChar(int c, void** ppDest);
 extern int _cdeCoreSprintf(CDE_APP_IF* pCdeAppIf, char* pszDest, const char* pszFormat, ...);
-extern void* memset(void* s, int c, size_t n);
 
 #define BUFFLEN (64 + 2)
 #define XWORD unsigned long long

@@ -3,15 +3,38 @@
 [**toro C Library**](https://github.com/KilianKegel/toro-C-Library#toro-c-library-formerly-known-as-torito-c-library)
 
 ```
-    Copyright (c) 2017-2022, Kilian Kegel. All rights reserved.
+    Copyright (c) 2017-2023, Kilian Kegel. All rights reserved.
     SPDX-License-Identifier: GNU General Public License v3.0
 ```
 
 ## Revision history
+### 20230409
+* add Memory Discovered (https://uefi.org/sites/default/files/resources/PI_Spec_1_6.pdf#page=111) handling for PEIM (Pre-EFI Initialization Module)
+    * restart memory management when switching from CAR (Cash As RAM) to permanent memory
+    * reassign `CDE_SERVICES` pointer when switching from CAR (Cash As RAM) to permanent memory
+* support of multi-invocation of `CdePkg`-based PEIM
+    * NOTE: Each `CdePkg`-based PEIM needs a small, read-/writeable, dedicated static duration to provide
+      Standard C Library compliance (e.g. to hold `atexit()`-registered function pointers, the internal `strtok()`pointer, the `rand()` next, the jump buffer,
+      the I/O buffer for `stdin`, `stdout` and `stderr` ...).
+      
+      Internally this is provided in the HOB storage area and holds a `CDE_APP_IF` protocol registered with the driver specific `gEfiCallerIdGuid`.
+      HOB storage is available early in POST in PEI (Pre-EFI Initialization).
+
+      Once a PEIM is started multiple times, only the first instance static duration will be reinitialized with current `EFI_PEI_FILE_HANDLE`,
+      `EFI_PEI_SERVICES` and the current `CDE_SERVICES` pointer.
+
+      This proceeding prevents `LocatePpi()` to return an invalid pointer to the first instance, while a second instance is currently active.
+      
+* improve `CDEABI` (*C Development Environment Application Binary Interface*), used as collision avoidance with EDK2 `StdLibC` and relatives<br>
+  NOTE: In real-world UEFI implementations various components provide (*reduced*)[https://github.com/tianocore/edk2/blob/master/CryptoPkg/Library/BaseCryptLib/SysCall/CrtWrapper.c#L603]
+  Standard C Interface just fitting the requirements of that particular package (`CryptoPkg`, `RedfishPkg`).<br>
+  To avoid symbol double definitions at link time or link order failures , `CDEABI`:<br>
+    * provides Standard C Functions in their `__declspec(dllimport)` incarnation only
+    * except for Microsoft compiler intrinsics `__cdecl memset()` and `__cdecl memcmp()` that are paired with the its `__declsspec(dllimport)` counterpart in the same COMDAT (same .OBJ module)
 ### 20230304
 * fixed `strtok()`, `wcstok()`
 ### 20230212
-* introduce `CDEABI`, an additional application binary interface ABI to ease coexistance of `CdePkg` based BIOS 
+* introduce `CDEABI`(*C Development Environment Application Binary Interface*), an additional application binary interface ABI to ease coexistance of `CdePkg` based BIOS 
     drivers with incomplete [tianocore EDK2](https://github.com/tianocore/edk2) `C Library` 
     [fragments](https://github.com/tianocore/edk2/blob/master/CryptoPkg/Library/BaseCryptLib/SysCall/CrtWrapper.c#L603)
 

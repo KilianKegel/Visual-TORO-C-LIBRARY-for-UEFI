@@ -21,7 +21,7 @@ Author:
     Kilian Kegel
 
 --*/
-#include <_wctype.h>
+#include <_wctypeCDEABI.h>
 #include <CdeServices.h>
 //
 // wctype.

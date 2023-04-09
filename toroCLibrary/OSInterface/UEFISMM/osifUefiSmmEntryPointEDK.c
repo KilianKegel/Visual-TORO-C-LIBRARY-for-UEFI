@@ -45,7 +45,7 @@ EFI_SMM_SYSTEM_TABLE2*   _cdegSmst;
 
 extern int main(int argc, char** argv);
 extern void _cdeSigDflt(int sig);
-extern struct _CDE_LCONV_LANGUAGE _locale_C_;
+extern struct _CDE_LCONV_LANGUAGE _cdeCLocale;
 extern GUID gEfiCallerIdGuid;
 extern char* gEfiCallerBaseName;
 extern EFI_STATUS EFIAPI OemHookStatusCodeInitialize(void);
@@ -91,7 +91,7 @@ static CDE_APP_IF CdeAppIfSmm = {
     .pIob = NULL,           //&_iob[0],
     .cIob = 0,              //CDE_FILEV_MIN,  /* _iobCnt,                 */
     .bmRuntimeFlags = TIANOCOREDEBUG,
-    .pActiveLocale = &_locale_C_
+    .pActiveLocale = &_cdeCLocale
 };
 
 /** __cdeGetAppIf()
@@ -139,6 +139,7 @@ void* __cdeGetAppIf(void)
 //          * DebugCodeEnabled()
 //          * DebugClearMemoryEnabled()
 //          * DebugPrintLevelEnabled()
+#include "..\EDK2ObjBlocker\_cdeStdCIntrinsics_c.h"
 #include "..\EDK2ObjBlocker\DriverEntryPoint_c.h"
 #include "..\EDK2ObjBlocker\DebugLib_c.h"
 
@@ -293,8 +294,7 @@ EFI_STATUS EFIAPI _MainEntryPointSmm(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TA
         //
         argc = _cdeStr2Argcv((char**)&argvex[0 + 2], pLoadOptionsRW);
 
-        for (i = 0; i < CDE_ATEXIT_REGISTRATION_NUM; i++)
-            CdeAppIfSmm.rgcbAtexit[i] = NULL;
+        memset(&CdeAppIfSmm.rgcbAtexit[0], 0, CDE_ATEXIT_REGISTRATION_NUM * sizeof(CdeAppIfSmm.rgcbAtexit[0]));
 
         //if (0 == __cdeGetCurrentPrivilegeLevel())       // running in RING0
         //    _enable();

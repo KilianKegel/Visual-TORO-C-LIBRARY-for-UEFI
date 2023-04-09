@@ -25,6 +25,8 @@ Author:
 #define _DONT_USE_EDK2_MODULEENTRYPOINT_OVERRIDE_   // block _cdeCRT0UefiDxeEDK() from beeing included
 #define _DEBUG_LIB_C_H_                             // block DebugLib.c from beeing included
 #define _DRIVER_ENTRY_POINT_C_H_                    // block DriverEntryPoint.c from beeing included
+#define _CDE_STDC_INTRINSICS_C_H_                   // pull __cdecl memset(), __cdecl memcmp() in the EntryPPoint .OBJ
+
 //
 // include the entire .C file but with _cdeCRT0UefiDxeEDK() and _cdeCRT0UefiDxeEDKINT3() disabled by switches above
 //

@@ -22,9 +22,17 @@ Author:
 #define OS_EFI//parameter for CdeServices.h
 #include <CdeServices.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <string.h>
+//
+// stdlib.h
+//
+extern __declspec(dllimport) long strtol(const char* s, char** endptr, int base);
+extern __declspec(dllimport) size_t wcstombs(char* mbstr, const wchar_t* wcstr, size_t count);
+//
+// string.h
+//
+extern __declspec(dllimport) char* strstr(const char* pszStr, const char* pszSubStr);
+extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
+
 #include <sys/stat.h>
 #include <guid/fileinfo.h>
 

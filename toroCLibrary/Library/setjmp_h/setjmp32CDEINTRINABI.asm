@@ -18,10 +18,13 @@
 
     .586p
 
-    .model flat, C
+    .model flat,C
     .code	
+    public _setjmp
+    public _setjmp3
     public _imp__setjmp
     public _imp__setjmp3
+    public __cdeSETJMPCDEINTRINABIAnchor
 REGISTERS struct
     _ebx    DWORD ?
     _ecx    DWORD ?
@@ -31,7 +34,8 @@ REGISTERS struct
     _esp    DWORD ?
     _ret    DWORD ?
 REGISTERS ends
-_setjmpCDEABI proc near pBuf:DWORD
+_setjmp3 label near
+_setjmp proc near pBuf:DWORD
 
     mov edx,[pBuf]
 
@@ -52,9 +56,11 @@ _setjmpCDEABI proc near pBuf:DWORD
 
     sub eax,eax
     ret
-_setjmpCDEABI endp
+_setjmp endp
 
-_imp__setjmp   dd _setjmpCDEABI
-_imp__setjmp3  dd _setjmpCDEABI
+_imp__setjmp   dd _setjmp
+_imp__setjmp3  dd _setjmp
+
+__cdeSETJMPCDEINTRINABIAnchor LABEL NEAR
 
 end

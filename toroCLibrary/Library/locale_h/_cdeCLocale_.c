@@ -8,7 +8,7 @@
 
 Module Name:
 
-    _locale_C_.c
+    _cdeCLocale.c
 
 Abstract:
 
@@ -54,4 +54,4 @@ static struct lconv _locale = {
     ._W_negative_sign = L"",
 };
 
-struct _CDE_LCONV_LANGUAGE _locale_C_ = { "C", &_locale, NULL };
+struct _CDE_LCONV_LANGUAGE _cdeCLocale = { "C", &_locale, NULL };

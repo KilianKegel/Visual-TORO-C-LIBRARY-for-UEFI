@@ -21,7 +21,7 @@
     <ClInclude Include="Include\_locale.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\_wctype.h">
+    <ClInclude Include="Include\_wctypeCDEABI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OSInterface\EDK2ObjBlocker\DebugLib_c.h">
@@ -37,6 +37,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Include\CdeServices.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OSInterface\EDK2ObjBlocker\_cdeStdCIntrinsics_c.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\_wctype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -221,9 +227,6 @@
     <ClCompile Include="Library\ctype_h\toupper.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Library\string_h\MemSet.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Library\string_h\_StrICmp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -231,9 +234,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Library\string_h\MemChr.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Library\string_h\MemCmp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Library\string_h\MemCpy.c">
@@ -246,9 +246,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Library\string_h\StrChr.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Library\string_h\StrCmp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Library\string_h\StrCpy.c">
@@ -365,7 +362,7 @@
     <ClCompile Include="Library\errno_h\errno.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Library\locale_h\_locale_C_.c">
+    <ClCompile Include="Library\locale_h\_cdeCLocale_.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Library\locale_h\_locales.c">
@@ -1547,25 +1544,13 @@
     <ClCompile Include="Library\string_h\MemChrCDEABI.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Library\string_h\MemCmpCDEABI.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Library\string_h\MemCpyCDEABI.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Library\string_h\MemMoveCDEABI.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Library\string_h\MemSetCDEABI.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Library\string_h\StrCatCDEABI.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Library\string_h\StrChrCDEABI.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Library\string_h\StrCmpCDEABI.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Library\string_h\StrCollCDEABI.c">
@@ -1856,6 +1841,24 @@
     <ClCompile Include="Library\stdlib_h\atexitCDEABI.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Library\string_h\MemCmpCDEINTRINABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\MemCpyCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\MemSetCDEINTRINABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrCmp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\string_h\StrCmpCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\wctype_h\_wcpropertyCDEABI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Tools\PostBuildEvent.bat">
@@ -1872,18 +1875,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="Library\setjmp_h\longjmp32.asm">
-      <Filter>Source Files</Filter>
-    </MASM>
-    <MASM Include="Library\setjmp_h\setjmp32.asm">
-      <Filter>Source Files</Filter>
-    </MASM>
-    <MASM Include="Library\setjmp_h\longjmp64.asm">
-      <Filter>Source Files</Filter>
-    </MASM>
-    <MASM Include="Library\setjmp_h\setjmp64.asm">
-      <Filter>Source Files</Filter>
-    </MASM>
     <MASM Include="LibAssist\_CdeGetCurrentPrivilegeLevel32.asm">
       <Filter>Source Files</Filter>
     </MASM>
@@ -1935,16 +1926,16 @@
     <MASM Include="Intrinsics\__chkstkWin32.asm">
       <Filter>Source Files</Filter>
     </MASM>
-    <MASM Include="Library\setjmp_h\longjmp32CDEABI.asm">
+    <MASM Include="Library\setjmp_h\longjmp32CDEINTRINABI.asm">
       <Filter>Source Files</Filter>
     </MASM>
-    <MASM Include="Library\setjmp_h\longjmp64CDEABI.asm">
+    <MASM Include="Library\setjmp_h\longjmp64CDEINTRINABI.asm">
       <Filter>Source Files</Filter>
     </MASM>
-    <MASM Include="Library\setjmp_h\setjmp32CDEABI.asm">
+    <MASM Include="Library\setjmp_h\setjmp32CDEINTRINABI.asm">
       <Filter>Source Files</Filter>
     </MASM>
-    <MASM Include="Library\setjmp_h\setjmp64CDEABI.asm">
+    <MASM Include="Library\setjmp_h\setjmp64CDEINTRINABI.asm">
       <Filter>Source Files</Filter>
     </MASM>
   </ItemGroup>

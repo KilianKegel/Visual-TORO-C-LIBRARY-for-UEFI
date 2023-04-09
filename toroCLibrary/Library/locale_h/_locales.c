@@ -24,13 +24,13 @@ Author:
 #include <locale.h>
 #include <_locale.h>
 
-extern struct _CDE_LCONV_LANGUAGE _locale_C_;
+extern struct _CDE_LCONV_LANGUAGE _cdeCLocale;
 
 static struct _CDE_LCONV_LANGUAGE EndOfTable;/* = { NULL,NULL };*/
 
 struct _CDE_LCONV_LANGUAGE* _locales[] = {
 
-    { &_locale_C_ },
+    { &_cdeCLocale },
     {&EndOfTable }
 
 };

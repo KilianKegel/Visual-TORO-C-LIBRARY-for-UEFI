@@ -11,6 +11,9 @@
 
 #include <Base.h>
 #include <Library/DebugLib.h>
+
+extern __declspec(dllimport) void* memset(void* s, int c, size_t n);
+
 //
 // prototypes, externs
 //

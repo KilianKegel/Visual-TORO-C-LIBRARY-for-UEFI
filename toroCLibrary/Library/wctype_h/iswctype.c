@@ -22,7 +22,6 @@ Author:
 #define _CTYPE_DISABLE_MACROS
 #include <CdeServices.h>
 
-#include <wctype.h>
 #include <_wctype.h>
 #include <string.h>
 

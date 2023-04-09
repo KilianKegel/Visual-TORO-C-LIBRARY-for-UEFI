@@ -21,12 +21,12 @@ Author:
     Kilian Kegel
 
 --*/
-#include <_wctype.h>
+#include <_wctypeCDEABI.h>
 #include <CdeServices.h>
 
 #define ELC(x)/*element count*/ (sizeof(x) / sizeof(x[0]))
 extern __declspec(dllimport) int strcmp(const char* pszDst, const char* pszSrc);
-extern WCPROPERTY __cdeWcproperty[];
+extern WCPROPERTYCDEABI __cdeWcpropertyCDEABI[];
 
 /** Brief description of the function’s purpose.
 
@@ -56,9 +56,9 @@ static wint_t wctypeCDEABI(const char* property) {
     int i = -1;
 
     if (NULL != property) {
-        while (NULL != __cdeWcproperty[++i].szProperty) {
-            if (0 == strcmp(property, __cdeWcproperty[i].szProperty)) {
-                nRet = __cdeWcproperty[i].type;
+        while (NULL != __cdeWcpropertyCDEABI[++i].szProperty) {
+            if (0 == strcmp(property, __cdeWcpropertyCDEABI[i].szProperty)) {
+                nRet = __cdeWcpropertyCDEABI[i].type;
                 break;
             }
         }

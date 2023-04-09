@@ -16,7 +16,9 @@
 ;
 ;--*/
     .code
+    public _setjmp
     public __imp_setjmp
+    public __cdeSETJMPCDEINTRINABIAnchor
 REGISTERS struct
 
     _xmm6   XMMWORD ?
@@ -48,7 +50,7 @@ REGISTERS struct
 
 REGISTERS ends
 
-_setjmpCDEABI proc
+_setjmp proc
 ; pBuf:QWORD
 
 ;   mov     rcx,[pBuf]
@@ -86,8 +88,10 @@ _setjmpCDEABI proc
     sub eax,eax
 
     ret
-_setjmpCDEABI endp
+_setjmp endp
 
-__imp_setjmp dq _setjmpCDEABI
+__imp_setjmp dq _setjmp
+
+__cdeSETJMPCDEINTRINABIAnchor LABEL NEAR
 
 end
