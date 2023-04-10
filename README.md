@@ -12,7 +12,7 @@
 * add Memory Discovered (https://uefi.org/sites/default/files/resources/PI_Spec_1_6.pdf#page=111) handling for PEIM (Pre-EFI Initialization Module)
     * restart memory management when switching from CAR (Cash As RAM) to permanent memory
     * reassign `CDE_SERVICES` pointer when switching from CAR (Cash As RAM) to permanent memory
-* support of multi-invocation of `CdePkg`-based PEIM
+* support multi-invocation of `CdePkg`-based PEIM
     * NOTE: Each `CdePkg`-based PEIM needs a small, read-/writeable, dedicated static duration to provide
       Standard C Library compliance (e.g. to hold `atexit()`-registered function pointers, the internal `strtok()`pointer, the `rand()` next, the jump buffer,
       the I/O buffer for `stdin`, `stdout` and `stderr` ...).
