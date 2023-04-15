@@ -18,9 +18,6 @@
     <ClInclude Include="Include\_invparm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\_locale.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Include\_wctypeCDEABI.h">
       <Filter>Header Files</Filter>
     </ClInclude>

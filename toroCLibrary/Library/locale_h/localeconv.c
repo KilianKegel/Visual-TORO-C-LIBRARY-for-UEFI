@@ -22,7 +22,7 @@ Author:
 --*/
 #include <CdeServices.h>
 
-#include <_locale.h>
+#include <locale.h>
 #include <string.h>
 
 extern struct _CDE_LCONV_LANGUAGE* _locales[];
@@ -50,9 +50,9 @@ struct lconv* localeconv(void) {
 
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
 
-    if (NULL == (*pCdeAppIf).pActiveLocale->pCopy) {
+    if (NULL == pCdeAppIf->ActiveLocale.pCopy) {
 
-        (*pCdeAppIf).pActiveLocale->pCopy = pCdeAppIf->pCdeServices->pMemRealloc(
+        pCdeAppIf->ActiveLocale.pCopy = pCdeAppIf->pCdeServices->pMemRealloc(
             pCdeAppIf,
             NULL,
             sizeof(struct lconv),
@@ -61,9 +61,8 @@ struct lconv* localeconv(void) {
         //
         //NOTE: This is MSFT implementation, copy once. GNU copies the structure to the same buffer
         //      each time.
-        memcpy((*pCdeAppIf).pActiveLocale->pCopy, (*pCdeAppIf).pActiveLocale->pLconv, sizeof(struct lconv));
+        memcpy(pCdeAppIf->ActiveLocale.pCopy, pCdeAppIf->ActiveLocale.pLconv, sizeof(struct lconv));
     }
 
-
-    return (*pCdeAppIf).pActiveLocale->pCopy;
+    return pCdeAppIf->ActiveLocale.pCopy;
 }

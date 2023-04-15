@@ -22,7 +22,6 @@ Author:
 #include <CdeServices.h>
 
 #include <locale.h>
-#include <_locale.h>
 
 extern struct _CDE_LCONV_LANGUAGE _cdeCLocale;
 

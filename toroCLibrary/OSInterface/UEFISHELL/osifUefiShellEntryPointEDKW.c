@@ -128,6 +128,7 @@ extern void* _CdeLocateProtocol(IN EFI_GUID* Protocol, IN void* Registration OPT
 extern int _cdeStr2Argcv(char** argv, char* szCmdline);
 extern void _cdeSigDflt(int sig);
 extern struct _CDE_LCONV_LANGUAGE _cdeCLocale;
+extern struct lconv _cdeLconv_C;
 extern char _gSTDOUTMode;   /* 0 == UEFI Shell default, 1 == ASCII only */
 extern char __cdeGetCurrentPrivilegeLevel(void);
 extern EFI_GUID _gCdeDxeProtocolGuid;
@@ -303,7 +304,7 @@ CDE_APP_IF CdeAppIfShellW = {
     .pIob = &_iob[0],
     .cIob = CDE_FILEV_MAX,
     .bmRuntimeFlags = 0,    /* clear all runtimeflags   */
-    .pActiveLocale = &_cdeCLocale
+    .ActiveLocale = { "C", &_cdeLconv_C, NULL }/*&_cdeCLocale*/
 };
 
 void __CdeChkCtrlC(void) {

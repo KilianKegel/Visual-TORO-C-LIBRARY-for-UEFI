@@ -36,6 +36,7 @@ static void __cdeFatalCdeServicesNotAvailPEI(const EFI_PEI_SERVICES** PeiService
 extern int main(int argc, char** argv);
 extern void _cdeSigDflt(int sig);
 extern struct _CDE_LCONV_LANGUAGE _cdeCLocale;
+extern struct lconv _cdeLconv_C;
 extern GUID gEfiCallerIdGuid;
 extern char* gEfiCallerBaseName;
 extern int _cdeStr2Argcv(char** argv, char* szCmdline);
@@ -75,7 +76,7 @@ static CDE_APP_IF_HOB CdeAppIfHobRomDflt =
     .CdeAppIf.pIob = (CDEFILE*)-1,
     .CdeAppIf.cIob = 0,
     .CdeAppIf.bmRuntimeFlags = TIANOCOREDEBUG,
-    .CdeAppIf.pActiveLocale = &_cdeCLocale,
+    .CdeAppIf.ActiveLocale = { "C", &_cdeLconv_C, NULL }/*&_cdeCLocale*/
 };
 ///
 // globals

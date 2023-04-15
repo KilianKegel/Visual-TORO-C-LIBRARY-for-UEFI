@@ -22,10 +22,9 @@ Author:
 #include <CdeServices.h>
 
 #include <locale.h>
-#include <_locale.h>
 #include <limits.h>
 
-static struct lconv _locale = {
+struct lconv _cdeLconv_C = {
     .decimal_point = ".",
     .thousands_sep = "",
     .grouping = "",
@@ -54,4 +53,4 @@ static struct lconv _locale = {
     ._W_negative_sign = L"",
 };
 
-struct _CDE_LCONV_LANGUAGE _cdeCLocale = { "C", &_locale, NULL };
+struct _CDE_LCONV_LANGUAGE _cdeCLocale = { "C", &_cdeLconv_C, NULL };

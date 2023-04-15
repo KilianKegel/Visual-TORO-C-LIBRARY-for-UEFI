@@ -25,7 +25,7 @@ Author:
 #include <CdeServices.h>
 
 #include <string.h>
-#include <_locale.h>
+#include <locale.h>
 extern struct _CDE_LCONV_LANGUAGE* _locales[];
 
 /** setlocale()
@@ -65,7 +65,7 @@ char* setlocale(int nCat, char const* szLocale) {
 
             if (0 == strcmp((*ppLocales)->szLanguageCountry, szLocale))
             {
-                pCdeAppIf->pActiveLocale = *ppLocales;
+                memcpy(&pCdeAppIf->ActiveLocale,ppLocales,sizeof(struct _CDE_LCONV_LANGUAGE));
                 pszRet = (*ppLocales)->szLanguageCountry;
                 break;
             }

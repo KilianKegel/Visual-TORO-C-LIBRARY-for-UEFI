@@ -23,7 +23,6 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </ClInclude>
     <ClInclude Include="Include\_invparm.h" />
-    <ClInclude Include="Include\_locale.h" />
     <ClInclude Include="Include\_wctype.h" />
     <ClInclude Include="Include\_wctypeCDEABI.h" />
     <ClInclude Include="OSInterface\EDK2ObjBlocker\_cdeStdCIntrinsics_c.h" />

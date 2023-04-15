@@ -29,13 +29,7 @@ extern struct _CDE_LCONV_LANGUAGE* _locales[];
 // _locale.h
 //
 extern __declspec(dllimport) void* memcpy(void* s1, const void* s2, size_t n);
-
-struct _CDE_LCONV_LANGUAGE
-{
-    char* szLanguageCountry;
-    struct lconv* pLconv;
-    struct lconv* pCopy;    // copy returned for localeconv()
-};
+extern __declspec(dllimport) void* memset(void* s, int c, size_t n);
 
 struct lconv {
     char* decimal_point;
@@ -86,12 +80,11 @@ Returns
 
 **/
 static struct lconv* localeconvCDEABI(void) {
-
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
 
-    if (NULL == (*pCdeAppIf).pActiveLocale->pCopy) {
+    if (NULL == pCdeAppIf->ActiveLocale.pCopy) {
 
-        (*pCdeAppIf).pActiveLocale->pCopy = pCdeAppIf->pCdeServices->pMemRealloc(
+        pCdeAppIf->ActiveLocale.pCopy = pCdeAppIf->pCdeServices->pMemRealloc(
             pCdeAppIf,
             NULL,
             sizeof(struct lconv),
@@ -100,11 +93,8 @@ static struct lconv* localeconvCDEABI(void) {
         //
         //NOTE: This is MSFT implementation, copy once. GNU copies the structure to the same buffer
         //      each time.
-        memcpy((*pCdeAppIf).pActiveLocale->pCopy, (*pCdeAppIf).pActiveLocale->pLconv, sizeof(struct lconv));
+        memcpy(pCdeAppIf->ActiveLocale.pCopy, pCdeAppIf->ActiveLocale.pLconv, sizeof(struct lconv));
     }
-
-
-    return (*pCdeAppIf).pActiveLocale->pCopy;
+    return pCdeAppIf->ActiveLocale.pCopy;
 }
-
 MKCDEABI(localeconv);

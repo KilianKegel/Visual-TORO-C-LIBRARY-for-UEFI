@@ -46,6 +46,7 @@ EFI_SMM_SYSTEM_TABLE2*   _cdegSmst;
 extern int main(int argc, char** argv);
 extern void _cdeSigDflt(int sig);
 extern struct _CDE_LCONV_LANGUAGE _cdeCLocale;
+extern struct lconv _cdeLconv_C;
 extern GUID gEfiCallerIdGuid;
 extern char* gEfiCallerBaseName;
 extern EFI_STATUS EFIAPI OemHookStatusCodeInitialize(void);
@@ -91,7 +92,7 @@ static CDE_APP_IF CdeAppIfSmm = {
     .pIob = NULL,           //&_iob[0],
     .cIob = 0,              //CDE_FILEV_MIN,  /* _iobCnt,                 */
     .bmRuntimeFlags = TIANOCOREDEBUG,
-    .pActiveLocale = &_cdeCLocale
+    .ActiveLocale = { "C", &_cdeLconv_C, NULL }/*&_cdeCLocale*/
 };
 
 /** __cdeGetAppIf()

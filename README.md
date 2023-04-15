@@ -8,6 +8,11 @@
 ```
 
 ## Revision history
+### 20230415
+* fixed: in the pre-Memory-Discovered PEI (Pre Efi Initialization) POST x86-32
+  Standard C function `localeconv()` crashed the platform.<br>
+  NOTE: All x86-64 operation modes (UEFI Shell, UEFI SMM, UEFI DXE, Windows NT)
+  and post-Memory-Discovered PEI (Pre Efi Initialization) x86-32 was not affected by that bug.
 ### 20230409
 * add Memory Discovered (https://uefi.org/sites/default/files/resources/PI_Spec_1_6.pdf#page=111) handling for PEIM (Pre-EFI Initialization Module)
     * restart memory management when switching from CAR (Cash As RAM) to permanent memory

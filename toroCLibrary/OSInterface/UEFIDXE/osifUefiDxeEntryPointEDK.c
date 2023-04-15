@@ -46,6 +46,7 @@ EFI_RUNTIME_SERVICES*    _cdegRT;
 extern int main(int argc, char** argv);
 extern void _cdeSigDflt(int sig);
 extern struct _CDE_LCONV_LANGUAGE _cdeCLocale;
+extern struct lconv _cdeLconv_C;
 extern GUID gEfiCallerIdGuid;
 extern int _cdeStr2Argcv(char** argv, char* szCmdline);
 extern char __cdeGetCurrentPrivilegeLevel(void);
@@ -88,7 +89,7 @@ static CDE_APP_IF CdeAppIfDxe = {
     .pIob = NULL,   // &_iob[0],
     .cIob = 0,      //CDE_FILEV_MIN,  /* _iobCnt,                 */
     .bmRuntimeFlags = TIANOCOREDEBUG,
-    .pActiveLocale = &_cdeCLocale
+    .ActiveLocale = { "C", &_cdeLconv_C, NULL }/*&_cdeCLocale*/
 };
 
 /** __cdeGetAppIf()

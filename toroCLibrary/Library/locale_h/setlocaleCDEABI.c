@@ -26,9 +26,10 @@ Author:
 --*/
 #include <CdeServices.h>
 
-#include <_locale.h>
+#include <locale.h>
 extern struct _CDE_LCONV_LANGUAGE* _locales[];
 extern __declspec(dllimport) int strcmp(const char* pszDst, const char* pszSrc);
+extern __declspec(dllimport) void* memcpy(void* s1, const void* s2, size_t n);
 
 /** setlocale()
 *
@@ -67,7 +68,7 @@ static char* setlocaleCDEABI(int nCat, char const* szLocale) {
 
             if (0 == strcmp((*ppLocales)->szLanguageCountry, szLocale))
             {
-                pCdeAppIf->pActiveLocale = *ppLocales;
+                memcpy(&pCdeAppIf->ActiveLocale,ppLocales,sizeof(struct _CDE_LCONV_LANGUAGE));
                 pszRet = (*ppLocales)->szLanguageCountry;
                 break;
             }
