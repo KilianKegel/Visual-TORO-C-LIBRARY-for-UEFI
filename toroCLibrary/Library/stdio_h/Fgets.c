@@ -56,10 +56,12 @@ char* fgets(char* s, int n, FILE* stream) {
     char c;
     int i = 0;
 
-    if (    NULL == stream
-        ||  NULL == s
-        ||  0 > n)
-        (*pinvalid_parameter_handler)(L"\"NULL == stream || NULL == s || 0 > n\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+    if (NULL == stream
+        || NULL == s
+        || 0 > n) {
+        //(*pinvalid_parameter_handler)(L"\"NULL == stream || NULL == s || 0 > n\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+        (*pinvalid_parameter_handler)(NULL, NULL, NULL, 0, 0);
+    }
     else
         do {
 

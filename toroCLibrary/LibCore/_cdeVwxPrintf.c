@@ -1171,24 +1171,35 @@ _cdeVwxPrintf(
             break;//PROCESS_STATUS
         }
         case PROCESS_CHARSSTRING: {      // %c or %s
-            short singlecharbuf[2] = { '\0','\0' };
+            unsigned short singlecharbuf[2] = { '\0','\0' };
             char* pStr = (char*)&singlecharbuf[0];
             unsigned char IsSingle = 0;
             bIntOrLongOrInt64 = (bIntOrLongOrInt64 == 0 ? 8 * sizeof(short) : bIntOrLongOrInt64);
+            unsigned char fSkipChr = FALSE;
 
             switch (t = i++, ydes(fDes, t, CHAR816(t))) {
             case 'c':
             case 'C':   IsSingle = TRUE;
                 if (32 == bIntOrLongOrInt64)
-                    singlecharbuf[0] = va_arg(ap, short);
-                else
-                    ((char*)singlecharbuf)[0] = va_arg(ap, char);
+                {
+                    singlecharbuf[0] = va_arg(ap, unsigned short);
+
+                    if(0 == pFixParm->fWide)                            // with "narrow" printf()...
+                        if (singlecharbuf[0] > 255)                     //
+                            fSkipChr = TRUE;                            // ...skip wide char > 255
+                }
+                else {
+                    if (0 == pFixParm->fWide)
+                        ((char*)singlecharbuf)[0] = va_arg(ap, char);
+                    else
+                        singlecharbuf[0] = va_arg(ap, unsigned short);
+                }
                 break;
             case 'a': if (1 == pFixParm->fUEFIFormat) { 			/* EFI_SPECIFIC*/
-							bIntOrLongOrInt64 = 8 * sizeof(short);  /* EFI_SPECIFIC*/	/* in UEFI %a == ASCII STRING, in STDC float print */
-                        }                                           /* EFI_SPECIFIC*/
-						else
-						break;
+                bIntOrLongOrInt64 = 8 * sizeof(short);  /* EFI_SPECIFIC*/	/* in UEFI %a == ASCII STRING, in STDC float print */
+            }                                           /* EFI_SPECIFIC*/
+                    else
+                break;
 			
             case 's':
             case 'S':   IsSingle = FALSE;
@@ -1198,9 +1209,11 @@ _cdeVwxPrintf(
                 break;
             }
 
-            numdesc.NumType = STRING;
-            nprintfield(pStr, &numdesc, &flags, pfnDevPutChar, (unsigned int*)&dwCount, &pDest, 32 == bIntOrLongOrInt64, IsSingle/*is/not single*/);
-
+            if (FALSE == fSkipChr)                                   // skip wide char > 255
+            {
+                numdesc.NumType = STRING;
+                nprintfield(pStr, &numdesc, &flags, pfnDevPutChar, (unsigned int*)&dwCount, &pDest, fWide | (32 == bIntOrLongOrInt64), IsSingle/*is/not single*/);
+            }
             state = dwCount ? PROCESS_WRITECHARS : PROCESS_DONT_WRITE_ANYMORE;  //set state before decrement dwCount    /*kg20150210_00*/
             break;// PROCESS_CHARSSTRING
         }// PROCESS_CHARSSTRING

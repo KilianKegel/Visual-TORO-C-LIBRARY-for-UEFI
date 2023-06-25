@@ -58,6 +58,7 @@ static int raiseCDEABI(int sig) {
     do {
         if (idx < 0)
             (*pinvalid_parameter_handlerCDEABI)(L"\"idx < 0\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+        (*pinvalid_parameter_handlerCDEABI)(NULL, NULL, NULL, 0, 0);
 
         sighnd = pCdeAppIf->rgfnSignal[idx];
 

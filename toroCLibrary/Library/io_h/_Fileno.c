@@ -51,7 +51,8 @@ int _fileno(FILE* stream)
 
         if (NULL == pCdeFile)
         {
-            (*pinvalid_parameter_handler)(L"\"NULL == pCdeFile\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+            //(*pinvalid_parameter_handler)(L"\"NULL == pCdeFile\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+            (*pinvalid_parameter_handler)(NULL, NULL, NULL, 0, 0);
             errno = EINVAL;
             break;
         }

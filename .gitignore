@@ -5,3 +5,8 @@ toroCLibrary/$trash/
 toroCLibrary/Tools/$trash/
 toroCLibrary/x86/
 lib/
+toroCLibrary/Tools/PostBuild.exe
+toroCLibrary/Tools/PostBuild.ilk
+toroCLibrary/Tools/PostBuild.obj
+toroCLibrary/Tools/PostBuild.pdb
+toroCLibrary/vc140.pdb

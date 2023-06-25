@@ -169,6 +169,11 @@
     <ClCompile Include="Library\locale_h\setlocaleCDEABI.c" />
     <ClCompile Include="Library\locale_h\_locales.c" />
     <ClCompile Include="Library\locale_h\_cdeCLocale_.c" />
+    <ClCompile Include="Library\mbctype_h\_cdeMsftSingleByteCodePageNumber.c" />
+    <ClCompile Include="Library\mbctype_h\_getmbcp.c" />
+    <ClCompile Include="Library\mbctype_h\_getmbcpCDEABI.c" />
+    <ClCompile Include="Library\mbctype_h\_setmbcp.c" />
+    <ClCompile Include="Library\mbctype_h\_setmbcpCDEABI.c" />
     <ClCompile Include="Library\signal_h\raise.c" />
     <ClCompile Include="Library\signal_h\raiseCDEABI.c" />
     <ClCompile Include="Library\signal_h\signal.c" />
@@ -449,6 +454,15 @@
     <ClCompile Include="Library\wchar_h\GetwcCDEABI.c" />
     <ClCompile Include="Library\wchar_h\Getwchar.c" />
     <ClCompile Include="Library\wchar_h\GetwcharCDEABI.c" />
+    <ClCompile Include="Library\wchar_h\mbrlen.c" />
+    <ClCompile Include="Library\wchar_h\mbrlenCDEABI.c" />
+    <ClCompile Include="Library\wchar_h\mbrtowc.c" />
+    <ClCompile Include="Library\wchar_h\mbsrtowcs.c" />
+    <ClCompile Include="Library\wchar_h\wcrtomb.c" />
+    <ClCompile Include="Library\wchar_h\mbrtowcCDEABI.c" />
+    <ClCompile Include="Library\wchar_h\mbsinit.c" />
+    <ClCompile Include="Library\wchar_h\mbsinitCDEABI.c" />
+    <ClCompile Include="Library\wchar_h\mbsrtowcsCDEABI.c" />
     <ClCompile Include="Library\wchar_h\Putwc.c" />
     <ClCompile Include="Library\wchar_h\PutwcCDEABI.c" />
     <ClCompile Include="Library\wchar_h\Putwchar.c" />
@@ -469,6 +483,7 @@
     <ClCompile Include="Library\wchar_h\VswscanfCDEABI.c" />
     <ClCompile Include="Library\wchar_h\Vwprintf.c" />
     <ClCompile Include="Library\wchar_h\VwprintfCDEABI.c" />
+    <ClCompile Include="Library\wchar_h\wcrtombCDEABI.c" />
     <ClCompile Include="Library\wchar_h\WcsCat.c" />
     <ClCompile Include="Library\wchar_h\WcsCatCDEABI.c" />
     <ClCompile Include="Library\wchar_h\WcsChr.c" />
@@ -481,6 +496,8 @@
     <ClCompile Include="Library\wchar_h\WcsCpyCDEABI.c" />
     <ClCompile Include="Library\wchar_h\WcsCSpn.c" />
     <ClCompile Include="Library\wchar_h\WcsCSpnCDEABI.c" />
+    <ClCompile Include="Library\wchar_h\wcsftime.c" />
+    <ClCompile Include="Library\wchar_h\wcsftimeCDEABI.c" />
     <ClCompile Include="Library\wchar_h\WcsLen.c" />
     <ClCompile Include="Library\wchar_h\WcsLenCDEABI.c" />
     <ClCompile Include="Library\wchar_h\WcsNCat.c" />
@@ -495,6 +512,8 @@
     <ClCompile Include="Library\wchar_h\WcsPbrkCDEABI.c" />
     <ClCompile Include="Library\wchar_h\WcsRChr.c" />
     <ClCompile Include="Library\wchar_h\WcsRChrCDEABI.c" />
+    <ClCompile Include="Library\wchar_h\wcsrtombs.c" />
+    <ClCompile Include="Library\wchar_h\wcsrtombsCDEABI.c" />
     <ClCompile Include="Library\wchar_h\WcsSpn.c" />
     <ClCompile Include="Library\wchar_h\WcsSpnCDEABI.c" />
     <ClCompile Include="Library\wchar_h\WcsStr.c" />
@@ -525,6 +544,8 @@
     <ClCompile Include="Library\wchar_h\WMemSetCDEABI.c" />
     <ClCompile Include="Library\wchar_h\Wprintf.c" />
     <ClCompile Include="Library\wchar_h\WprintfCDEABI.c" />
+    <ClCompile Include="Library\wchar_h\wscanf.c" />
+    <ClCompile Include="Library\wchar_h\wscanfCDEABI.c" />
     <ClCompile Include="Library\wchar_h\_cdeSwscanf.c" />
     <ClCompile Include="Library\wchar_h\_WcsDup.c" />
     <ClCompile Include="Library\wchar_h\_WcsDupCDEABI.c" />

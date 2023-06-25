@@ -61,7 +61,8 @@ int _read(int const fd, void* const buffer, unsigned const buffer_size)
 
         if (NULL == buffer || buffer_size > INT_MAX)
         {
-            (*pinvalid_parameter_handler)(L"\"NULL == buffer || count > INT_MAX\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+            //(*pinvalid_parameter_handler)(L"\"NULL == buffer || count > INT_MAX\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+            (*pinvalid_parameter_handler)(NULL, NULL, NULL, 0, 0);
             break;
         }
 

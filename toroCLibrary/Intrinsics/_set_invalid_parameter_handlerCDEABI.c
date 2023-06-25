@@ -21,13 +21,15 @@ Author:
     Kilian Kegel
 
 --*/
+#include <CdeServices.h>
+
 #ifndef wchar_t
     #define  wchar_t short
 #endif//wchar_t
 
 extern void (*pinvalid_parameter_handlerCDEABI)(const wchar_t * expression,const wchar_t * function,const wchar_t * file,unsigned int line,unsigned* pReserved);
 
-void  (*_set_invalid_parameter_handler(void (*pfn)(const wchar_t *,const wchar_t *,const wchar_t *,unsigned int,unsigned* )))(const wchar_t *,const wchar_t *,const wchar_t *,unsigned int,unsigned* ){
+static void  (*_set_invalid_parameter_handlerCDEABI(void (*pfn)(const wchar_t *,const wchar_t *,const wchar_t *,unsigned int,unsigned* )))(const wchar_t *,const wchar_t *,const wchar_t *,unsigned int,unsigned* ){
 
     void (*pRet)(const wchar_t *,const wchar_t *,const wchar_t *,unsigned int,unsigned* ) = pinvalid_parameter_handlerCDEABI;
 
@@ -35,3 +37,5 @@ void  (*_set_invalid_parameter_handler(void (*pfn)(const wchar_t *,const wchar_t
     
     return pRet;
 }
+
+MKCDEABI(_set_invalid_parameter_handler);

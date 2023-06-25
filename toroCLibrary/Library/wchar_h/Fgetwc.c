@@ -39,8 +39,10 @@ wint_t fgetwc(FILE* stream) {
 
     wint_t nRet = WEOF;
 
-    if (NULL == stream)
-        (*pinvalid_parameter_handler)(L"\"NULL == stream\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+    if (NULL == stream) {
+        //(*pinvalid_parameter_handler)(L"\"NULL == stream\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+        (*pinvalid_parameter_handler)(NULL, NULL, NULL, 0, 0);
+    }
     else
         do {
             CDEFILE* pCdeFile = (CDEFILE*)stream;

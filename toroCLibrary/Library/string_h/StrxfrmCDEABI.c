@@ -26,10 +26,13 @@ TODO: add invalid parameter handler support
 --*/
 
 #include <stddef.h>
+#include <errno.h>
+#include <limits.h>
 #include <CdeServices.h>
 
 extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
 extern __declspec(dllimport) char* strncpy(char* pszDst, const char* pszSrc, size_t n);
+extern void (*pinvalid_parameter_handlerCDEABI)(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);  
 
 /**
 Synopsis
@@ -53,7 +56,21 @@ Returns
 **/
 static size_t strxfrmCDEABI(char* pszDst, const char* pszSrc, size_t n) {
 
-    return strlen(strncpy(pszDst, pszSrc, n));
+    size_t nRet = INT_MAX;
+    do
+    {
+        if (NULL == pszDst || NULL == pszSrc)
+        {
+            errno = EINVAL;
+            //(*pinvalid_parameter_handler)(L"\"NULL pointer assignment\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+            (*pinvalid_parameter_handlerCDEABI)(NULL, NULL, NULL, 0, 0);
+            break;
+        }
+        nRet =  strlen(strncpy(pszDst, pszSrc, n));
+
+    } while (0);
+
+    return nRet;
 }
 
 MKCDEABI(strxfrm);

@@ -23,7 +23,12 @@ TODO: add invalid parameter handler support
 
 --*/
 
+#include <CdeServices.h>
 #include <wchar.h>
+#include <limits.h>
+#include <errno.h>
+
+extern void (*pinvalid_parameter_handler)(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);
 
 /**
 Synopsis
@@ -47,5 +52,20 @@ Returns
 **/
 size_t wcsxfrm(wchar_t* pszDst, const wchar_t* pszSrc, size_t n) {
 
-    return wcslen(wcsncpy(pszDst, pszSrc, n));
+    size_t nRet = INT_MAX;
+
+    do
+    {
+        if (NULL == pszDst || NULL == pszSrc)
+        {
+            errno = EINVAL;
+            //(*pinvalid_parameter_handler)(L"\"NULL pointer assignment\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+            (*pinvalid_parameter_handler)(NULL, NULL, NULL, 0, 0);
+            break;
+        }
+        nRet = wcslen(wcsncpy(pszDst, pszSrc, n));
+
+    } while (0);
+
+    return nRet;
 }

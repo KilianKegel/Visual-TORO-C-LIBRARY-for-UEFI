@@ -60,7 +60,8 @@ int _write(int fd, const void* buffer, unsigned int count)
 
         if (NULL == buffer || count > INT_MAX)
         {
-            (*pinvalid_parameter_handler)(L"\"NULL == buffer || count > INT_MAX\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+            //(*pinvalid_parameter_handler)(L"\"NULL == buffer || count > INT_MAX\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+            (*pinvalid_parameter_handler)(NULL, NULL, NULL, 0, 0);
             break;
         }
         

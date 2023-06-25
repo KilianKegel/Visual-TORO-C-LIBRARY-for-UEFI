@@ -79,7 +79,8 @@ int _isatty(int fd)
 
         if (NULL == pCdeFile || 0 == pCdeFile->fRsv || -1 == fd)
         {
-            (*pinvalid_parameter_handler)(L"\"NULL == pCdeFile || 0 == pCdeFile->fRsv || -1 == fd\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+            //(*pinvalid_parameter_handler)(L"\"NULL == pCdeFile || 0 == pCdeFile->fRsv || -1 == fd\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+            (*pinvalid_parameter_handler)(NULL, NULL, NULL, 0, 0);
             errno = EBADF;
             break;//while(0);
         }

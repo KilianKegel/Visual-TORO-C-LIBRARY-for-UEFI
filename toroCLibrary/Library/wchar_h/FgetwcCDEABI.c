@@ -47,8 +47,10 @@ static wint_t fgetwcCDEABI(FILE* stream) {
 
     wint_t nRet = WEOF;
 
-    if (NULL == stream)
-        (*pinvalid_parameter_handlerCDEABI)(L"\"NULL == stream\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+    if (NULL == stream) {
+        //(*pinvalid_parameter_handlerCDEABI)(L"\"NULL == stream\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+        (*pinvalid_parameter_handlerCDEABI)(NULL, NULL, NULL, 0, 0);
+    }
     else
         do {
             CDEFILE* pCdeFile = (CDEFILE*)stream;

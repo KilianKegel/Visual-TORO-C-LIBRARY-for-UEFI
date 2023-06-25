@@ -24,7 +24,10 @@ TODO: add invalid parameter handler support
 --*/
 
 #include <string.h>
+#include <errno.h>
+#include <limits.h>
 
+extern void (*pinvalid_parameter_handler)(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);
 /**
 Synopsis
     #include <string.h>
@@ -47,5 +50,19 @@ Returns
 **/
 size_t strxfrm(char* pszDst, const char* pszSrc, size_t n) {
 
-    return strlen(strncpy(pszDst, pszSrc, n));
+    size_t nRet = INT_MAX;
+    do
+    {
+        if (NULL == pszDst || NULL == pszSrc)
+        {
+            errno = EINVAL;
+            //(*pinvalid_parameter_handler)(L"\"NULL pointer assignment\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+            (*pinvalid_parameter_handler)(NULL, NULL, NULL, 0, 0);
+            break;
+        }
+        nRet =  strlen(strncpy(pszDst, pszSrc, n));
+
+    } while (0);
+
+    return nRet;
 }
