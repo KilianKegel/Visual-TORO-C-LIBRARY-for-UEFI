@@ -20,8 +20,14 @@ Author:
 
 --*/
 #include <windows.h>
+#include <CdeServices.h>
 
 typedef unsigned long long EFI_PHYSICAL_ADDRESS;
+
+//
+// prototype
+//
+OSIFMEMFREE _osifWinNTMemFree;
 
 /** _osifMemFree() - free memory  pages
 
@@ -37,7 +43,7 @@ Parameters
 Returns
     void
 **/
-void _osifWinNTMemFree(IN void/*CDE_APP_IF*/* pCdeAppIf, IN EFI_PHYSICAL_ADDRESS Memory, IN unsigned Pages) {
+void _osifWinNTMemFree(IN CDE_APP_IF* pCdeAppIf, IN EFI_PHYSICAL_ADDRESS Memory, IN size_t Pages) {
 
     void* p;
 

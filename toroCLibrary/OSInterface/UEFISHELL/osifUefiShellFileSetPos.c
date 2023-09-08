@@ -31,6 +31,7 @@ Author:
 
 extern fpos_t __cdeOffsetCdeFposType(fpos_t fpos);
 extern int __cdeBiasCdeFposType(fpos_t fpos);
+OSIFFSETPOS _osifUefiShellFileSetPos;
 
 /**
 Synopsis

@@ -8,7 +8,7 @@
 
 Module Name:
 
-    _cdeVwxPrintf.c
+    _cdeCoreVwxPrintf.c
 
 Abstract:
 
@@ -27,11 +27,16 @@ Author:
 // string.h
 //
 extern __declspec(dllimport) void* memset(void* s, int c, size_t n);
+extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
+//
+// wchar.h
+//
+extern __declspec(dllimport) size_t wcslen(const wchar_t* pszBuffer);
 
 //
 // prototype
 ///
-VWXPRINTF _cdeVwxPrintf;
+VWXPRINTF _cdeCoreVwxPrintf;
 extern void _CdeMemPutChar(int c, void** ppDest);
 extern int _cdeCoreSprintf(CDE_APP_IF* pCdeAppIf, char* pszDest, const char* pszFormat, ...);
 
@@ -43,7 +48,7 @@ extern int _cdeCoreSprintf(CDE_APP_IF* pCdeAppIf, char* pszDest, const char* psz
 #define EXPPOS 52
 #define SIGPOS 63
 
-#define STRLEN(pszStr) (fWide ? _wcslen((short*)pszStr) : _strlen(pszStr))
+#define STRLEN(pszStr) (fWide ? wcslen((wchar_t*)pszStr) : strlen(pszStr))
 #define STRCPY(dst,src)     do{                                     \
                             char strcpy_c;                          \
                             char* strcpy_dst = dst;                 \
@@ -412,22 +417,6 @@ static int fract2bcd(double d, DOUBLEPRINTBUF* pDblData) {
     return pDblData->fractlen;
 }
 
-unsigned int _strlen(const char* pszBuffer) {
-    int i = 0;
-
-    while (pszBuffer[i] != '\0')
-        i++;
-    return i;
-}
-
-unsigned int _wcslen(const short* pszBuffer) {
-    unsigned int i = 0;
-
-    while (pszBuffer[i] != '\0')
-        i++;
-    return i;
-}
-
 static int str2dev(void (*pfnDevPutChar)(int, void**), char* pszBuf, unsigned int* pCount, void** ppDest, unsigned int nMaxnum, unsigned char fWide, unsigned char IsSingle/*Char->allow '\0' to be printed*/) {
     unsigned int nCnt, nEnd;
     int nRet = 0;
@@ -572,7 +561,7 @@ static int nprintfield(
     switch (pNumDesc->NumType) {
         case STRING: {       // have string??? (no sign/sharp string)???
 
-        unsigned tmplen = STRLEN(pszStr);   // JC20170117 fixed: %c if char == '\0' doesn't print the '\0'
+        unsigned tmplen = (unsigned)STRLEN(pszStr);   // JC20170117 fixed: %c if char == '\0' doesn't print the '\0'
 
         if (IsSingle && '\0' == pszStr[0])   // KG20170117 fixed: %c if char == '\0' doesn't print the '\0'
             tmplen++;                       // KG20170117 fixed: %c if char == '\0' doesn't print the '\0'
@@ -599,7 +588,7 @@ static int nprintfield(
                     }
                     
 //---
-            nStrlen += STRLEN(pszStr);
+            nStrlen += (int)STRLEN(pszStr);
             if (1) {
                 int OctalSharpPreciNonZeroCorrection = ((8 == pNumDesc->nNumBase) && (1 == pFlags->fSharp) && (1 < pFlags->nPrecisionsize) && (0 != pNumDesc->nNumber));
 
@@ -619,7 +608,7 @@ static int nprintfield(
 
             addPreciZeros = addPreciZeros < 0 ? 0 : addPreciZeros;
 
-            nStrlen = _strlen(&pszStr[offsIntgr]) + 1/*_strlen(".")*/;  // INTGR.FRACT, entire possible string
+            nStrlen = (int)strlen(&pszStr[offsIntgr]) + 1/*_strlen(".")*/;  // INTGR.FRACT, entire possible string
             if (0 == pNumDesc->nFloatFractLen)
                 nStrlen--;                                              // substract the "."
             nPrecilen = 0;                                              // precision zero are appended separately
@@ -640,7 +629,7 @@ static int nprintfield(
 //        }
 //    }
 
-    nSSlen = _strlen(szSignSharp);
+    nSSlen = (int)strlen(szSignSharp);
     nFillerlen = pFlags->nFieldsize - nStrlen - nSSlen - nPrecilen < 0 ? 0 : pFlags->nFieldsize - nStrlen - nSSlen - nPrecilen;
 
     //
@@ -701,7 +690,7 @@ short ydes(unsigned char fDes, int i, short v) {
 }
 
 int
-_cdeVwxPrintf(
+_cdeCoreVwxPrintf(
     CDE_APP_IF* pCdeAppIf,
     IN ROMPARM_VWXPRINTF* pFixParm,
     IN const void* pszFormat,
@@ -1212,7 +1201,7 @@ _cdeVwxPrintf(
             if (FALSE == fSkipChr)                                   // skip wide char > 255
             {
                 numdesc.NumType = STRING;
-                nprintfield(pStr, &numdesc, &flags, pfnDevPutChar, (unsigned int*)&dwCount, &pDest, fWide | (32 == bIntOrLongOrInt64), IsSingle/*is/not single*/);
+                nprintfield(pStr, &numdesc, &flags, pfnDevPutChar, (unsigned int*)&dwCount, &pDest, (32 == bIntOrLongOrInt64), IsSingle/*is/not single*/);
             }
             state = dwCount ? PROCESS_WRITECHARS : PROCESS_DONT_WRITE_ANYMORE;  //set state before decrement dwCount    /*kg20150210_00*/
             break;// PROCESS_CHARSSTRING

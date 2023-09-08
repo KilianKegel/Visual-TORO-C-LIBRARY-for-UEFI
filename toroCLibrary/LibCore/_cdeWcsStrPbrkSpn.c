@@ -23,9 +23,16 @@ Author:
 #include <CdeServices.h>
 #include <stdio.h>
 
-unsigned int _strlen(const char* pszBuffer);
-unsigned int _wcslen(const short* pszBuffer);
-#define STRLEN(pszStr) (PRESET_WID ? _wcslen((short*)pszStr) : _strlen(pszStr))
+//
+// string.h
+//
+extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
+//
+// wchar.h
+//
+extern __declspec(dllimport) size_t wcslen(const wchar_t* pszBuffer);
+
+#define STRLEN(pszStr) (PRESET_WID ? wcslen((wchar_t*)pszStr) : strlen(pszStr))
 
 void* _cdeWcsStrPbrkSpn(
     IN signed preset,
@@ -42,7 +49,7 @@ void* _cdeWcsStrPbrkSpn(
     unsigned char fBreak = 0;
     signed  xcrement = PRESET_TDN ? -1 : 1;//increment vs decrement
 
-    i = PRESET_TDN ? STRLEN(pszStr) - 1 : 0;
+    i = PRESET_TDN ? (unsigned)STRLEN(pszStr) - 1 : 0;
 
     for (pStr16 = &pStr16[i], \
         pStr8 = &pStr8[i]; \
@@ -69,7 +76,7 @@ void* _cdeWcsStrPbrkSpn(
             break;
         }
 
-		c1 = PRESET_WID ? 0xFFFF & c1 : 0xFF & c1;								// suppress sign extention from wchar/char to int
+		c1 = PRESET_WID ? 0xFFFF & c1 : 0xFF & c1;								// suppress sign extension from wchar/char to int
 
         c2 = PRESET_WID ? ((wchar_t*)pszSet)[0] : ((unsigned char*)pszSet)[0];
 

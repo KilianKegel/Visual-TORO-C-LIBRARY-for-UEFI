@@ -50,7 +50,7 @@ static char* tmpnamCDEABI(char* s)
 
 
     pCdeAppIf->szTmpBuf[0] = 's';                   // MSFT names begin with "s"
-    _ltoa(pCdeAppIf->lTmpNamNum, &ext[1], 36);      // generate number extention
+    _ltoa(pCdeAppIf->lTmpNamNum, &ext[1], 36);      // generate number extension
 
     if (0 == pCdeAppIf->lTmpNamNum++)
     {
@@ -61,7 +61,7 @@ static char* tmpnamCDEABI(char* s)
         *(strchr(pCdeAppIf->szTmpBuf, '.')) = '\0'; // kill "."
     }
 
-    strcat(pCdeAppIf->szTmpBuf, ext);               // append extention
+    strcat(pCdeAppIf->szTmpBuf, ext);               // append extension
 
     if (NULL != s)
     {

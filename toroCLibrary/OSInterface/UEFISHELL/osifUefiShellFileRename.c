@@ -54,7 +54,6 @@ extern __declspec(dllimport) int* _errno(void);
 
 #define ELC(x) sizeof(x) / sizeof(x[0])
 
-extern EFI_SHELL_PROTOCOL* pEfiShellProtocol;
 extern EFI_SYSTEM_TABLE* _cdegST;
 extern CDEFILE* _osifUefiShellFileOpen(IN CDE_APP_IF* pCdeAppIf, const wchar_t* pwcsFileName, const char* szModeNoSpace, CDEFILE* pCdeFile);
 

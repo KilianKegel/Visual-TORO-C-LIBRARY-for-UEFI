@@ -20,20 +20,13 @@ Author:
 
 --*/
 #include <windows.h>
-
+#include <CdeServices.h>
 #define UINT64 unsigned long long 
 
-typedef struct _HEAPDESC {
-    UINT64  qwMagic;
-#define FREEMEM 0x4D454552463E3E3EL     /* >>>FREEM */
-#define ALLOCMEM 0x434F4C4C413E3E3EL    /* >>>ALLOC */
-#define ENDOFMEM 0x464F444E453E3E3EL    /* >>>ENDOF */
-    unsigned char fInalterable;
-    struct _HEAPDESC* pPred;
-    struct _HEAPDESC* pSucc;
-    UINT64/*EFI_PHYSICAL_ADDRESS*/ PageBase;
-    unsigned  Pages;
-}HEAPDESC, * PHEAPDESC;
+//
+// prototype
+//
+OSIFMEMALLOC _osifWinNTMemAlloc;
 
 /** _osifMemAlloc() - allocate memory  pages
 
@@ -48,7 +41,7 @@ Parameters
 Returns
     pointer to memory block
 **/
-HEAPDESC* _osifWinNTMemAlloc(IN void/*CDE_APP_IF*/* pCdeAppIf, IN unsigned Pages) {
+HEAPDESC* _osifWinNTMemAlloc(IN CDE_APP_IF* pCdeAppIf, IN size_t Pages) {
 
     HEAPDESC* pMemory = 0;
 

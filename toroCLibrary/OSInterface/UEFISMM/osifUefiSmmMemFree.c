@@ -21,6 +21,12 @@ Author:
 --*/
 #define OS_EFI
 #include <CdeServices.h>
+
+//
+// prototype
+//
+OSIFMEMFREE _osifUefiSmmMemFree;
+
 /** _osifMemFree() - free memory  pages
 
 Synopsis
@@ -35,7 +41,7 @@ Parameters
 Returns
     pointer to memory block
 **/
-void _osifUefiSmmMemFree(IN CDE_APP_IF* pCdeAppIf, IN EFI_PHYSICAL_ADDRESS Memory, IN unsigned int Pages) {
+void _osifUefiSmmMemFree(IN CDE_APP_IF* pCdeAppIf, IN EFI_PHYSICAL_ADDRESS Memory, IN size_t Pages) {
     EFI_STATUS Status;
 
     Status = pCdeAppIf->DriverParm.BsDriverParm.pSmmSystemTable2->SmmFreePages(Memory, Pages);

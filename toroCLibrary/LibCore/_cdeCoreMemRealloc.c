@@ -8,7 +8,7 @@
 
 Module Name:
 
-    _cdeMemRealloc.c
+    _cdeCoreMemRealloc.c
 
 Abstract:
 
@@ -24,7 +24,7 @@ Author:
 #define PBYTE unsigned char*
 #define PAGESIZE 4096
 
-void* _cdeMemRealloc(
+void* _cdeCoreMemRealloc(
     CDE_APP_IF* pCdeAppIf,
     IN void* ptr,   /* input pointer for realloc */
     IN size_t size, /*  input size for realloc*/
@@ -49,14 +49,14 @@ static void __insertFree(HEAPDESC* pThis,
 //  2. free that free block (fuse with  successing free block)
 
     pFree->qwMagic = FREEMEM;
-    _cdeMemRealloc(pCdeAppIf, &pFree[1], 0, pHeapStart);	// fuse with bounding free block //KG20160402
+    _cdeCoreMemRealloc(pCdeAppIf, &pFree[1], 0, pHeapStart);	// fuse with bounding free block //KG20160402
 }
 
-/** _cdeMemRealloc()
+/** _cdeCoreMemRealloc()
 
 Synopsis
 
-    void* _cdeMemRealloc(
+    void* _cdeCoreMemRealloc(
         CDE_APP_IF* pCdeAppIf,
         void* ptr,
         size_t size,
@@ -78,7 +78,7 @@ Returns
             NULL on FAIL
 
 **/
-void* _cdeMemRealloc(
+void* _cdeCoreMemRealloc(
     CDE_APP_IF* pCdeAppIf,
     IN void* ptr,   /* input pointer for realloc */
     IN size_t size, /*  input size for realloc*/
@@ -155,13 +155,13 @@ void* _cdeMemRealloc(
                     case REA_MALLOC_MOVE: {
 
                         unsigned char* pNewBuf, * pOldBuf;
-                        pNewBuf = _cdeMemRealloc(pCdeAppIf, 0, size, pHeapStart);	    // allocate new size KG20160402
+                        pNewBuf = _cdeCoreMemRealloc(pCdeAppIf, 0, size, pHeapStart);	    // allocate new size KG20160402
                         pOldBuf = (unsigned char*)&pThis[1];						// get data area of ald buffer
 
                         if (pNewBuf != NULL) {
                             for (i = 0; i < TBS; i++)
                                 pNewBuf[i] = pOldBuf[i];
-                            _cdeMemRealloc(pCdeAppIf, &pThis[1], 0, pHeapStart);		// fuse with bounding free block //KG20160402
+                            _cdeCoreMemRealloc(pCdeAppIf, &pThis[1], 0, pHeapStart);		// fuse with bounding free block //KG20160402
                             pThis = &((HEAPDESC*)pNewBuf)[-1];
                         }
                         else {

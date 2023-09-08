@@ -12,7 +12,7 @@ Module Name:
 
 Abstract:
 
-    exit() for core mode (that is: CDE_APP_IF* pCdeAppIf is parameter)
+    exit() for core mode (that means: CDE_APP_IF* pCdeAppIf is an additional parameter)
 
 Author:
 
@@ -22,6 +22,8 @@ Author:
 #include <CdeServices.h>
 #include <stdarg.h>
 #include <limits.h>
+
+extern __declspec(dllimport) void longjmp(jmp_buf env, int val);
 
 void _cdeCoreExit(CDE_APP_IF* pCdeAppIf, int status) {
 

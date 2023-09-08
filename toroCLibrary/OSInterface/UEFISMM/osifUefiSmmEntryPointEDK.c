@@ -29,6 +29,11 @@ Author:
 #include <cde.h>
 #include <CdeServices.h>
 //
+// setjmp.h
+//
+extern __declspec(dllimport) int setjmp(jmp_buf);
+
+//
 // prototypes
 //
 static void __cdeFatalCdeServicesNotAvailSmm(EFI_SYSTEM_TABLE* SystemTable);
@@ -52,6 +57,7 @@ extern char* gEfiCallerBaseName;
 extern EFI_STATUS EFIAPI OemHookStatusCodeInitialize(void);
 extern int _cdeStr2Argcv(char** argv, char* szCmdline);
 extern char __cdeGetCurrentPrivilegeLevel(void);
+extern size_t _cdeInt2EfiStatus(int intstatus);
 
 extern EFI_GUID gEfiLoadedImageProtocolGuid;
 extern EFI_GUID _gCdeSmmProtocolGuid;                   // The GUID for the protocol
@@ -250,7 +256,7 @@ static void __cdeFatalCdeServicesNotAvailSMM(EFI_SYSTEM_TABLE* SystemTable);
 EFI_STATUS EFIAPI _MainEntryPointSmm(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
 {
     EFI_STATUS Status = EFI_LOAD_ERROR;
-    int i, argc;
+    int i, argc, nRet = 0;
     static void* argvex[CDE_ARGV_MAX + 2];
 
     argvex[0] = (void*)ImageHandle;
@@ -300,7 +306,9 @@ EFI_STATUS EFIAPI _MainEntryPointSmm(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TA
         //if (0 == __cdeGetCurrentPrivilegeLevel())       // running in RING0
         //    _enable();
 
-        Status = setjmp(CdeAppIfSmm.exit_buf) ? CdeAppIfSmm.exit_status : main(argc, (char**)&argvex[0 + 2]);
+        nRet = setjmp(CdeAppIfSmm.exit_buf) ? CdeAppIfSmm.exit_status : main(argc, (char**)&argvex[0 + 2]);
+
+        Status = _cdeInt2EfiStatus(nRet);
 
         //if (0 == __cdeGetCurrentPrivilegeLevel())       // running in RING0
         //    if(0 == (0x200 & eflags))                   // restore IF interrupt flag
@@ -329,7 +337,7 @@ EFI_STATUS EFIAPI _MainEntryPointSmm(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TA
         }//if( CDE_FREE_MEMORY_ALLOCATION_ON_EXIT ) 
 
         
-    } while (Status = EFI_SUCCESS);
+    } while (0);
 
     return Status;
 }

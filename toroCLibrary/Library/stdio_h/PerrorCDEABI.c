@@ -22,6 +22,9 @@ Author:
     Kilian Kegel
 
 --*/
+#ifndef _CRT_FUNCTIONS_REQUIRED
+#   define _CRT_FUNCTIONS_REQUIRED 0 /* prevent Microsoft specific definition of errno macro                          */
+#endif//_CRT_FUNCTIONS_REQUIRED
 #include <CdeServices.h>
 //
 // stdio.h
@@ -32,6 +35,11 @@ Author:
 extern FILE* __acrt_iob_func(unsigned i);
 __declspec(dllimport) extern int fprintf(FILE* stream, const char* pszFormat, ...);
 __declspec(dllimport) extern char* strerror(int errnum);
+//
+// errno.h
+//
+extern __declspec(dllimport) int* _errno(void);
+#define errno (*_errno())
 
 
 /** perror()

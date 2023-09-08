@@ -22,6 +22,11 @@ Author:
 #define OS_EFI
 #include <CdeServices.h>
 
+//
+// prototype
+//
+OSIFMEMFREE _osifUefiPeiMemFree;
+
 /** _osifMemFree() - free memory  pages
 
 Synopsis
@@ -36,6 +41,6 @@ Parameters
 Returns
     void
 **/
-void _osifUefiPeiMemFree(IN CDE_APP_IF* pCdeAppIf, IN EFI_PHYSICAL_ADDRESS Memory, IN unsigned int Pages) {
+void _osifUefiPeiMemFree(IN CDE_APP_IF* pCdeAppIf, IN EFI_PHYSICAL_ADDRESS Memory, IN size_t Pages) {
     return;//PEI can not release pages
 }

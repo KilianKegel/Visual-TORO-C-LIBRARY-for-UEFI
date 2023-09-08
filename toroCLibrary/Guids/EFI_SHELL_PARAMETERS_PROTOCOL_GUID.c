@@ -8,17 +8,20 @@
 
 Module Name:
 
-    _gSTDOUTMode.c
+    EFI_STATUS_CODE_RUNTIME_PROTOCOL_GUID.c
 
 Abstract:
 
-    CDE internal:   1: force character size conversion to 8Bit for STDOUT and STDERR
-                    0: leave UEFI Shell default 16Bit
-                    ???
+    Definition of EFI_STATUS_CODE_RUNTIME_PROTOCOL_GUID
 
 Author:
 
     Kilian Kegel
 
 --*/
-char _gSTDOUTMode = 0;   //0 == UEFI Shell default, 1 == ASCII only
+#define OS_EFI
+#include <uefi.h>
+#include <Pi\PiStatusCode.h>
+#include <Protocol\ShellParameters.h>
+
+EFI_GUID _gEfiShellParametersProtocolGuid = EFI_SHELL_PARAMETERS_PROTOCOL_GUID;

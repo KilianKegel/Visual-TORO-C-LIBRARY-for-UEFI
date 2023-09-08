@@ -26,9 +26,6 @@ Author:
 
 #include <CdeServices.h>
 
-extern EFI_SHELL_PROTOCOL* pEfiShellProtocol;
-extern CDESYSTEMVOLUMES gCdeSystemVolumes;
-
 /**
 
 Synopsis
@@ -52,11 +49,9 @@ char* _osifUefiShellGetDrvCwd(IN CDE_APP_IF* pCdeAppIf, IN OUT char* pstrDrvCwdB
     wchar_t* pwcsIntern = (void*)&pCdeAppIf->szTmpBuf[0];                   // access buffer via wchar_t* type
     wchar_t wc;
     int i = 0;
-
+    EFI_SHELL_PROTOCOL* pEfiShellProtocol = pCdeAppIf->pCdeServices->pvEfiShellProtocol;
     do
     {
-        //pwcsPool = (wchar_t*)pEfiShellProtocol->GetCurDir(NULL == pstrDrvCwdBuf ? NULL : (const wchar_t*) &wcsDrive[0]);
-        
         pwcsPool = (wchar_t*)pEfiShellProtocol->GetCurDir(NULL);
 
         if (NULL != pwcsPool)

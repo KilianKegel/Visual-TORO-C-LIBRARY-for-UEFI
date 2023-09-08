@@ -22,11 +22,14 @@ Author:
     Kilian Kegel
 
 --*/
+#define _INC_STDDEF         // exclude MSFT STDDEF.H, that conflicts with errno
 #include <CdeServices.h>
 #include <stddef.h>
 //
 // errno.h
 //
+#undef errno
+extern __declspec(dllimport) int* _errno(void);
 #define errno (*_errno())
 #define EILSEQ 42
 

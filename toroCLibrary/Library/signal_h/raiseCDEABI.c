@@ -56,10 +56,10 @@ static int raiseCDEABI(int sig) {
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
 
     do {
-        if (idx < 0)
-            (*pinvalid_parameter_handlerCDEABI)(L"\"idx < 0\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
-        (*pinvalid_parameter_handlerCDEABI)(NULL, NULL, NULL, 0, 0);
-
+        if (idx < 0){
+            //(*pinvalid_parameter_handlerCDEABI)(L"\"idx < 0\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+            (*pinvalid_parameter_handlerCDEABI)(NULL, NULL, NULL, 0, 0);
+        }
         sighnd = pCdeAppIf->rgfnSignal[idx];
 
         if (pCdeAppIf->rgfnSignal[idx] != &_cdeSigIgn) {

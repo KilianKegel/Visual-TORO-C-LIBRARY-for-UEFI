@@ -1,5 +1,6 @@
 .vs
 x64/
+!MdePkgInc/X64
 Win32/
 toroCLibrary/$trash/
 toroCLibrary/Tools/$trash/

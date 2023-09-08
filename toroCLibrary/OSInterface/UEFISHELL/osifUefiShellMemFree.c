@@ -25,6 +25,11 @@ Author:
 #include <Base.h>
 #include <CdeServices.h>
 
+//
+// prototype
+//
+OSIFMEMFREE _osifUefiShellMemFree;
+
 /** _osifMemFree() - free memory  pages
 
 Synopsis
@@ -39,7 +44,7 @@ Parameters
 Returns
     void
 **/
-void _osifUefiShellMemFree(IN CDE_APP_IF* pCdeAppIf, IN EFI_PHYSICAL_ADDRESS Memory, IN unsigned Pages) {
+void _osifUefiShellMemFree(IN CDE_APP_IF* pCdeAppIf, IN EFI_PHYSICAL_ADDRESS Memory, IN  size_t Pages) {
     EFI_STATUS Status;
     Status = pCdeAppIf->DriverParm.BsDriverParm.pSystemTable->BootServices->FreePages(Memory, Pages);
     

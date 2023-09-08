@@ -21,14 +21,21 @@ Author:
 
     Kilian Kegel
 
-TODO: add invalid parameter handler support
-
 --*/
-
+#define _INC_STDDEF         // exclude MSFT STDDEF.H, that conflicts with errno
 #include <CdeServices.h>
+#include <limits.h>
+//
+// errno.h
+//
+extern __declspec(dllimport) int* _errno(void);
+#define errno (*_errno())
+#define EBADF           9
+#define EINVAL          22
 
 extern __declspec(dllimport) size_t wcslen(const wchar_t* pszBuffer);
 extern __declspec(dllimport) wchar_t* wcsncpy(wchar_t* pszDst, const wchar_t* pszSrc, size_t n);
+extern void (*pinvalid_parameter_handler)(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);
 
 /**
 Synopsis
@@ -50,9 +57,25 @@ Parameters
 Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/strxfrm-wcsxfrm-strxfrm-l-wcsxfrm-l?view=msvc-170#return-value
 **/
-static size_t wcsxfrmCDEABI(wchar_t* pszDst, const wchar_t* pszSrc, size_t n) {
+static size_t wcsxfrmCDEABI(wchar_t* pszDst, const wchar_t* pszSrc, size_t n) 
+{
+    size_t nRet = INT_MAX;
 
-    return wcslen(wcsncpy(pszDst, pszSrc, n));
+    do
+    {
+        if ((n >= INT_MAX) || (pszDst == NULL) || (pszSrc == NULL))
+        {
+            errno = EINVAL;
+            //(*pinvalid_parameter_handler)(L"\"NULL pointer assignment\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+            (*pinvalid_parameter_handler)(NULL, NULL, NULL, 0, 0);
+            break;
+        }
+
+        nRet = wcslen(wcsncpy(pszDst, pszSrc, n));
+
+    } while (0);
+
+    return nRet;
 }
 
 MKCDEABI(wcsxfrm);

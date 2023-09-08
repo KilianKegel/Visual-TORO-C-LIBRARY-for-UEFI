@@ -23,7 +23,7 @@ Author:
 #include <stdarg.h>
 #include <limits.h>
 
-extern VWXPRINTF _cdeVwxPrintf;
+extern VWXPRINTF _cdeCoreVwxPrintf;
 
 int _cdeCoreSprintf(CDE_APP_IF* pCdeAppIf, char* pszDest, const char* pszFormat, ...) {
     va_list ap;
@@ -43,7 +43,7 @@ int _cdeCoreSprintf(CDE_APP_IF* pCdeAppIf, char* pszDest, const char* pszFormat,
 
     va_start(ap, pszFormat);
 
-    nRet = (int)_cdeVwxPrintf(
+    nRet = (int)_cdeCoreVwxPrintf(
         pCdeAppIf,
         &RomParm,           //IN ROMPARM_VWXPRINTF *pRomParm,
         pszFormat,          //IN const void *pszFormat,

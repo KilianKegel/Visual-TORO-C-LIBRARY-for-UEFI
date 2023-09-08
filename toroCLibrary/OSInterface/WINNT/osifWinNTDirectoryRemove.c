@@ -21,10 +21,6 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <string.h>
 
 int osifWinNTDirectoryRemove(IN CDE_APP_IF* pCdeAppIf, const char* strDirectoryName)
 {

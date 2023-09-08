@@ -25,10 +25,10 @@ Author:
 
 #define UINT64 unsigned long long
 #define UINT8 unsigned char
-#define CDE_APP_IF void
 
 extern fpos_t __cdeOffsetCdeFposType(fpos_t fpos);
 extern int __cdeBiasCdeFposType(fpos_t fpos);
+OSIFFSETPOS _osifWinNTFileSetPos;
 
 /**
 Synopsis

@@ -34,7 +34,7 @@ Author:
 #define EOS '\0'
 #define EOSSIZE 1/*sizeof("");*/
 
-#define _A_CDE_EXTENTION_DONE 0x80 // DONE FLAG -- File attribute constants extention from IO.H
+#define _A_CDE_EXTENSION_DONE 0x80 // DONE FLAG -- File attribute constants extension from IO.H
 
 extern char* __cdeSplitSearchNameExt2Upcase(const char* pstr, char** ppStrFULL, char** ppStrEXT);
 

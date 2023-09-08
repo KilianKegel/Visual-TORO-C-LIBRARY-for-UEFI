@@ -19,8 +19,6 @@ Author:
 
     Kilian Kegel
 
-TODO: add invalid parameter handler support
-
 --*/
 
 #include <CdeServices.h>
@@ -56,7 +54,7 @@ size_t wcsxfrm(wchar_t* pszDst, const wchar_t* pszSrc, size_t n) {
 
     do
     {
-        if (NULL == pszDst || NULL == pszSrc)
+        if ((n >= INT_MAX) || (pszDst == NULL) || (pszSrc == NULL))
         {
             errno = EINVAL;
             //(*pinvalid_parameter_handler)(L"\"NULL pointer assignment\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);

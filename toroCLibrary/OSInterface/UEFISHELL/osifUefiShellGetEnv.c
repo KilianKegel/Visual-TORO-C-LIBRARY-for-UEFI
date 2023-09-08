@@ -29,7 +29,6 @@ Author:
 
 #define ELC(x) sizeof(x) / sizeof(x[0])
 
-extern EFI_SHELL_PROTOCOL* pEfiShellProtocol;
 extern EFI_SYSTEM_TABLE* _cdegST;
 
 /**
@@ -53,6 +52,7 @@ char* _osifUefiShellGetEnv(IN CDE_APP_IF* pCdeAppIf, const char* pszEnvar/*envir
     wchar_t wbuffer[64];
     wchar_t* pwcsEnvar;
     int i;
+    EFI_SHELL_PROTOCOL* pEfiShellProtocol = pCdeAppIf->pCdeServices->pvEfiShellProtocol;
 
     for (i = 0; i < sizeof(buffer); i++)
         buffer[i] = 0;

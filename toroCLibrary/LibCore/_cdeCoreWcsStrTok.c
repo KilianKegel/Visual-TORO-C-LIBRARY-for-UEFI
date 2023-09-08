@@ -8,7 +8,7 @@
 
 Module Name:
 
-    _cdeWcsStrTok.c
+    _cdeCoreWcsStrTok.c
 
 Abstract:
 
@@ -21,19 +21,21 @@ Author:
 --*/
 #include <CdeServices.h>
 
-extern char* strpbrk(const char* pszStr, const char* pszSet);
-extern wchar_t* wcspbrk(const wchar_t* pszStr, const wchar_t* pszSet);
-extern size_t 	strspn(const char* pszStr, const char* pszSet);
-extern size_t 	wcsspn(const wchar_t* pszStr, const wchar_t* pszSet);
-unsigned int _strlen(const char* pszBuffer);
-unsigned int _wcslen(const short* pszBuffer);
+//
+// string.h
+//
+extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
+//
+// wchar.h
+//
+extern __declspec(dllimport) size_t wcslen(const wchar_t* pszBuffer);
 
 
-void* _cdeWcsStrTok(CDE_APP_IF* pCdeAppIf, IN void* pvoidStr, IN const void* pszSet, IN OUT void** ppLast, IN ROMPARM_WCSSTRTOK* pParm)
+void* _cdeCoreWcsStrTok(CDE_APP_IF* pCdeAppIf, IN void* pvoidStr, IN const void* pszSet, IN OUT void** ppLast, IN ROMPARM_WCSSTRTOK* pParm)
 {
     void* pNew;
     char* pszStr = pvoidStr, * p;
-    unsigned int (*pwcsstrlen)(const void* pszBuffer) = pParm->fWide ? (unsigned int (*)(const void*)) & _wcslen : (unsigned int (*)(const void*)) & _strlen;
+    unsigned int (*pwcsstrlen)(const void* pszBuffer) = pParm->fWide ? (unsigned int (*)(const void*)) & wcslen : (unsigned int (*)(const void*)) & strlen;
 
     do {
 

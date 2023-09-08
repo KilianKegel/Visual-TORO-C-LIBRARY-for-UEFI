@@ -78,14 +78,13 @@ extern __declspec(dllimport) size_t wcslen(const wchar_t* pszBuffer);
 #include <Protocol\Shell.h>
 #define UINT64 unsigned long long
 #define UINT8 unsigned char
-#define CDE_APP_IF void
+//#define CDE_APP_IF void
 
 #define ELC(x) (sizeof(x)/sizeof(x[0]))  // element count
 #define MAX_FILE_NAME_LEN 522 // (20 * (6+5+2))+1) unicode characters from EFI FAT spec (doubled for bytes)
 #define FIND_XXXXX_FILE_BUFFER_SIZE (SIZE_OF_EFI_FILE_INFO + MAX_FILE_NAME_LEN)
 
-extern const short* _CdeGetCurDir(IN const short* FileSystemMapping);
-extern CDESYSTEMVOLUMES gCdeSystemVolumes;
+extern const short* _CdeGetCurDir(IN CDE_APP_IF *pCdeAppIf, IN const short* FileSystemMapping);
 
 static CDEFILEINFO* __cdeReadDirectory(IN char* strFileName, OUT int* pcntDirEntries);
 
@@ -111,7 +110,7 @@ CDEFILEINFO* _osifUefiShellFileFindAll(IN CDE_APP_IF* pCdeAppIf, IN char* pstrDr
     bool fIsFileDrv = false/* a drive name leads the path e.g. FS0: This is identified by precense of ':' */;
     char strDrive[6], strDrive2[6];
     wchar_t wcsDrive2[6];
-    int i;
+    unsigned i;
 
     //
     // non-malloc()'ed pointers
@@ -144,7 +143,7 @@ CDEFILEINFO* _osifUefiShellFileFindAll(IN CDE_APP_IF* pCdeAppIf, IN char* pstrDr
         fIsFileDrv = (NULL != (pColon = strchr(pstrDrvPthDirStar, ':')));       // drive name presence is identified by ':'
         fIsFileAbs = pstrDrvPthDirStar[0] == '\\' || (fIsFileDrv ? pColon[1] == '\\' : 0);
 
-        pwcsCurDir = (wchar_t*)_CdeGetCurDir(NULL);
+        pwcsCurDir = (wchar_t*)_CdeGetCurDir(pCdeAppIf,NULL);
         pstrCurDir = (void*)pwcsCurDir;
         wcstombs(pstrCurDir, pwcsCurDir,(size_t)-1);
 
@@ -159,20 +158,20 @@ CDEFILEINFO* _osifUefiShellFileFindAll(IN CDE_APP_IF* pCdeAppIf, IN char* pstrDr
             //
             if (1)
             {
-                for (i = 0; i <gCdeSystemVolumes.nVolumeCount; i++)
+                for (i = 0; i < pCdeAppIf->pCdeServices->pCdeSystemVolumes->nVolumeCount; i++)
                 {
-                    if (0 == _wcsicmp(wcsDrive2,gCdeSystemVolumes.rgFsVolume[i].rgpVolumeMap[0]))
+                    if (0 == _wcsicmp(wcsDrive2, pCdeAppIf->pCdeServices->pCdeSystemVolumes->rgFsVolume[i].rgpVolumeMap[0]))
                         break;
                 }
 
                 //CDEMOFINE((MFNINF(i ==gCdeSystemVolumes.nVolumeCount) "Drive %ls %s found\n", wcsDrive2, i ==gCdeSystemVolumes.nVolumeCount ? "NOT" : ""));
 
-                if (i ==gCdeSystemVolumes.nVolumeCount)
+                if (i == pCdeAppIf->pCdeServices->pCdeSystemVolumes->nVolumeCount)
                     break;  // break with nRet == -1, drive is not available
 
             }
 
-            pwcsCurDir2 = (wchar_t*)_CdeGetCurDir(wcsDrive2);
+            pwcsCurDir2 = (wchar_t*)_CdeGetCurDir(pCdeAppIf, wcsDrive2);
             pstrCurDir2 = (void*)pwcsCurDir2;
             wcstombs(pstrCurDir2, pwcsCurDir2,(size_t)-1);
         }

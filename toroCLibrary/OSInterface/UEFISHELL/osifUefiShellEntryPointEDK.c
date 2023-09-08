@@ -45,6 +45,12 @@ Author:
 #include "Protocol\StatusCode.h"
 #include <Protocol\Shell.h>
 //
+// setjmp.h
+//
+#undef setjmp
+extern __declspec(dllimport) int setjmp(jmp_buf);
+
+//
 // C++/"C with classes" for the Microsoft compiler
 //
     typedef int(__cdecl* _PIFV)(void);
@@ -77,15 +83,16 @@ Author:
 //
 extern unsigned char _gCdeCfgCmdLnParmPoolMemRetain;
 extern unsigned char _gCdeCfgCmdLnParmReportStatusCodeSTDOUT;
-
+//
 // CdeServices
+//
 extern _PUTCHAR         _CdeDbgPutChar;
-extern VWXPRINTF        _cdeVwxPrintf;
-extern VWXSCANF         _cdeVwxScanf;
-extern WCSSTRTOK        _cdeWcsStrTok;
+extern VWXPRINTF        _cdeCoreVwxPrintf;
+extern VWXSCANF         _cdeCoreVwxScanf;
+extern WCSSTRTOK        _cdeCoreWcsStrTok;
 extern WCSSTRPBRKSPN    _cdeWcsStrPbrkSpn;
 extern void EFIAPI      DebugPrint(IN UINTN ErrorLevel, IN const char* Format, ...);
-extern MEMREALLOC       _cdeMemRealloc;
+extern MEMREALLOC       _cdeCoreMemRealloc;
 extern MEMSTRXCPY       _cdeMemStrxCpy;
 extern MEMSTRXCMP       _cdeMemStrxCmp;
 extern OSIFGETTIME		_osifIbmAtGetTime;
@@ -107,6 +114,11 @@ extern OSIFDIRCREATE    _osifUefiShellDirectoryCreate;   /*pDirCreate    */
 extern OSIFCMDEXEC      _osifUefiShellCmdExec;           /*pCmdExec      */
 extern OSIFGETENV       _osifUefiShellGetEnv;            /*pGetEnv       */
 extern OSIFGETDCWD      _osifUefiShellGetDrvCwd;         /*pGetDrvCwd    current working directory*/
+
+extern COREFILERW       _cdeCoreFread;                   /*pFReadCORE    */
+extern COREFILERW       _cdeCoreFwrite;                  /*pFWriteCORE   */
+extern CORESETPOS       _cdeCoreFsetpos;                 /*pFSetPosCORE  */
+extern COREFFLUSH       _cdeCoreFflush;                  /*pFFlushCORE   */
 
 // Microsoft specific C++ initialization support
 typedef int(__cdecl* _PIFV)(void);
@@ -131,7 +143,6 @@ extern int _cdeStr2Argcv(char** argv, char* szCmdline);
 extern void _cdeSigDflt(int sig);
 extern struct _CDE_LCONV_LANGUAGE _cdeCLocale;
 extern struct lconv _cdeLconv_C;
-extern char _gSTDOUTMode;   /* 0 == UEFI Shell default, 1 == ASCII only */
 extern char __cdeGetCurrentPrivilegeLevel(void);
 extern EFI_GUID _gCdeDxeProtocolGuid;
 extern EFI_GUID _gCdeEfiShellProtocolGuid;
@@ -157,14 +168,12 @@ extern __declspec(dllimport) int raise(int sig);
 //
 // globals
 //
-EFI_SHELL_PROTOCOL*     pEfiShellProtocol;// for version check
 EFI_HANDLE              _cdegImageHandle;
 EFI_SYSTEM_TABLE*       _cdegST;
 EFI_BOOT_SERVICES*      _cdegBS;
 EFI_RUNTIME_SERVICES*   _cdegRT;
 char* gszCdeDriverName;
-EFI_STATUS_CODE_PROTOCOL* pgEfiStatusCodeProtocol;
-CDESYSTEMVOLUMES gCdeSystemVolumes = { -1 };
+static CDESYSTEMVOLUMES gCdeSystemVolumes = { (UINTN) -1};
 static CDEFILE _iob[CDE_FILEV_MAX];                                  /* Microsoft definition. It must be buildable within the DDK*/
 static EFI_GUID _gEfiStatusCodeRuntimeProtocolGuid = { 0xD2B2B828, 0x0826, 0x48A7, { 0xB3, 0xDF, 0x98, 0x3C, 0x00, 0x60, 0x24, 0xF0 } };
 //
@@ -175,6 +184,7 @@ static EFI_GUID _gEfiStatusCodeRuntimeProtocolGuid = { 0xD2B2B828, 0x0826, 0x48A
 #include "..\EDK2ObjBlocker\DebugLib_c.h"
 
 #ifndef _DONT_USE_EDK2_MODULEENTRYPOINT_OVERRIDE_
+
 /** _cdeCRT0UefiShellEDK()
 
 Synopsis
@@ -182,14 +192,11 @@ Synopsis
     EFI_STATUS EFIAPI _cdeCRT0UefiShellEDK(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable);
 Description
 
-    Function locates the "Application Interface" (r/w memory) that is exclusive for each driver
-    at runtime.
-    For PeiDrivers this chunk of memory is placed in a HOB, allocated at image startup.
-
-    NOTE:   _ModuleEntryPoint() might run various LibConstructors that use DEBUG macro that CdePkg replaces.
-            The CdeAppIf (CDE Application interface) needs to be allocated and initialized earlier, at
-            image start.
-
+    _ModuleEntryPoint() might run ProcessLibraryConstructorList(), ProcessModuleEntryPointList() that use 
+    DEBUG macro that CdePkg replaces.
+    The CdeAppIf (CDE Application interface) needs to be allocated and initialized earlier, at
+    image start.
+    
     Returns
 
     @param[in]  void
@@ -199,13 +206,13 @@ Description
 **/
 EFI_STATUS EFIAPI _cdeCRT0UefiShellEDK(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
 {
-    return _ModuleEntryPoint(ImageHandle, SystemTable);
+    return _ModuleEntryPoint(ImageHandle, SystemTable);     // process all original EDK2 LibraryConstructors and EntryPoints
 }
 
 EFI_STATUS EFIAPI _cdeCRT0UefiShellEDKINT3(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
 {
     __debugbreak();
-    return _ModuleEntryPoint(ImageHandle, SystemTable);
+    return _ModuleEntryPoint(ImageHandle, SystemTable);     // process all original EDK2 LibraryConstructors and EntryPoints
 }
 #endif//_DONT_USE_EDK2_MODULEENTRYPOINT_OVERRIDE_
 
@@ -222,45 +229,40 @@ static int _StdInGetChar(void** ppDest) {
     return fgetc((FILE*)CDE_STDIN);
 }
 
-static int _StdInGetCharDxe(void** ppDest) {
-    return EOF;
-}
-
 static CDE_SERVICES gCdeServicesShell = {/*CDE_PROTOCOL*/
     .TimeAtSystemStart = 0,         /* assuming 01.01.1970  */
     .TSClocksPerSec = 2000000000,   /* assuming 2GHz        */
 
     .wVerMajor = 0,
     .wVerMinor = 0,
-    //////todo filedate??? __TIMESTAMP__
-    ////    UINT16 wPtclSize;
     .fx64Opcode = 8 == sizeof(void*),
     .HeapStart = {(void*)-1,ENDOFMEM,1,NULL,NULL,0,0,(void*)-1},
     .TSClocksAtCdeTrace = 0,
     .TimeAtSystemStart = 0,
     .ReportStatusCode = 0,
-    .CpuIoXyz = 0,
+    .pvEfiShellProtocol = 0,
+    .pCdeSystemVolumes = &gCdeSystemVolumes,
     ////    FNDECL_MAINSTART(*pmainstart);          // the fjMainDxeEntryPoint/fjMainSmmEntryPoint loader     /* kg0705F0*/
     ////    FNDECL_SMMSTART(*psmmstart);            // wrapper for fjLoadDriverToSmm
     .pGetConIn = _StdInGetChar,
     .pPutConOut = _StdOutPutChar,
-    ////    FNDECL_PUTSTDERR(*pputstderr);          // STDERR - COM1
-    ////    FNDECL_GETDBGIN(*pgetdbgin);            // DBGIN  - COM1
     .pPutDebug = _CdeDbgPutChar,
-    .pVwxPrintf = _cdeVwxPrintf,
-    .pVwxScanf = _cdeVwxScanf,
-    .pMemRealloc = _cdeMemRealloc,
+    .pVwxPrintf = _cdeCoreVwxPrintf,
+    .pVwxScanf = _cdeCoreVwxScanf,
+    .pMemRealloc = _cdeCoreMemRealloc,
     .pMemStrxCpy = _cdeMemStrxCpy,
     .pMemStrxCmp = _cdeMemStrxCmp,
-    ////    FNDECL_IOREADX(*pioreadx);
-    ////    FNDECL_IOWRITEX(*piowritex);
-    ////    FNDECL_MEMREADX(*pmemreadx);                                                /* kg0704F0*/
-    ////    FNDECL_MEMWRITEX(*pmemwritex);                                              /* kg0704F0*/
-    ////    //@ToDo: Add additional functions and/or data types to this protocol
     ////// ----- string processing functions
     .pWcsStrPbrkSpn = _cdeWcsStrPbrkSpn,
-    .pWcsStrTok = _cdeWcsStrTok,
-    //
+    .pWcsStrTok = _cdeCoreWcsStrTok,
+//
+// core C functions, running on driver side
+//
+    .pFReadCORE = _cdeCoreFread,                   /* core fread()    */
+    .pFWriteCORE = _cdeCoreFwrite,                 /* core fwrite()   */
+    .pFSetPosCORE = _cdeCoreFsetpos,               /* core fsetpos()  */
+    .pFFlushCORE = _cdeCoreFflush,                 /* core fflush()   */
+
     // OSIF - operating system interface
     //
         .pGetTime = _osifIbmAtGetTime,
@@ -282,7 +284,7 @@ static CDE_SERVICES gCdeServicesShell = {/*CDE_PROTOCOL*/
         .pFgetstatus = _osifUefiShellFileGetStatus,  /* OSIFFGETSTATUS   *pFgetstatus*/
         .pGetDrvCwd = _osifUefiShellGetDrvCwd,       /* OSIFGETDCWD      *pGetDrvCwd */
         .pDirCreate = _osifUefiShellDirectoryCreate, /* OSIFDIRCREATE    *pDirCreate */
-        .pDirRemove = NULL,                         /* OSIFDIRCREATE    *pDirCreate */
+        .pDirRemove = NULL,                          /* OSIFDIRCREATE    *pDirCreate */
     //
     // diagnostic
     //
@@ -312,12 +314,32 @@ CDE_APP_IF CdeAppIfShell = {
     .ActiveLocale = { "C", &_cdeLconv_C, NULL }/*&_cdeCLocale*/
 };
 
-void __CdeChkCtrlC(void) {
+static void __CdeChkCtrlC(void) {
+
+    EFI_SHELL_PROTOCOL* pEfiShellProtocol = CdeAppIfShell.pCdeServices->pvEfiShellProtocol;
+
     if(NULL != pEfiShellProtocol)
         if (_cdegBS->CheckEvent(pEfiShellProtocol->ExecutionBreak) == EFI_SUCCESS)
             raise(SIGINT);
 }
 
+/** __cdeGetAppIf()
+
+Synopsis
+    void* __cdeGetAppIf(void);
+Description
+
+    Function locates the "Application Interface" (r/w memory) that is exclusive for each driver
+    at runtime.
+    For PeiDrivers this chunk of memory is placed in a HOB, allocated at startup
+
+    Returns
+
+    @param[in]  void
+
+    @retval (void*)pCdeAppIfDxe
+
+**/
 void* __cdeGetAppIf(void) {
     __CdeChkCtrlC();
     return &CdeAppIfShell;
@@ -360,7 +382,8 @@ _MainEntryPointShell(
         /*fWide                 */ 0 ,\
     };
     size_t eflags = __readeflags();
-    
+    CDE_APP_IF* pCdeAppIf = &CdeAppIfShell;
+
     CDEPOSTCODE(IS64BITCODE, 0xC0);
     if (1)
         do {
@@ -374,8 +397,8 @@ _MainEntryPointShell(
             argvex[0] = (void*)ImageHandle;         // instead do dedicated initialization that invokes __imp__memset()
             argvex[1] = (void*)SystemTable;         // instead do dedicated initialization that invokes __imp__memset()
 
-            CdeAppIfShell.DriverParm.BsDriverParm.ImageHandle = ImageHandle;
-            CdeAppIfShell.DriverParm.BsDriverParm.pSystemTable = SystemTable;
+            pCdeAppIf->DriverParm.BsDriverParm.ImageHandle = ImageHandle;
+            pCdeAppIf->DriverParm.BsDriverParm.pSystemTable = SystemTable;
 
             //
             // get the ReportStatusCodeProtocol
@@ -397,7 +420,7 @@ _MainEntryPointShell(
             ////
             //// check shell version
             ////
-            //if (NULL == (pEfiShellProtocol = _CdeLocateProtocol(&_gCdeEfiShellProtocolGuid, NULL))) {
+            //if (NULL == (pvEfiShellProtocol = _CdeLocateProtocol(&_gCdeEfiShellProtocolGuid, NULL))) {
             //    pCdeST->ConOut->OutputString(pCdeST->ConOut, L"FATAL ERROR: Shell Protocol missing\r\nDownload UEFI SHELL from:\r\n\thttps://github.com/tianocore/edk2/blob/master/ShellBinPkg/UefiShell/X64/Shell.efi\r\nand copy to EFI\\BOOT\\BOOTX64.EFI");
             //    Status = EFI_INCOMPATIBLE_VERSION;
             //    break;
@@ -407,10 +430,11 @@ _MainEntryPointShell(
             //
             if (1) {
                 int ShellVerNum = 0;
-                pEfiShellProtocol = _CdeLocateProtocol(&_gCdeEfiShellProtocolGuid, NULL);
+                pCdeAppIf->pCdeServices->pvEfiShellProtocol = _CdeLocateProtocol(&_gCdeEfiShellProtocolGuid, NULL);
 
-                if (NULL != pEfiShellProtocol)
+                if (NULL != pCdeAppIf->pCdeServices->pvEfiShellProtocol)
                 {
+                    EFI_SHELL_PROTOCOL *pEfiShellProtocol = pCdeAppIf->pCdeServices->pvEfiShellProtocol;
                     ShellVerNum = 100 * pEfiShellProtocol->MajorVersion;
                     ShellVerNum += pEfiShellProtocol->MinorVersion;
                 }
@@ -429,8 +453,8 @@ _MainEntryPointShell(
                 static EFI_GUID EfiShellParametersProtocolGuid = EFI_SHELL_PARAMETERS_PROTOCOL_GUID;
                 EFI_SHELL_PARAMETERS_PROTOCOL* pEfiShellParametersProtocol;
 
-                memset(&gCdeSystemVolumes, 0, sizeof(gCdeSystemVolumes));   // clear entire structure
-                gCdeSystemVolumes.nVolumeCount = -1;                        // mark volume enumeration not yet done
+                memset(pCdeAppIf->pCdeServices->pCdeSystemVolumes, 0, sizeof(CDESYSTEMVOLUMES));   // clear entire structure
+                pCdeAppIf->pCdeServices->pCdeSystemVolumes->nVolumeCount = (UINTN) -1;             // mark volume enumeration not yet done
 
                 memset(&_iob[0], 0, sizeof(_iob));                          // clear entire structure
 
@@ -446,23 +470,23 @@ _MainEntryPointShell(
                 CDE_STDOUT->pRootProtocol = pEfiShellParametersProtocol->StdOut;
                 CDE_STDOUT->pFileProtocol = pEfiShellParametersProtocol->StdOut;
                 CDE_STDOUT->fRsv = TRUE;
-                CDE_STDOUT->openmode = O_TEXT + O_WRONLY + O_CDESTDOUT + (_gSTDOUTMode == 0 ? O_CDENOSEEK : 0) + (EFI_UNSUPPORTED == _iob[1].pFileProtocol->GetPosition(_iob[1].pRootProtocol, &Position) ? O_CDEWCSZONLY : O_CDEREDIR);
+                CDE_STDOUT->openmode = O_TEXT + O_WRONLY + O_CDESTDOUT + (pCdeAppIf->STDOUT816BitMode == 0 ? O_CDENOSEEK : 0) + (EFI_UNSUPPORTED == _iob[1].pFileProtocol->GetPosition(_iob[1].pRootProtocol, &Position) ? O_CDEWCSZONLY : O_CDEREDIR);
                 CDE_STDOUT->emufp = &_iob[1];
 
                 CDE_STDERR->pRootProtocol = pEfiShellParametersProtocol->StdErr;
                 CDE_STDERR->pFileProtocol = pEfiShellParametersProtocol->StdErr;
                 CDE_STDERR->fRsv = TRUE;
-                CDE_STDERR->openmode = O_TEXT + O_WRONLY + O_CDESTDERR + (_gSTDOUTMode == 0 ? O_CDENOSEEK : 0) + (EFI_UNSUPPORTED == _iob[2].pFileProtocol->GetPosition(_iob[2].pRootProtocol, &Position) ? O_CDEWCSZONLY : O_CDEREDIR);
+                CDE_STDERR->openmode = O_TEXT + O_WRONLY + O_CDESTDERR + (pCdeAppIf->STDOUT816BitMode == 0 ? O_CDENOSEEK : 0) + (EFI_UNSUPPORTED == _iob[2].pFileProtocol->GetPosition(_iob[2].pRootProtocol, &Position) ? O_CDEWCSZONLY : O_CDEREDIR);
                 CDE_STDERR->emufp = &_iob[2];
             }
 
             //
             // clock() initialization
             //
-            CdeAppIfShell.pCdeServices->TSClocksAtSystemStart = gCdeServicesShell.pGetTsc(&CdeAppIfShell);
+            pCdeAppIf->pCdeServices->TSClocksAtSystemStart = gCdeServicesShell.pGetTsc(pCdeAppIf);
             if (0 == __cdeGetCurrentPrivilegeLevel()) {                                      // running in RING0
-                CdeAppIfShell.pCdeServices->TSClocksPerSec = gCdeServicesShell.pGetTscPerSec(&CdeAppIfShell);
-                CdeAppIfShell.pCdeServices->TimeAtSystemStart = gCdeServicesShell.pGetTime(&CdeAppIfShell);
+                pCdeAppIf->pCdeServices->TSClocksPerSec = gCdeServicesShell.pGetTscPerSec(pCdeAppIf);
+                pCdeAppIf->pCdeServices->TimeAtSystemStart = gCdeServicesShell.pGetTime(pCdeAppIf);
             }
             //todo check STATUS
             //Status = SystemTable->BootServices->LocateProtocol(&_gCdeDxeProtocolGuid,NULL,&CdeAppIfShell.pCdeServices);
@@ -483,7 +507,7 @@ _MainEntryPointShell(
 
             gszCdeDriverName = argvex[0 + 2];
 
-            memset((void*)&CdeAppIfShell.rgcbAtexit[0], (int)0, sizeof(CdeAppIfShell.rgcbAtexit));
+            memset((void*)pCdeAppIf->rgcbAtexit[0], (int)0, sizeof(pCdeAppIf->rgcbAtexit));
             
             if (1)
             {
@@ -542,7 +566,7 @@ _MainEntryPointShell(
             if (0 == __cdeGetCurrentPrivilegeLevel())        // running in RING0
                 _enable();
 
-            Status = setjmp(CdeAppIfShell.exit_buf) ? CdeAppIfShell.exit_status : main(argc, (char**)&argvex[0 + 2]);
+            Status = setjmp(pCdeAppIf->exit_buf) ? pCdeAppIf->exit_status : main(argc, (char**)&argvex[0 + 2]);
 
             if (0 == __cdeGetCurrentPrivilegeLevel())        // running in RING0
                 if (0 == (0x200 & eflags))          // restore IF interrupt flag
@@ -551,8 +575,8 @@ _MainEntryPointShell(
             CDEPOSTCODE(IS64BITCODE, 0xC9);
 
             for (i = CDE_ATEXIT_REGISTRATION_NUM - 1; i >= 0; i--) {
-                if (NULL != CdeAppIfShell.rgcbAtexit[i]) {
-                    (*CdeAppIfShell.rgcbAtexit[i])();
+                if (NULL != pCdeAppIf->rgcbAtexit[i]) {
+                    (pCdeAppIf->rgcbAtexit[i])();
                 }
             }
 
@@ -576,11 +600,11 @@ _MainEntryPointShell(
             // free memory allocated during runtime
             //
             if (CDE_FREE_MEMORY_ALLOCATION_ON_EXIT) {
-                HEAPDESC* pHeap = &CdeAppIfShell.pCdeServices->HeapStart;
+                HEAPDESC* pHeap = &pCdeAppIf->pCdeServices->HeapStart;
                 do {
                     if (pHeap->qwMagic == ALLOCMEM) {
                         free(&pHeap[1]);
-                        pHeap = &CdeAppIfShell.pCdeServices->HeapStart;
+                        pHeap = &pCdeAppIf->pCdeServices->HeapStart;
                     }
                     pHeap = pHeap->pSucc;
                 } while (pHeap);

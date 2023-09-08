@@ -21,14 +21,18 @@ Author:
 
     Kilian Kegel
 
-TODO: add invalid parameter handler support
-
 --*/
 
-#include <stddef.h>
-#include <errno.h>
-#include <limits.h>
+#define _INC_STDDEF         // exclude MSFT STDDEF.H, that conflicts with errno
 #include <CdeServices.h>
+#include <limits.h>
+//
+// errno.h
+//
+extern __declspec(dllimport) int* _errno(void);
+#define errno (*_errno())
+#define EBADF           9
+#define EINVAL          22
 
 extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
 extern __declspec(dllimport) char* strncpy(char* pszDst, const char* pszSrc, size_t n);
@@ -59,7 +63,7 @@ static size_t strxfrmCDEABI(char* pszDst, const char* pszSrc, size_t n) {
     size_t nRet = INT_MAX;
     do
     {
-        if (NULL == pszDst || NULL == pszSrc)
+        if ((n >= INT_MAX) || (pszDst == NULL) || (pszSrc == NULL))
         {
             errno = EINVAL;
             //(*pinvalid_parameter_handler)(L"\"NULL pointer assignment\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);

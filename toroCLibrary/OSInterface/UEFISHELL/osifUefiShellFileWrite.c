@@ -26,7 +26,6 @@ Author:
 #include <CdeServices.h>
 #include <stdio.h>
 #include <stdint.h>
-extern char _gSTDOUTMode;   /* 0 == UEFI Shell default, 1 == ASCII only */
 
 //EFI_SYSTEM_TABLE* _cdegST;
 //extern char trcen;
@@ -68,7 +67,7 @@ size_t _osifUefiShellFileWrite(IN CDE_APP_IF* pCdeAppIf, void* ptr, size_t nelem
             //
             // suppress ASCII only mode for STDOUT and STDERR
             //
-            if (1 == _gSTDOUTMode/* 0 == UEFI Shell default, 1 == ASCII only */) {
+            if (1 == pCdeAppIf->STDOUT816BitMode/* 0 == UEFI Shell default, 1 == ASCII only */) {
                 *pUni = 'T';
                 OPENMODE |= O_CDEWIDTH16;
             }
@@ -127,6 +126,7 @@ size_t _osifUefiShellFileWrite(IN CDE_APP_IF* pCdeAppIf, void* ptr, size_t nelem
 */
                 do
                 {
+
                     sGapSize -= sizeof(zBuf64k);                                                                // subtract buffer size
                     sBufSiz = sGapSize > 0 ? sizeof(zBuf64k) : sGapSize + sizeof(zBuf64k);                      // write full buffersize of zeros / write remaining zeros
 

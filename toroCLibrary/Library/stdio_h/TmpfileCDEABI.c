@@ -23,7 +23,6 @@ Author:
 
 --*/
 //#include <stdlib.h>
-#include <string.h>
 #include <CdeServices.h>
 //
 // stdio.h
@@ -37,6 +36,8 @@ extern __declspec(dllimport) char* tmpnam(char* s);
 extern __declspec(dllimport) FILE* fopen(const char* filename, const char* mode);
 extern __declspec(dllimport) int fclose(FILE* stream);
 extern __declspec(dllimport) void* malloc(size_t size);
+extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
+extern __declspec(dllimport) char* strcpy(char* pszDst, const char* pszSrc);
 
 /** tmpfile
 

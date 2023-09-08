@@ -22,15 +22,15 @@ Author:
 
 #include <uefi.h>
 #include <Protocol\Shell.h>
+#include <CdeServices.h>
 
 extern void* _cdePoolWcs2AppWcs(short* pwcs, unsigned char freePool);
-extern  EFI_SHELL_PROTOCOL* pEfiShellProtocol;
 
 /** _CdeGetCurDir() 
 
 Synopsis
 
-    const short * _CdeGetCurDir(IN const short* FileSystemMapping)
+    const short * _CdeGetCurDir(IN CDE_APP_IF *pCdeAppIf, IN const short* FileSystemMapping)
 
 Description
 
@@ -43,7 +43,9 @@ Returns
     @retval short * pwcsDirectoryName
 
 **/
-const short * _CdeGetCurDir(IN const short* FileSystemMapping) 
+const short * _CdeGetCurDir(IN CDE_APP_IF *pCdeAppIf, IN const short* FileSystemMapping) 
 {
+    EFI_SHELL_PROTOCOL* pEfiShellProtocol = pCdeAppIf->pCdeServices->pvEfiShellProtocol;
+
     return _cdePoolWcs2AppWcs((short*)pEfiShellProtocol->GetCurDir(FileSystemMapping), 1/*FREEPOOL*/);
 }

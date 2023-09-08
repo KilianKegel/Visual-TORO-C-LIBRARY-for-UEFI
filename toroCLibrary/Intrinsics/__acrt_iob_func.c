@@ -23,7 +23,6 @@ Author:
 --*/
 
 #include <stdio.h>
-#include <errno.h>
 #include <CdeServices.h>
 
 /** __acrt_iob_func

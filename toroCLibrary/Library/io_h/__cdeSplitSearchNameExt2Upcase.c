@@ -37,8 +37,8 @@ Description
 Parameter
 
     const char*  pStr       : IN    input searchstring
-    const char** ppStrFULL  : OUT   pointer to EXTENTION
-    const char** ppStrEXT   : OUT   pointer to EXTENTION
+    const char** ppStrFULL  : OUT   pointer to EXTENSION
+    const char** ppStrEXT   : OUT   pointer to EXTENSION
 
 Returns
 
@@ -51,7 +51,7 @@ char* __cdeSplitSearchNameExt2Upcase(const char* pstr, char** ppStrFULL, char** 
     size_t sizeStrFULL = strlen(pstr);
     char* pStrFULL = malloc(sizeof("") + sizeStrFULL)   /* full search pattern converted to UPCASE  */;
     char* pPatNAME = pStrFULL                   /* search pattern name e.g. "COMMAND" or "CO*AN?    */;
-    char* pStrEXT = NULL                        /* search pattern extention e.g. "COM" or "C?M      */;
+    char* pStrEXT = NULL                        /* search pattern extension e.g. "COM" or "C?M      */;
     char c;
     int i = 0;
 

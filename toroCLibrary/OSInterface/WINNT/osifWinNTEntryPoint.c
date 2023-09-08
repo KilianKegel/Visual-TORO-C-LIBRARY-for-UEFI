@@ -29,6 +29,10 @@ Author:
 
 #include <cde.h>
 #include <CdeServices.h>
+//
+// setjmp.h
+//
+extern __declspec(dllimport) int setjmp(jmp_buf);
 
 const char _1 = 1;
 const char _0 = 0;
@@ -70,32 +74,37 @@ extern void free(void*);
 extern void (*__cdeChkStkAddr)(size_t);
 extern void __chkstkWindows(size_t);
 
-extern VWXPRINTF _cdeVwxPrintf;
-extern VWXSCANF _cdeVwxScanf;
-extern WCSSTRTOK _cdeWcsStrTok;
+extern VWXPRINTF _cdeCoreVwxPrintf;
+extern VWXSCANF _cdeCoreVwxScanf;
+extern WCSSTRTOK _cdeCoreWcsStrTok;
 extern WCSSTRPBRKSPN _cdeWcsStrPbrkSpn;
-extern MEMREALLOC _cdeMemRealloc;
+extern MEMREALLOC _cdeCoreMemRealloc;
 extern MEMSTRXCPY _cdeMemStrxCpy;
 extern MEMSTRXCMP _cdeMemStrxCmp;
 extern OSIFGETTIME		  _osifWinNTGetTime;
 //extern OSIFSETTIME      _osifIbmAtSetTime;
 extern OSIFGETTSCPERSEC _osifWinNTGetTscPerSec;
 extern OSIFGETTSC       osifWinNTGetTsc;
-extern OSIFMEMALLOC     _osifWinNTMemAlloc;          /*pMemAlloc     */
-extern OSIFMEMFREE      _osifWinNTMemFree;           /*pfREEPages    */
-extern OSIFFWRITE       _osifWinNTFileWrite;         /*pFwrite       */
-extern OSIFFREAD        _osifWinNTFileRead;          /*pFread        */
-extern OSIFFSETPOS      _osifWinNTFileSetPos;        /*pFsetpos      */
-extern OSIFFOPEN        _osifWinNTFileOpen;          /*pFopen        */
-extern OSIFFCLOSE       _osifWinNTFileClose;         /*pFclose       */
-extern OSIFFDELETE      _osifWinNTFileDelete;        /*pFdelete      */
-extern OSIFFRENAME      _osifWinNTFileRename;        /*pFrename;     */
-extern OSIFFFINDALL     _osifWinNTFileFindAll;       /*pFfindall     */
-extern OSIFFGETSTATUS   _osifWinNTFileGetStatus;     /*pFgetstatus   */
-extern OSIFDIRCREATE    _osifWinNTDirectoryCreate;   /*pDirCreate    */
-extern OSIFCMDEXEC      _osifWinNTCmdExec;           /*pCmdExec      */
-extern OSIFGETENV       _osifWinNTGetEnv;            /*pGetEnv           */
-extern OSIFGETDCWD      _osifWinNTGetDrvCwd;         /*pGetDrvCwd    current working directory   */
+extern OSIFMEMALLOC     _osifWinNTMemAlloc;         /*pMemAlloc     */
+extern OSIFMEMFREE      _osifWinNTMemFree;          /*pfREEPages    */
+extern OSIFFWRITE       _osifWinNTFileWrite;        /*pFwrite       */
+extern OSIFFREAD        _osifWinNTFileRead;         /*pFread        */
+extern OSIFFSETPOS      _osifWinNTFileSetPos;       /*pFsetpos      */
+extern OSIFFOPEN        _osifWinNTFileOpen;         /*pFopen        */
+extern OSIFFCLOSE       _osifWinNTFileClose;        /*pFclose       */
+extern OSIFFDELETE      _osifWinNTFileDelete;       /*pFdelete      */
+extern OSIFFRENAME      _osifWinNTFileRename;       /*pFrename;     */
+extern OSIFFFINDALL     _osifWinNTFileFindAll;      /*pFfindall     */
+extern OSIFFGETSTATUS   _osifWinNTFileGetStatus;    /*pFgetstatus   */
+extern OSIFDIRCREATE    _osifWinNTDirectoryCreate;  /*pDirCreate    */
+extern OSIFCMDEXEC      _osifWinNTCmdExec;          /*pCmdExec      */
+extern OSIFGETENV       _osifWinNTGetEnv;           /*pGetEnv           */
+extern OSIFGETDCWD      _osifWinNTGetDrvCwd;        /*pGetDrvCwd    current working directory   */
+
+extern COREFILERW       _cdeCoreFread;              /*pFReadCORE    */
+extern COREFILERW       _cdeCoreFwrite;             /*pFWriteCORE   */
+extern CORESETPOS       _cdeCoreFsetpos;            /*pFSetPosCORE  */
+extern COREFFLUSH       _cdeCoreFflush;             /*pFFlushCORE   */
 
 extern int main(int argc, char** argv);
 extern int _cdeStr2Argcv(char** argv, char* szCmdline);
@@ -162,34 +171,32 @@ static CDE_SERVICES gCdeServicesWinNT = {/*CDE_PROTOCOL*/
 
     .wVerMajor = 0,
     .wVerMinor = 0,
-    //////todo filedate??? __TIMESTAMP__
-    ////    UINT16 wPtclSize;
     .fx64Opcode = 8 == sizeof(void*),
     .HeapStart = {(void*)-1,ENDOFMEM,1,NULL,NULL,0,0,(void*)-1},
     .TSClocksAtCdeTrace = 0,
     .TimeAtSystemStart = 0,
     .ReportStatusCode = 0,
-    .CpuIoXyz =  0,
     ////    FNDECL_MAINSTART(*pmainstart);          // the fjMainDxeEntryPoint/fjMainSmmEntryPoint loader     /* kg0705F0*/
     ////    FNDECL_SMMSTART(*psmmstart);            // wrapper for fjLoadDriverToSmm
     .pGetConIn = _StdInGetChar,
     .pPutConOut = _StdOutPutChar,
-    ////    FNDECL_PUTSTDERR(*pputstderr);          // STDERR - COM1
-    ////    FNDECL_GETDBGIN(*pgetdbgin);            // DBGIN  - COM1
     .pPutDebug = _StdOutPutChar,
-    .pVwxPrintf = _cdeVwxPrintf,
-    .pVwxScanf = _cdeVwxScanf,
-    .pMemRealloc = _cdeMemRealloc,
+    .pVwxPrintf = _cdeCoreVwxPrintf,
+    .pVwxScanf = _cdeCoreVwxScanf,
+    .pMemRealloc = _cdeCoreMemRealloc,
     .pMemStrxCpy = _cdeMemStrxCpy,
     .pMemStrxCmp = _cdeMemStrxCmp,
-    ////    FNDECL_IOREADX(*pioreadx);
-    ////    FNDECL_IOWRITEX(*piowritex);
-    ////    FNDECL_MEMREADX(*pmemreadx);                                                /* kg0704F0*/
-    ////    FNDECL_MEMWRITEX(*pmemwritex);                                              /* kg0704F0*/
-    ////    //@ToDo: Add additional functions and/or data types to this protocol
     ////// ----- string processing functions
     .pWcsStrPbrkSpn = _cdeWcsStrPbrkSpn,
-    .pWcsStrTok = _cdeWcsStrTok,
+    .pWcsStrTok = _cdeCoreWcsStrTok,
+//
+// ----- core C functions, running on driver side
+//
+    .pFReadCORE = _cdeCoreFread,            /* core fread()     */
+    .pFWriteCORE = _cdeCoreFwrite,          /* core fwrite()    */
+    .pFSetPosCORE = _cdeCoreFsetpos,        /* core fsetpos()   */
+    .pFFlushCORE = _cdeCoreFflush,          /* core fflush()    */
+
 //
 // OSIF - operating system interface
 //

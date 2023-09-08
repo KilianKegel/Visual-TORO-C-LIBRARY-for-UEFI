@@ -8,7 +8,7 @@
 
 Module Name:
 
-    _cdeVwxScanf.c
+    _cdeCoreVwxScanf.c
 
 Abstract:
 
@@ -67,6 +67,13 @@ static int StoreTerminate(int fWide, int fTerminate, void* pVoid, int nMaxChars,
             }
             fWritten = 1;
         }
+    }
+    else {
+        //
+        // NOTE: do _NOT_ update pIndex. "fWritten == 1 && *pIndex == 0" identifies a skipped token!!!
+        //
+        if (*pIndex < nMaxChars)
+            fWritten = 1;
     }
     return fWritten;
 }
@@ -326,7 +333,7 @@ static int str2num(STRDESC* pParms, int (*pfnDevGetChar)(void** ppSrc), int (*pf
 }
 
 int
-_cdeVwxScanf(
+_cdeCoreVwxScanf(
     CDE_APP_IF* pCdeAppIf,
     IN ROMPARM_VWXSCANF* pFixParm,
     IN const char* pszFormat,
@@ -451,6 +458,7 @@ _cdeVwxScanf(
                             break;
                         }
                         if (StoreTerminate(fWide, 1/*fTerminate*/, pVoid, *pWidth, &o, c)) {
+                            if(0 != o)
                             fSSToken = 1;
                         }
                         else {
@@ -508,6 +516,7 @@ _cdeVwxScanf(
                     fInside = 1;
                     if (!fInverted) {
                         if (StoreTerminate(fWide, 1/*fTerminate*/, pVoid, *pWidth, &o, c)) {
+                            if (0 != o)
                             fSSToken = 1;
                         }
                         else {
@@ -706,7 +715,7 @@ _cdeVwxScanf(
                 }
             }
 
-            if (fCharProcessed)
+            if (fCharProcessed && 0 != o)
                 nTokenScanned++;
 
             OverallCount += nCharsProcessed;
@@ -730,7 +739,7 @@ _cdeVwxScanf(
                 fCharProcessed |= StoreTerminate(fWide, 0/*fTerminate*/, pVoid, INT_MAX, &o, c);
             }
             OverallCount += nCharsProcessed;
-            if (fCharProcessed)
+            if (fCharProcessed && 0 != o)
                 nTokenScanned++;
             state = (state == PROCESS_END ? PROCESS_END : (0 == fCharProcessed ? PROCESS_END : PROCESS_FORMATSTR));
             break;

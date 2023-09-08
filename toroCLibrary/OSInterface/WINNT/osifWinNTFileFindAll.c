@@ -61,7 +61,7 @@ CDEFILEINFO* _osifWinNTFileFindAll(IN CDE_APP_IF* pCdeAppIf, IN char* pstrDrvPth
     CDEFILEINFO* pCdeFileInfo = malloc(sizeCdeFileInfo);
     CDEFILEINFO* pCdeFileInfoEnd = NULL;
     CDEFILEINFO* pCdeFileInfoFF = NULL;
-    __debugbreak();
+
     pCdeFileInfo->time_write = -1LL;
 
     if (NULL != pCountOrError)

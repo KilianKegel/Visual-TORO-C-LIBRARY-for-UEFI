@@ -27,6 +27,7 @@ Author:
 // wchar.h
 //
 extern __declspec(dllimport) int wcsncmp(const wchar_t* pszDst, const wchar_t* pszSrc, size_t count);
+extern __declspec(dllimport) wchar_t* wcsstr(const wchar_t* pszStr, const wchar_t* pszSubStr);
 
 //
 // string.h
@@ -39,7 +40,6 @@ extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
 #include "Protocol\DevicePathToText.h"
 # define ELC(x)/*ELementCount*/ (sizeof(x) / sizeof(x[0]))
 
-extern EFI_SHELL_PROTOCOL* pEfiShellProtocol;
 extern EFI_SYSTEM_TABLE* _cdegST;
 
 EFI_TEXT_CLEAR_SCREEN   pConIOClr;
@@ -101,12 +101,28 @@ static EFI_STATUS EFIAPI myConIOPutStr(IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* This,
         state = AWAITING_DRIVENAME0;
         break;
     case AWAITING_DRIVENAME0:
-        if (
+        char fDOSDRV = 0;
+        wchar_t wcsDOSDRV[] = { L"A:" };
+
+        for (wchar_t wc = 'A'; wc < 'Z'; wc++)
+        {
+            wcsDOSDRV[0] = wc;
+            
+            fDOSDRV = (NULL != wcsstr(String, wcsDOSDRV));
+
+            if (fDOSDRV)
+                break;
+        }
+
+        if (1 == fDOSDRV || \
             0 == wcsncmp(wcsBLK, String, ELC(wcsBLK) - 1) || \
             0 == wcsncmp(wcsBLK2, String, ELC(wcsBLK2) - 1) || \
             0 == wcsncmp(wcsFS, String, ELC(wcsFS) - 1) || \
             0 == wcsncmp(wcsFS2, String, ELC(wcsFS2) - 1))
+        {
             state = AWAITING_ALIAS0;
+            //fDOSDRV = 0;
+        }
         else
             state = STOP_WAITING;
         break;
@@ -138,6 +154,7 @@ int _osifUefiShellCmdExec(CDE_APP_IF* pCdeAppIf, char* szCommand) {
     static wchar_t wcsCommand[CDE_SLASHCEXTENDETCOMMAND_LEN];
     size_t i;
     size_t len = strlen(szCommand);
+    EFI_SHELL_PROTOCOL* pEfiShellProtocol = pCdeAppIf->pCdeServices->pvEfiShellProtocol;
 
     do {
 
@@ -150,7 +167,6 @@ int _osifUefiShellCmdExec(CDE_APP_IF* pCdeAppIf, char* szCommand) {
         for (i = 0; i < len + 1; i++)
             wcsCommand[i] = (0xFF) & (wchar_t)szCommand[i];
 
-        //CDEMOFINE((MFNINF(1) "wcsCommand->\"%S\", &pCdeAppIf->DriverParm.BsDriverParm.ImageHandle -> %p, pCdeAppIf->DriverParm.BsDriverParm.ImageHandle->%X\n",&wcsCommand[0],&pCdeAppIf->DriverParm.BsDriverParm.ImageHandle,pCdeAppIf->DriverParm.BsDriverParm.ImageHandle));
         if (1) {
 
             pConIOClr = _cdegST->ConOut->ClearScreen;

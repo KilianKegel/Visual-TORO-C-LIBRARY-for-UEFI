@@ -63,7 +63,7 @@ FILE* freopen(const char* filename, const char* mode, FILE* stream) {
 
         fp->fRsv = FALSE;
 
-        sp->openmode |= O_CDEREOPEN;
+        sp->openmode |= O_CDEREOPEN + O_CDEREDIR;
     }
     else
         stream = NULL;

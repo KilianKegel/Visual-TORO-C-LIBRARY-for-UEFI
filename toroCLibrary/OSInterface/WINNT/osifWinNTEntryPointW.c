@@ -29,6 +29,10 @@ Author:
 
 #include <cde.h>
 #include <CdeServices.h>
+//
+// setjmp.h
+//
+extern __declspec(dllimport) int setjmp(jmp_buf);
 
 
 const char _1 = 1;
@@ -69,11 +73,11 @@ char* gszCdeDriverName;
 //
 extern void free(void*);
 
-extern VWXPRINTF _cdeVwxPrintf;
-extern VWXSCANF _cdeVwxScanf;
-extern WCSSTRTOK _cdeWcsStrTok;
+extern VWXPRINTF _cdeCoreVwxPrintf;
+extern VWXSCANF _cdeCoreVwxScanf;
+extern WCSSTRTOK _cdeCoreWcsStrTok;
 extern WCSSTRPBRKSPN _cdeWcsStrPbrkSpn;
-extern MEMREALLOC _cdeMemRealloc;
+extern MEMREALLOC _cdeCoreMemRealloc;
 extern MEMSTRXCPY _cdeMemStrxCpy;
 extern MEMSTRXCMP _cdeMemStrxCmp;
 extern OSIFGETTIME		  _osifWinNTGetTime;
@@ -168,27 +172,19 @@ static CDE_SERVICES gCdeServicesWinNT = {/*CDE_PROTOCOL*/
     .TSClocksAtCdeTrace = 0,
     .TimeAtSystemStart = 0,
     .ReportStatusCode = 0,
-    .CpuIoXyz =  0,
     ////    FNDECL_MAINSTART(*pmainstart);          // the fjMainDxeEntryPoint/fjMainSmmEntryPoint loader     /* kg0705F0*/
     ////    FNDECL_SMMSTART(*psmmstart);            // wrapper for fjLoadDriverToSmm
     .pGetConIn = _StdInGetChar,
     .pPutConOut = _StdOutPutChar,
-    ////    FNDECL_PUTSTDERR(*pputstderr);          // STDERR - COM1
-    ////    FNDECL_GETDBGIN(*pgetdbgin);            // DBGIN  - COM1
     .pPutDebug = _StdOutPutChar,
-    .pVwxPrintf = _cdeVwxPrintf,
-    .pVwxScanf = _cdeVwxScanf,
-    .pMemRealloc = _cdeMemRealloc,
+    .pVwxPrintf = _cdeCoreVwxPrintf,
+    .pVwxScanf = _cdeCoreVwxScanf,
+    .pMemRealloc = _cdeCoreMemRealloc,
     .pMemStrxCpy = _cdeMemStrxCpy,
     .pMemStrxCmp = _cdeMemStrxCmp,
-    ////    FNDECL_IOREADX(*pioreadx);
-    ////    FNDECL_IOWRITEX(*piowritex);
-    ////    FNDECL_MEMREADX(*pmemreadx);                                                /* kg0704F0*/
-    ////    FNDECL_MEMWRITEX(*pmemwritex);                                              /* kg0704F0*/
-    ////    //@ToDo: Add additional functions and/or data types to this protocol
     ////// ----- string processing functions
     .pWcsStrPbrkSpn = _cdeWcsStrPbrkSpn,
-    .pWcsStrTok = _cdeWcsStrTok,
+    .pWcsStrTok = _cdeCoreWcsStrTok,
 //
 // OSIF - operating system interface
 //

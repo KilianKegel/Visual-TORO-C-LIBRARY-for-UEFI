@@ -29,6 +29,10 @@ Author:
 #include <CdeServices.h>
 
 #include <Protocol/smmbase2.h>
+//
+// setjmp.h
+//
+extern __declspec(dllimport) int setjmp(jmp_buf);
 
 //
 // prototypes
@@ -50,6 +54,7 @@ extern struct lconv _cdeLconv_C;
 extern GUID gEfiCallerIdGuid;
 extern int _cdeStr2Argcv(char** argv, char* szCmdline);
 extern char __cdeGetCurrentPrivilegeLevel(void);
+extern size_t _cdeInt2EfiStatus(int intstatus);
 
 extern EFI_GUID gEfiLoadedImageProtocolGuid;
 extern EFI_GUID _gCdeDxeProtocolGuid;                   // The GUID for the protocol
@@ -212,7 +217,7 @@ static void __cdeFatalCdeServicesNotAvailDXE(EFI_SYSTEM_TABLE* SystemTable);
 EFI_STATUS EFIAPI _MainEntryPointDxe(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
 {
     EFI_STATUS Status = EFI_LOAD_ERROR;
-    int i, argc;
+    int i, argc, nRet;
     static void* argvex[CDE_ARGV_MAX + 2];
 
     argvex[0] = (void*)ImageHandle;
@@ -265,7 +270,9 @@ EFI_STATUS EFIAPI _MainEntryPointDxe(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TA
         if (0 == __cdeGetCurrentPrivilegeLevel())       // running in RING0
             _enable();
 
-        Status = setjmp(CdeAppIfDxe.exit_buf) ? CdeAppIfDxe.exit_status : main(argc, (char**)&argvex[0 + 2]);
+        nRet = setjmp(CdeAppIfDxe.exit_buf) ? CdeAppIfDxe.exit_status : main(argc, (char**)&argvex[0 + 2]);
+
+        Status = _cdeInt2EfiStatus(nRet);
 
         if (0 == __cdeGetCurrentPrivilegeLevel())       // running in RING0
             if(0 == (0x200 & eflags))                   // restore IF interrupt flag
@@ -292,8 +299,6 @@ EFI_STATUS EFIAPI _MainEntryPointDxe(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TA
             } while (pHeap);
 
         }//if( CDE_FREE_MEMORY_ALLOCATION_ON_EXIT ) 
-
-        Status = EFI_SUCCESS;
 
     } while (0);
 

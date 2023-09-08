@@ -22,15 +22,15 @@ Author:
 
 #include <uefi.h>
 #include <Protocol\Shell.h>
+#include <CdeServices.h>
 
 extern void* _cdePoolWcs2AppWcs(short* pwcs, unsigned char freePool);
-extern  EFI_SHELL_PROTOCOL* pEfiShellProtocol;
 
 /** _CdeGetMapFromDevicePath()
 
 Synopsis
 
-    short* _CdeGetMapFromDevicePath(IN OUT EFI_DEVICE_PATH_PROTOCOL** DevicePath)
+    short* _CdeGetMapFromDevicePath(IN CDE_APP_IF *pCdeAppIf, IN OUT EFI_DEVICE_PATH_PROTOCOL** DevicePath)
 
 Description
 
@@ -43,7 +43,9 @@ Returns
     @retval short *
 
 **/
-short* _CdeGetMapFromDevicePath(IN OUT EFI_DEVICE_PATH_PROTOCOL** DevicePath) 
+short* _CdeGetMapFromDevicePath(IN CDE_APP_IF *pCdeAppIf, IN OUT EFI_DEVICE_PATH_PROTOCOL** DevicePath) 
 {
+    EFI_SHELL_PROTOCOL* pEfiShellProtocol = pCdeAppIf->pCdeServices->pvEfiShellProtocol;
+
     return _cdePoolWcs2AppWcs((short*)pEfiShellProtocol->GetMapFromDevicePath(DevicePath), 0/*FREEPOOL*/);
 }

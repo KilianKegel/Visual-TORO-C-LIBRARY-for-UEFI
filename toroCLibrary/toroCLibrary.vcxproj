@@ -25,14 +25,18 @@
     <ClInclude Include="Include\_invparm.h" />
     <ClInclude Include="Include\_wctype.h" />
     <ClInclude Include="Include\_wctypeCDEABI.h" />
+    <ClInclude Include="OSInterface\EDK2ObjBlocker\ApplicationEntryPoint_c.h" />
     <ClInclude Include="OSInterface\EDK2ObjBlocker\_cdeStdCIntrinsics_c.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Guids\CDE_DXE_PROTOCOL_GUID.c" />
+    <ClCompile Include="Guids\CDE_PEI_PROTOCOL_GUID.c" />
+    <ClCompile Include="Guids\CDE_SHELL_PROTOCOL_GUID.c" />
     <ClCompile Include="Guids\CDE_SMM_PROTOCOL_GUID.c" />
     <ClCompile Include="Guids\EFI_DEVICE_PATH_PROTOCOL_GUID.c" />
     <ClCompile Include="Guids\EFI_DEVICE_PATH_TO_TEXT_PROTOCOL_GUID.c" />
     <ClCompile Include="Guids\EFI_FILE_INFO_ID_GUID.c" />
+    <ClCompile Include="Guids\EFI_SHELL_PARAMETERS_PROTOCOL_GUID.c" />
     <ClCompile Include="Guids\EFI_SHELL_PROTOCOL_GUID.c" />
     <ClCompile Include="Guids\EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID.c" />
     <ClCompile Include="Guids\EFI_STATUS_CODE_RUNTIME_PROTOCOL_GUID.c" />
@@ -55,6 +59,7 @@
       <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </AssemblerOutput>
     </ClCompile>
+    <ClCompile Include="Intrinsics\__acrt_iob_funcCORE.c" />
     <ClCompile Include="Intrinsics\__CheckForDebuggerJustMyCode.c" />
     <ClCompile Include="Intrinsics\__iob_func.c" />
     <ClCompile Include="Intrinsics\__use_fma3_lib.c" />
@@ -90,14 +95,17 @@
     <ClCompile Include="LibConfig\_gCdeCfgCmdLnParmPoolMemRetain.c" />
     <ClCompile Include="LibConfig\_gCdeCfgCmdLnParmReportStatusCodeSTDOUT.c" />
     <ClCompile Include="LibConfig\_gCdeCfgMofineRawSeparator.c" />
-    <ClCompile Include="LibConfig\_gSTDOUTMode.c" />
-    <ClCompile Include="LibCore\_cdeMemRealloc.c" />
+    <ClCompile Include="LibCore\_cdeCoreFflush.c" />
+    <ClCompile Include="LibCore\_cdeCoreFread.c" />
+    <ClCompile Include="LibCore\_cdeCoreFsetpos.c" />
+    <ClCompile Include="LibCore\_cdeCoreFwrite.c" />
+    <ClCompile Include="LibCore\_cdeCoreMemRealloc.c" />
     <ClCompile Include="LibCore\_cdeMemStrxCmp.c" />
     <ClCompile Include="LibCore\_cdeMemStrxCpy.c" />
-    <ClCompile Include="LibCore\_cdeVwxPrintf.c" />
-    <ClCompile Include="LibCore\_cdeVwxScanf.c" />
+    <ClCompile Include="LibCore\_cdeCoreVwxPrintf.c" />
+    <ClCompile Include="LibCore\_cdeCoreVwxScanf.c" />
     <ClCompile Include="LibCore\_cdeWcsStrPbrkSpn.c" />
-    <ClCompile Include="LibCore\_cdeWcsStrTok.c" />
+    <ClCompile Include="LibCore\_cdeCoreWcsStrTok.c" />
     <ClCompile Include="LibCore\_cdeCoreClock.c" />
     <ClCompile Include="LibCore\_cdeCoreExit.c" />
     <ClCompile Include="LibCore\_cdeCoreSprintf.c" />
@@ -140,8 +148,12 @@
     <ClCompile Include="Library\direct_h\_mkdir.c" />
     <ClCompile Include="Library\errno_h\errno.c" />
     <ClCompile Include="Library\errno_h\errnoCDEABI.c" />
+    <ClCompile Include="Library\errno_h\errnoCORE.c" />
+    <ClCompile Include="Library\errno_h\_cdeEfiStatus2Int.c" />
+    <ClCompile Include="Library\errno_h\_cdeInt2EfiStatus.c" />
     <ClCompile Include="Library\errno_h\_efierrno.c" />
     <ClCompile Include="Library\errno_h\__cdeOnErrSet_errno.c" />
+    <ClCompile Include="Library\errno_h\__cdeOnErrSet_errnoCORE.c" />
     <ClCompile Include="Library\errno_h\__cdeOnErrSet_status.c" />
     <ClCompile Include="Library\inttypes_h\strtoimax.c" />
     <ClCompile Include="Library\inttypes_h\strtoimaxCDEABI.c" />
@@ -156,7 +168,9 @@
     <ClCompile Include="Library\io_h\_Fileno.c" />
     <ClCompile Include="Library\io_h\_findclose.c" />
     <ClCompile Include="Library\io_h\_findfirst.c" />
-    <ClCompile Include="Library\io_h\_findnext.c" />
+    <ClCompile Include="Library\io_h\_findnext.c">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+    </ClCompile>
     <ClCompile Include="Library\io_h\_isatty.c" />
     <ClCompile Include="Library\io_h\_Open.c" />
     <ClCompile Include="Library\io_h\_Read.c" />
@@ -241,6 +255,7 @@
     <ClCompile Include="Library\stdio_h\RenameCDEABI.c" />
     <ClCompile Include="Library\stdio_h\Rewind.c" />
     <ClCompile Include="Library\stdio_h\RewindCDEABI.c" />
+    <ClCompile Include="Library\stdio_h\__cderewindCORE.c" />
     <ClCompile Include="Library\stdio_h\Scanf.c" />
     <ClCompile Include="Library\stdio_h\ScanfCDEABI.c" />
     <ClCompile Include="Library\stdio_h\Setbuf.c" />
@@ -259,7 +274,9 @@
     <ClCompile Include="Library\stdio_h\TmpnamCDEABI.c" />
     <ClCompile Include="Library\stdio_h\Ungetc.c" />
     <ClCompile Include="Library\stdio_h\UngetcCDEABI.c" />
-    <ClCompile Include="Library\stdio_h\Vfprintf.c" />
+    <ClCompile Include="Library\stdio_h\Vfprintf.c">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+    </ClCompile>
     <ClCompile Include="Library\stdio_h\VfprintfCDEABI.c" />
     <ClCompile Include="Library\stdio_h\Vfscanf.c" />
     <ClCompile Include="Library\stdio_h\VfscanfCDEABI.c" />
@@ -282,8 +299,11 @@
     <ClCompile Include="Library\stdio_h\__cdeGetOffsetCdeFposType.c" />
     <ClCompile Include="Library\stdio_h\__cdeIsCdeFposType.c" />
     <ClCompile Include="Library\stdio_h\__cdeIsFilePointer.c" />
+    <ClCompile Include="Library\stdio_h\__cdeIsFilePointerCORE.c" />
     <ClCompile Include="Library\stdio_h\__cdeIsIOBuffer.c" />
+    <ClCompile Include="Library\stdio_h\__cdeIsIOBufferCORE.c" />
     <ClCompile Include="Library\stdio_h\__cdsGetIOBuffer.c" />
+    <ClCompile Include="Library\stdio_h\__cdsGetIOBufferCORE.c" />
     <ClCompile Include="Library\stdlib_h\abort.c" />
     <ClCompile Include="Library\stdlib_h\abortCDEABI.c" />
     <ClCompile Include="Library\stdlib_h\Abs.c" />
@@ -314,6 +334,7 @@
     <ClCompile Include="Library\stdlib_h\mbtowcCDEABI.c" />
     <ClCompile Include="Library\stdlib_h\QsortCDEABI.c" />
     <ClCompile Include="Library\stdlib_h\randCDEABI.c" />
+    <ClCompile Include="Library\stdlib_h\__cdereallocCORE.c" />
     <ClCompile Include="Library\stdlib_h\ReallocCDEABI.c" />
     <ClCompile Include="Library\stdlib_h\srandCDEABI.c" />
     <ClCompile Include="Library\stdlib_h\strtolCDEABI.c" />
@@ -473,9 +494,13 @@
     <ClCompile Include="Library\wchar_h\SwscanfCDEABI.c" />
     <ClCompile Include="Library\wchar_h\Ungetwc.c" />
     <ClCompile Include="Library\wchar_h\UngetwcCDEABI.c" />
-    <ClCompile Include="Library\wchar_h\Vfwprintf.c" />
+    <ClCompile Include="Library\wchar_h\Vfwprintf.c">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+    </ClCompile>
     <ClCompile Include="Library\wchar_h\VfwprintfCDEABI.c" />
-    <ClCompile Include="Library\wchar_h\Vfwscanf.c" />
+    <ClCompile Include="Library\wchar_h\Vfwscanf.c">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+    </ClCompile>
     <ClCompile Include="Library\wchar_h\VfwscanfCDEABI.c" />
     <ClCompile Include="Library\wchar_h\Vswprintf.c" />
     <ClCompile Include="Library\wchar_h\VswprintfCDEABI.c" />
@@ -623,6 +648,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClCompile Include="OSInterface\UEFISHELLDRV\osifUefiShellDrvEntryPoint.c" />
+    <ClCompile Include="OSInterface\UEFISHELLDRV\osifUefiShellDrvEntryPointEDK.c" />
     <ClCompile Include="OSInterface\UEFIDXE\osifUefiDxeEntryPoint.c" />
     <ClCompile Include="OSInterface\UEFIDXE\osifUefiDxeEntryPointEDK.c" />
     <ClCompile Include="OSInterface\UEFIDXE\osifUefiDxeMemAlloc.c" />
@@ -660,10 +687,16 @@
     <ClCompile Include="OSInterface\UEFISMM\osifUefiSmmMemAlloc.c" />
     <ClCompile Include="OSInterface\UEFISMM\osifUefiSmmMemFree.c" />
     <ClCompile Include="OSInterface\WINNT\osifWinNTCmdExec.c" />
-    <ClCompile Include="OSInterface\WINNT\osifWinNTDirectoryCreate.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTDirectoryCreate.c">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+    </ClCompile>
     <ClCompile Include="OSInterface\WINNT\osifWinNTDirectoryRemove.c" />
-    <ClCompile Include="OSInterface\WINNT\osifWinNTEntryPoint.c" />
-    <ClCompile Include="OSInterface\WINNT\osifWinNTEntryPointW.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTEntryPoint.c">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTEntryPointW.c">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+    </ClCompile>
     <ClCompile Include="OSInterface\WINNT\osifWinNTFileClose.c" />
     <ClCompile Include="OSInterface\WINNT\osifWinNTFileDelete.c" />
     <ClCompile Include="OSInterface\WINNT\osifWinNTFileFindAll.c" />
@@ -686,6 +719,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <None Include="..\README.md" />
     <None Include="Tools\PreBuild.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -1027,7 +1061,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <ExternalWarningLevel>Level4</ExternalWarningLevel>
-      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706;4996</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706;4996;4127</DisableSpecificWarnings>
       <OmitFramePointers>true</OmitFramePointers>
     </ClCompile>
     <Link>
@@ -1088,7 +1122,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <ExternalWarningLevel>Level4</ExternalWarningLevel>
-      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706;4996</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706;4996;4127</DisableSpecificWarnings>
       <OmitFramePointers>true</OmitFramePointers>
     </ClCompile>
     <Link>
@@ -1148,7 +1182,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AssemblerOutput />
-      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706;4996</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706;4996;4127</DisableSpecificWarnings>
       <UseFullPaths>false</UseFullPaths>
     </ClCompile>
     <Link>
@@ -1216,7 +1250,7 @@
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AssemblerOutput>
       </AssemblerOutput>
-      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706;4996</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706;4996;4127</DisableSpecificWarnings>
       <UseFullPaths>false</UseFullPaths>
     </ClCompile>
     <Link>

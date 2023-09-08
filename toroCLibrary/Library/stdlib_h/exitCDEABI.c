@@ -23,7 +23,7 @@ Author:
 #include <CdeServices.h>
 
 extern void* __cdeGetAppIf(void);
-extern void longjmp(jmp_buf env, int val);
+extern __declspec(dllimport) void longjmp(jmp_buf env, int val);
 /**
 
 Synopsis

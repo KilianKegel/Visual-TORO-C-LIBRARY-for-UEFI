@@ -50,41 +50,9 @@ Returns
 */
 static int fflushCDEABI(FILE* stream)
 {
-    CDEFILE* pCdeFile;
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
 
-    int nRet = EOF;
-    int j;
-    int cde_filev_max = 0;
-
-    if (NULL != stream)
-    {
-        // set parameters to flush one file
-        cde_filev_max = 1;
-        pCdeFile = (CDEFILE*)stream;
-
-    }
-    else // NULL == pCdeFile
-    {
-        // set parameters to flush all files
-        cde_filev_max = pCdeAppIf->cIob;
-        pCdeFile = (CDEFILE*)__cdeGetIOBuffer(0);
-    }
-
-    for (j = 0; j < cde_filev_max; pCdeFile = (CDEFILE*)__cdeGetIOBuffer(++j))
-    {
-        if ((TRUE == pCdeFile->fRsv) &&
-            (pCdeFile->openmode & (O_WRONLY | O_APPEND | O_CREAT | O_RDWR | O_APPEND)) &&
-            (pCdeFile->bdirty && !pCdeFile->bclean)
-            )
-        {
-            fwrite(NULL, (size_t)EOF, 0, (void*)pCdeFile);    // NULL,EOF,0,stream == flush parameter
-        }
-    }
-    //TODO: Add Error
-    nRet = 0;
-    //TODO: Add errno
-    return nRet;
+    return pCdeAppIf->pCdeServices->pFFlushCORE(pCdeAppIf, (CDEFILE*)stream);
 }
 
 MKCDEABI(fflush);

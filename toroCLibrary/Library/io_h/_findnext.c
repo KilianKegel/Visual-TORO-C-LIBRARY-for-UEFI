@@ -37,7 +37,7 @@ Author:
 
 #include "__cdeFindFirst.h"
 
-#define _A_CDE_EXTENTION_DONE 0x80 // DONE FLAG -- File attribute constants extention from IO.H
+#define _A_CDE_EXTENSION_DONE 0x80 // DONE FLAG -- File attribute constants extension from IO.H
 
 extern char* __cdeSplitSearchNameExt2Upcase(const char* pstr, char** ppStrFULL, char** ppStrEXT);
 extern char* __cdeStrMatch(const char* pStr, const size_t lenName, const char* pPat);
@@ -79,7 +79,7 @@ int _findnext64i32(intptr_t hFile, struct _finddata64i32_t* pFindData)
             ;   /* expression-2 */
             -1LL != pCdeFileInfo->time_write
             ;   /* expression-3 */
-            pCdeFileInfo->attrib |= _A_CDE_EXTENTION_DONE   /* mark entry done      */,
+            pCdeFileInfo->attrib |= _A_CDE_EXTENSION_DONE   /* mark entry done      */,
             pCdeFileInfo = (void*)((char*)&pCdeFileInfo[0]  /* update to next entry */
                 + sizeof(CDEFILEINFO)
                 + strlen(pCdeFileInfo->strFileName)
@@ -87,7 +87,7 @@ int _findnext64i32(intptr_t hFile, struct _finddata64i32_t* pFindData)
             )
         {
 
-            if (_A_CDE_EXTENTION_DONE & pCdeFileInfo->attrib)
+            if (_A_CDE_EXTENSION_DONE & pCdeFileInfo->attrib)
                 continue;
             
             //
@@ -167,7 +167,7 @@ int _findnext64i32(intptr_t hFile, struct _finddata64i32_t* pFindData)
                 pFindData->time_access = -1LL;
                 pFindData->time_create = -1LL;
                 strcpy(pFindData->name, pCdeFileInfo->strFileName);
-                pCdeFileInfo->attrib |= _A_CDE_EXTENTION_DONE;  // mark entry done
+                pCdeFileInfo->attrib |= _A_CDE_EXTENSION_DONE;  // mark entry done
                 nRet = 0;                                       // return "found"
                 break;
 
