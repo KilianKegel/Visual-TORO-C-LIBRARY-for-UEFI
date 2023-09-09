@@ -21,7 +21,7 @@
 
 * prepare `system()` **ANSI-C-API** call for MSDOS drive name support (**A:**, **B:**, **C:** ...) coming soon for [**Visual-UEFI-SHELL**](https://github.com/KilianKegel/Visual-UEFI-SHELL#edk2-uefi-shell--visual-uefi-shell)
 * update [`MdePkg`](https://github.com/KilianKegel/MdePkgInc) to version **edk2-stable202308**
-* improve `CDEABI` (*C Development Environment Application Binary Interface*)<br>
+* improve [`CDEABI`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/README.md#20230212) (*C Development Environment Application Binary Interface*)<br>
     * force *all* `Core` and operating system interface `osif` modules to uses exclusively **ANSI-C-API** on `CDEABI` to avoid collision with EDK2 `StdLibC` and relatives<br>
       primarily remaining `errno()`, `setjmp()`, `longjmp()`, `strlen()`, `strcpy()`, `strcmp()`, `wcslen()`, `wcscpy()`, `wcscmp()`
 * improve `freopen()` to set *redirection flag* `O_CDEREDIR` to speed up character transission to file
