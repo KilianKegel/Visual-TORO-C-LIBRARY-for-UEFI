@@ -12,8 +12,8 @@
 
 ### 20230909
 * add `CDE`(*C Development Environment*)-interface for native **Tianocore UEFI SHELL** [`UEFISHELLDRV`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/tree/main/toroCLibrary/OSInterface/UEFISHELLDRV).
-  Enable [**Toro-C-Library**–`DXE`](https://github.com/KilianKegel/toro-C-Library#implementation-status) function set at `CRT0()`
-  and full [**Toro-C-Library**–`SHELL`](https://github.com/KilianKegel/toro-C-Library#implementation-status) function set with availability
+  Enable [**Toro-C-Library**â€“`DXE`](https://github.com/KilianKegel/toro-C-Library#implementation-status) function set at `CRT0()`
+  and full [**Toro-C-Library**â€“`SHELL`](https://github.com/KilianKegel/toro-C-Library#implementation-status) function set with availability
   of the `EfiShellProtocol`/`EFI_SHELL_PROTOCOL_GUID`:<br>
   https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/tree/main/toroCLibrary/OSInterface/UEFISHELLDRV<br>
 
@@ -28,12 +28,12 @@
 * fix `fscanf()`: assignment suppression indicated by a "*": https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf#page=295 
 * fix `raise()`
 * INTERN: 
-      * add:  `size_t _cdeInt2EfiStatus(int intstatus)`
-      * add:  `int _cdeEfiStatus2Int(size_t Status)`
-      * move selected file functions to [`CdeAppIf`](https://github.com/KilianKegel/CdePkg/blob/master/Include/CdeServices.h#L421) driver side.<br>
-        This allows future/upcoming code size reduced shell application type.
-      * preliminary: LINUX-OSIF buildable, ALPHA
-      * preliminary: `osifCdeUefiShellAppEntryPoint()`, `osifCdeUefiShellAppCRT0Service()` for future/upcoming shell application type
+	* add:  `size_t _cdeInt2EfiStatus(int intstatus)`
+	* add:  `int _cdeEfiStatus2Int(size_t Status)`
+	* move selected file functions to [`CdeAppIf`](https://github.com/KilianKegel/CdePkg/blob/master/Include/CdeServices.h#L421) driver side.<br>
+	This allows future/upcoming code size reduced shell application type.
+	* preliminary: LINUX-OSIF buildable, ALPHA
+	* preliminary: `osifCdeUefiShellAppEntryPoint()`, `osifCdeUefiShellAppCRT0Service()` for future/upcoming shell application type
         that doesn't include entire `CdeAppIf` machine code to each .EFI application, but share `CdeAppIf` provided by a **CDE UEFI SHELL**.
         This allows code size reduced applications.
 
