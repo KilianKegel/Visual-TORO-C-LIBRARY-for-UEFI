@@ -17,7 +17,7 @@
   of the `EfiShellProtocol`/`EFI_SHELL_PROTOCOL_GUID`:<br>
   https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/tree/main/toroCLibrary/OSInterface/UEFISHELLDRV<br>
 
-  This is the foundation of an **ANSI-C-API**-extended **CDE UEFI SHELL**
+  This is the foundation of an **ANSI-C-API**-extended "**CDE UEFI SHELL**"
 
 * prepare `system()` **ANSI-C-API** call for MSDOS drive name support (**A:**, **B:**, **C:** ...) coming soon for [**Visual-UEFI-SHELL**](https://github.com/KilianKegel/Visual-UEFI-SHELL#edk2-uefi-shell--visual-uefi-shell)
 * update [`MdePkg`](https://github.com/KilianKegel/MdePkgInc) to version **edk2-stable202308**
