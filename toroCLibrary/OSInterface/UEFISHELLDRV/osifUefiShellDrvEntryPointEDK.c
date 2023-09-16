@@ -507,7 +507,7 @@ EFI_STATUS EFIAPI _MainEntryPointUefiShellDrv(IN EFI_HANDLE ImageHandle, IN EFI_
                     pHeap = &CdeAppIfUefiShellDrv.pCdeServices->HeapStart;
                 }
                 pHeap = pHeap->pSucc;
-            } while (pHeap);
+            } while (0 > (ptrdiff_t)pHeap);
 
         }//if( CDE_FREE_MEMORY_ALLOCATION_ON_EXIT ) 
 
@@ -671,7 +671,7 @@ static void notifyCB(EFI_EVENT Event, VOID* Context)
             &_gCdeShellProtocolGuid, &gCdeServicesCdeUefiShellApp,  // Guid / Protocol pair
             NULL                                                    // End of list
         );
-        CDETRACE((TRCINF(1) "--> Shell Protocol available now ...\n"));
+        CDETRACE((CDEINF(1) "--> Shell Protocol available now ...\n"));
 
     }
 }

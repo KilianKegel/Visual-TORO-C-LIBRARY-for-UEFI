@@ -82,7 +82,7 @@ static int vfwprintfCDEABI(FILE* stream, const wchar_t* pszFormat, va_list ap) {
     {
         _PUTCHAR* pfnOutput = NULL;
 
-        if (CDEDBGMAGIC == (CDEDBGMAGICMASK & (size_t)stream))
+        if (CDEDBGMAGIC == (size_t)stream)
         {
             pfnOutput = pCdeAppIf->pCdeServices->pPutDebug;
         }

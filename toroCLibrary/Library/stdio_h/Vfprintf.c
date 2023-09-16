@@ -61,7 +61,7 @@ int vfprintf(FILE* stream, const char* pszFormat, va_list ap) {
     {
         _PUTCHAR* pfnOutput = NULL;
 
-        if (CDEDBGMAGIC == (CDEDBGMAGICMASK & (size_t)stream))
+        if (CDEDBGMAGIC == (size_t)stream)
         {
             pfnOutput = pCdeAppIf->pCdeServices->pPutDebug;
             stream = (void*)pCdeAppIf;

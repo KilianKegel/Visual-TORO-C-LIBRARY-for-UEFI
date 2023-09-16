@@ -85,7 +85,7 @@ CDEFILE* _osifWinNTFileOpen(CDE_APP_IF* pCdeAppIf, const wchar_t* pwcsFileName, 
             if (0 == strcmp(tblMode[i].pszMode, szModeNoSpace))
                 break;
 
-        CDETRACE((TRCERR(i == sizeof(tblMode) / sizeof(tblMode[0])) "Attributes \"%s\" NOT found\n", szModeNoSpace));
+        CDETRACE((CDEERR(i == sizeof(tblMode) / sizeof(tblMode[0])) "Attributes \"%s\" NOT found\n", szModeNoSpace));
 
         if (i == sizeof(tblMode) / sizeof(tblMode[0])) {
             //
@@ -123,7 +123,7 @@ CDEFILE* _osifWinNTFileOpen(CDE_APP_IF* pCdeAppIf, const wchar_t* pwcsFileName, 
             pOpenMode = &tblMode[i].openmode;                   // pointer to fopen() related openmode
         }
 
-        CDETRACE((TRCINF(1) "Attributes \"%s\" found, dwCreationDisposition == %08X\n", szModeNoSpace, tblMode[i].WinNTModeFlags));
+        CDETRACE((CDEINF(1) "Attributes \"%s\" found, dwCreationDisposition == %08X\n", szModeNoSpace, tblMode[i].WinNTModeFlags));
 
         //
         // https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilew#parameters
@@ -142,8 +142,8 @@ CDEFILE* _osifWinNTFileOpen(CDE_APP_IF* pCdeAppIf, const wchar_t* pwcsFileName, 
             0                           /*__in          HANDLE hTemplateFile*/
         );
 
-        CDETRACE((TRCINF(1) "hFile == %p\n", hFile));
-        CDETRACE((TRCERR(hFile == INVALID_HANDLE_VALUE) "Opening  \"%S\" failed, INVALID_HANDLE_VALUE == %p\n", pwcsFileName, INVALID_HANDLE_VALUE));
+        CDETRACE((CDEINF(1) "hFile == %p\n", hFile));
+        CDETRACE((CDEERR(hFile == INVALID_HANDLE_VALUE) "Opening  \"%S\" failed, INVALID_HANDLE_VALUE == %p\n", pwcsFileName, INVALID_HANDLE_VALUE));
 
         if (hFile == INVALID_HANDLE_VALUE) {
             LPVOID lpMsgBuf;
@@ -159,7 +159,7 @@ CDEFILE* _osifWinNTFileOpen(CDE_APP_IF* pCdeAppIf, const wchar_t* pwcsFileName, 
                 (LPTSTR)&lpMsgBuf,
                 0, NULL);
 
-            CDETRACE((TRCERR(1) "GetLastError() %d -> %s\n", err, (char*)lpMsgBuf));
+            CDETRACE((CDEERR(1) "GetLastError() %d -> %s\n", err, (char*)lpMsgBuf));
         }
 
         if (hFile == INVALID_HANDLE_VALUE)

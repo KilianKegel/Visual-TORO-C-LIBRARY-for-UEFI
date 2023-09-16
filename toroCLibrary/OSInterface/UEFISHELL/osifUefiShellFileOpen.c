@@ -220,12 +220,12 @@ static EFI_STATUS __CdeFsEnum(CDE_APP_IF *pCdeAppIf) {
     unsigned i;
     void* pTemp;
     wchar_t* pwcsTmp;
-    CDETRACE((TRCINF(1)"-->\n"));
+    CDETRACE((CDEINF(1)"-->\n"));
     do {
 
 
         if (NULL == (pCdeEfiDevicePathToTextProtocol = _CdeLocateProtocol(&_gEfiDevicePathToTextProtocolGuid, NULL))) {
-            CDETRACE((TRCINF(1)"-->ERROR\n"));
+            CDETRACE((CDEINF(1)"-->ERROR\n"));
             break;
         }
         //TODO: ASSERT on Error
@@ -235,14 +235,14 @@ static EFI_STATUS __CdeFsEnum(CDE_APP_IF *pCdeAppIf) {
         {
             EFI_STATUS stat;
 
-            CDETRACE((TRCINF(1)"--> nVolumeCount %zd\n", pCdeAppIf->pCdeServices->pCdeSystemVolumes->nVolumeCount));
-            CDETRACE((TRCINF(1)"--> pCdeAppIf->pCdeServices->pCdeSystemVolumes %p\n", pCdeAppIf->pCdeServices->pCdeSystemVolumes));
-            CDETRACE((TRCINF(1)"--> pCdeAppIf->pCdeServices %p\n", pCdeAppIf->pCdeServices));
-            CDETRACE((TRCINF(1)"--> pCdeAppIf %p\n", pCdeAppIf));
+            CDETRACE((CDEINF(1)"--> nVolumeCount %zd\n", pCdeAppIf->pCdeServices->pCdeSystemVolumes->nVolumeCount));
+            CDETRACE((CDEINF(1)"--> pCdeAppIf->pCdeServices->pCdeSystemVolumes %p\n", pCdeAppIf->pCdeServices->pCdeSystemVolumes));
+            CDETRACE((CDEINF(1)"--> pCdeAppIf->pCdeServices %p\n", pCdeAppIf->pCdeServices));
+            CDETRACE((CDEINF(1)"--> pCdeAppIf %p\n", pCdeAppIf));
 
             if (EFI_SUCCESS != (stat = _CdeLocateHandleBuffer(ByProtocol, &_gEfiSimpleFileSystemProtocolGuid, NULL, &pCdeAppIf->pCdeServices->pCdeSystemVolumes->nVolumeCount, (EFI_HANDLE**)&pTemp)))
             {
-                CDETRACE((TRCINF(1)"-->ERROR, status \"%s\"\n", _strefierror(stat)));
+                CDETRACE((CDEINF(1)"-->ERROR, status \"%s\"\n", _strefierror(stat)));
                 break;
             }
         }
@@ -254,7 +254,7 @@ static EFI_STATUS __CdeFsEnum(CDE_APP_IF *pCdeAppIf) {
 
         for (i = 0; i < pCdeAppIf->pCdeServices->pCdeSystemVolumes->nVolumeCount; i++) {
             
-            CDETRACE((TRCINF(1)"--> %02d: nVolumeCount %zd\n", i, pCdeAppIf->pCdeServices->pCdeSystemVolumes->nVolumeCount));
+            CDETRACE((CDEINF(1)"--> %02d: nVolumeCount %zd\n", i, pCdeAppIf->pCdeServices->pCdeSystemVolumes->nVolumeCount));
 
             // ----- 1. save that particular EFI_HANDLE
 
@@ -263,12 +263,12 @@ static EFI_STATUS __CdeFsEnum(CDE_APP_IF *pCdeAppIf) {
             // ----- 2. get the EFI_SIMPLE_FILE_SYSTEM_PROTOCOL
 
             Status = _cdegBS->HandleProtocol(pFsVolume[i].hSimpleFileSystem, &_gEfiSimpleFileSystemProtocolGuid, &pFsVolume[i].pSimpleFileSystemProtocol);//CDEFAULT((CDEFINE_ERRORSTATUS "%s\n",strefierror(Status)));
-            CDETRACE((TRCINF(1)"--> %02d: Status \"%s\"\n", i, _strefierror(Status)));
+            CDETRACE((CDEINF(1)"--> %02d: Status \"%s\"\n", i, _strefierror(Status)));
 
 // ----- 3. open the volume / get the EFI_FILE_PROTOCOL
 
             Status = pFsVolume[i].pSimpleFileSystemProtocol->OpenVolume(pFsVolume[i].pSimpleFileSystemProtocol, &pFsVolume[i].pRootProtocol);
-            CDETRACE((TRCINF(1)"--> %02d: Status \"%s\"\n", i, _strefierror(Status)));
+            CDETRACE((CDEINF(1)"--> %02d: Status \"%s\"\n", i, _strefierror(Status)));
             if (EFI_SUCCESS != Status) {
                 pFsVolume[i].pSimpleFileSystemProtocol = NULL;
                 continue;
@@ -277,15 +277,15 @@ static EFI_STATUS __CdeFsEnum(CDE_APP_IF *pCdeAppIf) {
             // ----- 4. get the EFI_DEVICE_PATH_PROTOCOL --> THAT IS THE DEVICE PATH itself
 
             Status = _cdegBS->HandleProtocol(pFsVolume[i].hSimpleFileSystem, &_gEfiDevicePathProtocolGuid, &pFsVolume[i].pDevicePathProtocol);
-            CDETRACE((TRCINF(1)"--> %02d: Status \"%s\"\n", i, _strefierror(Status)));
+            CDETRACE((CDEINF(1)"--> %02d: Status \"%s\"\n", i, _strefierror(Status)));
             //CDEFAULT((CDEFINE_ERRORSTATUS "%s\n",strefierror(Status)));
 
             pFsVolume[i].pwcsDevicePathText = _cdeConvertDevicePathToText(/*IN DevicePath*/pFsVolume[i].pDevicePathProtocol,/*IN DisplayOnly*/FALSE,/*IN AllowShortcuts*/ FALSE);
-            CDETRACE((TRCINF(1)"--> %02d: DevPath \"%ls\"\n", i, pFsVolume[i].pwcsDevicePathText));
-            CDETRACE((TRCINF(1)"--> %02d: pvEfiShellProtocol %p\n", i, pCdeAppIf->pCdeServices->pvEfiShellProtocol));
+            CDETRACE((CDEINF(1)"--> %02d: DevPath \"%ls\"\n", i, pFsVolume[i].pwcsDevicePathText));
+            CDETRACE((CDEINF(1)"--> %02d: pvEfiShellProtocol %p\n", i, pCdeAppIf->pCdeServices->pvEfiShellProtocol));
             
             pFsVolume[i].pwcsMap = _CdeGetMapFromDevicePath(pCdeAppIf, &pFsVolume[i].pDevicePathProtocol);
-            CDETRACE((TRCINF(1)"--> %02d: DevPath \"%ls\"\n", i, pFsVolume[i].pwcsMap));
+            CDETRACE((CDEINF(1)"--> %02d: DevPath \"%ls\"\n", i, pFsVolume[i].pwcsMap));
 
 //
 // initialize rgpVolumeMap[0] .. rgpVolumeMap[CDE_MAPV_MAX - 1] to pointer to '\0'
@@ -302,7 +302,7 @@ static EFI_STATUS __CdeFsEnum(CDE_APP_IF *pCdeAppIf) {
         }
     } while (EFI_SUCCESS != (Status = EFI_SUCCESS));
 
-    CDETRACE((TRCINF(1)"--> Status \"%s\"\n", _strefierror(Status)));
+    CDETRACE((CDEINF(1)"--> Status \"%s\"\n", _strefierror(Status)));
 
     return Status;
 }
@@ -328,14 +328,14 @@ CDEFILE* _osifUefiShellFileOpen(IN CDE_APP_IF* pCdeAppIf, const wchar_t* pwcsFil
     unsigned i, j;
     unsigned char TODO = 1;
     EFI_STATUS Status;
-    CDETRACE((TRCINF(1)"-->\n"));
+    CDETRACE((CDEINF(1)"-->\n"));
 
     do {/*1. dowhile(0)*/
 
         if (!__CdeIsFsEnum(pCdeAppIf)) {
 
             if (EFI_SUCCESS != __CdeFsEnum(pCdeAppIf)) {
-                CDETRACE((TRCINF(1)"-->ERROR\n"));
+                CDETRACE((CDEINF(1)"-->ERROR\n"));
                 break;
             }
         }

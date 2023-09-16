@@ -9,6 +9,12 @@
 ```
 
 ## Revision history
+### 20230916
+* improve debug trace CDETRACE() configuration switches
+    * `#define CDEDBG STDOUT` – traces directed to stdout
+    * `#define CDEDBG STDERR` – traces directed to stderr
+    * `#define CDEDBG STDDBG` – traces directed to CDE debug channel, normally COM1, I/O 0x3F8 115200,8,n,1
+    * `CDEDBG` undefined – UEFI Shell/post DRIVERS: STDDBG, Windows NT: STDOUT
 
 ### 20230909
 * add `CDE`(*C Development Environment*)-interface for native **Tianocore UEFI SHELL** [`UEFISHELLDRV`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/tree/main/toroCLibrary/OSInterface/UEFISHELLDRV).<br>

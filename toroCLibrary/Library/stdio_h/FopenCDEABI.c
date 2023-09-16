@@ -82,13 +82,13 @@ static FILE* fopenCDEABI(const char* filename, const char* mode) {
 
     do {/*1. dowhile(0)*/
 
-        //CDETRACE((TRCINF(1) "parm filename -> \"%s\", mode \"%s\"\n", filename, mode));
+        //CDETRACE((CDEINF(1) "parm filename -> \"%s\", mode \"%s\"\n", filename, mode));
 
         //
         // sanity check
         //
         if (NULL == pCdeAppIf->pCdeServices->pFopen) {
-            //CDETRACE((TRCERR(1) "NULL == pCdeAppIf->pCdeServices->pFopen\n"));
+            //CDETRACE((CDEERR(1) "NULL == pCdeAppIf->pCdeServices->pFopen\n"));
             return NULL;
         }
         //
@@ -97,7 +97,7 @@ static FILE* fopenCDEABI(const char* filename, const char* mode) {
         i = 0;
         while ('\0' != (pwcsFileName[i] = filename[i++]));
 
-        //CDETRACE((TRCINF(1) "pwcsFileName -> %S\n", pwcsFileName));
+        //CDETRACE((CDEINF(1) "pwcsFileName -> %S\n", pwcsFileName));
 
         //
         // ----- remove spaces from mode string, remove t (text), that is not Standard C
@@ -120,7 +120,7 @@ static FILE* fopenCDEABI(const char* filename, const char* mode) {
             } while (1);
         }
 
-        //CDETRACE((TRCINF(1) "szModeNoSpace: %s\n",szModeNoSpace));
+        //CDETRACE((CDEINF(1) "szModeNoSpace: %s\n",szModeNoSpace));
 
         if (TODO) {
             //TODO: add filename separation into drive, (relative) pathname, filename etc.
@@ -144,7 +144,7 @@ static FILE* fopenCDEABI(const char* filename, const char* mode) {
             }
 
             if (i == pCdeAppIf->cIob) {
-                //CDETRACE((TRCERR(1) "no free CDEFILE slot found\n"));
+                //CDETRACE((CDEERR(1) "no free CDEFILE slot found\n"));
                 //no free CDEFILE slot found
                 //TODO: add error "errno" here
                 break;/*1. dowhile(0)*/
@@ -171,7 +171,7 @@ static FILE* fopenCDEABI(const char* filename, const char* mode) {
 
             errno = errnoorg;                                                                       // preserve errno across existance check
 
-            //CDETRACE((TRCERR(NULL == pCdeFileTmp->emufp) "NULL == pCdeFileTmp->emufp\n"));
+            //CDETRACE((CDEERR(NULL == pCdeFileTmp->emufp) "NULL == pCdeFileTmp->emufp\n"));
 
             if (NULL != pCdeFileTmp->emufp)
                 pCdeAppIf->pCdeServices->pFclose(pCdeAppIf, pCdeFileTmp);       // instantly close file
@@ -184,7 +184,7 @@ static FILE* fopenCDEABI(const char* filename, const char* mode) {
                 fFileExists,  /* 1 == file present, 0 == file not present*/
                 pCdeFile);// get emulation file pointer, that is the Windows FP (CDE4WIN) or pCdeFile or NULL in error case
 
-            //CDETRACE((TRCERR(NULL == pCdeFileTmp->emufp) "NULL == pCdeFileTmp->emufp\n"));
+            //CDETRACE((CDEERR(NULL == pCdeFileTmp->emufp) "NULL == pCdeFileTmp->emufp\n"));
 
             if (pCdeFile->emufp == NULL)
                 pCdeFile->fRsv = 0;
