@@ -37,6 +37,7 @@ Author:
 #define FILE void
 #define stdout (__acrt_iob_func(1))
 
+extern FILE* __cdecl __acrt_iob_func(unsigned);
 extern __declspec(dllimport) int vfwprintf(FILE* stream, const wchar_t* pszFormat, va_list ap);
 extern __declspec(dllimport) int fputc(int b, FILE* stream);
 extern __declspec(dllimport) wint_t fputwc(wchar_t c, FILE* stream);
