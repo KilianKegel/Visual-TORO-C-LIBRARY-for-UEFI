@@ -1303,6 +1303,12 @@ _cdeCoreVwxPrintf(
                 numdesc.NumType = FLOATINGPOINT;
 
                 pszDbl = pBcdMsdIntgr;
+
+                //
+                // W/A for Excel 2016, convert "0.000000000000000" to "0"
+                //
+                if (0.0 == d)
+                    numdesc.nFloatFractLen = 0;;
             }
             memset(&numdesc.pszSignSharp[0], 0, 3);
 

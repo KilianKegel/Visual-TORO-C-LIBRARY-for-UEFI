@@ -31,7 +31,6 @@ Author:
 #define EOF    (-1)
 //#define FILE void
 #define stdout (__acrt_iob_func(1))
-extern FILE* __cdecl __acrt_iob_func(unsigned);
 //
 // errno.h
 //

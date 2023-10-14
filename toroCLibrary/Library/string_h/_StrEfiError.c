@@ -68,7 +68,7 @@ Returns
 **/
 char* _strefierror(EFI_STATUS errcode) {
 
-    static char* pszRet = { "Unknown error" };
+    char* pszRet = { "Unknown error" };
 
     EFI_STATUS ErrMask = (1ULL << (8 * sizeof(EFI_STATUS) - 1));
 
