@@ -96,7 +96,7 @@ extern MEMSTRXCPY       _cdeMemStrxCpy;
 extern MEMSTRXCMP       _cdeMemStrxCmp;
 extern OSIFGETTIME		_osifIbmAtGetTime;
 extern OSIFSETTIME      _osifIbmAtSetTime;
-extern OSIFGETTSCPERSEC _osifIbmAtGetTscPerSec;
+extern OSIFGETTSCPERSEC _osifUefiShellGetTscPerSec;
 extern OSIFGETTSC       _osifIbmAtGetTsc;
 extern OSIFMEMALLOC     _osifUefiShellMemAlloc;          /*pMemAlloc     */
 extern OSIFMEMFREE      _osifUefiShellMemFree;           /*pfREEPages    */
@@ -272,7 +272,7 @@ static CDE_SERVICES gCdeServicesShell = {/*CDE_PROTOCOL*/
     //
         .pGetTime = _osifIbmAtGetTime,
         .pSetRtcTime = 0,
-        .pGetTscPerSec = _osifIbmAtGetTscPerSec,
+        .pGetTscPerSec = _osifUefiShellGetTscPerSec,
         .pGetTsc = _osifIbmAtGetTsc,
         .pMemAlloc = _osifUefiShellMemAlloc,
         .pMemFree = _osifUefiShellMemFree,
@@ -470,7 +470,7 @@ _MainEntryPointShellW(
             //
             pCdeAppIf->pCdeServices->TSClocksAtSystemStart = gCdeServicesShell.pGetTsc(pCdeAppIf);
             if (0 == __cdeGetCurrentPrivilegeLevel()) {                                      // running in RING0
-                pCdeAppIf->pCdeServices->TSClocksPerSec = gCdeServicesShell.pGetTscPerSec(pCdeAppIf);
+                pCdeAppIf->pCdeServices->TSClocksPerSec = gCdeServicesShell.pGetTscPerSec(pCdeAppIf,0);
                 pCdeAppIf->pCdeServices->TimeAtSystemStart = gCdeServicesShell.pGetTime(pCdeAppIf);
             }
             //todo check STATUS

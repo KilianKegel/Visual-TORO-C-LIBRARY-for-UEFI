@@ -51,11 +51,12 @@ extern void _enable(void);
 **/
 unsigned long long _osifIbmAtGetTscPerSec(IN CDE_APP_IF* pCdeAppIf) {
 
+#define CLKWAIT (59659)
     size_t eflags = __readeflags();         // save flaags
-    unsigned long long qwTSCPerTick, qwTSCEnd, qwTSCStart, qwTSCDrift;
-    unsigned char counterLoHi[2];
-    unsigned short* pwCount = (unsigned short*)&counterLoHi[0];
-    unsigned short wCountDrift;
+    unsigned long long qwTSCEnd, qwTSCStart, qwTSCdiff, qwTSCPerIntervall;
+    unsigned char bCountLo, bCountHi;
+    unsigned short wCount;
+    unsigned short wTicksGoneThrough;
 
     _disable();
 
@@ -73,35 +74,42 @@ unsigned long long _osifIbmAtGetTscPerSec(IN CDE_APP_IF* pCdeAppIf) {
     do                                                              //
     {                                                               //
         outp(0x43, (TIMER << 6) + 0x0);                             // counter latch timer 2
-        counterLoHi[0] = (unsigned char)inp(0x40 + TIMER);          // get low byte
-        counterLoHi[1] = (unsigned char)inp(0x40 + TIMER);          // get high byte
                                                                     //
-    } while (*pwCount > (65535 - 59659));                           // until 59659 ticks gone
+        bCountLo = (unsigned char)inp(0x40 + TIMER);                // get low byte
+        bCountHi = (unsigned char)inp(0x40 + TIMER);                // get high byte
+                                                                    //
+        wCount = (bCountHi << 8) | bCountLo;                        //
+                                                                    //
+    } while (wCount > (65535 - CLKWAIT));                           // until 59659 ticks gone
 
-    qwTSCEnd = __rdtsc();                               // get TSC end ~50ms
+    qwTSCEnd = __rdtsc();                                           // get TSC end ~50ms
 
-    *pwCount = 65535 - *pwCount;                        // get true, not inverted, number of clock ticks...
-                                                        // ... that really happened
-    wCountDrift = *pwCount - 59659;                     // get the number of additional ticks gone through
+    qwTSCdiff = qwTSCEnd - qwTSCStart;
+
+    wCount = 65535 - wCount;                                        // get true, not inverted, number of clock ticks...
+                                                                    // ... that really happened
+    wTicksGoneThrough = wCount - CLKWAIT;                           // get the number of additional ticks gone through
 
     //
-    // approximate the additional number of TSC
+    // error correction
     //
-    qwTSCPerTick = (qwTSCEnd - qwTSCStart) / *pwCount;  // get number of CPU TSC per 8254 ClkTick (1,19MHz)
-    qwTSCDrift = wCountDrift * qwTSCPerTick;            // get TSC drift
-
-    //printf("PITticks gone: %04d, PITticksDrift: %04d, TSCPerTick: %lld, TSCDrift: %5lld, TSC end/start diff: %lld, end - start - TSCDrift: %lld, TSC/Sec: %lld\n",
-    //    *pwCount,                                       /* PITticks gone            */
-    //    wCountDrift,                                    /* PITticksDrift            */
-    //    qwTSCPerTick,                                   /* TSCPerTick               */
-    //    qwTSCDrift,                                     /* TSCDrift                 */
-    //    qwTSCEnd - qwTSCStart,                          /* TSC end/start diff       */
-    //    qwTSCEnd - qwTSCDrift - qwTSCStart,             /* end - start - TSCDrift   */
-    //    20 * (qwTSCEnd - qwTSCStart - qwTSCDrift)       /* TSC/Sec                  */
-    //);
+    //            qwTSCdiff               qwTSCPerIntervall
+    //     -------------------------- == -------------------     -->
+    //     CLKWAIT + wTicksGoneThrough         CLKWAIT
+    //
+    //
+    //                             qwTSCdiff * CLKWAIT
+    //      qwTSCPerIntervall = --------------------------
+    //                          CLKWAIT + wTicksGoneThrough
+    //
+    
+    //
+    // calculate number of CPU TSC per requested intervall CLKWAIT (59659) i8254 timer ticks
+    //
+    qwTSCPerIntervall = (qwTSCdiff * CLKWAIT) / (CLKWAIT + wTicksGoneThrough);
 
     if (0x200 & eflags)                                 // restore IF interrupt flag
         _enable();
 
-    return 20 * (qwTSCEnd - qwTSCStart - qwTSCDrift);   // subtract the drift from TSC difference, scale to 1 second
+    return 20 * qwTSCPerIntervall;                      // subtract the drift from TSC difference, scale to 1 second
 }

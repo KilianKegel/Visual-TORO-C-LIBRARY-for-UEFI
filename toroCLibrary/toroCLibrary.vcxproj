@@ -680,6 +680,7 @@
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileWrite.c" />
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellGetDrvCwd.c" />
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellGetEnv.c" />
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellGetTscPerSec.c" />
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellMemAlloc.c" />
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellMemFree.c" />
     <ClCompile Include="OSInterface\UEFISMM\osifUefiSmmEntryPoint.c" />

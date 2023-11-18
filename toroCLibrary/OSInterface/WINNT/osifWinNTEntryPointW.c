@@ -283,7 +283,7 @@ int _MainEntryPointWinNTW(void)
             //
             // clock() initialization
             //
-            /* -=PORTING=- */ pCdeAppIf->pCdeServices->TSClocksPerSec = gCdeServicesWinNT.pGetTscPerSec(pCdeAppIf);
+            /* -=PORTING=- */ pCdeAppIf->pCdeServices->TSClocksPerSec = gCdeServicesWinNT.pGetTscPerSec(pCdeAppIf,0);
             pCdeAppIf->pCdeServices->TimeAtSystemStart = gCdeServicesWinNT.pGetTime(pCdeAppIf);
             pCdeAppIf->pCdeServices->TSClocksAtSystemStart = gCdeServicesWinNT.pGetTsc(pCdeAppIf);
             //

@@ -44,6 +44,16 @@ Author:
 #include "Pi\PiStatusCode.h"
 #include "Protocol\StatusCode.h"
 #include <Protocol\Shell.h>
+
+#include <Guid\Acpi.h>
+#include <Protocol\AcpiSystemDescriptionTable.h>
+#include <Protocol\AcpiTable.h>
+#include <Guid\Acpi.h>
+#include <IndustryStandard/Acpi62.h>
+#include <IndustryStandard/MemoryMappedConfigurationSpaceAccessTable.h>
+
+#include <Protocol\AcpiSystemDescriptionTable.h>
+
 //
 // setjmp.h
 //
@@ -97,7 +107,7 @@ extern MEMSTRXCPY       _cdeMemStrxCpy;
 extern MEMSTRXCMP       _cdeMemStrxCmp;
 extern OSIFGETTIME		_osifIbmAtGetTime;
 extern OSIFSETTIME      _osifIbmAtSetTime;
-extern OSIFGETTSCPERSEC _osifIbmAtGetTscPerSec;
+extern OSIFGETTSCPERSEC _osifUefiShellGetTscPerSec;
 extern OSIFGETTSC       _osifIbmAtGetTsc;
 extern OSIFMEMALLOC     _osifUefiShellMemAlloc;          /*pMemAlloc     */
 extern OSIFMEMFREE      _osifUefiShellMemFree;           /*pfREEPages    */
@@ -155,6 +165,7 @@ extern void _enable(void);
 extern __declspec(dllimport) void* malloc(size_t size);
 extern __declspec(dllimport) void free(void* ptr);
 extern __declspec(dllimport) void* memset(void* s, int c, size_t n);
+extern __declspec(dllimport) int memcmp(const void* pszDst, const void* pszSrc, size_t count);
 extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
 extern __declspec(dllimport) char* strcpy(char* pszDst, const char* pszSrc);
 extern __declspec(dllimport) int fclose(FILE* stream);
@@ -164,6 +175,8 @@ extern __declspec(dllimport) int sprintf(char* pszDest, const char* pszFormat, .
 extern __declspec(dllimport) int raise(int sig);
 //#undef setjmp
 //extern __declspec(dllimport) int setjmp(jmp_buf);
+
+#define IsEqualGUID(rguid1, rguid2) (!memcmp(rguid1, rguid2, sizeof(GUID))) //guiddef.h
 
 //
 // globals
@@ -267,7 +280,7 @@ static CDE_SERVICES gCdeServicesShell = {/*CDE_PROTOCOL*/
     //
         .pGetTime = _osifIbmAtGetTime,
         .pSetRtcTime = 0,
-        .pGetTscPerSec = _osifIbmAtGetTscPerSec,
+        .pGetTscPerSec = _osifUefiShellGetTscPerSec,
         .pGetTsc = _osifIbmAtGetTsc,
         .pMemAlloc = _osifUefiShellMemAlloc,
         .pMemFree = _osifUefiShellMemFree,
@@ -483,10 +496,59 @@ _MainEntryPointShell(
             //
             // clock() initialization
             //
-            pCdeAppIf->pCdeServices->TSClocksAtSystemStart = gCdeServicesShell.pGetTsc(pCdeAppIf);
-            if (0 == __cdeGetCurrentPrivilegeLevel()) {                                      // running in RING0
-                pCdeAppIf->pCdeServices->TSClocksPerSec = gCdeServicesShell.pGetTscPerSec(pCdeAppIf);
-                pCdeAppIf->pCdeServices->TimeAtSystemStart = gCdeServicesShell.pGetTime(pCdeAppIf);
+            if (1)
+            {
+                unsigned short AcpiPmTmrBase = UINT16_MAX;
+
+                if (1)
+                {
+                    uint32_t FirmwareTableID = 'PCAF';
+                    EFI_ACPI_6_2_FIXED_ACPI_DESCRIPTION_TABLE* pFACP;
+                    uint32_t sizeTbl;
+                    char foundTbl = 0;
+                    static EFI_GUID EfiAcpi20TableGuid = EFI_ACPI_20_TABLE_GUID;
+                    EFI_ACPI_2_0_ROOT_SYSTEM_DESCRIPTION_POINTER* pRSD = NULL;
+                    EFI_CONFIGURATION_TABLE* pCfg = _cdegST->ConfigurationTable;
+
+                    for (unsigned x = 0; x < _cdegST->NumberOfTableEntries; x++)
+                    {
+                        int64_t qwSig;
+                        char* pStr8 = NULL;
+
+                        if (IsEqualGUID(&EfiAcpi20TableGuid, &_cdegST->ConfigurationTable[x].VendorGuid))
+                        {
+                            pRSD = pCfg[x].VendorTable;
+                            qwSig = pRSD->Signature;
+                            break;
+                        }
+                    }
+
+                    if (NULL != pRSD) do
+                    {
+                        EFI_ACPI_SDT_HEADER* pXSDT = (void*)((size_t)pRSD->XsdtAddress);
+                        EFI_ACPI_2_0_COMMON_HEADER* pTBLEnd = (void*)&(((char*)pXSDT)[pXSDT->Length]);
+                        EFI_ACPI_2_0_COMMON_HEADER** ppTBL = (void*)&(((char*)pXSDT)[sizeof(EFI_ACPI_SDT_HEADER)]);
+                        ptrdiff_t numTbl = pTBLEnd - (EFI_ACPI_2_0_COMMON_HEADER*)ppTBL, idxTbl;
+
+                        for (idxTbl = 0; idxTbl < numTbl; idxTbl++, ppTBL++)        // walk through all tables in the XSDT
+                        {                                                           //
+                            if (FirmwareTableID == (*ppTBL)->Signature)             // if signatur match...
+                            {                                                       //
+                                pFACP = (void*)*ppTBL;                              // ... save table address
+                                sizeTbl = (*ppTBL)->Length;                         // save table length
+                                foundTbl = 1;                                       // mark found flag and...
+                                AcpiPmTmrBase = (unsigned short)pFACP->PmTmrBlk;    //
+                                break;// for()                                      // ...break for()
+                            }                                                       // 
+                        }
+                    } while (0);
+                }
+
+                pCdeAppIf->pCdeServices->TSClocksAtSystemStart = gCdeServicesShell.pGetTsc(pCdeAppIf);
+                if (0 == __cdeGetCurrentPrivilegeLevel()) {                                      // running in RING0
+                    pCdeAppIf->pCdeServices->TSClocksPerSec = gCdeServicesShell.pGetTscPerSec(pCdeAppIf, AcpiPmTmrBase);
+                    pCdeAppIf->pCdeServices->TimeAtSystemStart = gCdeServicesShell.pGetTime(pCdeAppIf);
+                }
             }
             //todo check STATUS
             //Status = SystemTable->BootServices->LocateProtocol(&_gCdeDxeProtocolGuid,NULL,&CdeAppIfShell.pCdeServices);

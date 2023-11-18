@@ -644,6 +644,7 @@
     <ClCompile Include="Library\errno_h\_cdeInt2EfiStatus.c" />
     <ClCompile Include="OSInterface\UEFISHELLDRV\osifUefiShellDrvEntryPointEDK.c" />
     <ClCompile Include="OSInterface\UEFISHELLDRV\osifUefiShellDrvEntryPoint.c" />
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellGetTscPerSec.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\CdeServices.h" />
