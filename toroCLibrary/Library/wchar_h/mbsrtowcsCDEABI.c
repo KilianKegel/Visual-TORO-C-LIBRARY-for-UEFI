@@ -3,7 +3,7 @@
     toro C Library
     https://github.com/KilianKegel/toro-C-Library#toro-c-library-formerly-known-as-torito-c-library
 
-    Copyright (c) 2017-2023, Kilian Kegel. All rights reserved.
+    Copyright (c) 2017-2024, Kilian Kegel. All rights reserved.
     SPDX-License-Identifier: GNU General Public License v3.0
 
 Module Name:
@@ -60,7 +60,7 @@ size_t mbsrtowcsCDEABI(wchar_t* wcstr, const char** mbstr, size_t count, mbstate
 
         if (NULL == wcstr)
         {
-            initial_count = strlen(*mbstr);     // Microsoft desided to return remaining string length if NULL == destination, not my choice!!!
+            initial_count = strlen(*mbstr);     // Microsoft decided to return remaining string length if NULL == destination, not my choice!!!
             break;
         }
 
