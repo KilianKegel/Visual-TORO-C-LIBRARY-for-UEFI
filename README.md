@@ -1,4 +1,3 @@
-![Visitor](https://visitor-badge.laobi.icu/badge?page_id=KilianKegel.kiliankegel)
 # torosrc
 
 [**toro C Library**](https://github.com/KilianKegel/toro-C-Library#toro-c-library-formerly-known-as-torito-c-library)
