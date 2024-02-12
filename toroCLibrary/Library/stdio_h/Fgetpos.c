@@ -20,9 +20,17 @@ Author:
     Kilian Kegel
 
 --*/
-#include <stdio.h>
-#include <stdlib.h>
 #include <CdeServices.h>
+//
+// stdlib.h
+//
+#define EXIT_SUCCESS 0
+#define EXIT_FAILURE 1
+//
+// stdio.h
+//
+#define EOF    (-1)
+#define FILE void
 
 extern int __cdeIsFilePointer(void* stream);
 /*

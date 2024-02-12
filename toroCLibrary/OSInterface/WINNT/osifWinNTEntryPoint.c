@@ -21,6 +21,7 @@ Author:
 --*/
 //#define _STDSTREAM_DEFINED
 #include <stdio.h>
+#include <string.h>
 #include <windows.h>
 #pragma warning( disable : 4702 )
 #define ALIENOS
@@ -124,6 +125,8 @@ extern _PVFV* __xt_z; // C terminators (last)
 extern void _cdeSigDflt(int sig);
 extern struct _CDE_LCONV_LANGUAGE _cdeCLocale;
 extern struct lconv _cdeLconv_C;
+
+extern char _gCdeStrLibcVersion[];
 
 static void _StdOutPutChar(int c, void** ppDest) {
     if (c == EOF)
@@ -362,6 +365,15 @@ int _MainEntryPointWinNT(void)
                     if (0 != nRet)
                         break;
                 }
+            }
+            
+            //
+            // version string
+            //
+            if (2 == argc && 0 == strcmp(argvex[1 + 2], "--TOROCVER"))
+            {
+                fprintf(stdout, "%s\n", _gCdeStrLibcVersion);
+                return 3;
             }
             //
             // invoke "main()"

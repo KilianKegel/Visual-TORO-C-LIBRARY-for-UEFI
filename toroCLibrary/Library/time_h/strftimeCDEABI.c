@@ -44,7 +44,7 @@ extern __declspec(dllimport) time_t mktime(struct tm* ptm);
 extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
 extern __declspec(dllimport) void* memcpy(void* s1, const void* s2, size_t n);
 
-extern void* __cdeGetAppIf();
+extern void* __cdeGetAppIf(void);
 
 extern char* wday_name_short[7];
 extern char* mon_name_short[12];

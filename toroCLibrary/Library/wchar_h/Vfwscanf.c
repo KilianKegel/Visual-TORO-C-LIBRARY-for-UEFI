@@ -25,7 +25,7 @@ Author:
 #include <cde.h>
 #include <CdeServices.h>
 
-extern void* __cdeGetAppIf();
+extern void* __cdeGetAppIf(void);
 extern int fgetc(FILE* stream);
 extern int ungetc(int c, FILE* stream);
 

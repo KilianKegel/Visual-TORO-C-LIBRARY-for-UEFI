@@ -72,10 +72,9 @@ EFI_STATUS EFIAPI _cdeCRT0UefiSmm/*for non-EDK build environment*/(IN EFI_HANDLE
         if (1)
         {
             EFI_SMM_BASE2_PROTOCOL* pSmmBase2 = NULL;
-            static EFI_GUID gEfiSmmBase2ProtocolGuid = { 0xf4ccbfb7, 0xf6e0, 0x47fd, { 0x9d, 0xd4, 0x10, 0xa8, 0xf1, 0x50, 0xc1, 0x91 } };
 
             Status = _cdegBS->LocateProtocol(
-                &gEfiSmmBase2ProtocolGuid,
+                &_gEfiSmmBase2ProtocolGuid,
                 NULL,
                 (VOID**)&pSmmBase2
             );
@@ -111,7 +110,7 @@ EFI_STATUS EFIAPI _cdeCRT0UefiSmm/*for non-EDK build environment*/(IN EFI_HANDLE
         CdeAppIfSmm.DriverParm.BsDriverParm.pSystemTable = SystemTable;
         CdeAppIfSmm.DriverParm.BsDriverParm.pSmmSystemTable2 = _cdegSmst;
 
-    } while (Status = EFI_SUCCESS);
+    } while (Status = EFI_SUCCESS, Status == EFI_SUCCESS);
 
     return EFI_SUCCESS == Status ? _MainEntryPointSmm(ImageHandle, SystemTable) : Status;
 }

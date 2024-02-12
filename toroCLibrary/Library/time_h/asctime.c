@@ -25,7 +25,7 @@ Author:
 #include <time.h>
 
 extern int snprintf(char* pszDest, size_t dwCount, const char* pszFormat, ...);
-extern void* __cdeGetAppIf();
+extern void* __cdeGetAppIf(void);
 extern const char* wday_name_short[7];
 extern const char* mon_name_short[12];
 

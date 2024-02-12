@@ -50,7 +50,6 @@ Returns
 **/
 CDEFILEINFO* _osifWinNTFileFindAll(IN CDE_APP_IF* pCdeAppIf, IN char* pstrDrvPthDirStar, IN OUT int* pCountOrError)
 {
-    struct _finddata64i32_t** ppFindData = NULL;
     CDEFILEINFO* pRet = NULL;
     int cntDirEntries = 0;                                      // count directory entries
     size_t sizeFileName;
@@ -61,6 +60,9 @@ CDEFILEINFO* _osifWinNTFileFindAll(IN CDE_APP_IF* pCdeAppIf, IN char* pstrDrvPth
     CDEFILEINFO* pCdeFileInfo = malloc(sizeCdeFileInfo);
     CDEFILEINFO* pCdeFileInfoEnd = NULL;
     CDEFILEINFO* pCdeFileInfoFF = NULL;
+
+    if (NULL == pCdeFileInfo)
+        abort();
 
     pCdeFileInfo->time_write = -1LL;
 
@@ -86,7 +88,13 @@ CDEFILEINFO* _osifWinNTFileFindAll(IN CDE_APP_IF* pCdeAppIf, IN char* pstrDrvPth
             sizeCdeFileInfo += sizeFileName;
             sizeCdeFileInfo += sizeof(CDEFILEINFO);
 
-            pCdeFileInfo = realloc(pCdeFileInfo, sizeCdeFileInfo);
+            if (1)
+            {
+                void* ptmp = realloc(pCdeFileInfo, sizeCdeFileInfo);
+                pCdeFileInfo = ptmp;
+                if (NULL == pCdeFileInfo)
+                    abort();
+            }
 
             //
             // get pointer to last entry (one before 0xFF/termination structure)

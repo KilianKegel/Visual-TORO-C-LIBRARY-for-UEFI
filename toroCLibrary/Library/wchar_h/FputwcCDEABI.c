@@ -45,7 +45,6 @@ static wint_t fputwcCDEABI(wchar_t c, FILE* stream) {
     CDEFILE* pCdeFile = (CDEFILE*)stream;
     wint_t nRet = WEOF;
     size_t size = 1 + (0 != (pCdeFile->openmode & O_BINARY)); // 2 bin, 1 txt
-    wint_t msk = 1 == size ? 0xFF : 0xFFFF;
 
     do {
 

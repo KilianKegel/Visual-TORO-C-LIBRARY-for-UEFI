@@ -19,8 +19,9 @@ Author:
     Kilian Kegel
 
 --*/
-#include <stddef.h>
-#include <string.h>
+#include <CdeServices.h>
+
+extern size_t wcslen(const wchar_t* pszBuffer);
 /**
 
 Synopsis
@@ -55,7 +56,7 @@ size_t wcsrtombs(char* mbstr, const wchar_t** wcstr, size_t count, mbstate_t* mb
 
         if (NULL == mbstr)
         {
-            initial_count = wcslen(*wcstr);     // Microsoft decided to return remaining string length if NULL == destination, not my choice!!!
+            initial_count = NULL == wcstr ? 0 : wcslen(*wcstr);     // Microsoft decided to return remaining string length if NULL == destination, not my choice!!!
             break;
         }
 
@@ -63,7 +64,9 @@ size_t wcsrtombs(char* mbstr, const wchar_t** wcstr, size_t count, mbstate_t* mb
             break;
 
         c = (char)*pwc++;
-        *wcstr = (void*)pwc;
+        
+        if(NULL != wcstr)
+            *wcstr = (void*)pwc;
 
         *mbstr++ = c;
 

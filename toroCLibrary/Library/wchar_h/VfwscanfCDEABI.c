@@ -32,7 +32,7 @@ Author:
 #define WEOF ((wint_t)(0xFFFF))
 #define FILE void
 
-extern void* __cdeGetAppIf();
+extern void* __cdeGetAppIf(void);
 extern __declspec(dllimport) wint_t fgetwc(FILE* stream);
 extern __declspec(dllimport) wint_t ungetwc(wint_t c, FILE* stream);
 

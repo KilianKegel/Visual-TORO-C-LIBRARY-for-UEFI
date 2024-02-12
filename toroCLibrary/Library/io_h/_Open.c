@@ -68,7 +68,7 @@ Returns
 int _open(const char* filename, int oflag, ...) {
 
     //TODO: add pmode support    va_list ap;
-    int nRet = 0, fd = -1;
+    int fd = -1;
     //int rdwroncrap/*O_RDWR O_WRONLY O_CREAT O_APPEND*/;
     int pmode = _S_IREAD | _S_IWRITE;
     char fopenmode[] = "ctrwaxb"/*backdoor signature -- case-in-sensitive */;
@@ -125,6 +125,8 @@ int _open(const char* filename, int oflag, ...) {
         {
             CDEFILE* pCdeFile = (void*)fp;
             pCdeFile->tmpfilename = malloc(sizeof('\0') + strlen(filename));
+            if (NULL == pCdeFile->tmpfilename)
+                abort();
             strcpy(pCdeFile->tmpfilename, filename);
         }
 

@@ -54,7 +54,7 @@ static wint_t fgetwcCDEABI(FILE* stream) {
     else
         do {
             CDEFILE* pCdeFile = (CDEFILE*)stream;
-            wint_t c;
+            wint_t c = 0;
             size_t size = 1 + (0 != (pCdeFile->openmode & O_BINARY)); // 2 bin, 1 txt
             wint_t msk = 1 == size ? 0xFF : 0xFFFF;
 

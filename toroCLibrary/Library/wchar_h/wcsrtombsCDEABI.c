@@ -56,7 +56,7 @@ static size_t wcsrtombsCDEABI(char* mbstr, const wchar_t** wcstr, size_t count, 
 
         if (NULL == mbstr)
         {
-            initial_count = wcslen(*wcstr);     // Microsoft decided to return remaining string length if NULL == destination, not my choice!!!
+            initial_count = NULL == wcstr ? 0 : wcslen(*wcstr);     // Microsoft decided to return remaining string length if NULL == destination, not my choice!!!
             break;
         }
 
@@ -64,7 +64,9 @@ static size_t wcsrtombsCDEABI(char* mbstr, const wchar_t** wcstr, size_t count, 
             break;
 
         c = (char)*pwc++;
-        *wcstr = (void*)pwc;
+
+        if(NULL != wcstr)
+            *wcstr = (void*)pwc;
 
         *mbstr++ = c;
 

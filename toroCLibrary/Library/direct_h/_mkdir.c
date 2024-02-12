@@ -49,7 +49,6 @@ int _mkdir(const char* pstrDirName)
 {
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
     int nErrRet = -1 /* assume error */;
-    char* pRet = NULL;
     struct _stat64i32 stat;
     int n;
     int errnoold = errno;
@@ -58,8 +57,8 @@ int _mkdir(const char* pstrDirName)
 
     if (NULL != pCdeAppIf) {
         size_t lenStrDirName = strnlen(pstrDirName, CDE_FILESYSNAME_LEN_MAX);
-        size_t sizeWcsDirName = sizeof((wchar_t)'\0') + sizeof(wchar_t) * lenStrDirName;
-        wchar_t* pwcsDirName = malloc(sizeWcsDirName);
+        size_t sizeWcsDirName = sizeof(L"") + sizeof(wchar_t) * lenStrDirName;
+        wchar_t* pwcsDirName = malloc(CDE_FILESYSNAME_LEN_MAX);
         
         do {
 
@@ -72,7 +71,7 @@ int _mkdir(const char* pstrDirName)
 
             if ((/* 2, no such file or directory */ ENOENT == errno && -1 == n))
             {
-                mbstowcs(pwcsDirName, pstrDirName, (size_t)-1);  // convert string to wide character string
+                mbstowcs(pwcsDirName, pstrDirName, sizeWcsDirName);  // convert string to wide character string
 
                 n = pCdeAppIf->pCdeServices->pDirCreate(pCdeAppIf, pwcsDirName);
 
@@ -90,7 +89,7 @@ int _mkdir(const char* pstrDirName)
                 break;      // break with error in nErrRet
             }
 
-        } while (nErrRet = EXIT_SUCCESS);   // exit loop with success of operation
+        } while (nErrRet = EXIT_SUCCESS, nErrRet == EXIT_SUCCESS);   // exit loop with success of operation
 
         if (NULL != pwcsDirName)
             free(pwcsDirName);

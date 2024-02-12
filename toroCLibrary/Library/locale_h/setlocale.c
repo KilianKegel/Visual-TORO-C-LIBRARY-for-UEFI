@@ -60,6 +60,9 @@ char* setlocale(int nCat, char const* szLocale) {
     do {
         if (nCat != LC_ALL)
             break;
+        
+        if (NULL == szLocale)
+            break;
 
         while ((*++ppLocales)->szLanguageCountry != NULL) {
 

@@ -2,6 +2,16 @@
 rem ######################################################################################
 rem ### currently not used ###############################################################
 rem ######################################################################################
+set ONE=1
+for /F "tokens=1-3" %%a in ('type %~p0..\Include\BUILDNUM.h') do set BUILDOLD=%%c
+
+set /a "BUILD=%BUILDOLD%+%ONE%"
+echo #define BUILDNUM %BUILD% > %~p0..\Include\BUILDNUM.h
+type %~p0..\Include\BUILDNUM.h
+
+set BUILDOLD=
+set BUILD=
+
 goto EOF
 echo ### PreBuild - start %date%%time%
 echo %~p0

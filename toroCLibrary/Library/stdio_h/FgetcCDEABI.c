@@ -60,7 +60,7 @@ Returns
 static int fgetcCDEABI(FILE* stream) {
 
     unsigned int nRet = (size_t)EOF;
-    char c;
+    char c = 0;
 
     if (NULL == stream) {
         //(*pinvalid_parameter_handlerCDEABI)(L"\"NULL == stream\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);

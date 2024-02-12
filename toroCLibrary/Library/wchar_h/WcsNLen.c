@@ -20,7 +20,7 @@ Author:
     Kilian Kegel
 
 --*/
-#include <string.h>
+#include <CdeServices.h>
 
 /**
 Synopsis

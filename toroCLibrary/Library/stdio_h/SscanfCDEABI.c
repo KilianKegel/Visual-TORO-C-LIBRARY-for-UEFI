@@ -24,7 +24,7 @@ Author:
 --*/
 #include <CdeServices.h>
 
-extern void* __cdeGetAppIf();
+extern void* __cdeGetAppIf(void);
 extern int _cdeMemGetChar(void** ppSrc);
 extern int _cdeMemUngetChar(int c, void** ppSrc);
 

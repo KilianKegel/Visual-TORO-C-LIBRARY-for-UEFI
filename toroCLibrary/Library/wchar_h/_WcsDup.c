@@ -20,8 +20,11 @@ Author:
     Kilian Kegel
 
 --*/
-#include <wchar.h>
-#include <stdlib.h>
+#include <CdeServices.h>
+
+extern wchar_t* wcscpy(wchar_t* pszDst, const wchar_t* pszSrc);
+extern size_t wcslen(const wchar_t* pszBuffer);
+extern void* malloc(size_t size);
 
 /**
 Synopsis
@@ -44,8 +47,17 @@ wchar_t* wcsdup(const wchar_t* s1)
 
 wchar_t* _wcsdup(const wchar_t* s1) 
 {
-    wchar_t* pRet = malloc(sizeof(wchar_t) * wcslen(s1));
+    wchar_t* pRet = NULL;
     
-    return wcscpy(pRet, s1);
-}
+    if (NULL != s1) do
+    {
+        pRet = malloc(sizeof(wchar_t) * wcslen(s1));
 
+        if (NULL == pRet)
+            break;
+
+        pRet = wcscpy(pRet, s1);
+    } while (0);
+
+    return pRet;
+}

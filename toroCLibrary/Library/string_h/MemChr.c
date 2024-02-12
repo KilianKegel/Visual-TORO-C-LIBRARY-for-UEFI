@@ -21,7 +21,6 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <string.h>
 
 /**
 Synopsis

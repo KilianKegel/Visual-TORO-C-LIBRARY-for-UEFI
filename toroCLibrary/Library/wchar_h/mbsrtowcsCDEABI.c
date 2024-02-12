@@ -50,8 +50,8 @@ size_t mbsrtowcsCDEABI(wchar_t* wcstr, const char** mbstr, size_t count, mbstate
     size_t initial_count = count;
     char* pc = (char*)*mbstr; 
 
-    do {
-        
+    if(NULL != mbstr && NULL != wcstr) do {
+
         if (NULL != mbstr && 0 == strlen(*mbstr))
         {
             initial_count = 0;
@@ -68,7 +68,9 @@ size_t mbsrtowcsCDEABI(wchar_t* wcstr, const char** mbstr, size_t count, mbstate
             break;
 
         wc = (wchar_t)*pc++;
-        *mbstr = pc;
+        
+        if (NULL != mbstr)
+            *mbstr = pc;
 
         *wcstr++ = wc;
 

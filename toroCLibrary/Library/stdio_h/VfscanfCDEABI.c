@@ -29,7 +29,7 @@ Author:
 #define EOF    (-1)
 #define FILE void
 
-extern void* __cdeGetAppIf();
+extern void* __cdeGetAppIf(void);
 extern __declspec(dllimport) int fgetc(FILE* stream);
 extern __declspec(dllimport) int ungetc(int c, FILE* stream);
 

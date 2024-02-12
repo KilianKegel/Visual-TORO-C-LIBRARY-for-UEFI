@@ -19,9 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\BUILDNUM.h" />
     <ClInclude Include="Include\CdeServices.h">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </ClInclude>
+    <ClInclude Include="Include\VERSION.h" />
     <ClInclude Include="Include\_invparm.h" />
     <ClInclude Include="Include\_wctype.h" />
     <ClInclude Include="Include\_wctypeCDEABI.h" />
@@ -39,6 +41,7 @@
     <ClCompile Include="Guids\EFI_SHELL_PARAMETERS_PROTOCOL_GUID.c" />
     <ClCompile Include="Guids\EFI_SHELL_PROTOCOL_GUID.c" />
     <ClCompile Include="Guids\EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID.c" />
+    <ClCompile Include="Guids\EFI_SMM_BASE2_PROTOCOL_GUID.c" />
     <ClCompile Include="Guids\EFI_STATUS_CODE_RUNTIME_PROTOCOL_GUID.c" />
     <ClCompile Include="Intrinsics\_fltused.c" />
     <ClCompile Include="Intrinsics\_handle_error.c" />
@@ -95,6 +98,7 @@
     <ClCompile Include="LibConfig\_gCdeCfgCmdLnParmPoolMemRetain.c" />
     <ClCompile Include="LibConfig\_gCdeCfgCmdLnParmReportStatusCodeSTDOUT.c" />
     <ClCompile Include="LibConfig\_gCdeCfgMofineRawSeparator.c" />
+    <ClCompile Include="LibConfig\_gCdeStrLibcVersion.c" />
     <ClCompile Include="LibCore\_cdeCoreFflush.c" />
     <ClCompile Include="LibCore\_cdeCoreFread.c" />
     <ClCompile Include="LibCore\_cdeCoreFsetpos.c" />
@@ -1002,6 +1006,7 @@
     <IntDir>x86\$(Configuration)\</IntDir>
     <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
     <TargetName>toroC$(PlatformArchitecture)</TargetName>
+    <CodeAnalysisRuleSet>toroCLibrary.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -1019,6 +1024,7 @@
     <OutDir>$(SolutionDir)lib\</OutDir>
     <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
     <TargetName>toroC$(PlatformArchitecture)</TargetName>
+    <CodeAnalysisRuleSet>toroCLibrary.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -1183,8 +1189,9 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AssemblerOutput />
-      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706;4996;4127</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4200;4324;4100</DisableSpecificWarnings>
       <UseFullPaths>false</UseFullPaths>
+      <LanguageStandard_C>Default</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -1251,7 +1258,7 @@
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AssemblerOutput>
       </AssemblerOutput>
-      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706;4996;4127</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4200;4324;4100</DisableSpecificWarnings>
       <UseFullPaths>false</UseFullPaths>
     </ClCompile>
     <Link>

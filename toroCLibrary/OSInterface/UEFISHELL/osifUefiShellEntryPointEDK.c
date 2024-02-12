@@ -173,8 +173,9 @@ extern __declspec(dllimport) int fgetc(FILE* stream);
 extern __declspec(dllimport) size_t fwrite(const void* ptr, size_t size, size_t nelem, FILE* stream);
 extern __declspec(dllimport) int sprintf(char* pszDest, const char* pszFormat, ...);
 extern __declspec(dllimport) int raise(int sig);
-//#undef setjmp
-//extern __declspec(dllimport) int setjmp(jmp_buf);
+extern __declspec(dllimport) int strcmp(const char* pszDst, const char* pszSrc);
+extern __declspec(dllimport) int fprintf(FILE* stream, const char* pszFormat, ...);
+extern char _gCdeStrLibcVersion[];
 
 #define IsEqualGUID(rguid1, rguid2) (!memcmp(rguid1, rguid2, sizeof(GUID))) //guiddef.h
 
@@ -513,7 +514,6 @@ _MainEntryPointShell(
                     for (unsigned x = 0; x < _cdegST->NumberOfTableEntries; x++)
                     {
                         int64_t qwSig;
-                        char* pStr8 = NULL;
 
                         if (IsEqualGUID(&EfiAcpi20TableGuid, &_cdegST->ConfigurationTable[x].VendorGuid))
                         {
@@ -628,6 +628,12 @@ _MainEntryPointShell(
             if (0 == __cdeGetCurrentPrivilegeLevel())        // running in RING0
                 _enable();
 
+            if (2 == argc && 0 == strcmp(argvex[1 + 2], "--TOROCVER"))
+            {
+                fprintf(stdout, "%s\n", _gCdeStrLibcVersion);
+                return 3;
+            }
+            
             Status = setjmp(pCdeAppIf->exit_buf) ? pCdeAppIf->exit_status : main(argc, (char**)&argvex[0 + 2]);
 
             if (0 == __cdeGetCurrentPrivilegeLevel())        // running in RING0

@@ -121,6 +121,8 @@ FILE* fopen(const char* filename, const char* mode) {
                 break;/*1. dowhile(0)*/
             }
 
+            if (NULL == pCdeFile)
+                break;
             //
             // open the file, for POSIX open()/Microsoft _open() additionally check existance/presence of requested file
             //  NOTE:   The "existance check" is an additional step that is required for POSIX open()/Microsoft _open() support
@@ -172,5 +174,5 @@ FILE* fopen(const char* filename, const char* mode) {
 
     free(pwcsFileName);
 
-    return pCdeFile->emufp == NULL ? NULL : (FILE*)pCdeFile;
+    return (NULL == pCdeFile || pCdeFile->emufp == NULL) ? NULL : (FILE*)pCdeFile;
 }

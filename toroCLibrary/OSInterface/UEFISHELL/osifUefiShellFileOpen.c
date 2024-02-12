@@ -96,14 +96,11 @@ static struct _tblMode {
 
 static EFI_STATUS efifopen(const char* szModeNoSpace, int fFileExists/* 0 no, 1 yes, -1 unk */, CDEFILE* pCdeFile)
 {
-    CDEFILE* pRet = NULL;
     int i;
     EFI_STATUS Status = (EFI_STATUS)-1;
     int OpenMode = 0, * pOpenMode = &OpenMode;
     uint64_t UefiAttribFlags = EFI_FILE_ARCHIVE, * pUefiAttribFlags = &UefiAttribFlags;
     uint64_t UefiModeFlags = 0, * pUefiModeFlags = &UefiModeFlags;
-    int fFinalOpenStatus = 1;
-
 
     do {
 

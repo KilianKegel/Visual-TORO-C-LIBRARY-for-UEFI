@@ -25,7 +25,7 @@ Author:
 #include <stdarg.h>
 #include <stddef.h>
 
-extern void* __cdeGetAppIf();
+extern void* __cdeGetAppIf(void);
 extern int _cdeMemGetWChar(void** ppSrc);
 extern int _cdeMemUngetWChar(int c, void** ppSrc);
 

@@ -25,7 +25,7 @@ Author:
 #include <CdeServices.h>
 #include <limits.h>
 
-extern void* __cdeGetAppIf();
+extern void* __cdeGetAppIf(void);
 extern void _CdeMemPutWChar(int c, void** ppDest);
 extern void _CdeMemPutNada(int c, void** ppDest);
 

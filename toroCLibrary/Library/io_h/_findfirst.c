@@ -116,11 +116,9 @@ intptr_t _findfirst64i32(char const* pstrFileName, struct _finddata64i32_t* pFin
             const char* pstrFileNameOrCWD = NULL == pstrUpperDir ? pstrFileName : pstrUpperDir;
             char* pBSlashRight = strrchr(pstrFileNameOrCWD, '\\');   // check if back slash (bslash) '\\' is contained before search patter
             char* pColon  = strchr(pstrFileNameOrCWD, ':');          // check if colon ':' is contained before search patter
-            int bslashadjust = 0;
             ptrdiff_t idxBSlash = -1;                           // separator index == offset of most right '\\'. if 0 we have somthing like "\dir\?"
             ptrdiff_t idxColon = -1;                            // index == offset of most left (and the only) ':'. This indicates there is a drive name
             int pathtype = 0;
-            size_t sizeSearchAll = 0;
             size_t nCpy = 0;
             CDEFILEINFO* pCdeFileInfo = NULL;
 
@@ -169,6 +167,8 @@ intptr_t _findfirst64i32(char const* pstrFileName, struct _finddata64i32_t* pFin
             }
 
             pstrSearchAllBuffer = malloc(320/* additional scratch space*/ + nCpy + sizeof("*"));
+            if (NULL == pstrSearchAllBuffer)
+                abort();
             strncpy(pstrSearchAllBuffer, pstrFileNameOrCWD, nCpy);
             pstrSearchAllBuffer[nCpy] = '\0';
             strcat(pstrSearchAllBuffer, "*");
@@ -177,6 +177,8 @@ intptr_t _findfirst64i32(char const* pstrFileName, struct _finddata64i32_t* pFin
             // duplicate pstrSearchPat and increase size to be r/w and extensible for ".*"
             //
             pstrSearchPatExt = malloc(sizeof(".*")/* including '\0' */ + strlen(pstrSearchPat));
+            if (NULL == pstrSearchPatExt)
+                abort();
             strcpy(pstrSearchPatExt, pstrSearchPat);
 
            
@@ -219,6 +221,8 @@ intptr_t _findfirst64i32(char const* pstrFileName, struct _finddata64i32_t* pFin
                 // allocate the "handle" that include the file list, file count and pattern NAME + EXT
                 //
                 pcdeFindFirstNextData = malloc(sizeof(CDEFINDFIRSTNEXT));
+                if (NULL == pcdeFindFirstNextData)
+                    abort();
 
                 pcdeFindFirstNextData->nCountOfAll = nCntOfAll;
                 pcdeFindFirstNextData->pCdeFileInfo = pCdeFileInfo;

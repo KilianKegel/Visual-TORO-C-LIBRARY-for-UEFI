@@ -23,7 +23,7 @@ Author:
 #include <CdeServices.h>
 #include <limits.h>
 
-extern void* __cdeGetAppIf();
+extern void* __cdeGetAppIf(void);
 extern int _cdeSwscanf(const wchar_t* pwcsBuffer, wchar_t** endptr, const wchar_t* pwcsFormat, ...);
 
 /**

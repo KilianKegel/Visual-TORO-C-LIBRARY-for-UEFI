@@ -21,7 +21,7 @@ Author:
 
 --*/
 #include <limits.h>
-extern void* __cdeGetAppIf();
+extern void* __cdeGetAppIf(void);
 extern int _cdeSscanf(const char* pszBuffer, char** endptr, const char* pszFormat, ...);
 
 /**

@@ -183,7 +183,6 @@ Returns
 
 **/
 static unsigned long long IntgrBinDigits(double d) {	// integer digit
-    unsigned long long* pd = (void*)&d;
     unsigned long long nRet = 0LL;
     unsigned long long fractionplushidden = FractFieldOfDouble(d) + (1LL << EXPPOS); // place hidden bit into the mantisse
     signed exp = ExpFieldOfDouble(d);
@@ -603,7 +602,6 @@ static int nprintfield(
 		
         case FLOATINGPOINT: {
             int offsIntgr = 0;
-            int offsFract = pNumDesc->nFloatIntgrLen;
             int addPreciZeros = pFlags->nPrecisionsize - pNumDesc->nFloatFractLen;
 
             addPreciZeros = addPreciZeros < 0 ? 0 : addPreciZeros;

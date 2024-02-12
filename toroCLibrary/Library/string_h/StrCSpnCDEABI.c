@@ -27,7 +27,7 @@ Author:
 
 #define _TCHAR char
 
-extern void* __cdeGetAppIf();
+extern void* __cdeGetAppIf(void);
 
 /**
 

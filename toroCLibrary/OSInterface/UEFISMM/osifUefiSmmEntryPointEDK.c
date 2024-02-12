@@ -73,7 +73,7 @@ extern __declspec(dllimport) void* memset(void* s, int c, size_t n);
 extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
 extern __declspec(dllimport) char* strcpy(char* pszDst, const char* pszSrc);
 
-
+extern EFI_GUID _gEfiSmmBase2ProtocolGuid;
 //
 // globals
 //
@@ -193,10 +193,9 @@ EFI_STATUS EFIAPI _cdeCRT0UefiSmmEDK(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TA
         if (1)
         {
             EFI_SMM_BASE2_PROTOCOL* pSmmBase2 = NULL;
-            static EFI_GUID gEfiSmmBase2ProtocolGuid = { 0xf4ccbfb7, 0xf6e0, 0x47fd, { 0x9d, 0xd4, 0x10, 0xa8, 0xf1, 0x50, 0xc1, 0x91 } };
 
             Status = _cdegBS->LocateProtocol(
-                &gEfiSmmBase2ProtocolGuid,
+                &_gEfiSmmBase2ProtocolGuid,
                 NULL,
                 (VOID**)&pSmmBase2
             );
@@ -236,7 +235,7 @@ EFI_STATUS EFIAPI _cdeCRT0UefiSmmEDK(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TA
         CdeAppIfSmm.DriverParm.BsDriverParm.pSystemTable = SystemTable;
         CdeAppIfSmm.DriverParm.BsDriverParm.pSmmSystemTable2 = _cdegSmst;
 
-    } while (Status = EFI_SUCCESS);
+    } while (Status = EFI_SUCCESS, Status == EFI_SUCCESS);
 
     return EFI_SUCCESS == Status ? _ModuleEntryPoint(ImageHandle, SystemTable) : Status;
 }
@@ -268,7 +267,6 @@ EFI_STATUS EFIAPI _MainEntryPointSmm(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TA
     static EFI_GUID gCdeLoadOptionsProtocolGuid = CDE_LOAD_OPTIONS_PROTOCOL_GUID;
     CDE_LOADOPTIONS_PROTOCOL* pCdeLoadOptionsProtocol;
     char* pLoadOptions, * pLoadOptionsRW = gEfiCallerBaseName;
-    size_t eflags = __readeflags();
 
     do {
 
@@ -310,9 +308,6 @@ EFI_STATUS EFIAPI _MainEntryPointSmm(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TA
 
         Status = _cdeInt2EfiStatus(nRet);
 
-        //if (0 == __cdeGetCurrentPrivilegeLevel())       // running in RING0
-        //    if(0 == (0x200 & eflags))                   // restore IF interrupt flag
-        //        _disable();
         for (i = CDE_ATEXIT_REGISTRATION_NUM - 1; i >= 0; i--)
             if (NULL != CdeAppIfSmm.rgcbAtexit[i])
                 (*CdeAppIfSmm.rgcbAtexit[i])();

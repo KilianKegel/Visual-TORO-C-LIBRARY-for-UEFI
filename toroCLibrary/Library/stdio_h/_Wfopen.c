@@ -21,12 +21,16 @@ Author:
 
 --*/
 //#undef NCDETRACE
-#include <stdio.h>
+//
+// stdio.h
+//
+#define FILE void
 #include <stdlib.h>
 #include <string.h>
 #include <CdeServices.h>
 
 extern void* __cdeGetIOBuffer(unsigned i);
+extern FILE* fopen(const char* filename, const char* mode);
 
 /** fopen
 Synopsis
@@ -47,11 +51,11 @@ FILE* _wfopen(const wchar_t* wcsFileName, const wchar_t* wcsFileMode)
     size_t lenFileName = wcslen(wcsFileName);
     size_t lenFileMode = wcslen(wcsFileMode);
 
-    char* strFileName = malloc(sizeof((char)'\0') + lenFileName);
-    char* strFileMode = malloc(sizeof((char)'\0') + lenFileMode);
+    char* strFileName = malloc(sizeof("") + lenFileName);
+    char* strFileMode = malloc(sizeof("") + lenFileMode);
 
-    wcstombs(strFileName, wcsFileName, sizeof((char)'\0') + lenFileName);
-    wcstombs(strFileMode, wcsFileMode, sizeof((char)'\0') + lenFileMode);
+    wcstombs(strFileName, wcsFileName, sizeof("") + lenFileName);
+    wcstombs(strFileMode, wcsFileMode, sizeof("") + lenFileMode);
 
     fp = fopen(strFileName, strFileMode);
 

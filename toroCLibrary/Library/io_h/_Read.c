@@ -52,7 +52,6 @@ int _read(int const fd, void* const buffer, unsigned const buffer_size)
 {
     FILE* fp = __cdeGetIOBuffer((unsigned)fd);
     int nRet = NULL == fp ? -1 : 0;
-    size_t size = 0;
 
     if (NULL != fp) do {
 

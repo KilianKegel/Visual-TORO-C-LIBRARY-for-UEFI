@@ -26,7 +26,7 @@ Author:
 #include <cde.h>
 #include <CdeServices.h>
 
-extern void* __cdeGetAppIf();
+extern void* __cdeGetAppIf(void);
 
 static void __fputcpp(int b, void** pstream) {
     fputc(b, *pstream);

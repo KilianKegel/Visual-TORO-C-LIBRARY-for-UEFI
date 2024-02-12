@@ -8,6 +8,11 @@
 ```
 
 ## Revision history
+### 20240212, v0.8.0 Build 1
+* add semantic versioning + build enumeration
+* optimize source code
+    * reduce number of suppressed warnings (4200;4324;4100 only)
+    * enable static code analysis (`toroCLibrary.ruleset`, suppress warning 28251 only )
 ### 20231228
 * update copyright date
 ### 20231118

@@ -26,7 +26,7 @@ Author:
 extern __declspec(dllimport) int sprintf(char* pszBuffer, const char* pszFormat, ...);
 extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
 extern __declspec(dllimport) size_t mbstowcs(wchar_t* wcstr, const char* mbstr, size_t count);
-extern void* __cdeGetAppIf();
+extern void* __cdeGetAppIf(void);
 
 extern char* wday_name_short[7];
 extern char* mon_name_short[12];
@@ -78,7 +78,6 @@ static size_t wcsftimeCDEABI(wchar_t* pDest, size_t maxsize, const wchar_t* form
     size_t nRet = 0;
     int n, f, fSharp, fErr, fFinished, l;
     char buffer[64];
-    size_t elc_buffer = sizeof(buffer) / sizeof(buffer[0]);
     wchar_t c;
     enum STATE {
         PROCESS_WRITECHARS,

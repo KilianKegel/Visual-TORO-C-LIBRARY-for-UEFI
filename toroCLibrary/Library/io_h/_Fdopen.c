@@ -71,8 +71,7 @@ Returns
 FILE* _fdopen(int fd, const char* mode)
 {
     CDEFILE* pCdeFile = __cdeGetIOBuffer(fd);
-    char szModeNoSpace[16], * pc = NULL;
-    const char szDelims[] = { " \tt" };
+    char szModeNoSpace[16];
     int i;
 
     do {

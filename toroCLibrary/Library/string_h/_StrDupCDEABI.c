@@ -28,6 +28,7 @@ Author:
 extern __declspec(dllimport) char* strcpy(char* pszDst, const char* pszSrc);
 extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
 extern __declspec(dllimport) void* malloc(size_t size);
+extern __declspec(dllimport) void abort(void);
 
 /**
 Synopsis
@@ -43,9 +44,19 @@ Returns
 **/
 static char* _strdupCDEABI(const char* s1) 
 {
-    char* pRet = malloc(strlen(s1));
-    
-    return strcpy(pRet, s1);
-}
 
+    char* pRet = NULL;
+    
+    if (NULL != s1) do
+    {
+        pRet = malloc(strlen(s1));
+
+        if (NULL == pRet)
+            break;
+
+        pRet = strcpy(pRet, s1);
+    } while (0);
+
+    return pRet;
+}
 MKCDEABI(_strdup);

@@ -19,17 +19,22 @@ Author:
     Kilian Kegel
 
 --*/
+#include <stdint.h>
 #include <stddef.h>
 
 size_t _cdeInt2EfiStatus(int intstatus)
 {
-	uintptr_t efistatus = (uintptr_t)-1;
+    uintptr_t efistatus = (uintptr_t)-1;
     long long mask = 0x800000007FFFFFFFLL;
 
-	if (4 == sizeof(efistatus))
-		efistatus = intstatus;
-	else
-		efistatus = (0x80000000 == (0xC0000000 & intstatus)) ? ((intptr_t)(mask)) & intstatus : intstatus;
+    switch (sizeof(uintptr_t))
+    {
+    case sizeof(uint32_t) :
+        efistatus = intstatus;
+        break;
+    default:
+        efistatus = (0x80000000 == (0xC0000000 & intstatus)) ? ((intptr_t)(mask)) & intstatus : intstatus;
+    }
 
-	return efistatus;
+    return efistatus;
 }

@@ -45,6 +45,7 @@ extern __declspec(dllimport) void free(void* ptr);
 extern __declspec(dllimport) void* realloc(void* ptr, size_t size);
 extern __declspec(dllimport) size_t wcstombs(char* mbstr, const wchar_t* wcstr, size_t count);
 extern __declspec(dllimport) size_t mbstowcs(wchar_t* wcstr, const char* mbstr, size_t count);
+extern __declspec(dllimport) void abort(void);
 //#include <stdbool.h>
 // time.h
 // 
@@ -104,7 +105,6 @@ Returns
 **/
 CDEFILEINFO* _osifUefiShellFileFindAll(IN CDE_APP_IF* pCdeAppIf, IN char* pstrDrvPthDirStar, IN OUT int* pCountOrError)
 {
-    struct _finddata64i32_t** ppFindData = NULL;
     CDEFILEINFO* pCdeFileInfo = NULL;
     bool fIsFileAbs = false/* absolute path vs. relative path */;
     bool fIsFileDrv = false/* a drive name leads the path e.g. FS0: This is identified by precense of ':' */;
@@ -223,11 +223,13 @@ static CDEFILEINFO* __cdeReadDirectory(IN char* strFileName, OUT int* pcntDirEnt
     CDEFILEINFO* pCdeFileInfo = malloc(sizeCdeFileInfo);
     CDEFILEINFO* pCdeFileInfoEnd = NULL;
     CDEFILEINFO* pCdeFileInfoFF = NULL;
-    CDEFILEINFO* pRet = NULL;
     int cntDirEntries = 0;                                      // count directory entries
     size_t sizeFileName;
 
     pCdeFileInfo->time_write = -1LL;
+
+    if (NULL == pCdeFileInfo)
+        abort();
 
     if (NULL != fp) do
     {
@@ -272,7 +274,12 @@ static CDEFILEINFO* __cdeReadDirectory(IN char* strFileName, OUT int* pcntDirEnt
                 sizeCdeFileInfo += sizeFileName;
                 sizeCdeFileInfo += sizeof(CDEFILEINFO);
 
-                pCdeFileInfo = realloc(pCdeFileInfo, sizeCdeFileInfo);
+                if (1) {
+                    void *ptmp = (void*)realloc(pCdeFileInfo, sizeCdeFileInfo);
+                    pCdeFileInfo = ptmp;
+                    if (NULL == pCdeFileInfo)
+                        abort();
+                }
                 //
                 // get pointer to last entry (one before 0xFF/termination structure)
                 //
@@ -297,7 +304,7 @@ static CDEFILEINFO* __cdeReadDirectory(IN char* strFileName, OUT int* pcntDirEnt
                 pCdeFileInfoEnd->time_write = mktime(&timetm);                              // convert EFI_TIME to time_t
  
                 if (NULL != pcntDirEntries)
-                    *pcntDirEntries++;
+                    (*pcntDirEntries)++;
 
             }
         } while (0);

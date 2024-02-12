@@ -25,7 +25,7 @@ Author:
 
 #pragma warning (disable:4028)
 
-extern void* __cdeGetAppIf();
+extern void* __cdeGetAppIf(void);
 extern int fgetc(FILE* stream);
 extern int ungetc(int c, FILE* stream);
 

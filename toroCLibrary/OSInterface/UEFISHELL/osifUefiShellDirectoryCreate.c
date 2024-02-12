@@ -88,7 +88,7 @@ int _osifUefiShellDirectoryCreate(IN CDE_APP_IF* pCdeAppIf, wchar_t* pwcsDirName
             break;
         }
 
-    } while (nRetErrno = EXIT_SUCCESS);
+    } while (nRetErrno = EXIT_SUCCESS, nRetErrno == EXIT_SUCCESS);
 
     //printf(/*__FILE__*/"(%d), "__FUNCTION__"()""nRet -> %X\n", __LINE__, nRetErrno);
 

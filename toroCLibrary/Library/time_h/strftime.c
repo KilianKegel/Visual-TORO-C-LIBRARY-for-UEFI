@@ -21,11 +21,28 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <time.h>
-#include <string.h>
+//#include <time.h>
+//#include <string.h>
+typedef long long time_t;
 
+struct tm
+{
+    int tm_sec;   // seconds after the minute - [0, 60] including leap second
+    int tm_min;   // minutes after the hour - [0, 59]
+    int tm_hour;  // hours since midnight - [0, 23]
+    int tm_mday;  // day of the month - [1, 31]
+    int tm_mon;   // months since January - [0, 11]
+    int tm_year;  // years since 1900
+    int tm_wday;  // days since Sunday - [0, 6]
+    int tm_yday;  // days since January 1 - [0, 365]
+    int tm_isdst; // daylight savings time flag
+};
 extern int sprintf(char* pszDest, const char* pszFormat, ...);
-extern void* __cdeGetAppIf();
+extern time_t mktime(struct tm* ptm);
+extern size_t strlen(const char* pszBuffer);
+extern void* memcpy(void* s1, const void* s2, size_t n);
+
+extern void* __cdeGetAppIf(void);
 
 extern char* wday_name_short[7];
 extern char* mon_name_short[12];
@@ -33,7 +50,7 @@ extern char* wday_name_long[7];
 extern char* mon_name_long[12];
 extern char* ampm[2];
 
-int FirstYday(int year_since_1900) {
+static int FirstYday(int year_since_1900) {
     struct tm tm = { 0,0,0,1,0,0,0,0,0 };
 
     tm.tm_year = year_since_1900;

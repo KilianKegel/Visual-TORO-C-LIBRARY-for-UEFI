@@ -24,7 +24,11 @@ Author:
 --*/
 
 #include <CdeServices.h>
-#include <signal.h>
+//
+// signal.h
+//
+#define SIGILL  4
+#define SIGSEGV 11
 
 extern char _cdeSig2idx(int sig);
 extern void (*pinvalid_parameter_handlerCDEABI)(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);
@@ -60,22 +64,23 @@ static int raiseCDEABI(int sig) {
             //(*pinvalid_parameter_handlerCDEABI)(L"\"idx < 0\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
             (*pinvalid_parameter_handlerCDEABI)(NULL, NULL, NULL, 0, 0);
         }
-        sighnd = pCdeAppIf->rgfnSignal[idx];
+        else {
+            sighnd = pCdeAppIf->rgfnSignal[idx];
 
-        if (pCdeAppIf->rgfnSignal[idx] != &_cdeSigIgn) {
-            //NOTE: raise() does not reinstall the default handler for signal number SIGILL and SIGSEGV,
-            //      as expected, but some garbage address
-            //      that is returned by signal(), once the signal was raised...
-            //MSFT BUGBUG pCdeAppIf->rgfnSignal[idx] = &_cdeSigDflt;
+            if (pCdeAppIf->rgfnSignal[idx] != &_cdeSigIgn) {
+                //NOTE: raise() does not reinstall the default handler for signal number SIGILL and SIGSEGV,
+                //      as expected, but some garbage address
+                //      that is returned by signal(), once the signal was raised...
+                //MSFT BUGBUG pCdeAppIf->rgfnSignal[idx] = &_cdeSigDflt;
 
-            if (sig == SIGILL || sig == SIGSEGV)
-                pCdeAppIf->rgfnSignal[idx] = (void(__cdecl*)(int))0x6AABA6E;//&_cdeSigDflt; GARBAGE
-            else
-                pCdeAppIf->rgfnSignal[idx] = &_cdeSigDflt;//&_cdeSigDflt;
+                if (sig == SIGILL || sig == SIGSEGV)
+                    pCdeAppIf->rgfnSignal[idx] = (void(__cdecl*)(int))0x6AABA6E;//&_cdeSigDflt; GARBAGE
+                else
+                    pCdeAppIf->rgfnSignal[idx] = &_cdeSigDflt;//&_cdeSigDflt;
+            }
+
+            (*sighnd)(sig);
         }
-
-        (*sighnd)(sig);
-
     } while (0);
 
     return(0);

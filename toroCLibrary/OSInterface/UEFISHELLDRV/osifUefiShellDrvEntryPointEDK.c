@@ -150,6 +150,9 @@ extern __declspec(dllimport) int fgetc(FILE* stream);
 extern __declspec(dllimport) size_t fwrite(const void* ptr, size_t size, size_t nelem, FILE* stream);
 extern __declspec(dllimport) int wcsncmp(const wchar_t* s1, const wchar_t* s2, size_t n);
 extern __declspec(dllimport) size_t wcslen(const wchar_t* pszBuffer);
+extern __declspec(dllimport) int strcmp(const char* pszDst, const char* pszSrc);
+extern __declspec(dllimport) int fprintf(FILE* stream, const char* pszFormat, ...);
+extern char _gCdeStrLibcVersion[];
 
 #define IsEqualGUID(rguid1, rguid2) (!memcmp(rguid1, rguid2, sizeof(GUID))) //guiddef.h
 
@@ -466,7 +469,6 @@ EFI_STATUS EFIAPI _MainEntryPointUefiShellDrv(IN EFI_HANDLE ImageHandle, IN EFI_
             for (unsigned x = 0; x < _cdegST->NumberOfTableEntries; x++)
             {
                 int64_t qwSig;
-                char* pStr8 = NULL;
 
                 if (IsEqualGUID(&EfiAcpi20TableGuid, &_cdegST->ConfigurationTable[x].VendorGuid))
                 {
@@ -528,6 +530,14 @@ EFI_STATUS EFIAPI _MainEntryPointUefiShellDrv(IN EFI_HANDLE ImageHandle, IN EFI_
         if (0 == __cdeGetCurrentPrivilegeLevel())       // running in RING0
             _enable();
 
+        //
+        // version string
+        //
+        if (2 == argc && 0 == strcmp(argvex[1 + 2], "--TOROCVER"))
+        {
+            fprintf(stdout, "%s\n", _gCdeStrLibcVersion);
+            return 3;
+        }
         //
         // install notify callback triggered by CdeEfiShellProtocol availability
         //
@@ -759,7 +769,8 @@ EFI_STATUS UefiMain(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable)
 {
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
     EFI_LOADED_IMAGE_PROTOCOL* pLoadedImageProtocol;
-    EFI_STATUS Status = SystemTable->BootServices->HandleProtocol(ImageHandle, &gEfiLoadedImageProtocolGuid, &pLoadedImageProtocol);
+    
+    SystemTable->BootServices->HandleProtocol(ImageHandle, &gEfiLoadedImageProtocolGuid, &pLoadedImageProtocol);
 
     if (0 == wcsncmp(L"Shell.efi -exit", pLoadedImageProtocol->LoadOptions, wcslen(L"Shell.efi -exit")))
     {

@@ -25,7 +25,7 @@ Author:
 #include <time.h>
 #undef localtime
 
-extern void* __cdeGetAppIf();
+extern void* __cdeGetAppIf(void);
 extern struct tm* _cdeGmltime(const long long* timep, struct tm* ptm);
 
 /**

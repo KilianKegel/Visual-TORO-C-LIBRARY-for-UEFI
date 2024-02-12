@@ -24,9 +24,9 @@ Author:
 --*/
 #include <CdeServices.h>
 
-__declspec(dllimport) void* malloc(size_t size);
-__declspec(dllimport) size_t wcslen(const wchar_t* pszBuffer);
-__declspec(dllimport) wchar_t* wcscpy(wchar_t* pszDst, const wchar_t* pszSrc);
+extern __declspec(dllimport) wchar_t* wcscpy(wchar_t* pszDst, const wchar_t* pszSrc);
+extern __declspec(dllimport) size_t wcslen(const wchar_t* pszBuffer);
+extern __declspec(dllimport) void* malloc(size_t size);
 
 /**
 Synopsis
@@ -43,9 +43,19 @@ Returns
 
 static wchar_t* _wcsdupCDEABI(const wchar_t* s1) 
 {
-    wchar_t* pRet = malloc(sizeof(wchar_t) * wcslen(s1));
+    wchar_t* pRet = NULL;
     
-    return wcscpy(pRet, s1);
+    if (NULL != s1) do
+    {
+        pRet = malloc(sizeof(wchar_t) * wcslen(s1));
+
+        if (NULL == pRet)
+            break;
+
+        pRet = wcscpy(pRet, s1);
+    } while (0);
+
+    return pRet;
 }
 
 static wchar_t* wcsdupCDEABI(const wchar_t* s1)

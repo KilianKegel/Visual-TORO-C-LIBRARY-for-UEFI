@@ -645,6 +645,8 @@
     <ClCompile Include="OSInterface\UEFISHELLDRV\osifUefiShellDrvEntryPointEDK.c" />
     <ClCompile Include="OSInterface\UEFISHELLDRV\osifUefiShellDrvEntryPoint.c" />
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellGetTscPerSec.c" />
+    <ClCompile Include="Guids\EFI_SMM_BASE2_PROTOCOL_GUID.c" />
+    <ClCompile Include="LibConfig\_gCdeStrLibcVersion.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\CdeServices.h" />
@@ -657,6 +659,8 @@
     <ClInclude Include="OSInterface\EDK2ObjBlocker\DebugLib_c.h" />
     <ClInclude Include="OSInterface\EDK2ObjBlocker\DriverEntryPoint_c.h" />
     <ClInclude Include="OSInterface\EDK2ObjBlocker\PeimEntryPoint_c.h" />
+    <ClInclude Include="Include\VERSION.h" />
+    <ClInclude Include="Include\BUILDNUM.h" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="Intrinsics\__alldiv.asm" />

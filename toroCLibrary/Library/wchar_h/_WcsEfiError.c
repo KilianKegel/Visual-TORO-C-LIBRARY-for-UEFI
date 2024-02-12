@@ -70,6 +70,7 @@ Returns
 wchar_t* _wcsefierror(EFI_STATUS errcode) {
 
     static wchar_t* pszRet = { L"Unknown error" };
+    unsigned i;
 
     EFI_STATUS ErrMask = (1ULL << (8 * sizeof(EFI_STATUS) - 1));
 
@@ -79,9 +80,10 @@ wchar_t* _wcsefierror(EFI_STATUS errcode) {
             break;
 
         errcode &= ~ErrMask;
+        i = (unsigned)errcode;
 
-        if ((unsigned int)errcode < sizeof(rgszEfiErrors) / sizeof(char*))
-            pszRet = rgszEfiErrors[errcode];
+        if (i < (sizeof(rgszEfiErrors) / sizeof(char*)) )
+            pszRet = rgszEfiErrors[i];
 
     } while (0);
 

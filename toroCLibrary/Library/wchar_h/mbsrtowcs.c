@@ -21,8 +21,10 @@ Author:
     Kilian Kegel
 
 --*/
+#include <CdeServices.h>
 #include <stddef.h>
-#include <string.h>
+
+extern size_t strlen(const char* pszBuffer);
 /**
 
 Synopsis
@@ -57,7 +59,7 @@ size_t mbsrtowcs(wchar_t* wcstr, const char** mbstr, size_t count, mbstate_t* mb
 
         if (NULL == wcstr)
         {
-            initial_count = strlen(*mbstr);     // Microsoft decided to return remaining string length if NULL == destination, not my choice!!!
+            initial_count = NULL == mbstr ? 0 : strlen(*mbstr);     // Microsoft decided to return remaining string length if NULL == destination, not my choice!!!
             break;
         }
 
@@ -65,7 +67,9 @@ size_t mbsrtowcs(wchar_t* wcstr, const char** mbstr, size_t count, mbstate_t* mb
             break;
 
         wc = (wchar_t)*pc++;
-        *mbstr = pc;
+        
+        if(NULL != mbstr)
+            *mbstr = pc;
 
         *wcstr++ = wc;
 

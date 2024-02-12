@@ -21,13 +21,26 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <time.h>
+//#include <time.h>
 
+struct tm
+{
+    int tm_sec;   // seconds after the minute - [0, 60] including leap second
+    int tm_min;   // minutes after the hour - [0, 59]
+    int tm_hour;  // hours since midnight - [0, 23]
+    int tm_mday;  // day of the month - [1, 31]
+    int tm_mon;   // months since January - [0, 11]
+    int tm_year;  // years since 1900
+    int tm_wday;  // days since Sunday - [0, 6]
+    int tm_yday;  // days since January 1 - [0, 365]
+    int tm_isdst; // daylight savings time flag
+};
 extern int sprintf(char* pszDest, const char* pszFormat, ...);
+extern time_t mktime(struct tm* ptm);
 extern size_t strlen(const char* pszBuffer);
 extern wchar_t* wmemcpy(wchar_t* s1, const wchar_t* s2, size_t n);
 extern size_t mbstowcs(wchar_t* wcstr, const char* mbstr, size_t count);
-extern void* __cdeGetAppIf();
+extern void* __cdeGetAppIf(void);
 
 extern char* wday_name_short[7];
 extern char* mon_name_short[12];
@@ -35,7 +48,7 @@ extern char* wday_name_long[7];
 extern char* mon_name_long[12];
 extern char* ampm[2];
 
-int FirstYday(int year_since_1900) {
+static int FirstYday(int year_since_1900) {
     struct tm tm = { 0,0,0,1,0,0,0,0,0 };
 
     tm.tm_year = year_since_1900;
@@ -79,7 +92,6 @@ size_t wcsftime(wchar_t* pDest, size_t maxsize, const wchar_t* format, const str
     size_t nRet = 0;
     int n, f, fSharp, fErr, fFinished, l;
     char buffer[64];
-    size_t elc_buffer = sizeof(buffer) / sizeof(buffer[0]);
     wchar_t c;
     enum STATE {
         PROCESS_WRITECHARS,

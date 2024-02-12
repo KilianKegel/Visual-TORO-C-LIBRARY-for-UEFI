@@ -20,11 +20,16 @@ Author:
     Kilian Kegel
 
 --*/
-#include <cdeservices.h>
-#include <stdio.h>
-#include <wchar.h>
+#include <CdeServices.h>
+//
+// stdio.h
+//
+#define EOF    (-1)
+#define WEOF ((wint_t)(0xFFFF))
+#define FILE void
 
 extern void (*pinvalid_parameter_handler)(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);
+extern size_t fread(const void* ptr, size_t size, size_t nelem, FILE* stream);
 
 /** fgets
 Synopsis

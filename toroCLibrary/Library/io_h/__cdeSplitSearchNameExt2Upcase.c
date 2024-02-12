@@ -27,7 +27,7 @@ Author:
 /**
 
 Synopsis
-    
+
     char* __cdeSplitSearchNameExt2Upcase(const char* pstr, char** ppStrFULL, char** ppStrEXT)
 
 Description
@@ -50,10 +50,12 @@ char* __cdeSplitSearchNameExt2Upcase(const char* pstr, char** ppStrFULL, char** 
 {
     size_t sizeStrFULL = strlen(pstr);
     char* pStrFULL = malloc(sizeof("") + sizeStrFULL)   /* full search pattern converted to UPCASE  */;
-    char* pPatNAME = pStrFULL                   /* search pattern name e.g. "COMMAND" or "CO*AN?    */;
     char* pStrEXT = NULL                        /* search pattern extension e.g. "COM" or "C?M      */;
     char c;
     int i = 0;
+
+    if (NULL == pStrFULL)
+        abort();
 
     while ( /* copy to UPCASE */
         c = pstr[i],
@@ -65,7 +67,7 @@ char* __cdeSplitSearchNameExt2Upcase(const char* pstr, char** ppStrFULL, char** 
         );
 
     if (NULL != pStrEXT)                // if '.' found
-    {    
+    {
         strcpy(pStrEXT++, "");          // terminate file forename and update pointer to beginning of "EXT"
         if (0 == strlen(pStrEXT))       // check empty ".EXT" --> "*."
             pStrEXT = NULL;             // empty EXT --> set NULL

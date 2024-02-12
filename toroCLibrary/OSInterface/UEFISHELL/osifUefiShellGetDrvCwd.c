@@ -45,8 +45,6 @@ char* _osifUefiShellGetDrvCwd(IN CDE_APP_IF* pCdeAppIf, IN OUT char* pstrDrvCwdB
 {
     wchar_t* pwcsPool;
     char* pRet = NULL;
-    char*    pstrIntern = (void*)&pCdeAppIf->szTmpBuf[0];                   // access buffer via char* type
-    wchar_t* pwcsIntern = (void*)&pCdeAppIf->szTmpBuf[0];                   // access buffer via wchar_t* type
     wchar_t wc;
     int i = 0;
     EFI_SHELL_PROTOCOL* pEfiShellProtocol = pCdeAppIf->pCdeServices->pvEfiShellProtocol;
@@ -60,15 +58,6 @@ char* _osifUefiShellGetDrvCwd(IN CDE_APP_IF* pCdeAppIf, IN OUT char* pstrDrvCwdB
                 #error CDE_TMPBUF_WCHAR_LEN TOO SMALL
             #endif// CDE_DIRECTORYNAME_LEN > CDE_TMPBUF_WCHAR_LEN
             
-            //wcsncpy(pwcsIntern, pwcsPool, CDE_DIRECTORYNAME_LEN);
-            //pwcsIntern[CDE_DIRECTORYNAME_LEN] = L'\0';
-
-            //while ( wc = pwcsIntern[i], 
-            //        pstrIntern[i++] = (char)wc, 
-            //        L'\0' != wc
-            //    );
-            //
-            //pRet = pstrIntern;
             while ( wc = pwcsPool[i],
                 pstrDrvCwdBuf[i++] = (char)wc,
                     L'\0' != wc

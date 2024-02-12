@@ -78,7 +78,6 @@ int _cdeCoreFsetpos(CDE_APP_IF *pCdeAppIf, FILE* stream, const fpos_t* pos)
 {
     CDEFILE* pCdeFile = (CDEFILE*)stream;
     int nRet = EOF, nRetErr = EOF, *pRet = &nRet;
-    EFI_STATUS Status = EFI_SUCCESS;
     
     CDEFPOS_T CdeFPos = { .fpos64 = *pos };
 

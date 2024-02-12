@@ -194,7 +194,7 @@ void* _cdeCoreMemRealloc(
 
                     pThis = pThis->pPred;
                 }
-                if (FALSE == pThis->fInalterable && (pThis->pPred->qwMagic == ENDOFMEM) && (pThis->pSucc->qwMagic == ENDOFMEM)) {	//free pages
+                if (FALSE == pThis->fInalterable && (pThis->pPred != NULL && pThis->pPred->qwMagic == ENDOFMEM) && (pThis->pSucc->qwMagic == ENDOFMEM)) {	//free pages
                     pThis->pPred->pSucc = pThis->pSucc->pSucc;
                     if (NULL != pThis->pSucc->pSucc) {
                         pThis->pSucc->pSucc->pPred = pThis->pPred;
@@ -271,7 +271,11 @@ void* _cdeCoreMemRealloc(
                         pTmpEnd->pSucc = NULL;
                     }
                 }
+
+                if (NULL == pThis)
+                    break;//while (pThis != NULL);
                 pThis = pThis->pSucc;
+
             } while (pThis != NULL);
         }//if(ptr != NULL)
     } while (0);

@@ -20,9 +20,14 @@ Author:
     Kilian Kegel
 
 --*/
-#include <stdio.h>
 #include <cdeservices.h>
+//
+// stdio.h
+//
+#define FILE void
+
 extern void (*pinvalid_parameter_handler)(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);
+extern size_t fread(const void* ptr, size_t size, size_t nelem, FILE* stream);
 
 /** fgets
 Synopsis

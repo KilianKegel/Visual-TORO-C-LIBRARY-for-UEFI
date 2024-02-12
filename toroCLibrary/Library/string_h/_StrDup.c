@@ -20,8 +20,13 @@ Author:
     Kilian Kegel
 
 --*/
-#include <string.h>
-#include <stdlib.h>
+#include <stddef.h>
+#include <CdeServices.h>
+
+extern char* strcpy(char* pszDst, const char* pszSrc);
+extern size_t strlen(const char* pszBuffer);
+extern void* malloc(size_t size);
+extern void abort(void);
 
 /**
 Synopsis
@@ -37,7 +42,18 @@ Returns
 **/
 char* _strdup(const char* s1) 
 {
-    char* pRet = malloc(strlen(s1));
+
+    char* pRet = NULL;
     
-    return strcpy(pRet, s1);
+    if (NULL != s1) do
+    {
+        pRet = malloc(strlen(s1));
+
+        if (NULL == pRet)
+            break;
+
+        pRet = strcpy(pRet, s1);
+    } while (0);
+
+    return pRet;
 }

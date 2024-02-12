@@ -26,7 +26,7 @@ Author:
 #include <CdeServices.h>
 typedef long long time_t;
 
-extern void* __cdeGetAppIf();
+extern void* __cdeGetAppIf(void);
 extern struct tm* _cdeGmltime(const long long* timep, struct tm* ptm);
 
 /**

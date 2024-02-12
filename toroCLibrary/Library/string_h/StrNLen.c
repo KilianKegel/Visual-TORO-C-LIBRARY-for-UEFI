@@ -20,7 +20,7 @@ Author:
     Kilian Kegel
 
 --*/
-#include <string.h>
+#include <stddef.h>
 
 /**
 Synopsis
