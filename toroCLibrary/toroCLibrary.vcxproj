@@ -168,6 +168,7 @@
     <ClCompile Include="Library\inttypes_h\wcstoumax.c" />
     <ClCompile Include="Library\inttypes_h\wcstoumaxCDEABI.c" />
     <ClCompile Include="Library\io_h\_Close.c" />
+    <ClCompile Include="Library\io_h\_Eof.c" />
     <ClCompile Include="Library\io_h\_Fdopen.c" />
     <ClCompile Include="Library\io_h\_Fileno.c" />
     <ClCompile Include="Library\io_h\_findclose.c" />
@@ -176,6 +177,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="Library\io_h\_isatty.c" />
+    <ClCompile Include="Library\io_h\_Lseek.c" />
     <ClCompile Include="Library\io_h\_Open.c" />
     <ClCompile Include="Library\io_h\_Read.c" />
     <ClCompile Include="Library\io_h\_Write.c" />

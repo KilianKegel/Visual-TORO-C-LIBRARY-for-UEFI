@@ -53,16 +53,16 @@ Synopsis
 
 Description
 
-    https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/open-wopen?view=msvc-190
+    https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/open-wopen
     https://pubs.opengroup.org/onlinepubs/9699919799/functions/open.html
 
 Parameters
 
-    https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/open-wopen?view=msvc-190#parameters
+    https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/open-wopen#parameters
 
 Returns
 
-    https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/open-wopen?view=msvc-190#return-value
+    https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/open-wopen#return-value
 
 **/
 int _open(const char* filename, int oflag, ...) {

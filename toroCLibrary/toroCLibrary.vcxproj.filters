@@ -647,6 +647,8 @@
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellGetTscPerSec.c" />
     <ClCompile Include="Guids\EFI_SMM_BASE2_PROTOCOL_GUID.c" />
     <ClCompile Include="LibConfig\_gCdeStrLibcVersion.c" />
+    <ClCompile Include="Library\io_h\_Lseek.c" />
+    <ClCompile Include="Library\io_h\_Eof.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\CdeServices.h" />
