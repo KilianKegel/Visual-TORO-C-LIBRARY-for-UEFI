@@ -48,14 +48,13 @@ void _CdeDbgPutChar(short c, void** ppDest) {
                     .szText = "ABC"
     };
     do {
+        CDE_APP_IF* pCdeAppIf = (CDE_APP_IF*)*ppDest;
 
         if (EOF == c)               // skip writing EOF that is send by printf() for flushing to stdout
             break;
 
         if (_gCdeCfgCmdLnParmReportStatusCodeSTDOUT == 1 && CDE_STATUSCODE2STDOUTBYCMDLN)
         {
-
-            CDE_APP_IF* pCdeAppIf = (CDE_APP_IF*)*ppDest;
 
             pCdeAppIf->pCdeServices->pPutConOut(c, (void**)&pCdeAppIf);
 
@@ -67,21 +66,36 @@ void _CdeDbgPutChar(short c, void** ppDest) {
         }
 
         if (0 == __cdeGetCurrentPrivilegeLevel()) {                                      // running in RING0
-            int i = 0;
-            DbgNfo.szText[0] = '\n' == (char)c ? '\r' : (char)c;
-            DbgNfo.szText[1] = '\n' == (char)c ? '\n' : '\0';
-            DbgNfo.szText[2] = '\0';
+            
+            if (FALSE == pCdeAppIf->pCdeServices->fCOM1Timeout)
+            {
+                int i = 0;
+                DbgNfo.szText[0] = '\n' == (char)c ? '\r' : (char)c;
+                DbgNfo.szText[1] = '\n' == (char)c ? '\n' : '\0';
+                DbgNfo.szText[2] = '\0';
+                unsigned long long timeout = pCdeAppIf->pCdeServices->TSClocksPerSec / 100 + __rdtsc();     // timeout 10ms  (TSClocksPerSec/100)
 
-            if (_CdeDbgCOMInit()) {
+                if (_CdeDbgCOMInit()) {
+                    char fTimeout = FALSE;
+                    do {
 
-                do {
+                        while (0 == _CdeDbgCOMReady2Send())
+                        {
+                            if (timeout < __rdtsc())
+                            {
+                                pCdeAppIf->pCdeServices->fCOM1Timeout = TRUE;
+                                fTimeout = TRUE;
+                                break;
+                            }
+                        }
 
-                    while (0 == _CdeDbgCOMReady2Send())
-                        ;
+                        if (TRUE == fTimeout)
+                            break;
 
-                    _CdeDbgCOMSend(DbgNfo.szText[i]);
+                        _CdeDbgCOMSend(DbgNfo.szText[i]);
 
-                } while (DbgNfo.szText[++i] != '\0');
+                    } while (DbgNfo.szText[++i] != '\0');
+                }
             }
 
         }
@@ -90,8 +104,6 @@ void _CdeDbgPutChar(short c, void** ppDest) {
             DbgNfo.szText[0] = (char)c;
             DbgNfo.szText[1] = '%' == (char)c ? '%' : '\0';	// allow single '%' to be printed by using ReportStatus engine
             DbgNfo.szText[2] = '\0';
-
-            CDE_APP_IF* pCdeAppIf = (CDE_APP_IF*)*ppDest;
 
             if (NULL != pCdeAppIf->pCdeServices->ReportStatusCode.pPei) {
                 switch (pCdeAppIf->DriverParm.CommParm.OSIf) {

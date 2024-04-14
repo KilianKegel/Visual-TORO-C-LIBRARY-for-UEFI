@@ -1009,6 +1009,7 @@
     <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
     <TargetName>toroC$(PlatformArchitecture)</TargetName>
     <CodeAnalysisRuleSet>toroCLibrary.ruleset</CodeAnalysisRuleSet>
+    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
