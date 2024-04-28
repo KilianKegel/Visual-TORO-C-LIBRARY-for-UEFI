@@ -654,8 +654,12 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
-    <ClCompile Include="OSInterface\UEFISHELLDRV\osifUefiShellDrvEntryPoint.c" />
-    <ClCompile Include="OSInterface\UEFISHELLDRV\osifUefiShellDrvEntryPointEDK.c" />
+    <ClCompile Include="OSInterface\UEFISHELLDRV\osifUefiShellDrvEntryPoint.c">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELLDRV\osifUefiShellDrvEntryPointEDK.c">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+    </ClCompile>
     <ClCompile Include="OSInterface\UEFIDXE\osifUefiDxeEntryPoint.c" />
     <ClCompile Include="OSInterface\UEFIDXE\osifUefiDxeEntryPointEDK.c" />
     <ClCompile Include="OSInterface\UEFIDXE\osifUefiDxeMemAlloc.c" />
@@ -671,8 +675,12 @@
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellCmdExec.c" />
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellDirectoryCreate.c" />
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellDirectoryRemove.c" />
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPoint.c" />
-    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPointEDK.c" />
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPoint.c">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPointEDK.c">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+    </ClCompile>
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPointEDKW.c" />
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellEntryPointW.c" />
     <ClCompile Include="OSInterface\UEFISHELL\osifUefiShellFileClose.c" />
@@ -1036,6 +1044,7 @@
     <OutDir>$(SolutionDir)lib\</OutDir>
     <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
     <TargetName>toroc$(PlatformArchitecture)</TargetName>
+    <CodeAnalysisRuleSet>toroCLibrary.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

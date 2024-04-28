@@ -58,7 +58,7 @@ static time_t _mktime64CDEABI(struct tm* ptm)
     struct tm tm;
     if (ptm->tm_year < (1970 - 1900))
         return (long long)-1;
-    t = (long long)_cdeGreg2Day(ptm->tm_year + 1900, ptm->tm_mon + 1, ptm->tm_mday);
+    t = (long long)_cdeGreg2Day(ptm->tm_year + 1900ULL, ptm->tm_mon + 1ULL, ptm->tm_mday);
     t = 24 * t + ptm->tm_hour;
     t = 60 * t + ptm->tm_min;
     t = 60 * t + ptm->tm_sec;

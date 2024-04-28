@@ -64,7 +64,7 @@ static wchar_t* fgetwsCDEABI(wchar_t* s, int n, FILE* stream) {
 
             CDEFILE* pCdeFile = (CDEFILE*)stream;
             wchar_t c;
-            size_t size = 1 + (0 != (pCdeFile->openmode & O_BINARY)); // 2 bin, 1 txt
+            size_t size = 1ULL + (0 != (pCdeFile->openmode & O_BINARY)); // 2 bin, 1 txt
             wint_t msk = 1 == size ? 0xFF : 0xFFFF;
 
             for (i = 0, c = 0; i < (n - 1) && c != '\n'; i++) {

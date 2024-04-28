@@ -72,7 +72,7 @@ void* _cdeCoreWcsStrTok(CDE_APP_IF* pCdeAppIf, IN void* pvoidStr, IN const void*
                 *((short*)pNew) = '\0';
             else
                 *((char*)pNew) = '\0';
-            *(char**)ppLast = (char*)pNew + (1 + pParm->fWide);
+            *(char**)ppLast = (char*)pNew + (size_t)(1 + pParm->fWide);
         }
         else {
             *ppLast = NULL;                                     // we have reasched the end

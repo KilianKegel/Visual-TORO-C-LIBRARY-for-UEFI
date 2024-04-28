@@ -106,7 +106,7 @@ unsigned long long _osifIbmAtGetTscPerSec(IN CDE_APP_IF* pCdeAppIf) {
     //
     // calculate number of CPU TSC per requested intervall CLKWAIT (59659) i8254 timer ticks
     //
-    qwTSCPerIntervall = (qwTSCdiff * CLKWAIT) / (CLKWAIT + wTicksGoneThrough);
+    qwTSCPerIntervall = (qwTSCdiff * CLKWAIT) / (CLKWAIT + (unsigned long long)wTicksGoneThrough);
 
     if (0x200 & eflags)                                 // restore IF interrupt flag
         _enable();

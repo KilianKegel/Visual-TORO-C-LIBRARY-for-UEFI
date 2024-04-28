@@ -8,6 +8,9 @@
 ```
 
 ## Revision history
+### 20240428, v0.8.3 Build 84
+* include static code analysis configuration `toroCLibrary.ruleset`
+* fix minor static code analysis warnings
 ### 20240414, v0.8.2 Build 73
 * add timeout detection for disabled **COM1**/**UART at I/O 3F8h** used for debug traces.<br>
   NOTE: Disabled I/O devices usually do not respond to I/O cycles.  
