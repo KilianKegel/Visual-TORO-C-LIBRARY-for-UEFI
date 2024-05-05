@@ -1044,7 +1044,8 @@ _cdeCoreVwxPrintf(
 
             pGuid = va_arg(ap, COMM_GUID*);
             _cdeCoreSprintf(pCdeAppIf, (char*)&rgbBuffer[0], pFormat, pGuid->Data1, pGuid->Data2, pGuid->Data3, pGuid->Data4[0], pGuid->Data4[1], pGuid->Data4[2], pGuid->Data4[3], pGuid->Data4[4], pGuid->Data4[5], pGuid->Data4[6], pGuid->Data4[7]);
-            nprintfield((char*)&rgbBuffer[0], NULL, &flags, pfnDevPutChar, (uint32_t*)&dwCount, &pDest, fWide | (32 == bIntOrLongOrInt64), 0/*is not single*/);
+            numdesc.NumType = STRING;
+            nprintfield((char*)&rgbBuffer[0], &numdesc, &flags, pfnDevPutChar, (uint32_t*)&dwCount, &pDest, fWide | (32 == bIntOrLongOrInt64), 0/*is not single*/);
 
             state = dwCount ? PROCESS_WRITECHARS : PROCESS_DONT_WRITE_ANYMORE;  //set state before decrement dwCount    /*kg20150210_00*/
             i++;
@@ -1070,7 +1071,8 @@ _cdeCoreVwxPrintf(
 
             pTime = va_arg(ap, EFI_TIME*);
             _cdeCoreSprintf(pCdeAppIf, (char*)&rgbBuffer[0], "%02d/%02d/%04d  %02d:%02d", pTime->Month, pTime->Day, pTime->Year, pTime->Hour, pTime->Minute);
-            nprintfield((char*)&rgbBuffer[0], NULL, &flags, pfnDevPutChar, (uint32_t*)&dwCount, &pDest, fWide | (32 == bIntOrLongOrInt64), 0/*is not single*/);
+            numdesc.NumType = STRING;
+            nprintfield((char*)&rgbBuffer[0], &numdesc, &flags, pfnDevPutChar, (uint32_t*)&dwCount, &pDest, fWide | (32 == bIntOrLongOrInt64), 0/*is not single*/);
 
             state = dwCount ? PROCESS_WRITECHARS : PROCESS_DONT_WRITE_ANYMORE;  //set state before decrement dwCount    /*kg20150210_00*/
             i++;
@@ -1152,7 +1154,8 @@ _cdeCoreVwxPrintf(
             case EFI_WARN_WRITE_FAILURE:    pszErr = "Warning Write Failure";    break;
             case EFI_WARN_BUFFER_TOO_SMALL: pszErr = "Warning Buffer Too Small"; break;
             }
-            nprintfield(pszErr, NULL, &flags, pfnDevPutChar, (uint32_t*)&dwCount, &pDest, fWide | (32 == bIntOrLongOrInt64), 0/*is not single*/);
+            numdesc.NumType = STRING;
+            nprintfield(pszErr, &numdesc, &flags, pfnDevPutChar, (uint32_t*)&dwCount, &pDest, fWide | (32 == bIntOrLongOrInt64), 0/*is not single*/);
             state = dwCount ? PROCESS_WRITECHARS : PROCESS_DONT_WRITE_ANYMORE;  //set state before decrement dwCount    /*kg20150210_00*/
             i++;
             break;//PROCESS_STATUS
@@ -1187,7 +1190,7 @@ _cdeCoreVwxPrintf(
             }                                           /* EFI_SPECIFIC*/
                     else
                 break;
-			
+
             case 's':
             case 'S':   IsSingle = FALSE;
                 pStr = 32 == bIntOrLongOrInt64 ? (char*)va_arg(ap, wchar_t*) : va_arg(ap, char*);
