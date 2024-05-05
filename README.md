@@ -10,11 +10,11 @@
 ## Revision history
 ### 20240505, v0.8.4 Build 91
 * fixed EDK2 `DEBUG` trace macro won't crash anymore with
-  UEFI specific (non-ANSI-C) format specifiers: **%g**, **%t** and **%r**
+  UEFI specific (non-ANSI-C) format specifiers: **%g**, **%t** and **%r**<br>
 **NOTE: The improvement above doesn't change ANSI-C related behaviour of previous library versions**
 ### 20240428, v0.8.3 Build 84
 * include static code analysis configuration `toroCLibrary.ruleset`
-* fix minor static code analysis warnings
+* fix minor static code analysis warnings<br>
 **NOTE: The improvement above doesn't change ANSI-C related behaviour of previous library versions**
 ### 20240414, v0.8.2 Build 73
 * add timeout detection for disabled **COM1**/**UART at I/O 3F8h** used for debug traces.<br>
@@ -25,7 +25,7 @@
     1. address decoding is kept enabled
     2. internal clock line is stopped or decoupled from internal circuitry<br>
        The disadvantage of this aproach is, that status registers are still visible
-       but not updated anymore.
+       but not updated anymore.<br>
 **NOTE: The improvement above doesn't change ANSI-C related behaviour of previous library versions**
 ### 20240309, v0.8.1 Build 54
 * add Microsoft/POSIX C Library functions: 
@@ -35,10 +35,10 @@
 * add semantic versioning + build enumeration
 * optimize source code
     * reduce number of suppressed warnings (4200;4324;4100 only)
-    * enable static code analysis (`toroCLibrary.ruleset`, suppress warning 28251 only )
+    * enable static code analysis (`toroCLibrary.ruleset`, suppress warning 28251 only )<br>
 **NOTE: The improvement above doesn't change ANSI-C related behaviour of previous library versions**
 ### 20231228
-* update copyright date
+* update copyright date<br>
 **NOTE: The improvement above doesn't change ANSI-C related behaviour of previous library versions**
 ### 20231118
 * add ACPI timer based synchronization for **toro C Library** Shell programs.<br>
