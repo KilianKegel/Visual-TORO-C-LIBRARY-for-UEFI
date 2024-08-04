@@ -235,7 +235,7 @@ EFI_STATUS EFIAPI _cdeCRT0UefiSmmEDK(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TA
         CdeAppIfSmm.DriverParm.BsDriverParm.pSystemTable = SystemTable;
         CdeAppIfSmm.DriverParm.BsDriverParm.pSmmSystemTable2 = _cdegSmst;
 
-    } while (Status = EFI_SUCCESS, Status == EFI_SUCCESS);
+    } while (0);
 
     return EFI_SUCCESS == Status ? _ModuleEntryPoint(ImageHandle, SystemTable) : Status;
 }
