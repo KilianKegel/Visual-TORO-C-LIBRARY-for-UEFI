@@ -649,6 +649,9 @@
     <ClCompile Include="LibConfig\_gCdeStrLibcVersion.c" />
     <ClCompile Include="Library\io_h\_Lseek.c" />
     <ClCompile Include="Library\io_h\_Eof.c" />
+    <ClCompile Include="Intrinsics\__isa_available.c" />
+    <ClCompile Include="Intrinsics\__isa_inverted.c" />
+    <ClCompile Include="Intrinsics\_except1.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\CdeServices.h" />
@@ -665,21 +668,10 @@
     <ClInclude Include="Include\BUILDNUM.h" />
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="Intrinsics\__alldiv.asm" />
-    <MASM Include="Intrinsics\__alldvrm.asm" />
-    <MASM Include="Intrinsics\__allmul.asm" />
-    <MASM Include="Intrinsics\__allrem.asm" />
-    <MASM Include="Intrinsics\__allshl.asm" />
-    <MASM Include="Intrinsics\__allshr.asm" />
-    <MASM Include="Intrinsics\__aulldiv.asm" />
-    <MASM Include="Intrinsics\__aulldvrm.asm" />
-    <MASM Include="Intrinsics\__aullrem.asm" />
-    <MASM Include="Intrinsics\__aullshr.asm" />
     <MASM Include="Intrinsics\__chkstk32.asm" />
     <MASM Include="Intrinsics\__chkstk64.asm" />
     <MASM Include="Intrinsics\__chkstkWin32.asm" />
     <MASM Include="Intrinsics\__chkstkWin64.asm" />
-    <MASM Include="Intrinsics\__ltod3.asm" />
     <MASM Include="LibAssist\_CdeGetCurrentPrivilegeLevel32.asm" />
     <MASM Include="LibAssist\CdeGetCurrentPrivilegeLevel64.asm" />
     <MASM Include="Library\setjmp_h\longjmp32CDEINTRINABI.asm" />
@@ -693,6 +685,7 @@
     <None Include="Tools\PreLinkEvent.bat" />
     <None Include="Tools\PostBuildEvent.bat" />
     <None Include="Tools\PreBuildEvent.bat" />
+    <None Include="Tools\GetIntrinModules.bat" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Library\locale_h\__todo.txt" />

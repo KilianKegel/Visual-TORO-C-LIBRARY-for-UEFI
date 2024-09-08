@@ -82,13 +82,11 @@ static FILE* fopenCDEABI(const char* filename, const char* mode) {
 
     do {/*1. dowhile(0)*/
 
-        //CDETRACE((CDEINF(1) "parm filename -> \"%s\", mode \"%s\"\n", filename, mode));
 
         //
         // sanity check
         //
         if (NULL == pCdeAppIf->pCdeServices->pFopen) {
-            //CDETRACE((CDEERR(1) "NULL == pCdeAppIf->pCdeServices->pFopen\n"));
             return NULL;
         }
         //
@@ -96,8 +94,6 @@ static FILE* fopenCDEABI(const char* filename, const char* mode) {
         //
         i = 0;
         while ('\0' != (pwcsFileName[i] = filename[i++]));
-
-        //CDETRACE((CDEINF(1) "pwcsFileName -> %S\n", pwcsFileName));
 
         //
         // ----- remove spaces from mode string, remove t (text), that is not Standard C
@@ -110,17 +106,25 @@ static FILE* fopenCDEABI(const char* filename, const char* mode) {
             strcpy(szModeNoSpace, rgModeCopy);
         }
         else {
+            //
+            // NOTE: strtok() is not reentrant (due to internal buffer usage) and collides with external strtok() calls in conjunction with fopen(), _stat() etc.
+            //       Do not use strtok() in this context, use pCdeAppIf->pCdeServices->pWcsStrTok() instead
+            //
+            void* pStrtokStaticInternal = NULL;                                     // scratch buffer for strtok()
+            static ROMPARM_WCSSTRTOK ROMPARM = {
+                /*fForceToDataSeg       */ 1 ,\
+                /*fWide                 */ sizeof(char) > 1 ,\
+            };
             szModeNoSpace[0] = '\0';                                                //init space removed copy of mode
-            pc = strtok((void*)&rgModeCopy[0], &szDelims[0]);
+            pc = (char*)pCdeAppIf->pCdeServices->pWcsStrTok(pCdeAppIf, (void*)&rgModeCopy[0], &szDelims[0], &pStrtokStaticInternal, &ROMPARM);
             do {
                 if (NULL == pc)
                     break;
                 strcpy(&szModeNoSpace[strlen(szModeNoSpace)], pc);
-                pc = strtok(NULL, &szDelims[0]);
+                pc = (char*)pCdeAppIf->pCdeServices->pWcsStrTok(pCdeAppIf, NULL, &szDelims[0], &pStrtokStaticInternal, &ROMPARM);
             } while (1);
         }
 
-        //CDETRACE((CDEINF(1) "szModeNoSpace: %s\n",szModeNoSpace));
 
         if (TODO) {
             //TODO: add filename separation into drive, (relative) pathname, filename etc.
@@ -144,7 +148,6 @@ static FILE* fopenCDEABI(const char* filename, const char* mode) {
             }
 
             if (i == pCdeAppIf->cIob) {
-                //CDETRACE((CDEERR(1) "no free CDEFILE slot found\n"));
                 //no free CDEFILE slot found
                 //TODO: add error "errno" here
                 break;/*1. dowhile(0)*/
@@ -173,8 +176,6 @@ static FILE* fopenCDEABI(const char* filename, const char* mode) {
 
             errno = errnoorg;                                                                       // preserve errno across existance check
 
-            //CDETRACE((CDEERR(NULL == pCdeFileTmp->emufp) "NULL == pCdeFileTmp->emufp\n"));
-
             if (NULL != pCdeFileTmp->emufp)
                 pCdeAppIf->pCdeServices->pFclose(pCdeAppIf, pCdeFileTmp);       // instantly close file
 
@@ -185,8 +186,6 @@ static FILE* fopenCDEABI(const char* filename, const char* mode) {
                 szModeNoSpace,
                 fFileExists,  /* 1 == file present, 0 == file not present*/
                 pCdeFile);// get emulation file pointer, that is the Windows FP (CDE4WIN) or pCdeFile or NULL in error case
-
-            //CDETRACE((CDEERR(NULL == pCdeFileTmp->emufp) "NULL == pCdeFileTmp->emufp\n"));
 
             if (pCdeFile->emufp == NULL)
                 pCdeFile->fRsv = 0;

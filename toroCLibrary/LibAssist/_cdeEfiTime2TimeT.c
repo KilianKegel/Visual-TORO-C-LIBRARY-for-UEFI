@@ -66,7 +66,7 @@ time_t _cdeEfiTime2TimeT(EFI_TIME* pEfiTime)
         .tm_min = pEfiTime->Minute,
         .tm_hour = pEfiTime->Hour,
         .tm_mday = pEfiTime->Day,
-        .tm_mon = pEfiTime->Month,
+        .tm_mon = pEfiTime->Month - 1,
         .tm_year = pEfiTime->Year - 1900,
         .tm_wday = 0,
         .tm_yday = 0,

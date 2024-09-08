@@ -22,6 +22,7 @@ Author:
 #define OS_EFI//parameter for CdeServices.h
 #include <CdeServices.h>
 #include <stdio.h>
+
 //
 // stdlib.h
 //
@@ -32,6 +33,11 @@ extern __declspec(dllimport) size_t wcstombs(char* mbstr, const wchar_t* wcstr, 
 //
 extern __declspec(dllimport) char* strstr(const char* pszStr, const char* pszSubStr);
 extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
+extern __declspec(dllimport) int _strnicmp(const char* pszDst, const char* pszSrc, size_t count);
+//
+// ctype.h
+//
+extern __declspec(dllimport) int toupper(int c);
 
 #include <sys/stat.h>
 #include <guid/fileinfo.h>
@@ -80,7 +86,11 @@ int _osifUefiShellFileGetStatus(IN CDE_APP_IF* pCdeAppIf, void* pFpOrFname, CDES
                 // regrettably a "wcstol()" function is _NOT_ yet implemented
             pColon = strstr(drivename, ":");
 
-            pStat64i32->st_dev = (int)strtol(&drivename[strlen("FS")], &pColon, 10);
+            // distiguish between FSx: and A:..Z: mapping
+            if (0 == _strnicmp(drivename, "FS", sizeof("FS")))
+                pStat64i32->st_dev = (int)strtol(&drivename[strlen("FS")], &pColon, 10);
+            else
+                pStat64i32->st_dev = toupper(drivename[0]) - 'A';
             pStat64i32->st_rdev = pStat64i32->st_dev;
         }
         pStat64i32->st_nlink = 1;
@@ -89,9 +99,10 @@ int _osifUefiShellFileGetStatus(IN CDE_APP_IF* pCdeAppIf, void* pFpOrFname, CDES
         pStat64i32->st_gid = 0;
 
         pStat64i32->st_size = (_off_t)pFileInfo->FileSize;
-        pStat64i32->st_atime = _cdeEfiTime2TimeT(&pFileInfo->LastAccessTime);
         pStat64i32->st_ctime = _cdeEfiTime2TimeT(&pFileInfo->CreateTime);
         pStat64i32->st_mtime = _cdeEfiTime2TimeT(&pFileInfo->ModificationTime);
+        //pStat64i32->st_atime = _cdeEfiTime2TimeT(&pFileInfo->LastAccessTime); // BUGFIX: atime's timestamp is 0:0:0
+        pStat64i32->st_atime = pStat64i32->st_mtime;
 
         pStat64i32->st_mode = 0;
         pStat64i32->st_mode |= ((_S_IFREG + _S_IREAD + 0x24/*undocumented flags*/) * (0 == (EFI_FILE_DIRECTORY & pFileInfo->Attribute)));

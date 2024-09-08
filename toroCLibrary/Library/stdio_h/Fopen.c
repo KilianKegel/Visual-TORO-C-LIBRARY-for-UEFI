@@ -83,13 +83,22 @@ FILE* fopen(const char* filename, const char* mode) {
             strcpy(szModeNoSpace, rgModeCopy);
         }
         else {
+            //
+            // NOTE: strtok() is not reentrant (due to internal buffer usage) and collides with external strtok() calls in conjunction with fopen(), _stat() etc.
+            //       Do not use strtok() in this context, use pCdeAppIf->pCdeServices->pWcsStrTok() instead
+            //
+            void* pStrtokStaticInternal = NULL;                                     // scratch buffer for strtok()
+            static ROMPARM_WCSSTRTOK ROMPARM = {
+                /*fForceToDataSeg       */ 1 ,\
+                /*fWide                 */ sizeof(char) > 1 ,\
+            };
             szModeNoSpace[0] = '\0';                                                //init space removed copy of mode
-            pc = strtok((void*)&rgModeCopy[0], &szDelims[0]);
+            pc = (char*)pCdeAppIf->pCdeServices->pWcsStrTok(pCdeAppIf, (void*)&rgModeCopy[0], &szDelims[0], &pStrtokStaticInternal, &ROMPARM);
             do {
                 if (NULL == pc)
                     break;
                 strcpy(&szModeNoSpace[strlen(szModeNoSpace)], pc);
-                pc = strtok(NULL, &szDelims[0]);
+                pc = (char*)pCdeAppIf->pCdeServices->pWcsStrTok(pCdeAppIf, NULL, &szDelims[0], &pStrtokStaticInternal, &ROMPARM);
             } while (1);
         }
 

@@ -79,9 +79,23 @@ int _osifWinNTFileGetStatus(IN CDE_APP_IF* pCdeAppIf, void* pFpOrFname, CDESTAT6
         pStat64i32->st_gid = 0;
 
         pStat64i32->st_size = FileInfo.nFileSizeLow;
-        pStat64i32->st_atime = *((time_t*)&FileInfo.ftLastAccessTime.dwLowDateTime);
-        pStat64i32->st_ctime = *((time_t*)&FileInfo.ftCreationTime.dwLowDateTime);
-        pStat64i32->st_mtime = *((time_t*)&FileInfo.ftLastWriteTime.dwLowDateTime);
+        //
+        // NOTE: Windows FILETIME is 100-nanosecond intervals since January 1, 1601 (UTC). 
+        //       Unix time is seconds since January 1, 1970 (UTC).
+        //       // https://learn.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-filetime
+        //
+        pStat64i32->st_atime =
+            -11644473600LL +    // 1970-1601 in seconds
+            ((time_t)FileInfo.ftLastAccessTime.dwLowDateTime +
+                (time_t)FileInfo.ftLastAccessTime.dwHighDateTime * 0x100000000LL) / 10000000LL;
+        pStat64i32->st_ctime =
+            -11644473600LL +    // 1970-1601 in seconds
+            ((time_t)FileInfo.ftCreationTime.dwLowDateTime +
+                (time_t)FileInfo.ftCreationTime.dwHighDateTime * 0x100000000LL) / 10000000LL;
+        pStat64i32->st_mtime =
+            -11644473600LL +    // 1970-1601 in seconds
+            ((time_t)FileInfo.ftLastWriteTime.dwLowDateTime +
+                (time_t)FileInfo.ftLastWriteTime.dwHighDateTime * 0x100000000LL) / 10000000LL;
 
         pStat64i32->st_mode = 0;
         pStat64i32->st_mode |= ((_S_IFREG + _S_IREAD + 0x24/*undocumented flags*/) * (0 == (_A_SUBDIR & FileInfo.dwFileAttributes)));

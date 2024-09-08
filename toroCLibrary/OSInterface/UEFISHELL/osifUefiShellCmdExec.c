@@ -44,6 +44,7 @@ extern EFI_SYSTEM_TABLE* _cdegST;
 
 EFI_TEXT_CLEAR_SCREEN   pConIOClr;
 EFI_TEXT_STRING         pConIOPutStr;
+EFI_FILE_WRITE          pEFI_FILE_WRITE;
 EFI_ALLOCATE_POOL       pAllocPool;
 EFI_IMAGE_START         pStartImage;
 
@@ -64,7 +65,8 @@ static enum STATE {
     STOP_WAITING,
 }state;
 
-static EFI_STATUS EFIAPI myConIOPutStr(IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* This, IN CHAR16* String) {
+static EFI_STATUS EFIAPI myEFI_FILE_WRITE(IN EFI_FILE_PROTOCOL* This, IN OUT UINTN* BufferSize, IN VOID* Buffer)
+{
     EFI_STATUS Status = EFI_SUCCESS;
     static wchar_t wcsSHELL[] = { L"UEFI Interactive Shell v" };
     static wchar_t wcsMAP[] = { L"Mapping table" };
@@ -76,7 +78,7 @@ static EFI_STATUS EFIAPI myConIOPutStr(IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* This,
 
     switch (state) {
     case AWAITING_UEFISHELL1:
-        if (0 == wcsncmp(wcsSHELL, String, ELC(wcsSHELL) - 1))
+        if (0 == wcsncmp(wcsSHELL, Buffer, ELC(wcsSHELL) - 1))
             state = AWAITING_UEFISHELL2;
         else
             state = STOP_WAITING;
@@ -88,13 +90,13 @@ static EFI_STATUS EFIAPI myConIOPutStr(IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* This,
         state = AWAITING_MAPPINGTBL;
         break;
     case AWAITING_MAPPINGTBL:
-        if (0 == wcsncmp(wcsMAP, String, ELC(wcsMAP) - 1))
+        if (0 == wcsncmp(wcsMAP, Buffer, ELC(wcsMAP) - 1))
             state = AWAITING_ALIAS0;
         else
             state = STOP_WAITING;
         break;
     case AWAITING_ALIAS0:
-        if (0 == wcsncmp(wcsALIAS, String, ELC(wcsALIAS) - 1))
+        if (0 == wcsncmp(wcsALIAS, Buffer, ELC(wcsALIAS) - 1))
             state = AWAITING_ALIAS1;
         break;
     case AWAITING_ALIAS1:
@@ -107,18 +109,18 @@ static EFI_STATUS EFIAPI myConIOPutStr(IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* This,
         for (wchar_t wc = 'A'; wc < 'Z'; wc++)
         {
             wcsDOSDRV[0] = wc;
-            
-            fDOSDRV = (NULL != wcsstr(String, wcsDOSDRV));
+
+            fDOSDRV = (NULL != wcsstr(Buffer, wcsDOSDRV));
 
             if (fDOSDRV)
                 break;
         }
-
+        
         if (1 == fDOSDRV || \
-            0 == wcsncmp(wcsBLK, String, ELC(wcsBLK) - 1) || \
-            0 == wcsncmp(wcsBLK2, String, ELC(wcsBLK2) - 1) || \
-            0 == wcsncmp(wcsFS, String, ELC(wcsFS) - 1) || \
-            0 == wcsncmp(wcsFS2, String, ELC(wcsFS2) - 1))
+            0 == wcsncmp(wcsBLK, Buffer, ELC(wcsBLK) - 1) || \
+            0 == wcsncmp(wcsBLK2, Buffer, ELC(wcsBLK2) - 1) || \
+            0 == wcsncmp(wcsFS, Buffer, ELC(wcsFS) - 1) || \
+            0 == wcsncmp(wcsFS2, Buffer, ELC(wcsFS2) - 1))
         {
             state = AWAITING_ALIAS0;
             //fDOSDRV = 0;
@@ -129,11 +131,13 @@ static EFI_STATUS EFIAPI myConIOPutStr(IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* This,
     }
 
     if (STOP_WAITING == state) {
-        Status = pConIOPutStr(This, String);
+        Status = pEFI_FILE_WRITE(This, BufferSize, Buffer);
     }
 
     return Status;
 }
+
+
 
 /** _osifCmdExec() - run command on system shell
 
@@ -170,10 +174,11 @@ int _osifUefiShellCmdExec(CDE_APP_IF* pCdeAppIf, char* szCommand) {
         if (1) {
 
             pConIOClr = _cdegST->ConOut->ClearScreen;
-            pConIOPutStr = _cdegST->ConOut->OutputString;
+            pEFI_FILE_WRITE = CDE_STDOUT->pFileProtocol->Write;
 
+            CDE_STDOUT->pFileProtocol->Write = myEFI_FILE_WRITE;
             _cdegST->ConOut->ClearScreen = myConIOClr;
-            _cdegST->ConOut->OutputString = myConIOPutStr;
+
 
             state = AWAITING_UEFISHELL1;
         }
@@ -183,7 +188,7 @@ int _osifUefiShellCmdExec(CDE_APP_IF* pCdeAppIf, char* szCommand) {
         if (1) {
 
             _cdegST->ConOut->ClearScreen = pConIOClr;
-            _cdegST->ConOut->OutputString = pConIOPutStr;
+            CDE_STDOUT->pFileProtocol->Write = pEFI_FILE_WRITE;
         }
 
     } while (0);
