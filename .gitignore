@@ -12,3 +12,4 @@ toroCLibrary/Tools/PostBuild.obj
 toroCLibrary/Tools/PostBuild.pdb
 toroCLibrary/vc140.pdb
 *.pdb
+toroCLibrary/intrin.lst

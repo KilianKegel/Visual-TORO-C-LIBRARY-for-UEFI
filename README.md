@@ -8,6 +8,13 @@
 ```
 
 ## Revision history
+### 20240908, v0.8.6 Build 187
+* introduce intrinsic math function (`_allXYZ()`, `_aullXYZ()` and `__ltod3()`) extraction from Microsoft **LIBCMT.LIB<br>
+    * remove disassembled `__allXYZ()` and `__aullXYZ()` from `toroCLibrary`
+* fixed `stat()` running on WINDOWS reports wrong time stamp
+* fixed `stat()` running on UEFI reports from erronous time stamp by exacly one month
+* fixed `stat()` running on UEFI to support MSDOS drive name (**A:**, **B:**, **C:** ...)
+* fixed `system()` running on UEFI with output redirection emits additional garbage characters
 ### 20240804, v0.8.5 Build 122
 * improve **C++** support for `CDE.H`
     * enable mixed *C/C++* applications based **toro C Library** using `CDE.H`
