@@ -569,7 +569,7 @@ _MainEntryPointShell(
 
             gszCdeDriverName = argvex[0 + 2];
 
-            memset((void*)pCdeAppIf->rgcbAtexit[0], (int)0, sizeof(pCdeAppIf->rgcbAtexit));
+            memset((void*)&pCdeAppIf->rgcbAtexit[0], (int)0, sizeof(pCdeAppIf->rgcbAtexit));
             
             if (1)
             {

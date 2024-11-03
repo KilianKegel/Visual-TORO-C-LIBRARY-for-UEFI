@@ -88,8 +88,9 @@ int main(int argc, char** argv) {
             //
             // generate IN/OUT filenames for OSIF removal
             //
-            sprintf(strPathFileOUT, "%s..\\CdePkg\\CdeLib\\removeNONCDEABI%sMSFT.lst",
+            sprintf(strPathFileOUT, "%s..\\CdePkg\\%s\\removeNONCDEABI%sMSFT.lst",
                 argv[2],/*$(ProjectDir)*/
+                argv[3],/*$(Configuration)*/
                 str3264);
 
             sprintf(strPathFileIN, "%sCDEABI%s.lst",
@@ -127,8 +128,9 @@ int main(int argc, char** argv) {
             //
             // generate IN/OUT filenames for OSIF removal
             //
-            sprintf(strPathFileOUT, "%s..\\CdePkg\\CdeLib\\removeOSIF%sMSFT.lst",
+            sprintf(strPathFileOUT, "%s..\\CdePkg\\%s\\removeOSIF%sMSFT.lst",
                 argv[2],/*$(ProjectDir)*/
+                argv[3],/*$(Configuration)*/
                 str3264);
 
             sprintf(strPathFileIN, "%sOSIF%s.lst",

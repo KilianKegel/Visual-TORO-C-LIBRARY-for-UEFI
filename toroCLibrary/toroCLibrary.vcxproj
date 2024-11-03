@@ -1179,8 +1179,9 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)lib\</OutDir>
     <IntDir>x86\$(Configuration)\</IntDir>
-    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
     <TargetName>toroC$(PlatformArchitecture)</TargetName>
+    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -1198,9 +1199,10 @@
     <CustomBuildBeforeTargets />
     <CustomBuildAfterTargets />
     <OutDir>$(SolutionDir)lib\</OutDir>
-    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
     <TargetName>toroc$(PlatformArchitecture)</TargetName>
     <CodeAnalysisRuleSet>toroCLibrary.ruleset</CodeAnalysisRuleSet>
+    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -1256,8 +1258,8 @@
       <AdditionalDependencies>$(IntDir)MSFTINTRIN.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>tools\PostBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformShortName) $(IntDir) $(SolutionDir)lib\toroC$(PlatformArchitecture).lib &amp; COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\toroC32.lib</Command>
-      <Message>COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\toroC32.lib</Message>
+      <Command>tools\PostBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformShortName) $(IntDir) $(SolutionDir)lib\toroC$(PlatformArchitecture).lib &amp; DEL $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib &amp; COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib</Command>
+      <Message>COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib</Message>
     </PostBuildEvent>
     <PreLinkEvent>
       <Command>cmd /C tools\PreLinkEvent.bat $(IntDir) $(ProjectDir) $(Configuration) $(PlatformShortName)</Command>
@@ -1318,8 +1320,8 @@
       <AdditionalDependencies>$(IntDir)MSFTINTRIN.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>tools\PostBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformShortName) $(IntDir) $(SolutionDir)lib\toroC$(PlatformArchitecture).lib</Command>
-      <Message>COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\toroC32.lib</Message>
+      <Command>tools\PostBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformShortName) $(IntDir) $(SolutionDir)lib\toroC$(PlatformArchitecture).lib &amp; DEL $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib &amp; COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib</Command>
+      <Message>COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib</Message>
     </PostBuildEvent>
     <PreLinkEvent>
       <Command>cmd /C tools\PreLinkEvent.bat $(IntDir) $(ProjectDir) $(Configuration) $(PlatformShortName)</Command>
@@ -1375,8 +1377,8 @@
       <Message>Performing Custom Build Step before!</Message>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>tools\PostBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformShortName) $(IntDir) $(SolutionDir)lib\toroC$(PlatformArchitecture).lib &amp; COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\toroC64.lib</Command>
-      <Message>COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\toroC64.lib</Message>
+      <Command>tools\PostBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformShortName) $(IntDir) $(SolutionDir)lib\toroC$(PlatformArchitecture).lib &amp; DEL $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib &amp; COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib</Command>
+      <Message>COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib</Message>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>cmd /C tools\PreBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformShortName)
@@ -1445,8 +1447,8 @@
       <Message>Performing Custom Build Step before!</Message>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>tools\PostBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformShortName) $(IntDir) $(SolutionDir)lib\toroC$(PlatformArchitecture).lib</Command>
-      <Message>COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\toroc64.lib</Message>
+      <Command>tools\PostBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformShortName) $(IntDir) $(SolutionDir)lib\toroC$(PlatformArchitecture).lib &amp; DEL $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib &amp; COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib</Command>
+      <Message>COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib</Message>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>cmd /C tools\PreBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformShortName)

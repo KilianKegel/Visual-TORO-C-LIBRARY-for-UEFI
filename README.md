@@ -8,6 +8,10 @@
 ```
 
 ## Revision history
+### 20241103, v0.8.8 Build 222
+* add dedicated DEBUG/RELEASE support for **CdePkg**.<br>
+  In preparation for the upcoming [**EDK2-EMU**](https://github.com/KilianKegel/EDK2-EMU) project
+  the entire **CdePkg** and **CdePkg**-based components will be debugable on source code level in the **EDK2-Emulator**.
 ### 20241013, v0.8.7 Build 200
 * fixed: removed  disassembled math function wasn't replaced by extracted intrinsic 
 math function from Microsoft **LIBCMT.LIB**:
