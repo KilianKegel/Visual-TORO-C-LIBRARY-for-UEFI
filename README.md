@@ -8,6 +8,8 @@
 ```
 
 ## Revision history
+### 20241109
+* INTERN: minor correction
 ### 20241103, v0.8.8 Build 222
 * add dedicated DEBUG/RELEASE support for **CdePkg**.<br>
   In preparation for the upcoming [**EDK2-EMU**](https://github.com/KilianKegel/EDK2-EMU) project
