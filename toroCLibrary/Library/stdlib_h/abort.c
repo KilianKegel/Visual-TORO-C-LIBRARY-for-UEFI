@@ -52,24 +52,9 @@ Returns
 
 **/
 void abort(void) {
-    CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
-    int i;
 
     fprintf(stderr, "abnormal program termination\n"); // MSFT: this message appears only in VS 6 / _MSC_VER == 1200
     raise(SIGABRT);
 
-    // ----- don't flush files
-
-    for (i = 3/*skip stdin,stdout,stderr*/; i < pCdeAppIf->cIob; i++)
-    {
-        CDEFILE* fp = (CDEFILE*)__cdeGetIOBuffer(i);
-
-        if (NULL == fp)
-            break;
-
-        fp->bdirty = 0;
-        //_iob[i].bdirty = 0;
-    }
-
-    exit(0xC0000409/*STATUS_STACK_BUFFER_OVERRUN*/); //NOTE: Returnvalue of 3 documented by Microsoft instead
+    _exit(0xC0000409/*STATUS_STACK_BUFFER_OVERRUN*/); //NOTE: Returnvalue of 3 documented by Microsoft instead
 }

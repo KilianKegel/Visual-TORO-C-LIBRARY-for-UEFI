@@ -385,6 +385,8 @@
     <ClCompile Include="Library\stdlib_h\mbtowcCDEABI.c" />
     <ClCompile Include="Library\stdlib_h\QsortCDEABI.c" />
     <ClCompile Include="Library\stdlib_h\randCDEABI.c" />
+    <ClCompile Include="Library\stdlib_h\_exit.c" />
+    <ClCompile Include="Library\stdlib_h\_exitCDEABI.c" />
     <ClCompile Include="Library\stdlib_h\__cdereallocCORE.c" />
     <ClCompile Include="Library\stdlib_h\ReallocCDEABI.c" />
     <ClCompile Include="Library\stdlib_h\srandCDEABI.c" />

@@ -683,6 +683,8 @@
     <ClCompile Include="Library\math_h\__cdeLOG102.c" />
     <ClCompile Include="Library\math_h\pow.c" />
     <ClCompile Include="Library\math_h\__cdeXAM.c" />
+    <ClCompile Include="Library\stdlib_h\_exit.c" />
+    <ClCompile Include="Library\stdlib_h\_exitCDEABI.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\CdeServices.h" />

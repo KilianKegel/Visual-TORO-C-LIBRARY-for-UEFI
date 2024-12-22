@@ -45,7 +45,7 @@ Returns
 
 **/
 void* memset(void* s, int c, size_t n) {
-    unsigned char* p;
+    volatile unsigned char* p;
     size_t i;
 
     for (i = 0, p = (unsigned char*)s; i < n; i++)

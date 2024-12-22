@@ -89,7 +89,7 @@ static int inrange(int l, wchar_t begin, wchar_t end) {
     return (begin <= (wchar_t)l && (wchar_t)l <= end);
 }
 
-static int GetCharAndCount(IN int* pCnt,
+static int GetCharAndCountUp(IN int* pCnt,
     IN int (*pfnDevGetChar)(void** ppSrc),
     IN void** ppSrc,
     IN int EndMarker/* 0 / EOF */)
@@ -103,7 +103,7 @@ static int GetCharAndCount(IN int* pCnt,
     return c;
 }
 
-static int UngetCharAndDecount(
+static int UngetCharAndCountDown(
     int c, int* pCnt,
     IN int (*pfnDevUngetChar)(int c, void** ppDst),
     IN void** ppDst,
@@ -172,7 +172,7 @@ static int str2num(STRDESC* pParms, int (*pfnDevGetChar)(void** ppSrc), int (*pf
     while (state != PROCESS_DONE) {
 
         if (state != PROCESS_THE_END) {
-            c = GetCharAndCount(&nCharsProcessed, pfnDevGetChar, ppSrc, EndMarker);
+            c = GetCharAndCountUp(&nCharsProcessed, pfnDevGetChar, ppSrc, EndMarker);
         }
         switch (state) {
         case PROCESS_BLANKS:
@@ -206,7 +206,7 @@ static int str2num(STRDESC* pParms, int (*pfnDevGetChar)(void** ppSrc), int (*pf
                 nHexIDPecedingZeros += (c == '0' ? 1 : 0);
                 state = PROCESS_NUMBER;
             } else {
-                UngetCharAndDecount(c, &nCharsProcessed, pfnDevUngetChar, ppSrc, EndMarker);
+                UngetCharAndCountDown(c, &nCharsProcessed, pfnDevUngetChar, ppSrc, EndMarker);
                 nTokenScanned = '\0' == c ? 0 : -1;
                 state = PROCESS_DONE;
             }break;
@@ -229,7 +229,7 @@ static int str2num(STRDESC* pParms, int (*pfnDevGetChar)(void** ppSrc), int (*pf
                     state = PROCESS_NUMBER;
                 }
                 else {
-                    UngetCharAndDecount(c, &nCharsProcessed, pfnDevUngetChar, ppSrc, EndMarker);
+                    UngetCharAndCountDown(c, &nCharsProcessed, pfnDevUngetChar, ppSrc, EndMarker);
                     nTokenScanned = 0;
                     state = PROCESS_DONE;
                 }
@@ -264,7 +264,7 @@ static int str2num(STRDESC* pParms, int (*pfnDevGetChar)(void** ppSrc), int (*pf
                     }
                     else
                     {
-                        UngetCharAndDecount(c, &nCharsProcessed, pfnDevUngetChar, ppSrc, EndMarker);
+                        UngetCharAndCountDown(c, &nCharsProcessed, pfnDevUngetChar, ppSrc, EndMarker);
                         state = PROCESS_THE_END;
                     }
             break;
@@ -318,9 +318,9 @@ static int str2num(STRDESC* pParms, int (*pfnDevGetChar)(void** ppSrc), int (*pf
         }
         case PROCESS_ZEROX:
             state = (((pParms->nNumBase == 16) && (nHexIDPecedingZeros == 1) && (isxdigit(c))) ? PROCESS_NUMBER : PROCESS_THE_END);
-            UngetCharAndDecount(c, &nCharsProcessed, pfnDevUngetChar, ppSrc, EndMarker);
+            UngetCharAndCountDown(c, &nCharsProcessed, pfnDevUngetChar, ppSrc, EndMarker);
             if (state == PROCESS_THE_END) {
-                UngetCharAndDecount(c, &nCharsProcessed, pfnDevUngetChar, ppSrc, EndMarker);//TODO: verify!!!
+                UngetCharAndCountDown(c, &nCharsProcessed, pfnDevUngetChar, ppSrc, EndMarker);//TODO: verify!!!
                 nTokenScanned = 0;
             }
             break;
@@ -452,7 +452,7 @@ _cdeCoreVwxScanf(
 
                 if (fInverted) {
                     if (!fInside) {
-                        c = GetCharAndCount(&nCharsProcessed, pfnDevGetChar, &pSrc, pFixParm->EndMarker);
+                        c = GetCharAndCountUp(&nCharsProcessed, pfnDevGetChar, &pSrc, pFixParm->EndMarker);
                         if (c == pFixParm->EndMarker) {
                             state = PROCESS_SCANSET_END;
                             break;
@@ -462,7 +462,7 @@ _cdeCoreVwxScanf(
                             fSSToken = 1;
                         }
                         else {
-                            UngetCharAndDecount(c, &nCharsProcessed, pfnDevUngetChar, &pSrc, pFixParm->EndMarker);
+                            UngetCharAndCountDown(c, &nCharsProcessed, pfnDevUngetChar, &pSrc, pFixParm->EndMarker);
                             i--;
                             state = PROCESS_SCANSET_END;
                             break;
@@ -470,7 +470,7 @@ _cdeCoreVwxScanf(
                         fInside = 0;
                     }
                     else {
-                        //UngetCharAndDecount(c,&nCharsProcessed, pfnDevUngetChar, &pSrc, pFixParm->EndMarker);
+                        //UngetCharAndCountDown(c,&nCharsProcessed, pfnDevUngetChar, &pSrc, pFixParm->EndMarker);
                         i--;
                         state = PROCESS_SCANSET_END;
                         break;
@@ -506,7 +506,7 @@ _cdeCoreVwxScanf(
         }
         case PROCESS_SCANSET_SCAN:
 
-            c = GetCharAndCount(&nCharsProcessed, pfnDevGetChar, &pSrc, pFixParm->EndMarker);
+            c = GetCharAndCountUp(&nCharsProcessed, pfnDevGetChar, &pSrc, pFixParm->EndMarker);
             if (c == pFixParm->EndMarker) {
                 state = PROCESS_SCANSET_END;
             }
@@ -520,7 +520,7 @@ _cdeCoreVwxScanf(
                             fSSToken = 1;
                         }
                         else {
-                            UngetCharAndDecount(c, &nCharsProcessed, pfnDevUngetChar, &pSrc, pFixParm->EndMarker);
+                            UngetCharAndCountDown(c, &nCharsProcessed, pfnDevUngetChar, &pSrc, pFixParm->EndMarker);
                             i--;
                             state = PROCESS_SCANSET_END;
                             break;
@@ -529,7 +529,7 @@ _cdeCoreVwxScanf(
                         fInside = 0;
                     }
                     else {
-                        UngetCharAndDecount(c, &nCharsProcessed, pfnDevUngetChar, &pSrc, pFixParm->EndMarker);
+                        UngetCharAndCountDown(c, &nCharsProcessed, pfnDevUngetChar, &pSrc, pFixParm->EndMarker);
 
                     }
                 }
@@ -540,11 +540,11 @@ _cdeCoreVwxScanf(
                             state = PROCESS_SCANSET_END;
                         }
                         else {
-                            UngetCharAndDecount(c, &nCharsProcessed, pfnDevUngetChar, &pSrc, pFixParm->EndMarker);
+                            UngetCharAndCountDown(c, &nCharsProcessed, pfnDevUngetChar, &pSrc, pFixParm->EndMarker);
                         }
                     }
                     else {
-                        UngetCharAndDecount(c, &nCharsProcessed, pfnDevUngetChar, &pSrc, pFixParm->EndMarker);
+                        UngetCharAndCountDown(c, &nCharsProcessed, pfnDevUngetChar, &pSrc, pFixParm->EndMarker);
                     }
                 }
             }
@@ -575,22 +575,22 @@ _cdeCoreVwxScanf(
             }break;
         case PROCESS_GETCHECKEDINPUT:
             nCharsProcessed = 0;
-            c = GetCharAndCount(&nCharsProcessed, pfnDevGetChar, &pSrc, pFixParm->EndMarker);
+            c = GetCharAndCountUp(&nCharsProcessed, pfnDevGetChar, &pSrc, pFixParm->EndMarker);
             state = (format == c ? PROCESS_FORMATSTR : PROCESS_END);
             if (state == PROCESS_END)
-                UngetCharAndDecount(c, &nCharsProcessed, pfnDevUngetChar, &pSrc, pFixParm->EndMarker);
+                UngetCharAndCountDown(c, &nCharsProcessed, pfnDevUngetChar, &pSrc, pFixParm->EndMarker);
             OverallCount += nCharsProcessed;
             break;
         case PROCESS_GETINPUT:
             nCharsProcessed = 0;
             switch (formctype) {
             case WSPC: do {
-                c = GetCharAndCount(&nCharsProcessed, pfnDevGetChar, &pSrc, pFixParm->EndMarker);
+                c = GetCharAndCountUp(&nCharsProcessed, pfnDevGetChar, &pSrc, pFixParm->EndMarker);
             } while (isspace(c));
-            UngetCharAndDecount(c, &nCharsProcessed, pfnDevUngetChar, &pSrc, pFixParm->EndMarker);
+            UngetCharAndCountDown(c, &nCharsProcessed, pfnDevUngetChar, &pSrc, pFixParm->EndMarker);
             OverallCount += nCharsProcessed;
             state = PROCESS_FORMATSTR; break;
-            default: state = (c == GetCharAndCount(&nCharsProcessed, pfnDevGetChar, &pSrc, pFixParm->EndMarker)) ? PROCESS_FORMATSTR : PROCESS_ERROR;
+            default: state = (c == GetCharAndCountUp(&nCharsProcessed, pfnDevGetChar, &pSrc, pFixParm->EndMarker)) ? PROCESS_FORMATSTR : PROCESS_ERROR;
                 OverallCount += nCharsProcessed;               // adjust overall count
                 break;
             }break;
@@ -695,7 +695,7 @@ _cdeCoreVwxScanf(
             }
 
             while (nMaxChars) {
-                c = GetCharAndCount(&nCharsProcessed, pfnDevGetChar, &pSrc, pFixParm->EndMarker);
+                c = GetCharAndCountUp(&nCharsProcessed, pfnDevGetChar, &pSrc, pFixParm->EndMarker);
                 if (c == pFixParm->EndMarker) {
                     state = PROCESS_END;
                     break;//while(nMaxChars--)
@@ -703,7 +703,7 @@ _cdeCoreVwxScanf(
 
                 if (isspace(c) || (c == pFixParm->EndMarker)) {
                     if (fCharProcessed) {
-                        UngetCharAndDecount(c, &nCharsProcessed, pfnDevUngetChar, &pSrc, pFixParm->EndMarker);
+                        UngetCharAndCountDown(c, &nCharsProcessed, pfnDevUngetChar, &pSrc, pFixParm->EndMarker);
                         break;
                     }
                 }
@@ -731,7 +731,7 @@ _cdeCoreVwxScanf(
             pVoid = stParms.fAsterix ? NULL : va_arg(ap, void*); // load output pointer dont get and use on asterisk
             nMaxChars = (INT_MAX == nMaxChars) ? 1 : nMaxChars;
             while (nMaxChars--) {
-                c = GetCharAndCount(&nCharsProcessed, pfnDevGetChar, &pSrc, pFixParm->EndMarker);
+                c = GetCharAndCountUp(&nCharsProcessed, pfnDevGetChar, &pSrc, pFixParm->EndMarker);
                 if (c == pFixParm->EndMarker) {
                     state = PROCESS_END;
                     break;//while(nMaxChars--)

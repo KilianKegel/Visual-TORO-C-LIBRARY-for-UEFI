@@ -47,7 +47,7 @@ static int __fgetwcpp(void** stream)
 static int __fungetwcpp(int c, void** stream)
 {
     CDEFILE* pCdeFile = *stream;
-    int nRet = RomParm.EndMarker;                       // NOTE: check UngetCharAndDecount() for understanding
+    int nRet = RomParm.EndMarker;                       // NOTE: check UngetCharAndCountDown() for understanding
 
     do {
         //

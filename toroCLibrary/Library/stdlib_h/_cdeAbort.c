@@ -23,7 +23,7 @@ Author:
 //
 // stdlib.h
 //
-extern __declspec(dllimport) void exit(int status);
+extern __declspec(dllimport) void _exit(int status);
 /**
 
 Synopsis
@@ -39,11 +39,17 @@ void _cdeAbort(void) {
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
     int i;
 
-    // ----- don't flush files
+    //
+    // prevent all atexit-registered functions from being called
+    //
+    for (i = CDE_ATEXIT_REGISTRATION_NUM - 1; i >= 0; i--)
+        pCdeAppIf->rgcbAtexit[i] = NULL;
 
-    if (pCdeAppIf->pIob != (CDEFILE*)-1)
-        for (i = 3/*skip stdin,stdout,stderr*/; i < pCdeAppIf->cIob; i++)
-            pCdeAppIf->pIob[i].bdirty = 0;
+    //
+    // prevent all file buffers from being flushed
+    //
+    for (i = 0; i < pCdeAppIf->cIob; i++)
+        pCdeAppIf->pIob[i].fRsv = 0;
 
-    exit(3); //NOTE: Return 3 as documented by Microsoft
+    _exit(0xC0000409/*STATUS_STACK_BUFFER_OVERRUN*/); //NOTE: Returnvalue of 3 documented by Microsoft instead
 }

@@ -51,7 +51,7 @@ static int __fgetcpp(void** stream)
 static int __fungetcpp(int c, void** stream)
 {
     CDEFILE* pCdeFile = *stream;
-    int nRet = RomParm.EndMarker;                       // NOTE: check UngetCharAndDecount() for understanding
+    int nRet = RomParm.EndMarker;                       // NOTE: check UngetCharAndCountDown() for understanding
 
     do {
         //
