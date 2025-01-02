@@ -3,7 +3,7 @@
     toro C Library
     https://github.com/KilianKegel/toro-C-Library#toro-c-library-formerly-known-as-torito-c-library
 
-    Copyright (c) 2017-2024, Kilian Kegel. All rights reserved.
+    Copyright (c) 2017-2025, Kilian Kegel. All rights reserved.
     SPDX-License-Identifier: GNU General Public License v3.0
 
 Module Name:
@@ -32,7 +32,7 @@ typedef wchar_t wctrans_t;
 
 extern __declspec(dllimport) int strcmp(const char* pszDst, const char* pszSrc);
 
-/** Brief description of the function’s purpose.
+/** Brief description of the functionï¿½s purpose.
 
 Synopsis
     #include <wctype.h>
