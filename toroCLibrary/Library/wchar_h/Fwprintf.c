@@ -20,9 +20,9 @@ Author:
     Kilian Kegel
 
 --*/
+#include <CdeServices.h>
 #include <stdio.h>
 #include <wchar.h>
-#include <CdeServices.h>
 
 /**
 Synopsis

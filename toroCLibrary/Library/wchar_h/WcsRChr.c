@@ -20,8 +20,8 @@ Author:
     Kilian Kegel
 
 --*/
-#include <wchar.h>
 #include <CdeServices.h>
+#include <wchar.h>
 
 /** wcsrchr()
 Synopsis

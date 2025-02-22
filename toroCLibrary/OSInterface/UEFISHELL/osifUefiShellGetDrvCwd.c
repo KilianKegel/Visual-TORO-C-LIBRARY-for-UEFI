@@ -20,11 +20,10 @@ Author:
 
 --*/
 #define OS_EFI
+#include <CdeServices.h>
 #include <uefi.h>
 #include <Protocol\Shell.h>
 #include <wchar.h>
-
-#include <CdeServices.h>
 
 /**
 

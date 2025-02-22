@@ -19,10 +19,10 @@ Author:
     Kilian Kegel
 
 --*/
+#include <CdeServices.h>
 #include <Windows.h>
 #include <stdint.h>
 #include <wchar.h>
-#include <CdeServices.h>
 
 /**
 

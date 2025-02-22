@@ -20,11 +20,11 @@ Author:
     Kilian Kegel
 
 --*/
+#include <cde.h>
+#include <CdeServices.h>
 #include <stdio.h>
 #include <wchar.h>
 
-#include <cde.h>
-#include <CdeServices.h>
 
 extern void* __cdeGetAppIf(void);
 
