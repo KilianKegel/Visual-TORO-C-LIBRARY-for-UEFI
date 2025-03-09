@@ -12,6 +12,8 @@ Module Name:
 
 Abstract:
 
+    Import Library version
+
     Implementation of the Standard C function.
     Splits a floating-point value into fractional and integer parts.
 
@@ -21,7 +23,13 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <math.h>
+//
+// math.h
+//
+#define signbit(_Val)   _dsign(_Val)
+#define _HUGE_ENUF      1e+300
+#define INFINITY        ((float)(_HUGE_ENUF * _HUGE_ENUF))
+#define NAN             (-(float)(INFINITY * 0.0F))
 
 extern double __cdecl __cde80387FISTP(double x);
 extern uint16_t __cdecl __cde80387FSTCW(void);
@@ -40,7 +48,7 @@ Returns
     https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/modf-modff-modfl#return-value
 
 **/
-double modf(double x, double* intptr)
+static double modfCDEABI(double x, double* intptr)
 {
     double dRet = x;
     CDEDOUBLE* pdRet = (void*)&dRet;
@@ -93,3 +101,5 @@ double modf(double x, double* intptr)
     } while (0);
     return dRet;
 }
+
+MKCDEABI(modf);

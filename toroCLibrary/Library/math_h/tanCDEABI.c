@@ -37,7 +37,7 @@ Returns
     https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/tan-tanf-tanl#return-value
 
 **/
-double __cdecl tan(double d)
+static double __cdecl tanCDEABI(double d)
 {
     CDEDOUBLE* pdbl = (void*)&d;
     uint64_t di = 0x7FF8042000000000LL;
@@ -48,3 +48,5 @@ double __cdecl tan(double d)
 
     return *pd;
 }
+
+MKCDEABI(tan);

@@ -12,6 +12,8 @@ Module Name:
 
 Abstract:
 
+    Import Library version
+
     Implementation of the Standard C function.
     Calculates x raised to the power of y.
 
@@ -21,11 +23,22 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <math.h>
-extern double __cdecl __cde80387FYL2X(double x, double y);
-extern double modf(double, double*);
+//
+// math.h
+//
+#define signbit(_Val)   _dsign(_Val)
+#define _HUGE_ENUF      1e+300
+#define INFINITY        ((float)(_HUGE_ENUF * _HUGE_ENUF))
+#define NAN             (-(float)(INFINITY * 0.0F))
+
 extern double __cde80387F2XM1(double);
-extern double fabs(double x);
+extern double __cde80387FYL2X(double x, double y);
+extern __declspec(dllimport) double exp(double);
+extern __declspec(dllimport) double modf(double, double*);
+extern __declspec(dllimport) double fabs(double x);
+extern __declspec(dllimport) double fmod(double x, double y);
+extern int _dsign(double d);
+
 
 /**
 
@@ -61,7 +74,7 @@ Returns
     NOTE:   80387's only exponential function is F2XM1 -> 2  - 1 in the range -1 <= x <= + 1
 
 **/
-double pow(double bas, double exp)
+static double powCDEABI(double bas, double exp)
 {
     CDEDOUBLE product = { .dbl = -NAN };                                  // assume failure
     CDEDOUBLE x = { .dbl = bas };
@@ -267,7 +280,6 @@ double pow(double bas, double exp)
                     product.dbl = +yxldx.dbl;
 
                 if (0x7FF0000000000000ULL == yxldx.uint64) {
-                    //kgtest product.uint64 = yxldx.uint64;
                     if (signbit(x.dbl))
                         if (fYIsFrational)
                             product.dbl = +yxldx.dbl;
@@ -327,3 +339,5 @@ double pow(double bas, double exp)
 
     return product.dbl;
 }
+
+MKCDEABI(pow);

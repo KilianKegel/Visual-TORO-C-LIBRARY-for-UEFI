@@ -12,6 +12,8 @@ Module Name:
 
 Abstract:
 
+    Import Library version
+
     Implementation of the Standard C function.
     Calculates the floor of a value.
 
@@ -20,8 +22,9 @@ Author:
     Kilian Kegel
 
 --*/
+#include <CdeServices.h>
 
-extern double modf(double x, double* intptr);
+extern __declspec(dllimport) double modf(double x, double* intptr);
 
 /**
 
@@ -36,7 +39,7 @@ Returns
     https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/floor-floorf-floorl#return-value
 
 **/
-double __cdecl floor(double d)
+static double __cdecl floorCDEABI(double d)
 {
     double dRet;
     double fract = modf(d, &dRet);
@@ -44,3 +47,5 @@ double __cdecl floor(double d)
     
     return dRet + add;
 }
+
+MKCDEABI(floor);

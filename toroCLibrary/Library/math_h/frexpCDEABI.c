@@ -12,6 +12,8 @@ Module Name:
 
 Abstract:
 
+    Import Library version
+
     Implementation of the Standard C function.
     Gets the mantissa and exponent of a floating-point number.
 
@@ -38,7 +40,7 @@ Returns
     https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/frexp#return-value
 
 **/
-double __cdecl frexp(double x, int* expptr)
+static double __cdecl frexpCDEABI(double x, int* expptr)
 {
 	CDEDOUBLE* px = (void*)&x;
     CDEDOUBLE dRet = { .dbl = x };
@@ -72,7 +74,7 @@ double __cdecl frexp(double x, int* expptr)
                 if (px->member.mant & (1ULL << i))
                 {
                     *expptr = -1073 + 0 + i;
-                    dbl.uint64 = 1ULL << (1 + i);
+					dbl.uint64 = 1ULL << (1 + i);
                     break;
                 }
             }
@@ -83,3 +85,5 @@ double __cdecl frexp(double x, int* expptr)
 
     return dRet.dbl;
 }
+
+MKCDEABI(frexp);

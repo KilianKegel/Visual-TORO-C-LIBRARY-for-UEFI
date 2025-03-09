@@ -8,12 +8,14 @@
 
 Module Name:
 
-    cos.c
+    sin.c
 
 Abstract:
 
+    Import Library version
+
     Implementation of the Standard C function.
-    Calculates the cosine of a floating-point value.
+    Calculates the sine of a floating-point value.
 
 Author:
 
@@ -21,27 +23,26 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <math.h>
 
-extern double __cdecl __cde80387FCOS(double x);
+extern double __cdecl __cde80387FSIN(double x);
 
 /**
 
 Synopsis
     #include <math.h>
-    double cos(double x);
+    double sin(double x);
 Description
-    https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/cos-cosf-cosl
+    https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/sin-sinf-sinl
 Parameters
-    https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/cos-cosf-cosl#parameters
+    https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/sin-sinf-sinl#parameters
 Returns
-    https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/cos-cosf-cosl#return-value
+    https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/sin-sinf-sinl#return-value
 
 **/
-double __cdecl cos(double d)
+static double __cdecl sinCDEABI(double d)
 {
     CDEDOUBLE* pdbl = (void*)&d;
-    uint64_t di = 0x7FF8042000000000ULL;
+    uint64_t di = 0x7FF8042000000000LL;
     double* pd = (void*)&di;
     
     do 
@@ -57,9 +58,11 @@ double __cdecl cos(double d)
         }
 
         if ((63 + 1023) > pdbl->member.exp)
-            *pd = __cde80387FCOS(d);
+            *pd = __cde80387FSIN(d);
 
     } while (0);
 
     return *pd;
 }
+
+MKCDEABI(sin);

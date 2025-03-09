@@ -12,6 +12,8 @@ Module Name:
 
 Abstract:
 
+    Import Library version
+
     Implementation of the Standard C function.
     Calculates the exponential of a floating-point value.
 
@@ -21,10 +23,16 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <math.h>
+//
+// math.h
+//
+#define signbit(_Val)   _dsign(_Val)
+#define _HUGE_ENUF      1e+300
+#define INFINITY        ((float)(_HUGE_ENUF * _HUGE_ENUF))
+#define NAN             (-(float)(INFINITY * 0.0F))
 
 extern const double __cdeLOG2E;
-extern double modf(double, double*);
+extern __declspec(dllimport) double modf(double, double*);
 extern double __cde80387F2XM1(double);
 
 /**
@@ -59,7 +67,7 @@ Returns
     NOTE:   80387's only exponential function is F2XM1 -> 2  - 1 in the range -1 <= x <= + 1
             
 **/
-double exp(double d)
+static double expCDEABI(double d)
 {
     double dret = INFINITY;
     double intgr, fract;
@@ -84,7 +92,7 @@ double exp(double d)
 
         if (intgr > -1023)                                      // deal with normalized doubles
         {
-            if (0x7FEULL < 1023/*bias*/ + (uint64_t)intgr)      // check exponent overflow
+			if (0x7FEULL < 1023/*bias*/ + (uint64_t)intgr)      // check exponent overflow
                 break;  // return with error
 
             ptwoPowerIntgr->member.exp = 1023/*bias*/ + (uint64_t)intgr;
@@ -105,3 +113,5 @@ double exp(double d)
 
     return dret;
 }
+
+MKCDEABI(exp);

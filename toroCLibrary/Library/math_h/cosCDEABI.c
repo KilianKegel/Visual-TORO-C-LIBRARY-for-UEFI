@@ -12,6 +12,8 @@ Module Name:
 
 Abstract:
 
+    Import Library version
+
     Implementation of the Standard C function.
     Calculates the cosine of a floating-point value.
 
@@ -21,7 +23,6 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <math.h>
 
 extern double __cdecl __cde80387FCOS(double x);
 
@@ -38,7 +39,7 @@ Returns
     https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/cos-cosf-cosl#return-value
 
 **/
-double __cdecl cos(double d)
+static double __cdecl cosCDEABI(double d)
 {
     CDEDOUBLE* pdbl = (void*)&d;
     uint64_t di = 0x7FF8042000000000ULL;
@@ -63,3 +64,5 @@ double __cdecl cos(double d)
 
     return *pd;
 }
+
+MKCDEABI(cos);

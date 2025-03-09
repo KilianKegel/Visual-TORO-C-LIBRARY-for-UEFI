@@ -34,7 +34,7 @@ Returns
     https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/floating-point-primitives#_dsign-_ldsign-_fdsign#return-value
 
 **/
-int __cdecl _dsign(double d)
+int _dsign(double d)
 {
     CDEDOUBLE* pdbl = (void*)&d;
 

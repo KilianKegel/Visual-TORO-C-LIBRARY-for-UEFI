@@ -42,11 +42,23 @@ double __cdecl sin(double d)
     CDEDOUBLE* pdbl = (void*)&d;
     uint64_t di = 0x7FF8042000000000LL;
     double* pd = (void*)&di;
-
-    if ((63 + 1023) > pdbl->member.exp)
+    
+    do 
     {
-        *pd = __cde80387FSIN(d);
-    }
+        if (pdbl->member.exp == 0x7FF)  //INF,NAN
+        {
+            *pd = d,
+                di |= 0x0008000000000000;
+
+            if (0 == pdbl->member.mant)
+                di |= 0x8000000000000000;
+            break;
+        }
+
+        if ((63 + 1023) > pdbl->member.exp)
+            *pd = __cde80387FSIN(d);
+
+    } while (0);
 
     return *pd;
 }

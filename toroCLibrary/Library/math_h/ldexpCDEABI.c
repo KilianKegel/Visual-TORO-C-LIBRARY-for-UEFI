@@ -12,6 +12,8 @@ Module Name:
 
 Abstract:
 
+    Import Library version
+
     Implementation of the Standard C function.
     Multiplies a floating-point number by an integral power of two.
 
@@ -44,7 +46,9 @@ Returns
                       exp  := +1024
 **/
 
-double __cdecl ldexp(double x, int exp)
+static double __cdecl ldexpCDEABI(double x, int exp)
 {
 	return __cde80387FSCALE(x, (double)exp);
 }
+
+MKCDEABI(ldexp);

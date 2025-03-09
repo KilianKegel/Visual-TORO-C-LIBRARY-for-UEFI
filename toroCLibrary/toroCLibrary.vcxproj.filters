@@ -685,6 +685,28 @@
     <ClCompile Include="Library\math_h\__cdeXAM.c" />
     <ClCompile Include="Library\stdlib_h\_exit.c" />
     <ClCompile Include="Library\stdlib_h\_exitCDEABI.c" />
+    <ClCompile Include="Library\math_h\acosCDEABI.c" />
+    <ClCompile Include="Library\math_h\asinCDEABI.c" />
+    <ClCompile Include="Library\math_h\atan2CDEABI.c" />
+    <ClCompile Include="Library\math_h\atanCDEABI.c" />
+    <ClCompile Include="Library\math_h\ceilCDEABI.c" />
+    <ClCompile Include="Library\math_h\cosCDEABI.c" />
+    <ClCompile Include="Library\math_h\coshCDEABI.c" />
+    <ClCompile Include="Library\math_h\expCDEABI.c" />
+    <ClCompile Include="Library\math_h\fabsCDEABI.c" />
+    <ClCompile Include="Library\math_h\floorCDEABI.c" />
+    <ClCompile Include="Library\math_h\fmodCDEABI.c" />
+    <ClCompile Include="Library\math_h\frexpCDEABI.c" />
+    <ClCompile Include="Library\math_h\ldexpCDEABI.c" />
+    <ClCompile Include="Library\math_h\log10CDEABI.c" />
+    <ClCompile Include="Library\math_h\logCDEABI.c" />
+    <ClCompile Include="Library\math_h\modfCDEABI.c" />
+    <ClCompile Include="Library\math_h\powCDEABI.c" />
+    <ClCompile Include="Library\math_h\sinCDEABI.c" />
+    <ClCompile Include="Library\math_h\sinhCDEABI.c" />
+    <ClCompile Include="Library\math_h\sqrtCDEABI.c" />
+    <ClCompile Include="Library\math_h\tanCDEABI.c" />
+    <ClCompile Include="Library\math_h\tanhCDEABI.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\CdeServices.h" />
@@ -733,6 +755,10 @@
     <MASM Include="Library\math_h\__cde80387FSTSW64.asm" />
     <MASM Include="Library\math_h\__cde80387FXAM32.asm" />
     <MASM Include="Library\math_h\__cde80387FXAM64.asm" />
+    <MASM Include="Library\math_h\__cde80387FPREM32.asm" />
+    <MASM Include="Library\math_h\__cde80387FPREM64.asm" />
+    <MASM Include="Library\math_h\__cde80387FSCALE32.asm" />
+    <MASM Include="Library\math_h\__cde80387FSCALE64.asm" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />

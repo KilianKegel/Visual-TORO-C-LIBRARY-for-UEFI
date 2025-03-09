@@ -37,7 +37,7 @@ Returns
     https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/sqrt-sqrtf-sqrtl#return-value
 
 **/
-double __cdecl sqrt(double d)
+static double __cdecl sqrtCDEABI(double d)
 {
     CDEDOUBLE* pdbl = (void*)&d;
     uint64_t di = 0xFFF8000000000000ULL;// 0x7FF8002000000000LL;//DOMAIN ERROR
@@ -58,3 +58,5 @@ double __cdecl sqrt(double d)
 
     return *pd;
 }
+
+MKCDEABI(sqrt);

@@ -12,6 +12,8 @@ Module Name:
 
 Abstract:
 
+    Import Library version
+
     Implementation of the Standard C function.
     Calculates the floating-point remainder.
 
@@ -39,7 +41,7 @@ Returns
     https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/fmod-fmodf#return-value
 
 **/
-double __cdecl fmod(double x, double y)
+static double __cdecl fmodCDEABI(double x, double y)
 {
     CDEDOUBLE dRet, * py = (void*)&y;
 
@@ -83,3 +85,5 @@ double __cdecl fmod(double x, double y)
 
     return dRet.dbl;
 }
+
+MKCDEABI(fmod);

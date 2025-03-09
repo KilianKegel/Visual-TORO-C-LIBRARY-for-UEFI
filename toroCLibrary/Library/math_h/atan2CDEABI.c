@@ -12,6 +12,8 @@ Module Name:
 
 Abstract:
 
+    Import Library version
+
     Implementation of the Standard C function.
     Calculates the arcatangent of y/x floating-point value.
 
@@ -21,7 +23,12 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <math.h>
+//
+// math.h
+//
+#define signbit(_Val)   _dsign(_Val)
+
+extern int _dsign(double d);
 
 extern double __cdecl __cde80387FPATAN(double x);
 extern const double __cdePI;
@@ -40,7 +47,7 @@ Returns
     https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/atan-atanf-atanl-atan2-atan2f-atan2l#return-value
 
 **/
-double __cdecl atan2(double y, double x)
+static double __cdecl atan2CDEABI(double y, double x)
 {
     double d = 0.0 == x ? 0.0 : y / x;
     CDEDOUBLE* pd = (void*)&d;
@@ -108,3 +115,4 @@ double __cdecl atan2(double y, double x)
     return d;
 }
 
+MKCDEABI(atan2);

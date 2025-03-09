@@ -8,12 +8,14 @@
 
 Module Name:
 
-    tan.c
+    tanh.c
 
 Abstract:
 
+    Import Library version
+
     Implementation of the Standard C function.
-    Calculates the tangens of a floating-point value.
+    Calculates the tangens hyperbolicus of a floating-point value.
 
 Author:
 
@@ -22,29 +24,34 @@ Author:
 --*/
 #include <CdeServices.h>
 
-extern double __cdecl __cde80387FPTAN(double x);
+extern __declspec(dllimport) double exp(double);
 
 /**
 
 Synopsis
     #include <math.h>
-    double tan(double x);
+    double tanh(double x);
 Description
     https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/tan-tanf-tanl
+    https://en.wikipedia.org/wiki/Hyperbolic_functions
 Parameters
     https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/tan-tanf-tanl#parameters
 Returns
     https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/tan-tanf-tanl#return-value
-
+                                2x
+                sinh(x)        e   - 1
+    tanh(x) = ------------ = ------------
+                cosh(x)         2x
+                               e   + 1
 **/
-double __cdecl tan(double d)
+static double __cdecl tanhCDEABI(double d)
 {
-    CDEDOUBLE* pdbl = (void*)&d;
-    uint64_t di = 0x7FF8042000000000LL;
-    double* pd = (void*)&di;
+    double epow2x = exp(2.0 * d);
+    double epow2xm1 = epow2x - 1.0;
+    double epow2xp1 = epow2x + 1.0;
+    double dRet = epow2xm1 / epow2xp1;
 
-    if ((63 + 1023) > pdbl->member.exp)
-        *pd = __cde80387FPTAN(d);
-
-    return *pd;
+    return dRet;
 }
+
+MKCDEABI(tanh);

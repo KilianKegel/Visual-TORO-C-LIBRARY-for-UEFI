@@ -12,6 +12,8 @@ Module Name:
 
 Abstract:
 
+    Import Library version
+
     Implementation of the Standard C function.
     Calculates the hyperbolic cosine of a floating-point value.
 
@@ -20,7 +22,9 @@ Author:
     Kilian Kegel
 
 --*/
-#include <math.h>
+#include <CdeServices.h>
+
+extern __declspec(dllimport) double exp(double);
 
 /**
 
@@ -38,9 +42,9 @@ Returns
     cosh(x) = 0.5 * (e^x + e^(-x))
 
 **/
-double cosh(double d)
+static double coshCDEABI(double d)
 {
-    double dret = INFINITY;
+    double dret = 0x7FF0000000000000ULL;// INFINITY;
 
     do
     {
@@ -62,3 +66,5 @@ double cosh(double d)
 
     return dret;
 }
+
+MKCDEABI(cosh);
