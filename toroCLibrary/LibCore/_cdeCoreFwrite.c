@@ -78,7 +78,7 @@ size_t _cdeCoreFwrite(CDE_APP_IF* pCdeAppIf, const void* ptr, size_t size, size_
         }
 
         if (NULL == pCdeFile->Buffer) {
-            pCdeFile->Buffer = __cdereallocCORE(pCdeAppIf, 0, BUFSIZ);
+            pCdeFile->Buffer = __cdereallocCORE(pCdeAppIf, NULL, BUFSIZ);
             pCdeFile->bsiz = BUFSIZ;
         }
 

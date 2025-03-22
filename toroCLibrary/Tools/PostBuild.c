@@ -23,6 +23,7 @@ Author:
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <ctype.h>
 
 char cmdline1[512];
 char cmdline2[512];
@@ -35,12 +36,12 @@ char* eos(char* str)
 //
 //              0                       1               2               3                   4             5                 6
 // 
-//cmd / C tools\PostBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformShortName) $(IntDir) $(SolutionDir)lib\toroC$(PlatformArchitecture).lib
+//cmd / C tools\PostBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformArchitecture) $(IntDir) $(SolutionDir)lib\toroC$(PlatformArchitecture).lib
 //
 int main(int argc, char** argv) {
     time_t timer = time(NULL);
     struct tm* time = gmtime(&timer);
-    char str3264[sizeof("64")], *pstr3264 = strcpy(str3264,0 == strcmp(argv[4],"x64") ? "64" : "32");// get build platform x64 vs. x86
+    char str3264[sizeof("64")], *pstr3264 = strcpy(str3264,argv[4]);    // get build platform 64 vs.32 $(PlatformArchitecture)
 
     printf("-->> str3264 %s\n", str3264);
 
@@ -150,6 +151,117 @@ int main(int argc, char** argv) {
 
             while (NULL != (pLine = fgets(strLineBuf, sizeof(strLineBuf), fpIN)))
                 fprintf(fpOUT, NULL != strstr(pLine, "\\osif") ? "/REMOVE:%s" : "", pLine);
+        }
+        
+        //
+        // Create LLVM linker enabled libraries by removing certain .OBJ modules.
+        // 
+        // NOTE: The LLVM linker cannot handle libraries containing multiple .OBJ modules exporting the same SYMBOL.
+        //       Unlike the Microsoft linker, the LLVM linker does not follow SYMBOL SEQUENCE TRACE, beginning at the /ENTRY:"CRT0_NAME".
+        //       For this reason, the LLVM linker does not support multi-entrypoint libraries like the TORO C Library.
+        //       As a workaround, remove all .OBJ modules from the library that are not required for a particular target operating system.
+        //       For example:
+        //       - For WINNT TARGET, remove all UefiShell-, UefiDxe-, and UefiPei-related .OBJ modules.
+        //       - For UEFISHELL TARGET, remove all WinNT-, UefiDxe-, and UefiPei-related .OBJ modules.
+        if (1)
+        {
+            char strPathFileOUT[256];
+            char strPathFileIN[256];
+
+            sprintf(cmdline1, "lib /nologo /list %s  > %sALLOBJ%s.lst",
+                argv[6]/*$(SolutionDir)lib\toroC$(PlatformArchitecture).lib*/,
+                argv[5],/*$(IntDir)*/
+                str3264);
+
+            printf("%s\n", cmdline1);
+            system(cmdline1);
+
+            //
+            // Uefi Shell  first
+            //
+            if (1)
+            {
+                sprintf(strPathFileIN, "%sALLOBJ%s.lst", argv[5],/*$(IntDir)*/ str3264);
+                sprintf(strPathFileOUT, "%sREMOVE4UEFISHELL%s.lst", argv[5],/*$(IntDir)*/ str3264);
+
+                FILE* fpIN = fopen(strPathFileIN, "r");
+                FILE* fpOUT = fopen(strPathFileOUT, "w");
+
+                fgets(line, sizeof(line), fpIN); // skip first line
+
+                while (fgets(line, sizeof(line), fpIN))
+                {
+                    // to lower line
+                    for (int i = 0; '\0' != line[i]; i++)
+                        line[i] = tolower(line[i]);
+                    if (NULL != strstr(line, "osif")) {
+                        if (NULL != strstr(line, "winnt") ||
+                            NULL != strstr(line, "uefipei") ||
+                            NULL != strstr(line, "uefidxe") ||
+                            NULL != strstr(line, "uefismm") ||
+                            NULL != strstr(line, "uefishelldrv") ||
+                            NULL != strstr(line, "entrypointw") ||
+                            NULL != strstr(line, "entrypointedk"))
+                        {
+                            fprintf(fpOUT, "/REMOVE:%s", line);
+                        }
+                    }
+
+                    if (NULL != strstr(line, "_dfltgetcdeappif"))
+                    {
+                        fprintf(fpOUT, "/REMOVE:%s", line);
+                    }
+
+                }
+
+                fclose(fpIN);
+                fclose(fpOUT);
+
+            }
+
+            //
+			// WinNT  second
+            //
+            if (1)
+            {
+                sprintf(strPathFileIN, "%sALLOBJ%s.lst", argv[5],/*$(IntDir)*/ str3264);
+                sprintf(strPathFileOUT, "%sREMOVE4WINNT%s.lst", argv[5],/*$(IntDir)*/ str3264);
+
+                FILE* fpIN = fopen(strPathFileIN, "r");
+                FILE* fpOUT = fopen(strPathFileOUT, "w");
+
+                fgets(line, sizeof(line), fpIN); // skip first line
+
+                while (fgets(line, sizeof(line), fpIN))
+                {
+                    // to lower line
+                    for (int i = 0; '\0' != line[i]; i++)
+                        line[i] = tolower(line[i]);
+                    if (NULL != strstr(line, "osif")) {
+                        if (NULL != strstr(line, "uefishell") ||
+                            NULL != strstr(line, "uefipei") ||
+                            NULL != strstr(line, "uefidxe") ||
+                            NULL != strstr(line, "uefismm") ||
+                            NULL != strstr(line, "uefishelldrv") ||
+                            NULL != strstr(line, "entrypointw") ||
+                            NULL != strstr(line, "entrypointedk"))
+                        {
+                            fprintf(fpOUT, "/REMOVE:%s", line);
+                        }
+                    }
+
+                    if (NULL != strstr(line, "_dfltgetcdeappif"))
+                    {
+                        fprintf(fpOUT, "/REMOVE:%s", line);
+                    }
+
+                }
+
+                fclose(fpIN);
+                fclose(fpOUT);
+            }
+
+
         }
         
         exit(EXIT_SUCCESS);

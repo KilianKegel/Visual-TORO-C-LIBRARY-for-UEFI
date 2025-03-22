@@ -200,7 +200,7 @@ double pow(double bas, double exp)
                     if(fYIsFrational || fYIsEven)
                         product.dbl = 0.0;
                     else
-                        product.dbl = -0.0;
+						product.dbl = INFINITY == x.dbl ? +0.0 : -0.0;
                     break;
                 }
             }

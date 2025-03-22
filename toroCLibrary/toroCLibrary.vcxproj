@@ -1411,7 +1411,7 @@
       <AdditionalDependencies>$(IntDir)MSFTINTRIN.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>tools\PostBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformShortName) $(IntDir) $(SolutionDir)lib\toroC$(PlatformArchitecture).lib &amp; DEL $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib &amp; COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib</Command>
+      <Command>tools\PostBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformArchitecture) $(IntDir) $(SolutionDir)lib\toroC$(PlatformArchitecture).lib &amp; DEL $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib &amp; COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib</Command>
       <Message>COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib</Message>
     </PostBuildEvent>
     <PreLinkEvent>
@@ -1474,7 +1474,7 @@
       <AdditionalDependencies>$(IntDir)MSFTINTRIN.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>tools\PostBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformShortName) $(IntDir) $(SolutionDir)lib\toroC$(PlatformArchitecture).lib &amp; DEL $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib &amp; COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib</Command>
+      <Command>tools\PostBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformArchitecture) $(IntDir) $(SolutionDir)lib\toroC$(PlatformArchitecture).lib &amp; DEL $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib &amp; COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib</Command>
       <Message>COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib</Message>
     </PostBuildEvent>
     <PreLinkEvent>
@@ -1532,7 +1532,7 @@
       <Message>Performing Custom Build Step before!</Message>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>tools\PostBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformShortName) $(IntDir) $(SolutionDir)lib\toroC$(PlatformArchitecture).lib &amp; DEL $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib &amp; COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib</Command>
+      <Command>tools\PostBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformArchitecture) $(IntDir) $(SolutionDir)lib\toroC$(PlatformArchitecture).lib &amp; DEL $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib &amp; COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture)*.lib" $(ProjectDir)..\CdePkg\$(Configuration)\</Command>
       <Message>COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib</Message>
     </PostBuildEvent>
     <PreBuildEvent>
@@ -1603,7 +1603,7 @@
       <Message>Performing Custom Build Step before!</Message>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>tools\PostBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformShortName) $(IntDir) $(SolutionDir)lib\toroC$(PlatformArchitecture).lib &amp; DEL $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib &amp; COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib</Command>
+      <Command>tools\PostBuildEvent.bat $(SolutionDir) $(ProjectDir) $(Configuration) $(PlatformArchitecture) $(IntDir) $(SolutionDir)lib\toroC$(PlatformArchitecture).lib &amp; DEL $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib &amp; COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib</Command>
       <Message>COPY /y "$(SolutionDir)lib\toroC$(PlatformArchitecture).lib" $(ProjectDir)..\CdePkg\$(Configuration)\toroC$(PlatformArchitecture).lib</Message>
     </PostBuildEvent>
     <PreBuildEvent>

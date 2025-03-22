@@ -37,9 +37,11 @@ Parameters
 Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/wctob?view=msvc-160#return-value
 **/
-int wctob(wchar_t wc)
+static int wctobCDEABI(wchar_t wc)
 {
     char c;
 
     return 1 == wctomb(&c, wc) ? 0xFF & c : -1;
 }
+
+MKCDEABI(wctob);
