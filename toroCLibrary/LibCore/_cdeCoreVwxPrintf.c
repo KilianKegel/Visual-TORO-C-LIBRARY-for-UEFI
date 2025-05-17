@@ -1090,7 +1090,7 @@ _cdeCoreVwxPrintf(
         }
         case PROCESS_STATUS: {      // %r
             /*EFI_STATUS*/size_t   Status;//kgtest check size!!! = 0x5555aaaa5a96;
-            char* pszErr = (int8_t*)&rgbBuffer[0];
+            char* pszErr = &rgbBuffer[0];
             Status = va_arg(ap,/*EFI_STATUS*/size_t);
             _cdeCoreSprintf(pCdeAppIf, pszErr, "%qX", Status);
 

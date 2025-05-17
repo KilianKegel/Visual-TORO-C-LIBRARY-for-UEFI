@@ -8,6 +8,11 @@
 ```
 
 ## Revision history
+
+### 20250517, v0.9.1 Build 269
+* fix minor build error that appears with **Visual Studio 2022 v17.14**
+* W/A for **cdeWelcomePei** sample driver when started with **gEfiPeiMemoryDiscoveredPpiGuid** depex hangs on some systems
+ 
 ### 20250322, v0.9.1 Build 267
 * introduce **toro C Library** for the **Microsoft VS2022 LLVM tool chain** for **Windows NT** and **UEFI Shell** targets<br>
     - toroc64LLVMUefiShell.lib
