@@ -47,7 +47,7 @@ HEAPDESC* _osifUefiPeiMemAlloc(IN CDE_APP_IF* pCdeAppIf, IN size_t Pages) {
     EFI_STATUS Status;
 
     Status = (*pCdeAppIf->DriverParm.PeimParm.PeiServices)->AllocatePages(
-        pCdeAppIf->DriverParm.PeimParm.PeiServices,
+        (const EFI_PEI_SERVICES**)pCdeAppIf->DriverParm.PeimParm.PeiServices,
         EfiLoaderData,
         Pages,
         &Memory);

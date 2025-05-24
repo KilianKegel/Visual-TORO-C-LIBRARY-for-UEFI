@@ -157,11 +157,6 @@ extern char __cdeGetCurrentPrivilegeLevel(void);
 extern EFI_GUID _gCdeDxeProtocolGuid;
 extern EFI_GUID _gCdeEfiShellProtocolGuid;
 
-extern void _disable(void);
-extern void _enable(void);
-
-#pragma intrinsic (_disable, _enable)
-
 extern __declspec(dllimport) void* malloc(size_t size);
 extern __declspec(dllimport) void free(void* ptr);
 extern __declspec(dllimport) void* memset(void* s, int c, size_t n);
@@ -187,7 +182,7 @@ EFI_SYSTEM_TABLE*       _cdegST;
 EFI_BOOT_SERVICES*      _cdegBS;
 EFI_RUNTIME_SERVICES*   _cdegRT;
 char* gszCdeDriverName;
-static CDESYSTEMVOLUMES gCdeSystemVolumes = { (UINTN) -1};
+static CDESYSTEMVOLUMES gCdeSystemVolumes = { .nVolumeCount = (UINTN) -1};
 static CDEFILE _iob[CDE_FILEV_MAX];                                  /* Microsoft definition. It must be buildable within the DDK*/
 static EFI_GUID _gEfiStatusCodeRuntimeProtocolGuid = { 0xD2B2B828, 0x0826, 0x48A7, { 0xB3, 0xDF, 0x98, 0x3C, 0x00, 0x60, 0x24, 0xF0 } };
 //
@@ -253,7 +248,7 @@ static CDE_SERVICES gCdeServicesShell = {/*CDE_PROTOCOL*/
     .HeapStart = {(void*)-1,ENDOFMEM,1,NULL,NULL,0,0,(void*)-1},
     .TSClocksAtCdeTrace = 0,
     .TimeAtSystemStart = 0,
-    .ReportStatusCode = 0,
+    .ReportStatusCode = { 0 },
     .pvEfiShellProtocol = 0,
     .pCdeSystemVolumes = &gCdeSystemVolumes,
     ////    FNDECL_MAINSTART(*pmainstart);          // the fjMainDxeEntryPoint/fjMainSmmEntryPoint loader     /* kg0705F0*/
@@ -394,8 +389,9 @@ _MainEntryPointShell(
         /*fCountIsParm;         */ 0 ,\
         /*fAjustDifference      */ 0 ,\
         /*fWide                 */ 0 ,\
+        /*fUEFIFormat           */ 0 
     };
-    size_t eflags = __readeflags();
+    size_t eflags = __cdeGetEFLAGS();
     CDE_APP_IF* pCdeAppIf = &CdeAppIfShell;
 
     CDEPOSTCODE(IS64BITCODE, 0xC0);
@@ -460,7 +456,7 @@ _MainEntryPointShell(
                 }
             }
 
-            Status = SystemTable->BootServices->HandleProtocol(ImageHandle, &EfiLoadedImageProtocolGuid, &pLoadedImageProtocol);
+            Status = SystemTable->BootServices->HandleProtocol(ImageHandle, &EfiLoadedImageProtocolGuid, (void**)&pLoadedImageProtocol);
 
             if (1/* setup file i/o, stdin, stout, stderr*/) {
                 UINT64 Position;
@@ -472,7 +468,7 @@ _MainEntryPointShell(
 
                 memset(&_iob[0], 0, sizeof(_iob));                          // clear entire structure
 
-                Status = SystemTable->BootServices->HandleProtocol(ImageHandle, &EfiShellParametersProtocolGuid, &pEfiShellParametersProtocol);
+                Status = SystemTable->BootServices->HandleProtocol(ImageHandle, &EfiShellParametersProtocolGuid, (void**)&pEfiShellParametersProtocol);
 
                 CDE_STDIN->pRootProtocol = pEfiShellParametersProtocol->StdIn;
 
@@ -626,7 +622,7 @@ _MainEntryPointShell(
             CDEPOSTCODE(IS64BITCODE, 0xC8);
 
             if (0 == __cdeGetCurrentPrivilegeLevel())        // running in RING0
-                _enable();
+                __CDEINTERRUPT_ENABLE;
 
             if (2 == argc && 0 == strcmp(argvex[1 + 2], "--TOROCVER"))
             {
@@ -638,7 +634,7 @@ _MainEntryPointShell(
 
             if (0 == __cdeGetCurrentPrivilegeLevel())        // running in RING0
                 if (0 == (0x200 & eflags))          // restore IF interrupt flag
-                    _disable();
+                    __CDEINTERRUPT_DISABLE;
 
             CDEPOSTCODE(IS64BITCODE, 0xC9);
 

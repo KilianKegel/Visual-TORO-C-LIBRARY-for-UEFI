@@ -85,7 +85,7 @@ extern __declspec(dllimport) size_t wcslen(const wchar_t* pszBuffer);
 #define MAX_FILE_NAME_LEN 522 // (20 * (6+5+2))+1) unicode characters from EFI FAT spec (doubled for bytes)
 #define FIND_XXXXX_FILE_BUFFER_SIZE (SIZE_OF_EFI_FILE_INFO + MAX_FILE_NAME_LEN)
 
-extern const short* _CdeGetCurDir(IN CDE_APP_IF *pCdeAppIf, IN const short* FileSystemMapping);
+extern const short* _CdeGetCurDir(IN CDE_APP_IF *pCdeAppIf, IN const wchar_t* FileSystemMapping);
 
 static CDEFILEINFO* __cdeReadDirectory(IN char* strFileName, OUT int* pcntDirEntries);
 

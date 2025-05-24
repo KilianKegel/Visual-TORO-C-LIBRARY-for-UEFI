@@ -707,6 +707,20 @@
     <ClCompile Include="Library\math_h\sqrtCDEABI.c" />
     <ClCompile Include="Library\math_h\tanCDEABI.c" />
     <ClCompile Include="Library\math_h\tanhCDEABI.c" />
+    <ClCompile Include="LibAssist\_cdeOUTByte.c" />
+    <ClCompile Include="LibAssist\_cdeOUTDWord.c" />
+    <ClCompile Include="LibAssist\_cdeOUTWord.c" />
+    <ClCompile Include="LibAssist\_cdeINDWord.c" />
+    <ClCompile Include="LibAssist\_cdeINWord.c" />
+    <ClCompile Include="LibAssist\_cdeINByte.c" />
+    <ClCompile Include="Intrinsics\_intel_fast_memset.c" />
+    <ClCompile Include="Intrinsics\_intel_fast_memcpy.c" />
+    <ClCompile Include="LibAssist\__outbyte.c" />
+    <ClCompile Include="LibAssist\__outword.c" />
+    <ClCompile Include="LibAssist\__outdword.c" />
+    <ClCompile Include="LibAssist\__inbyte.c" />
+    <ClCompile Include="LibAssist\__indword.c" />
+    <ClCompile Include="LibAssist\__inword.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\CdeServices.h" />
@@ -727,8 +741,8 @@
     <MASM Include="Intrinsics\__chkstk64.asm" />
     <MASM Include="Intrinsics\__chkstkWin32.asm" />
     <MASM Include="Intrinsics\__chkstkWin64.asm" />
-    <MASM Include="LibAssist\_CdeGetCurrentPrivilegeLevel32.asm" />
-    <MASM Include="LibAssist\CdeGetCurrentPrivilegeLevel64.asm" />
+    <MASM Include="LibAssist\__cdeGetCurrentPrivilegeLevel32.asm" />
+    <MASM Include="LibAssist\__cdeGetCurrentPrivilegeLevel64.asm" />
     <MASM Include="Library\setjmp_h\longjmp32CDEINTRINABI.asm" />
     <MASM Include="Library\setjmp_h\longjmp64CDEINTRINABI.asm" />
     <MASM Include="Library\setjmp_h\setjmp32CDEINTRINABI.asm" />
@@ -759,6 +773,8 @@
     <MASM Include="Library\math_h\__cde80387FPREM64.asm" />
     <MASM Include="Library\math_h\__cde80387FSCALE32.asm" />
     <MASM Include="Library\math_h\__cde80387FSCALE64.asm" />
+    <MASM Include="LibAssist\__cdeGetEFLAGS32.asm" />
+    <MASM Include="LibAssist\__cdeGetEFLAGS64.asm" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />

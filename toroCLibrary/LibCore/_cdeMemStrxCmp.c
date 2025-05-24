@@ -26,7 +26,7 @@ extern short ydes(unsigned char fDes, signed i, short v);
 signed _cdeMemStrxCmp(IN ROMPARM_MEMSTRXCMP* pFixParm, IN const char* pszDest, IN const char* pszSource, IN size_t count) {
     unsigned char fDes = 2 == (pFixParm->fForceToDataSeg & 2);
     register signed n = 0;
-    wchar_t c1, c2;
+    wchar_t c1, c2, c1bORVal, c2bORVal;
     size_t  wCnt = (size_t)-1;
     unsigned char bORVal = ((!pFixParm->fCaseSensitive) << 5);  //ORVal is ORed to
                                                         //to ASCII A..Z, a..z
@@ -48,8 +48,12 @@ signed _cdeMemStrxCmp(IN ROMPARM_MEMSTRXCMP* pFixParm, IN const char* pszDest, I
         c1 = pFixParm->fWide ? *((wchar_t*)pszDest) : *pszDest;
         c2 = pFixParm->fWide ? *((wchar_t*)pszSource) : *pszSource;
         c2 = ydes(fDes, (signed)wCnt, c2);
-        c1 = ((c1 <= 'Z') && (c1 >= 'A')) ? c1 |= bORVal : c1;
-        c2 = ((c2 <= 'Z') && (c2 >= 'A')) ? c2 |= bORVal : c2;
+
+        c1bORVal = c1 + bORVal;
+        c2bORVal = c2 + bORVal;
+
+        c1 = ((c1 <= 'Z') && (c1 >= 'A')) ? c1bORVal : c1;
+        c2 = ((c2 <= 'Z') && (c2 >= 'A')) ? c2bORVal : c2;
 
         n = c1 - c2;
 

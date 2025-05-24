@@ -9,7 +9,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #ifndef _APPLICATION_ENTRY_POINT_C_H_
 #define _APPLICATION_ENTRY_POINT_C_H_
 
-#include <Uefi.h>
+#include <uefi.h>
 #include <Library/UefiApplicationEntryPoint.h>
 #include <Library/BaseLib.h>
 #include <Library/DebugLib.h>

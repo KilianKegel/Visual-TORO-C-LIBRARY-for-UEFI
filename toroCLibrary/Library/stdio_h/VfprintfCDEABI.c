@@ -122,7 +122,7 @@ static int vfprintfCDEABI(FILE* stream, const char* pszFormat, va_list ap) {
 // 
 //MKCDEABI(vfprintf);
 #if   defined(_M_AMD64)
-    int (*__imp_vfprintf)(void* stream, const char* pszFormat, char* ap) = vfprintfCDEABI;
+    int (*__imp_vfprintf)(void* stream, const char* pszFormat, char* ap) = (int (*)(void*, const char*, char*))vfprintfCDEABI;
 #else//   defined(_M_AMD64)
-    int (*_imp__vfprintf)(void* stream, const char* pszFormat, char* ap) = vfprintfCDEABI;
+    int (*_imp__vfprintf)(void* stream, const char* pszFormat, char* ap) = (int (*)(void*, const char*, char*))vfprintfCDEABI;
 #endif//  defined(_M_AMD64)

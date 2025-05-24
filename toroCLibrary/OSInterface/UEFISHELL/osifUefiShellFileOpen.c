@@ -22,6 +22,7 @@ Author:
 //#undef NCDETRACE
 #define OS_EFI
 #include <stddef.h>
+#include <limits.h>
 //
 // string.h
 //
@@ -49,8 +50,8 @@ extern void* _CdeLocateProtocol(IN EFI_GUID* Protocol, IN void* Registration OPT
 
 extern EFI_STATUS _CdeLocateHandleBuffer(IN EFI_LOCATE_SEARCH_TYPE SearchType, IN EFI_GUID* Protocol OPTIONAL, IN void* SearchKey OPTIONAL, IN OUT UINTN* NoHandles, OUT EFI_HANDLE** Buffer CDE_OPTIONAL);
 extern CHAR16* _cdeConvertDevicePathToText(IN const EFI_DEVICE_PATH_PROTOCOL* DevicePath, IN unsigned char DisplayOnly, IN unsigned char AllowShortcuts);
-extern short* _CdeGetMapFromDevicePath(IN CDE_APP_IF* pCdeAppIf, IN OUT EFI_DEVICE_PATH_PROTOCOL** DevicePath);
-extern const short* _CdeGetCurDir(IN CDE_APP_IF* pCdeAppIf, IN const short* FileSystemMapping);
+extern wchar_t* _CdeGetMapFromDevicePath(IN CDE_APP_IF* pCdeAppIf, IN OUT EFI_DEVICE_PATH_PROTOCOL** DevicePath);
+extern const short* _CdeGetCurDir(IN CDE_APP_IF* pCdeAppIf, IN const wchar_t* FileSystemMapping);
 extern  EFI_GUID _gEfiSimpleFileSystemProtocolGuid, _gEfiDevicePathToTextProtocolGuid, _gEfiDevicePathProtocolGuid;
 extern  EFI_BOOT_SERVICES* _cdegBS;                              // Pointer to boot services
 
@@ -96,7 +97,7 @@ static struct _tblMode {
 
 static EFI_STATUS efifopen(const char* szModeNoSpace, int fFileExists/* 0 no, 1 yes, -1 unk */, CDEFILE* pCdeFile)
 {
-    int i;
+    unsigned i;
     EFI_STATUS Status = (EFI_STATUS)-1;
     int OpenMode = 0, * pOpenMode = &OpenMode;
     uint64_t UefiAttribFlags = EFI_FILE_ARCHIVE, * pUefiAttribFlags = &UefiAttribFlags;
@@ -208,7 +209,7 @@ static EFI_STATUS efifopen(const char* szModeNoSpace, int fFileExists/* 0 no, 1 
 }
 
 static unsigned char __CdeIsFsEnum(CDE_APP_IF *pCdeAppIf) {
-    return pCdeAppIf->pCdeServices->pCdeSystemVolumes->nVolumeCount != -1 ? TRUE : FALSE;
+    return pCdeAppIf->pCdeServices->pCdeSystemVolumes->nVolumeCount != SIZE_MAX ? TRUE : FALSE;
 }
 
 static EFI_STATUS __CdeFsEnum(CDE_APP_IF *pCdeAppIf) {
@@ -259,7 +260,7 @@ static EFI_STATUS __CdeFsEnum(CDE_APP_IF *pCdeAppIf) {
 
             // ----- 2. get the EFI_SIMPLE_FILE_SYSTEM_PROTOCOL
 
-            Status = _cdegBS->HandleProtocol(pFsVolume[i].hSimpleFileSystem, &_gEfiSimpleFileSystemProtocolGuid, &pFsVolume[i].pSimpleFileSystemProtocol);//CDEFAULT((CDEFINE_ERRORSTATUS "%s\n",strefierror(Status)));
+            Status = _cdegBS->HandleProtocol(pFsVolume[i].hSimpleFileSystem, &_gEfiSimpleFileSystemProtocolGuid, (void**)&pFsVolume[i].pSimpleFileSystemProtocol);//CDEFAULT((CDEFINE_ERRORSTATUS "%s\n",strefierror(Status)));
             CDETRACE((CDEINF(1)"--> %02d: Status \"%s\"\n", i, _strefierror(Status)));
 
 // ----- 3. open the volume / get the EFI_FILE_PROTOCOL
@@ -273,7 +274,7 @@ static EFI_STATUS __CdeFsEnum(CDE_APP_IF *pCdeAppIf) {
 
             // ----- 4. get the EFI_DEVICE_PATH_PROTOCOL --> THAT IS THE DEVICE PATH itself
 
-            Status = _cdegBS->HandleProtocol(pFsVolume[i].hSimpleFileSystem, &_gEfiDevicePathProtocolGuid, &pFsVolume[i].pDevicePathProtocol);
+            Status = _cdegBS->HandleProtocol(pFsVolume[i].hSimpleFileSystem, &_gEfiDevicePathProtocolGuid, (void**)&pFsVolume[i].pDevicePathProtocol);
             CDETRACE((CDEINF(1)"--> %02d: Status \"%s\"\n", i, _strefierror(Status)));
             //CDEFAULT((CDEFINE_ERRORSTATUS "%s\n",strefierror(Status)));
 

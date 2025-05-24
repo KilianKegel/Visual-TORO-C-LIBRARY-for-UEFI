@@ -76,7 +76,8 @@ int vfprintf(FILE* stream, const char* pszFormat, va_list ap) {
                 if (    (FILE*)CDE_STDOUT == stream 
                     ||  (FILE*)CDE_STDERR == stream)
                     pfnOutput = pCdeAppIf->pCdeServices->pPutConOut;
-                    stream = (void*)pCdeAppIf;
+                    
+                stream = (void*)pCdeAppIf;
 
                 break;
             default:

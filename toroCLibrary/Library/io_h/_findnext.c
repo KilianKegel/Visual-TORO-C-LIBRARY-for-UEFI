@@ -31,9 +31,9 @@ Author:
 #include <stdbool.h>
 #include <stdlib.h>
 #include <io.h>
+#include <CdeServices.h>
 #include <cde.h>
 //
-#include <CdeServices.h>
 
 #include "__cdeFindFirst.h"
 

@@ -72,7 +72,7 @@ FILE* _fdopen(int fd, const char* mode)
 {
     CDEFILE* pCdeFile = __cdeGetIOBuffer(fd);
     char szModeNoSpace[16];
-    int i;
+    unsigned i;
 
     do {
         //

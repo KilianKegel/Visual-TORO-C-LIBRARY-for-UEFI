@@ -20,11 +20,9 @@ Author:
 
 --*/
 #include <CdeServices.h>
+#include <intrin.h>
 
-extern void _disable(void);
-extern void _enable(void);
-
-#pragma intrinsic (_disable, _enable)
+extern size_t __cdeGetEFLAGS(void);
 
 #define TIMER 2
 
@@ -52,19 +50,19 @@ extern void _enable(void);
 unsigned long long _osifIbmAtGetTscPerSec(IN CDE_APP_IF* pCdeAppIf) {
 
 #define CLKWAIT (59659)
-    size_t eflags = __readeflags();         // save flaags
+    size_t eflags = __cdeGetEFLAGS();            // save flaags
     unsigned long long qwTSCEnd, qwTSCStart, qwTSCdiff, qwTSCPerIntervall;
     unsigned char bCountLo, bCountHi;
     unsigned short wCount;
     unsigned short wTicksGoneThrough;
 
-    _disable();
+    __CDEINTERRUPT_DISABLE;
 
-    outp(0x61, 0);                          // stop counter
-    outp(0x43, (TIMER << 6) + 0x34);        // program timer 2 for MODE 2
-    outp(0x42, 0xFF);                       // write counter value low 65535
-    outp(0x42, 0xFF);                       // write counter value high 65535
-    outp(0x61, 1);                          // start counter
+    _cdeOUTByte(0x61, 0);                          // stop counter
+    _cdeOUTByte(0x43, (TIMER << 6) + 0x34);        // program timer 2 for MODE 2
+    _cdeOUTByte(0x42, 0xFF);                       // write counter value low 65535
+    _cdeOUTByte(0x42, 0xFF);                       // write counter value high 65535
+    _cdeOUTByte(0x61, 1);                          // start counter
 
     qwTSCStart = __rdtsc();                 // get TSC start
 
@@ -73,10 +71,10 @@ unsigned long long _osifIbmAtGetTscPerSec(IN CDE_APP_IF* pCdeAppIf) {
     //
     do                                                              //
     {                                                               //
-        outp(0x43, (TIMER << 6) + 0x0);                             // counter latch timer 2
+        _cdeOUTByte(0x43, (TIMER << 6) + 0x0);                      // counter latch timer 2
                                                                     //
-        bCountLo = (unsigned char)inp(0x40 + TIMER);                // get low byte
-        bCountHi = (unsigned char)inp(0x40 + TIMER);                // get high byte
+        bCountLo = (unsigned char)_cdeINByte(0x40 + TIMER);           // get low v
+        bCountHi = (unsigned char)_cdeINByte(0x40 + TIMER);           // get high v
                                                                     //
         wCount = (bCountHi << 8) | bCountLo;                        //
                                                                     //
@@ -109,7 +107,7 @@ unsigned long long _osifIbmAtGetTscPerSec(IN CDE_APP_IF* pCdeAppIf) {
     qwTSCPerIntervall = (qwTSCdiff * CLKWAIT) / (CLKWAIT + (unsigned long long)wTicksGoneThrough);
 
     if (0x200 & eflags)                                 // restore IF interrupt flag
-        _enable();
+        __CDEINTERRUPT_ENABLE;
 
     return 20 * qwTSCPerIntervall;                      // subtract the drift from TSC difference, scale to 1 second
 }

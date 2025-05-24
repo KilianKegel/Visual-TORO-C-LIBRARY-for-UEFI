@@ -9,6 +9,9 @@
 
 ## Revision history
 
+### 20250524, v0.9.1 Build 530
+* CLANG devel
+    * ANSI C apps no printf() output with **clang-cl** tool chain
 ### 20250517, v0.9.1 Build 269
 * fix minor build error that appears with **Visual Studio 2022 v17.14**
 * W/A for **cdeWelcomePei** sample driver when started with **gEfiPeiMemoryDiscoveredPpiGuid** depex hangs on some systems
@@ -38,13 +41,13 @@ it can be used here.<br><br>
 The 80387 processor has various improvements over its 8087 predecessor, such as<br>
   * range extension for transcendental function:
 
-    | Instruction  | function           |
-    |--------------|--------------------|
-    |FPTAN         | Partial tangent    |
-    |FPATAN        | Partial arctangent |
-    |F2XM1         | 2<sup>x</sup> - 1  |
+    | Instruction  | function                      |
+    |--------------|-------------------------------|
+    |FPTAN         | Partial tangent               |
+    |FPATAN        | Partial arctangent            |
+    |F2XM1         | 2<sup>x</sup> - 1             |
     |FYL2X         | Y * log<sub>2</sub>X          |
-    |FYL2XP        |Y * log<sub>2</sub>(X + 1)       |
+    |FYL2XP        |Y * log<sub>2</sub>(X + 1)     |
     
 * new instructions, e.g.
 

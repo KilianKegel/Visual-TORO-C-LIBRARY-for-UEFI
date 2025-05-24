@@ -66,9 +66,9 @@ fpos_t __cdeOffsetCdeFposType(fpos_t fpos)
 
     if (__cdeIsCdeFposType(fpos))                       // if CdeFpos_Type:
         if (1 == CdeFPos.CdeFposBias.Sign)              // if negative number == sign bit set...
-            CdeFPos.CdeFposBias.Bias = (uint64_t)-1;    // ...copy the sign == 1 from bit 60 to bits 61..63
+            CdeFPos.CdeFposBias.Bias = 7;               // ...copy the sign == 1 from bit 60 to bits 61..63
         else
-            CdeFPos.CdeFposBias.Bias = (uint64_t)0;     // ...copy the sign == 0 from bit 60 to bits 61..63
+            CdeFPos.CdeFposBias.Bias = 0;               // ...copy the sign == 0 from bit 60 to bits 61..63
 
     return CdeFPos.fpos64;
 }

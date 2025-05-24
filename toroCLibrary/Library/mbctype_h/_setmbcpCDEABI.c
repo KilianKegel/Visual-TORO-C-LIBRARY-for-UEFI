@@ -38,7 +38,7 @@ extern __declspec(dllimport) int* _errno(void);
 //
 // single byte codepages known to Microsoft C VS2022
 //
-extern short _cdeMsftSingleByteCodePageNumber[];
+extern unsigned short _cdeMsftSingleByteCodePageNumber[];
 
 /**
 
@@ -65,11 +65,11 @@ static int _setmbcpCDEABI(int codepage) {
 
     do {
 
-        for (i = 0; -1 != _cdeMsftSingleByteCodePageNumber[i]; i++)
-            if ((short)codepage == _cdeMsftSingleByteCodePageNumber[i])
+        for (i = 0; (unsigned short) -1 != _cdeMsftSingleByteCodePageNumber[i]; i++)
+            if ((unsigned short)codepage == _cdeMsftSingleByteCodePageNumber[i])
                 break;//for
 
-        if (-1 != _cdeMsftSingleByteCodePageNumber[i])
+        if ((unsigned short)-1 != _cdeMsftSingleByteCodePageNumber[i])
             break;
 
         //

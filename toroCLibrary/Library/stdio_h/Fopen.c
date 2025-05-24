@@ -70,7 +70,8 @@ FILE* fopen(const char* filename, const char* mode) {
         // expand filename to wide character
         //
         i = 0;
-        while ('\0' != (pwcsFileName[i] = filename[i++]));
+        while ('\0' != (pwcsFileName[i] = filename[i]))
+            i++;
 
         //
         // ----- remove spaces from mode string, remove t (text), that is not Standard C

@@ -48,7 +48,7 @@ Returns
 
 **/
 int fputc(int b, FILE* stream) {
-    unsigned int nRet = (size_t)EOF;
+    unsigned nRet = (unsigned)EOF;
     unsigned char c = (unsigned char)b;
 
     do {

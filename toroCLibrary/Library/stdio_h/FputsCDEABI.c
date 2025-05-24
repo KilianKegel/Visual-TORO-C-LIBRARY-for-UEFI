@@ -58,7 +58,7 @@ NOTE:   Seems, that Microsoft has not implemented any errorreporting.
 **/
 static int fputsCDEABI(const char* s, FILE* stream) {
 
-    return EOF != fwrite(s, 1, strlen(s), stream) ? 0 : EOF;
+    return (size_t)EOF != fwrite(s, 1, strlen(s), stream) ? 0 : EOF;
 }
 
 MKCDEABI(fputs);

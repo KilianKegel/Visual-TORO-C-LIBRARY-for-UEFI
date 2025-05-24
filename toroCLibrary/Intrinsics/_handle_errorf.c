@@ -21,9 +21,9 @@ Author:
 
 --*/
 
-void _handle_errorf(void){
-	volatile int x = 0xDEADBEEF;
+void _handle_errorf(void) {
+    volatile unsigned x = 0xDEADBEEF;
 
-		while(0xDEADBEEF == x)
-			;
+    while (0xDEADBEEF == x)
+        ;
 }

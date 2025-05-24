@@ -33,8 +33,8 @@ Author:
 #define stderr (__acrt_iob_func(2))
 extern FILE* __acrt_iob_func(unsigned i);
 
-extern __declspec(dllimport) size_t fwrite(const void* ptr, size_t size, size_t nelem, FILE* stream);
 #include <CdeServices.h>
+extern __declspec(dllimport) size_t fwrite(const void* ptr, size_t size, size_t nelem, FILE* stream);
 
 extern int __cdeIsFilePointerCORE(CDE_APP_IF* pCdeAppIf, void* stream);
 extern void* __cdereallocCORE(CDE_APP_IF* pCdeAppIf, void* ptr, size_t size);

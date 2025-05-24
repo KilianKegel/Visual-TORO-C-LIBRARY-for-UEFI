@@ -52,7 +52,7 @@ Returns
 **/
 int fgetc(FILE* stream) {
 
-    unsigned int nRet = (size_t)EOF;
+    unsigned nRet = (unsigned)EOF;
     char c = 0;
 
     if (NULL == stream) {

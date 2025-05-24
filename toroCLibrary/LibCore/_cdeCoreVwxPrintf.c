@@ -19,7 +19,7 @@ Author:
     Kilian Kegel
 
 --*/
-#include <Cde.h>
+#include <cde.h>
 #include <CdeServices.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -471,7 +471,7 @@ static char* num2str(NUMDESC* pParms, unsigned char fWide) {
     short nZeroExtendedLen = pParms->nZeroExtendedLen;
     char c;
 
-    fWide = 0;  // number strings are ASCII from now on
+    //fWide = 0;  // number strings are ASCII from now on
 
     pParms->pszNumber[i--] = '\0';
 
@@ -1090,7 +1090,7 @@ _cdeCoreVwxPrintf(
         }
         case PROCESS_STATUS: {      // %r
             /*EFI_STATUS*/size_t   Status;//kgtest check size!!! = 0x5555aaaa5a96;
-            char* pszErr = &rgbBuffer[0];
+            char* pszErr = (char*)&rgbBuffer[0];
             Status = va_arg(ap,/*EFI_STATUS*/size_t);
             _cdeCoreSprintf(pCdeAppIf, pszErr, "%qX", Status);
 

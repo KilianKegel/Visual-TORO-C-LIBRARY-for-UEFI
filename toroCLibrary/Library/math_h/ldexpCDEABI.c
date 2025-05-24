@@ -23,7 +23,7 @@ Author:
 
 --*/
 #undef NCDETRACE
-#include <CDE.h>
+#include <cde.h>
 #include <CdeServices.h>
 
 extern double __cde80387FSCALE(double x, double y);

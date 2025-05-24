@@ -22,6 +22,7 @@ Author:
     Kilian Kegel
 
 --*/
+#include <CdeServices.h>
 int _set_printf_count_output(  int enable  )
 {
     return 0;

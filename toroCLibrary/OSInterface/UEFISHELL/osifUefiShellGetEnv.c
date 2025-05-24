@@ -51,7 +51,7 @@ char* _osifUefiShellGetEnv(IN CDE_APP_IF* pCdeAppIf, const char* pszEnvar/*envir
     static char buffer[512];
     wchar_t wbuffer[64];
     wchar_t* pwcsEnvar;
-    int i;
+    unsigned i;
     EFI_SHELL_PROTOCOL* pEfiShellProtocol = pCdeAppIf->pCdeServices->pvEfiShellProtocol;
 
     for (i = 0; i < sizeof(buffer); i++)

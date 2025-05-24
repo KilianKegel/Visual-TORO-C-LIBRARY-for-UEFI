@@ -23,7 +23,7 @@ Author:
 #include <Protocol\Shell.h>
 #include <CdeServices.h>
 
-extern void* _cdePoolWcs2AppWcs(short* pwcs, unsigned char freePool);
+extern void* _cdePoolWcs2AppWcs(unsigned short* pwcs, unsigned char freePool);
 
 /** _CdeSetCurDir()
 
@@ -42,7 +42,7 @@ Returns
     @retval void *
 
 **/
-EFI_STATUS _CdeSetCurDir(IN CDE_APP_IF *pCdeAppIf, IN const short* FileSystem, IN const short* Dir) 
+EFI_STATUS _CdeSetCurDir(IN CDE_APP_IF *pCdeAppIf, IN const unsigned short* FileSystem, IN const unsigned short* Dir) 
 {
     EFI_SHELL_PROTOCOL* pEfiShellProtocol = pCdeAppIf->pCdeServices->pvEfiShellProtocol;
 

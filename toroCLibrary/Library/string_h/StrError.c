@@ -22,6 +22,8 @@ Author:
     Kilian Kegel
 
 --*/
+#include <assert.h>
+#undef NULL
 #include <Uefi\UefiBaseType.h>
 static char* rgszSysErrors[] = {
     /*0:*/"No error",

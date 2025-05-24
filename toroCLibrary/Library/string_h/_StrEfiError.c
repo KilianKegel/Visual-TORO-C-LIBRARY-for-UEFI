@@ -20,6 +20,8 @@ Author:
     Kilian Kegel
 
 --*/
+#include <assert.h>
+#undef NULL
 #include <Uefi\UefiBaseType.h>
 static char* rgszEfiErrors[] = {/*EdkCompatibilityPkg\Foundation\Efi\Include\EfiError.h*/
     "Success",               /* 0           */

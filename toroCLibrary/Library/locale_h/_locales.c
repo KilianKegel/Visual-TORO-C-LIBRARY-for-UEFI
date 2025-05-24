@@ -29,7 +29,7 @@ static struct _CDE_LCONV_LANGUAGE EndOfTable;/* = { NULL,NULL };*/
 
 struct _CDE_LCONV_LANGUAGE* _locales[] = {
 
-    { &_cdeCLocale },
-    {&EndOfTable }
+    &_cdeCLocale ,
+    &EndOfTable
 
 };

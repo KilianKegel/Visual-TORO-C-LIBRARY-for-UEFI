@@ -22,24 +22,24 @@ Author:
 int _CdeDbgCOMInit(void) {
 
     int nRet = 0;
-#define IODELAY outp(0xED, 0x1),outp(0xED, 0x2),outp(0xED, 0x3),outp(0xED, 0x4),outp(0xED, 0x5),outp(0xED, 0x6),outp(0xED, 0x7),outp(0xED, 0x8)
+#define IODELAY _cdeOUTByte(0xED, 0x1),_cdeOUTByte(0xED, 0x2),_cdeOUTByte(0xED, 0x3),_cdeOUTByte(0xED, 0x4),_cdeOUTByte(0xED, 0x5),_cdeOUTByte(0xED, 0x6),_cdeOUTByte(0xED, 0x7),_cdeOUTByte(0xED, 0x8)
 
     do {
         IODELAY;
-        if (0xFF == inp(0x3FD)) //check LSR / line status register
+        if (0xFF == _cdeINByte(0x3FD)) //check LSR / line status register
             break;
 
         IODELAY;
-        if (0x55 != inp(0x3FF)) {
+        if (0x55 != _cdeINByte(0x3FF)) {
 
             IODELAY;
 
-            outp(0x3FB, 0x80); IODELAY;
-            outp(0x3F8, 0x01); IODELAY;
-            outp(0x3F9, 0x00); IODELAY;
-            outp(0x3FB, 0x03); IODELAY;
+            _cdeOUTByte(0x3FB, 0x80); IODELAY;
+            _cdeOUTByte(0x3F8, 0x01); IODELAY;
+            _cdeOUTByte(0x3F9, 0x00); IODELAY;
+            _cdeOUTByte(0x3FB, 0x03); IODELAY;
 
-            outp(0x3FF, 0x55); IODELAY;
+            _cdeOUTByte(0x3FF, 0x55); IODELAY;
         }
 
         nRet = 1;

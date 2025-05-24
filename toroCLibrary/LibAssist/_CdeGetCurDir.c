@@ -43,7 +43,7 @@ Returns
     @retval short * pwcsDirectoryName
 
 **/
-const short * _CdeGetCurDir(IN CDE_APP_IF *pCdeAppIf, IN const short* FileSystemMapping) 
+const short * _CdeGetCurDir(IN CDE_APP_IF *pCdeAppIf, IN const unsigned short* FileSystemMapping) 
 {
     EFI_SHELL_PROTOCOL* pEfiShellProtocol = pCdeAppIf->pCdeServices->pvEfiShellProtocol;
 

@@ -49,11 +49,11 @@ static int bcd2int(int bcd) {
 
 }
 
-static int rtcrd8(int idx) {
+static int rtcrd8(unsigned char idx) {
     int nRet = 1;
 
-        outp(0x70, idx);
-        nRet = 0xFF & inp(0x71);
+        _cdeOUTByte(0x70, idx);
+        nRet = 0xFF & _cdeINByte(0x71);
 
     return nRet;
 }
@@ -100,7 +100,7 @@ long long _osifIbmAtGetTime(IN CDE_APP_IF* pCdeAppIf) {
         inside(tm.tm_mday, 1, 31) &&
         inside(tm.tm_mon, 0, 11) &&
         inside(tm.tm_year, 70, 270))) {
-        int i;
+        unsigned i;
         char *pc = (char*)&tm;
 
         for (i = 0; i < sizeof(tm); i++)

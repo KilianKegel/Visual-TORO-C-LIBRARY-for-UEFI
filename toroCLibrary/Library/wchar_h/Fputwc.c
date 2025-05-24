@@ -20,6 +20,8 @@ Author:
     Kilian Kegel
 
 --*/
+#include <assert.h>
+#undef NULL
 #include <uefi.h>
 #include <stdio.h>
 #include <CdeServices.h>

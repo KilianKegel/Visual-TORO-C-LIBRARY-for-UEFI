@@ -50,7 +50,7 @@ void* _cdeCoreWcsStrTok(CDE_APP_IF* pCdeAppIf, IN void* pvoidStr, IN const void*
             p = pCdeAppIf->pCdeServices->pWcsStrPbrkSpn(pParm->fWide ? WID + INV : INV, (void*)pszStr, (void*)pszSet); // strspn() / wcsspn()
 
             if (NULL != p) {
-                (char*)pszStr += p - pszStr;
+                pszStr += p - pszStr;
             }
         }
 

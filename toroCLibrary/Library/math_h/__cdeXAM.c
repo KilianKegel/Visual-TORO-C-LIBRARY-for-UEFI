@@ -20,6 +20,7 @@ Author:
     Kilian Kegel
 
 --*/            
+#include <CdeServices.h>
 extern unsigned short __cde80387FXAM(double x);
 //
 //  C3 C2 C0 C1 Meaning
