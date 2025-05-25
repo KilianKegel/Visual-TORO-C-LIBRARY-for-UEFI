@@ -19,6 +19,7 @@ Author:
     Kilian Kegel
 
 --*/
+#include <intrin.h>
 unsigned long _cdeINDWord(unsigned short p)
 {
     return __indword(p);

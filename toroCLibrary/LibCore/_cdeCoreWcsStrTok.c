@@ -35,7 +35,7 @@ void* _cdeCoreWcsStrTok(CDE_APP_IF* pCdeAppIf, IN void* pvoidStr, IN const void*
 {
     void* pNew;
     char* pszStr = pvoidStr, * p;
-    unsigned int (*pwcsstrlen)(const void* pszBuffer) = pParm->fWide ? (unsigned int (*)(const void*)) & wcslen : (unsigned int (*)(const void*)) & strlen;
+    size_t (*pwcsstrlen)(const void* pszBuffer) = pParm->fWide ? (size_t(*)(const void*)) (&wcslen) : (size_t(*)(const void*)) (&strlen);
 
     do {
 

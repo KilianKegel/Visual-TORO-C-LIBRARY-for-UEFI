@@ -19,6 +19,7 @@ Author:
     Kilian Kegel
 
 --*/
+#include <intrin.h>
 unsigned short _cdeINWord(unsigned short p)
 {
     return __inword(p);

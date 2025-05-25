@@ -38,6 +38,7 @@ Description
 
 
 **/
+#include <stdio.h>
 int mbsinit(const mbstate_t* ps)
 {
     return ps == NULL || ps->_Wchar == 0;

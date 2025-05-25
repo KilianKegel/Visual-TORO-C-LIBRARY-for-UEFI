@@ -19,6 +19,7 @@ Author:
     Kilian Kegel
 
 --*/
+#include <intrin.h>
 unsigned char _cdeINByte(unsigned short p)
 {
     return __inbyte(p);

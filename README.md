@@ -9,8 +9,14 @@
 
 ## Revision history
 
+### 20250525, v0.9.1 Build 553
+* branch: CLANGdevel
+    * support original Microsoft v143 tool chain 
+    * support VS2022 v17.14 with **LLVM (clang-cl)** tool chain
+    * support "**Intel C++ Compiler 2024** tool chain
+
 ### 20250524, v0.9.1 Build 530
-* CLANG devel
+* branch: CLANGdevel
     * ANSI C apps no printf() output with **clang-cl** tool chain
 ### 20250517, v0.9.1 Build 269
 * fix minor build error that appears with **Visual Studio 2022 v17.14**
