@@ -35,12 +35,14 @@ Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/memcpy-wmemcpy?view=msvc-160#return-value
 **/
 static void* memcpyCDEABI(void* s1, const void* s2, size_t n) {
-    size_t i;
+        size_t i;
+        volatile char* dst = s1;
+        const volatile char* src = s2;
 
-    for (i = 0; i < n; i++) {
-        ((unsigned char*)s1)[i] = ((unsigned char*)s2)[i];
+        for (i = 0; i < n; i++) {
+            dst[i] = src[i];
+        }
+        return s1;
     }
-    return s1;
-}
 
 MKCDEABI(memcpy);

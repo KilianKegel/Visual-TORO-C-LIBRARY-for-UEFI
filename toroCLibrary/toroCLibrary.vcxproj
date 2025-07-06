@@ -1519,6 +1519,8 @@
       <UseFullPaths>false</UseFullPaths>
       <LanguageStandard_C>Default</LanguageStandard_C>
       <FloatingPointModel>Strict</FloatingPointModel>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

@@ -9,6 +9,9 @@
 
 ## Revision history
 
+### 20250706, v0.9.2 Build 289
+* fix fatal compiler optimization bug with  **Visual Studio 2022 v17.14**
+    * [`memcpy()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/string_h/MemCpy.c) and [`wmemcpy()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/WMemCpy.c) recursively call `memcpy()`
 ### 20250517, v0.9.1 Build 269
 * fix minor build error that appears with **Visual Studio 2022 v17.14**
 * W/A for **cdeWelcomePei** sample driver when started with **gEfiPeiMemoryDiscoveredPpiGuid** depex hangs on some systems
@@ -30,6 +33,8 @@
     
 ### 20250309, v0.9.0 Build 243
 #### finalize MATH.H implementation
+<img src="https://upload.wikimedia.org/wikipedia/commons/0/06/KL_intel_i387DX.jpg" width="200"/><br>
+
 The architecture of this math library introduces a space optimized implementation of C's MATH.H functions,
 while keeping precision and correctness as good as already known in earlier x87-based math libraries.<BR>
 Since the traditional math coprocessor 80387 is still present in current x86 processors and is also not deprecated
@@ -55,9 +60,6 @@ The 80387 processor has various improvements over its 8087 predecessor, such as<
     |FCOS          | cosine                   |
 
 That has reduced the programming effort dramatically and made algorithms very simple and easy to implement.<br>
-
-<img src="https://upload.wikimedia.org/wikipedia/commons/0/06/KL_intel_i387DX.jpg" width="200"/><br>
-
 
 * [`acos()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/math_h/acos.c)
 * [`asin()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/math_h/asin.c)
