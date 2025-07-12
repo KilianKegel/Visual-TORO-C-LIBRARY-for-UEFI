@@ -9,6 +9,9 @@
 
 ## Revision history
 
+### 20250712, v0.9.3 Build 298
+* add C++ `virtual` function support by providing [Microsoft `type_info`](https://learn.microsoft.com/en-us/cpp/cpp/type-info-class?view=msvc-170) intrinsic
+
 ### 20250706, v0.9.2 Build 289
 * fix fatal compiler optimization bug with  **Visual Studio 2022 v17.14**
     * [`memcpy()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/string_h/MemCpy.c) and [`wmemcpy()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/WMemCpy.c) recursively call `memcpy()`

@@ -1416,6 +1416,7 @@
     </PostBuildEvent>
     <PreLinkEvent>
       <Command>cmd /C tools\PreLinkEvent.bat $(IntDir) $(ProjectDir) $(Configuration) $(PlatformShortName)</Command>
+      <Message>cmd /C tools\PreLinkEvent.bat $(IntDir) $(ProjectDir) $(Configuration) $(PlatformShortName)</Message>
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -1479,6 +1480,7 @@
     </PostBuildEvent>
     <PreLinkEvent>
       <Command>cmd /C tools\PreLinkEvent.bat $(IntDir) $(ProjectDir) $(Configuration) $(PlatformShortName)</Command>
+      <Message>cmd /C tools\PreLinkEvent.bat $(IntDir) $(ProjectDir) $(Configuration) $(PlatformShortName)</Message>
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -1546,11 +1548,11 @@
       <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <AdditionalOptions>/IGNORE:4006 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
+      <AdditionalDependencies>$(IntDir)MSFTINTRIN.lib</AdditionalDependencies>
     </Lib>
     <PreLinkEvent>
       <Command>cmd /C tools\PreLinkEvent.bat $(IntDir) $(ProjectDir) $(Configuration) $(PlatformShortName)</Command>
+      <Message>cmd /C tools\PreLinkEvent.bat $(IntDir) $(ProjectDir) $(Configuration) $(PlatformShortName)</Message>
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -1617,11 +1619,11 @@
       <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <AdditionalOptions>/IGNORE:4006 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
+      <AdditionalDependencies>$(IntDir)MSFTINTRIN.lib</AdditionalDependencies>
     </Lib>
     <PreLinkEvent>
       <Command>cmd /C tools\PreLinkEvent.bat $(IntDir) $(ProjectDir) $(Configuration) $(PlatformShortName)</Command>
+      <Message>cmd /C tools\PreLinkEvent.bat $(IntDir) $(ProjectDir) $(Configuration) $(PlatformShortName)</Message>
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

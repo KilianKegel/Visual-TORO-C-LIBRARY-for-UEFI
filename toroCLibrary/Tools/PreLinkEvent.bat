@@ -1,7 +1,4 @@
 @echo off
-rem ######################################################################################
-rem ### currently not used ###############################################################
-rem ######################################################################################
 
 REM debug 	echo 0: %0
 REM debug 	echo 1: %1
@@ -12,7 +9,7 @@ REM debug 	echo 5. %5
 REM debug 	echo 6. %6
 
 if exist %1MSFTINTRIN.lib goto SKIP_INTRINLIB
-if "%4" == "x64" goto SKIP_INTRINLIB
+rem if "%4" == "x64" goto SKIP_INTRINLIB
 
 set path=%path%;%LIB%
 for /F "delims=;" %%a in ('where libcmt.lib') do (
@@ -22,7 +19,8 @@ for /F "delims=;" %%a in ('where libcmt.lib') do (
 	lib /nologo /list "%%a" | find "\ll"         > intrin.lst
 	lib /nologo /list "%%a" | find "\ull"       >> intrin.lst
 	lib /nologo /list "%%a" | find "\ftol3.obj" >> intrin.lst
-
+	lib /nologo /list "%%a" | find "\std_type_info_static.obj" >> intrin.lst
+	
 	if exist %1\OBJExtractScript.txt del %1\OBJExtractScript.txt
 	for /F "delims=" %%b in ('type intrin.lst') do (
 		echo ^    ^%%~nxb
@@ -36,7 +34,13 @@ for /F "delims=;" %%a in ('where libcmt.lib') do (
 		echo lib /NOLOGO "%%a" %%l
 		lib /NOLOGO "%%a" %%l
 	)
-	lib /nologo /OUT:%1MSFTINTRIN.lib %1ll*.obj %1ull*.obj %1ftol3.obj 
+	if "%4" == "x64" (
+		echo ### Microsoft Intrinsics 64 bit: %1MSFTINTRIN.lib 
+		lib /nologo /OUT:%1MSFTINTRIN.lib %1std_type_info_static.obj
+	) else (
+		echo ### Microsoft Intrinsics 32 bit: %1MSFTINTRIN.lib 
+		lib /nologo /OUT:%1MSFTINTRIN.lib %1ll*.obj %1ull*.obj %1ftol3.obj %1std_type_info_static.obj
+	)
 )
 :SKIP_INTRINLIB
 
