@@ -21,10 +21,14 @@ Author:
     Kilian Kegel
 
 --*/
-#include <stdio.h>
-#include <stdlib.h>
+
 #include <limits.h>
+#include <stddef.h>
 #include <CdeServices.h>
+
+#define EOF    (-1)
+#define FILE void
+#define BUFSIZ  512
 
 extern int __cdeIsFilePointer(void* stream);
 

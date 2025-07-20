@@ -20,7 +20,7 @@ Author:
     Kilian Kegel
 
 --*/
-#include <cdeservices.h>
+#include <CdeServices.h>
 #include <stdio.h>
 
 extern void (*pinvalid_parameter_handler)(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);

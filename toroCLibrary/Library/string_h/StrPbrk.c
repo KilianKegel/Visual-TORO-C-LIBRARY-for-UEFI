@@ -42,7 +42,7 @@ Returns
 
     @param[in]  char *s2
 
-    @retval size_t, lenght of block
+    @retval size_t, length of block
 
 **/
 char* strpbrk(const char* pszStr, const char* pszSet) {

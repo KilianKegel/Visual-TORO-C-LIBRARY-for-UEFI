@@ -43,7 +43,7 @@ Returns
 
     @param[in]  char *pszSet
 
-    @retval size_t, lenght of block
+    @retval size_t, length of block
 
 **/
 

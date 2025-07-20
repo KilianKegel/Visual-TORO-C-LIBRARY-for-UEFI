@@ -22,6 +22,8 @@ Author:
     Kilian Kegel
 
 --*/
+#include <assert.h>
+#undef NULL
 #include <CdeServices.h>
 //
 // stdio.h

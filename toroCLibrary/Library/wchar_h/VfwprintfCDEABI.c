@@ -96,7 +96,8 @@ static int vfwprintfCDEABI(FILE* stream, const wchar_t* pszFormat, va_list ap) {
                 if (    (FILE*)CDE_STDOUT == stream 
                     ||  (FILE*)CDE_STDERR == stream)
                     pfnOutput = pCdeAppIf->pCdeServices->pPutConOut;
-                    stream = (void*)pCdeAppIf;
+                    
+                stream = (void*)pCdeAppIf;
 
                 break;
             default:
@@ -108,7 +109,7 @@ static int vfwprintfCDEABI(FILE* stream, const wchar_t* pszFormat, va_list ap) {
             pCdeAppIf,          // this
             &RomParm,           // IN ROMPARM_VWXPRINTF *pRomParm,
             pszFormat,          // IN const void *pszFormat,
-            pfnOutput,         	// void (*pfnDevPutChar)(UINT16/*wchar_t*/c,void** ppDest/*address of pDest*/),
+            pfnOutput,          // void (*pfnDevPutChar)(UINT16/*wchar_t*/c,void** ppDest/*address of pDest*/),
             stream,             // UINT8 *pDest, pointer for the output function memory address or pCdeAppIf
             (unsigned)-1,       // unsigned dwCount,
             ap                  // IN va_list ap

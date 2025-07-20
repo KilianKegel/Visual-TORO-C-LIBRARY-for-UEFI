@@ -21,6 +21,9 @@ Author:
 
 --*/
 #include <stdlib.h>
+#ifdef LLVM_COMPILER_WORKAROUND
+    extern void* _cdeREALLOC(void* ptr, size_t size);   // w/a for LLVM's buggy code generator
+#endif//LLVM_COMPILER_WORKAROUND
 /**
 
 Synopsis
@@ -34,5 +37,9 @@ Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/malloc?view=msvc-160#return-value
 **/
 void* malloc(size_t size) {
+#ifdef LLVM_COMPILER_WORKAROUND
+    return _cdeREALLOC(0, size);
+#else// LLVM_COMPILER_WORKAROUND
     return realloc(0, size);
+#endif//LLVM_COMPILER_WORKAROUND
 }

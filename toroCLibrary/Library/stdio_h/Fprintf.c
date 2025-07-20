@@ -42,7 +42,7 @@ Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/fprintf-fprintf-l-fwprintf-fwprintf-l?view=msvc-160#return-value
 
 **/
-int fprintf(FILE* stream, const char* pszFormat, ...) 
+int fprintf(FILE* const stream, char const* const pszFormat, ...)
 {
     va_list ap;
     int nRet = 0;

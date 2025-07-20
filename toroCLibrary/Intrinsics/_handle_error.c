@@ -20,9 +20,9 @@ Author:
     Kilian Kegel
 
 --*/
-void _handle_error(void){
-	volatile int x = 0xDEADBEEF;
+void _handle_error(void) {
+    volatile unsigned x = 0xDEADBEEF;
 
-		while(0xDEADBEEF == x)
-			;
+    while (0xDEADBEEF == x)
+        ;
 }

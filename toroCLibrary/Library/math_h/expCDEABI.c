@@ -92,7 +92,7 @@ static double expCDEABI(double d)
 
         if (intgr > -1023)                                      // deal with normalized doubles
         {
-			if (0x7FEULL < 1023/*bias*/ + (uint64_t)intgr)      // check exponent overflow
+            if (0x7FEULL < 1023/*bias*/ + (uint64_t)intgr)      // check exponent overflow
                 break;  // return with error
 
             ptwoPowerIntgr->member.exp = 1023/*bias*/ + (uint64_t)intgr;

@@ -9,7 +9,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #ifndef _DRIVER_ENTRY_POINT_C_H_
 #define _DRIVER_ENTRY_POINT_C_H_
 
-#include <Uefi.h>
+#include <uefi.h>
 
 #include <Protocol/LoadedImage.h>
 

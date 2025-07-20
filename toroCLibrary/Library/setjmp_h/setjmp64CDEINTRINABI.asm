@@ -71,7 +71,7 @@ _setjmp proc
     mov     r8,qword ptr [rsp]  
     mov     [rcx + REGISTERS._ret],r8
     
-    stmxcsr	[rcx + REGISTERS._mxcsr]
+    stmxcsr [rcx + REGISTERS._mxcsr]
     fnstcw  [rcx + REGISTERS._fpucw]
 
     movdqu  [rcx + REGISTERS._xmm6 ],xmm6

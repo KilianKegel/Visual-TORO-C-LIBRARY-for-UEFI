@@ -102,7 +102,7 @@ void _CdeDbgPutChar(short c, void** ppDest) {
         else {
 
             DbgNfo.szText[0] = (char)c;
-            DbgNfo.szText[1] = '%' == (char)c ? '%' : '\0';	// allow single '%' to be printed by using ReportStatus engine
+            DbgNfo.szText[1] = '%' == (char)c ? '%' : '\0'; // allow single '%' to be printed by using ReportStatus engine
             DbgNfo.szText[2] = '\0';
 
             if (NULL != pCdeAppIf->pCdeServices->ReportStatusCode.pPei) {
@@ -110,7 +110,7 @@ void _CdeDbgPutChar(short c, void** ppDest) {
                 case PEIIF:/*    PEIIF,DXEIF,SMMIF,SHELLIF*/
 
                     pCdeAppIf->pCdeServices->ReportStatusCode.pPei(
-                        pCdeAppIf->DriverParm.PeimParm.PeiServices, /*IN const EFI_PEI_SERVICES **PeiServices,*/
+                        (void*)pCdeAppIf->DriverParm.PeimParm.PeiServices, /*IN const EFI_PEI_SERVICES **PeiServices,*/
                         EFI_DEBUG_CODE,
                         (EFI_SOFTWARE_DXE_BS_DRIVER | EFI_DC_UNSPECIFIED),
                         0,

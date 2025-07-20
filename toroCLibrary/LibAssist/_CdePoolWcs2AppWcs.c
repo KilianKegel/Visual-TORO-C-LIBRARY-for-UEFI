@@ -58,9 +58,9 @@ Returns
     @retval void *
 
 **/
-void* _cdePoolWcs2AppWcs(short* pwcs, unsigned char freePool) {
+void* _cdePoolWcs2AppWcs(unsigned short* pwcs, unsigned char freePool) {
     EFI_STATUS Status;
-    short* pRet = NULL;
+    unsigned short* pRet = NULL;
     size_t wlen;
 
     if (NULL != pwcs) {

@@ -14,7 +14,7 @@
 ;
 ;    CDE internal math 80387 instruction FSTSW to store status word.
 ;
-;		double __cde80387FSTSW(double x)
+;       double __cde80387FSTSW(double x)
 ;
 ;Author:
 ;
@@ -24,10 +24,10 @@
 
 .code
 __cde80387FSTSW proc
-	
-	FSTSW ax
 
-	ret
+    FSTSW ax
+
+    ret
 
 __cde80387FSTSW endp
 end

@@ -41,7 +41,7 @@ Returns
 
     @param[in]  wchar_t *s2
 
-    @retval size_t, lenght of block
+    @retval size_t, length of block
 
 **/
 static wchar_t* wcspbrkCDEABI(const wchar_t* pszStr, const wchar_t* pszSet) {

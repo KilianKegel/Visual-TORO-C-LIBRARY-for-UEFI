@@ -14,7 +14,7 @@
 ;
 ;    CDE internal math 80387 instruction FCOS to calculate cosine.
 ;
-;		double __cde80387FCOS(double x)
+;       double __cde80387FCOS(double x)
 ;
 ;Author:
 ;
@@ -23,20 +23,20 @@
 ;--*/
 .code
 __cde80387FCOS proc
-	
-	local float64:QWORD
 
-	movsd float64,xmm0
+    local float64:QWORD
 
-	fld float64
+    movsd float64,xmm0
 
-	FCOS
+    fld float64
 
-	fstp float64
+    FCOS
 
-	movsd xmm0,float64
+    fstp float64
 
-	ret
+    movsd xmm0,float64
+
+    ret
 
 __cde80387FCOS endp
 end

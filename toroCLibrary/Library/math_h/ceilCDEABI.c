@@ -23,12 +23,7 @@ Author:
 
 --*/
 #include <CdeServices.h>
-//
-// math.h
-//
-#define signbit(_Val)   _dsign(_Val)
 
-extern int _dsign(double d);
 extern __declspec(dllimport) double modf(double x, double* intptr);
 
 /**
@@ -49,10 +44,11 @@ static double __cdecl ceilCDEABI(double d)
     double dRet;
     double fract = modf(d, &dRet);
     double add = 0.0 == fract ? 0.0 : (d > 0.0 ? +1.0 : 0.0);
-    
+    CDEDOUBLE _d = { .dbl = d };
+
     dRet = dRet + add;
-    if(0.0 == dRet && signbit(d))
-		dRet = -0.0;
+    if(0.0 == dRet && _d.member.sign)
+        dRet = -0.0;
     return dRet;
 }
 

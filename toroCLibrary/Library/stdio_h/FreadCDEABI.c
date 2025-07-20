@@ -27,6 +27,9 @@ Author:
 #include <stddef.h>
 #include <CdeServices.h>
 
+//
+// stdio.h
+//
 #define EOF    (-1)
 #define FILE void
 #define BUFSIZ  512

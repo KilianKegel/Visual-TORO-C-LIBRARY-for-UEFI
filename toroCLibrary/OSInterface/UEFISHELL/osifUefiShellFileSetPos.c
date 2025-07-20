@@ -67,7 +67,7 @@ int _osifUefiShellFileSetPos(IN CDE_APP_IF* pCdeAppIf, CDEFILE* pCdeFile, CDEFPO
 
             if (EFI_SUCCESS != Status) break;
 
-            Status = __cdeOnErrSet_status(pCdeFile->pRootProtocol->GetPosition(pCdeFile->pFileProtocol, &eofpos));
+            Status = __cdeOnErrSet_status(pCdeFile->pRootProtocol->GetPosition(pCdeFile->pFileProtocol, (UINT64*)&eofpos));
 
             if (EFI_SUCCESS != Status) break;
 
@@ -81,7 +81,7 @@ int _osifUefiShellFileSetPos(IN CDE_APP_IF* pCdeAppIf, CDEFILE* pCdeFile, CDEFPO
         if (1/*KG20220418 gap of non-initialized disk space*/)
         {
             if (    EFI_SUCCESS == pCdeFile->pRootProtocol->SetPosition(pCdeFile->pFileProtocol, 0xFFFFFFFFFFFFFFFFULL)
-                &&  EFI_SUCCESS == pCdeFile->pRootProtocol->GetPosition(pCdeFile->pFileProtocol, &pCdeFile->gappos))
+                &&  EFI_SUCCESS == pCdeFile->pRootProtocol->GetPosition(pCdeFile->pFileProtocol, (UINT64*)&pCdeFile->gappos))
             {
                 pCdeFile->gapsize = (newpos > pCdeFile->gappos) ? (size_t)(newpos - pCdeFile->gappos) : 0;
             }

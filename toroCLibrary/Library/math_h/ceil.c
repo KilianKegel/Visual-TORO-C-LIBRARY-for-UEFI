@@ -20,7 +20,7 @@ Author:
     Kilian Kegel
 
 --*/
-#include <math.h>
+#include <CdeServices.h>
 
 extern double modf(double x, double* intptr);
 
@@ -42,9 +42,10 @@ double __cdecl ceil(double d)
     double dRet;
     double fract = modf(d, &dRet);
     double add = 0.0 == fract ? 0.0 : (d > 0.0 ? +1.0 : 0.0);
-    
+    CDEDOUBLE _d = { .dbl = d };
+
     dRet = dRet + add;
-    if(0.0 == dRet && signbit(d))
-		dRet = -0.0;
+    if(0.0 == dRet && _d.member.sign)
+        dRet = -0.0;
     return dRet;
 }

@@ -21,6 +21,7 @@ Author:
 --*/
 #include <stdint.h>
 #include <CdeServices.h>
+#include <intrin.h>
 /** __cdeGetPeiServices()
 
 Synopsis

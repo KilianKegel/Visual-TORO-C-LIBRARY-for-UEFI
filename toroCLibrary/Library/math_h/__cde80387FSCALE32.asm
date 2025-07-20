@@ -14,24 +14,24 @@
 ;
 ;   CDE internal math 80387 instruction FSCALE to calculate Z = Y * 2^X.
 ;
-;		double __cde80387SCALE(double x, double y)
+;       double __cde80387SCALE(double x, double y)
 ;
 ;Author:
 ;
 ;    Kilian Kegel
 ;
 ;--*/
-	.model flat
+    .model flat
 .code
 __cde80387FSCALE proc C public float64X:QWORD, float64Y:QWORD
-	
-	fld float64Y
-	fld float64X
 
-	FSCALE
-	fstp	st(1)
+    fld float64Y
+    fld float64X
 
-	ret
+    FSCALE
+    fstp    st(1)
+
+    ret
 
 __cde80387FSCALE endp
 end

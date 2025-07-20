@@ -24,7 +24,11 @@ Author:
 --*/
 #include <CdeServices.h>
 
-extern __declspec(dllimport) void* realloc(void* ptr, size_t size);
+#ifdef LLVM_COMPILER_WORKAROUND
+    extern __declspec(dllimport) void* _cdeREALLOC(void* ptr, size_t size);
+#else// LLVM_COMPILER_WORKAROUND
+    extern __declspec(dllimport) void* realloc(void* ptr, size_t size);
+#endif//LLVM_COMPILER_WORKAROUND
 
 /**
 
@@ -39,7 +43,12 @@ Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/free?view=msvc-160#remarks
 **/
 static void freeCDEABI(void* ptr) {
-    realloc(ptr, 0);
+    if (NULL != ptr)
+#ifdef LLVM_COMPILER_WORKAROUND
+        _cdeREALLOC(ptr, 0);
+#else// LLVM_COMPILER_WORKAROUND
+        realloc(0, size);
+#endif//LLVM_COMPILER_WORKAROUND
 }
 
 MKCDEABI(free);

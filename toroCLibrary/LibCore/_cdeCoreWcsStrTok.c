@@ -35,7 +35,7 @@ void* _cdeCoreWcsStrTok(CDE_APP_IF* pCdeAppIf, IN void* pvoidStr, IN const void*
 {
     void* pNew;
     char* pszStr = pvoidStr, * p;
-    unsigned int (*pwcsstrlen)(const void* pszBuffer) = pParm->fWide ? (unsigned int (*)(const void*)) & wcslen : (unsigned int (*)(const void*)) & strlen;
+    size_t (*pwcsstrlen)(const void* pszBuffer) = pParm->fWide ? (size_t(*)(const void*)) (&wcslen) : (size_t(*)(const void*)) (&strlen);
 
     do {
 
@@ -45,16 +45,16 @@ void* _cdeCoreWcsStrTok(CDE_APP_IF* pCdeAppIf, IN void* pvoidStr, IN const void*
                 break;;                                         // ... yes
         }
 
-        //		(char*)pszStr += (1 + pParm->fWide) * (*pwcsstrspn)(pszStr, pszSet);
+        //      (char*)pszStr += (1 + pParm->fWide) * (*pwcsstrspn)(pszStr, pszSet);
         if (1) {
             p = pCdeAppIf->pCdeServices->pWcsStrPbrkSpn(pParm->fWide ? WID + INV : INV, (void*)pszStr, (void*)pszSet); // strspn() / wcsspn()
 
             if (NULL != p) {
-                (char*)pszStr += p - pszStr;
+                pszStr += p - pszStr;
             }
         }
 
-        //	    pNew = (*pwcsstrpbrk)(pszStr, pszSet);                                                          // find end of substring
+        //      pNew = (*pwcsstrpbrk)(pszStr, pszSet);                                                          // find end of substring
 
         pNew = pCdeAppIf->pCdeServices->pWcsStrPbrkSpn(pParm->fWide ? WID : 0, (void*)pszStr, (void*)pszSet);   // find end of substring
                                                                                                                 // find end of substring
@@ -80,5 +80,5 @@ void* _cdeCoreWcsStrTok(CDE_APP_IF* pCdeAppIf, IN void* pvoidStr, IN const void*
 
     } while (0);
 
-    return pszStr ? ((*pwcsstrlen)(pszStr) ? pszStr : NULL) : NULL;	//return NULL for ""
+    return pszStr ? ((*pwcsstrlen)(pszStr) ? pszStr : NULL) : NULL; //return NULL for ""
 }

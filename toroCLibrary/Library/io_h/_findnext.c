@@ -17,9 +17,9 @@ Abstract:
 TODO:   1. int _findnext64i32(intptr_t handle,struct _finddata64i32_t *fileinfo);
         2. set errno -> https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/findnext-functions?view=msvc-160#return-value
         3. set errno
-            EINVAL 	Invalid parameter : fileinfo was NULL.Or, the operating system returned an unexpected error.
-            ENOENT 	No more matching files could be found.
-            ENOMEM 	Not enough memory or the file name's length exceeded MAX_PATH.
+            EINVAL  Invalid parameter : fileinfo was NULL.Or, the operating system returned an unexpected error.
+            ENOENT  No more matching files could be found.
+            ENOMEM  Not enough memory or the file name's length exceeded MAX_PATH.
 Author:
 
     Kilian Kegel
@@ -31,9 +31,9 @@ Author:
 #include <stdbool.h>
 #include <stdlib.h>
 #include <io.h>
+#include <CdeServices.h>
 #include <cde.h>
 //
-#include <CdeServices.h>
 
 #include "__cdeFindFirst.h"
 

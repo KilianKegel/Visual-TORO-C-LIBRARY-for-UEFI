@@ -42,7 +42,6 @@ Author:
 #include <IndustryStandard/MemoryMappedConfigurationSpaceAccessTable.h>
 
 #include <Protocol\AcpiSystemDescriptionTable.h>
-
 //
 // setjmp.h
 //
@@ -94,9 +93,6 @@ extern EFI_GUID gEfiLoadedImageProtocolGuid;
 extern EFI_GUID _gCdeDxeProtocolGuid;                   // The GUID for the protocol
 extern EFI_GUID _gCdeShellProtocolGuid;                 // The GUID for the protocol
 
-extern void _disable(void);
-extern void _enable(void);
-
 extern EFI_GUID _gEfiStatusCodeRuntimeProtocolGuid;
 
 extern CRT0SERVICE      _osifCdeUefiShellAppCRT0Service; 
@@ -109,7 +105,7 @@ extern VOID EFIAPI      DebugPrint(IN UINTN ErrorLevel, IN CONST CHAR8* Format, 
 extern MEMREALLOC       _cdeCoreMemRealloc;
 extern MEMSTRXCPY       _cdeMemStrxCpy;
 extern MEMSTRXCMP       _cdeMemStrxCmp;
-extern OSIFGETTIME		_osifIbmAtGetTime;
+extern OSIFGETTIME      _osifIbmAtGetTime;
 extern OSIFSETTIME      _osifIbmAtSetTime;
 extern OSIFGETTSCPERSEC _osifUefiShellGetTscPerSec;
 extern OSIFGETTSC       _osifIbmAtGetTsc;
@@ -136,8 +132,6 @@ extern COREFILERW       _cdeCoreFread;              /*pFReadCORE    */
 extern COREFILERW       _cdeCoreFwrite;             /*pFWriteCORE   */
 extern CORESETPOS       _cdeCoreFsetpos;            /*pFSetPosCORE  */
 extern COREFFLUSH       _cdeCoreFflush;             /*pFFlushCORE   */
-
-#pragma intrinsic (_disable, _enable)
 
 extern __declspec(dllimport) void* malloc(size_t size);
 extern __declspec(dllimport) void free(void* ptr);
@@ -178,7 +172,7 @@ extern unsigned _gCdeRTUefiShellInstanceType;
 // globals
 //
 char* gszCdeDriverName;
-static CDESYSTEMVOLUMES gCdeSystemVolumes = { (UINTN) -1};
+static CDESYSTEMVOLUMES gCdeSystemVolumes = { .nVolumeCount = (UINTN) -1};
 static CDEFILE _iob[CDE_FILEV_MAX];                                  /* Microsoft definition. It must be buildable within the DDK*/
 unsigned _gCdeRTUefiShellInstanceType = 0;
 //
@@ -239,7 +233,7 @@ static CDE_SERVICES gCdeServicesCdeUefiShellApp = {/*CDE_PROTOCOL*/
     .HeapStart = {(void*)-1,ENDOFMEM,1,NULL,NULL,0,0,(void*)-1},
     .TSClocksAtCdeTrace = 0,
     .TimeAtSystemStart = 0,
-    .ReportStatusCode = 0,
+    .ReportStatusCode = { 0 },
     .pvEfiShellProtocol = 0,
     .pCRT0Service = NULL,//TODO _osifCdeUefiShellAppCRT0Service,
     .pCdeSystemVolumes = &gCdeSystemVolumes,
@@ -337,10 +331,18 @@ void* __cdeGetAppIf(void)
 }
 
 static void _StdOutPutChar(int c, void** ppDest) {
+#ifdef LLVM_COMPILER_WORKAROUND
+    volatile size_t dummyret = (size_t)-1;
+    if (c == EOF)
+        dummyret = fwrite(NULL, (size_t)EOF, 0, (FILE*)CDE_STDOUT);
+    else
+        dummyret = fwrite(&c, 1, 1, (FILE*)CDE_STDOUT);
+#else// LLVM_COMPILER_WORKAROUND
     if (c == EOF)
         fwrite(NULL, (size_t)EOF, 0, (FILE*)CDE_STDOUT);
     else
         fwrite(&c, 1, 1, (FILE*)CDE_STDOUT);
+#endif//LLVM_COMPILER_WORKAROUND
 }
 
 static int _StdInGetCharSHELL(void** ppDest) {
@@ -450,7 +452,7 @@ EFI_STATUS EFIAPI _MainEntryPointUefiShellDrv(IN EFI_HANDLE ImageHandle, IN EFI_
     //static EFI_GUID gCdeLoadOptionsProtocolGuid = CDE_LOAD_OPTIONS_PROTOCOL_GUID;
     //CDE_LOADOPTIONS_PROTOCOL* pCdeLoadOptionsProtocol;
     char/* pLoadOptions,*/ * pLoadOptionsRW;
-    size_t eflags = __readeflags();
+    size_t eflags = __cdeGetEFLAGS();
 
     do {
 
@@ -528,7 +530,7 @@ EFI_STATUS EFIAPI _MainEntryPointUefiShellDrv(IN EFI_HANDLE ImageHandle, IN EFI_
         memset(&CdeAppIfUefiShellDrv.rgcbAtexit[0], 0, CDE_ATEXIT_REGISTRATION_NUM * sizeof(CdeAppIfUefiShellDrv.rgcbAtexit[0]));
 
         if (0 == __cdeGetCurrentPrivilegeLevel())       // running in RING0
-            _enable();
+            __CDEINTERRUPT_ENABLE;
 
         //
         // version string
@@ -556,7 +558,7 @@ EFI_STATUS EFIAPI _MainEntryPointUefiShellDrv(IN EFI_HANDLE ImageHandle, IN EFI_
 
         if (0 == __cdeGetCurrentPrivilegeLevel())       // running in RING0
             if(0 == (0x200 & eflags))                   // restore IF interrupt flag
-                _disable();
+                __CDEINTERRUPT_DISABLE;
 
         for (i = CDE_ATEXIT_REGISTRATION_NUM - 1; i >= 0; i--)
             if (NULL != CdeAppIfUefiShellDrv.rgcbAtexit[i])
@@ -770,7 +772,7 @@ EFI_STATUS UefiMain(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable)
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
     EFI_LOADED_IMAGE_PROTOCOL* pLoadedImageProtocol;
     
-    SystemTable->BootServices->HandleProtocol(ImageHandle, &gEfiLoadedImageProtocolGuid, &pLoadedImageProtocol);
+    SystemTable->BootServices->HandleProtocol(ImageHandle, &gEfiLoadedImageProtocolGuid, (void**)&pLoadedImageProtocol);
 
     if (0 == wcsncmp(L"Shell.efi -exit", pLoadedImageProtocol->LoadOptions, wcslen(L"Shell.efi -exit")))
     {

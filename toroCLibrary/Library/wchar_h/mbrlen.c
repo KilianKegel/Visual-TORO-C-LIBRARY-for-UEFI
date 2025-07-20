@@ -40,6 +40,7 @@ Description
 
 
 **/
+#include <stdio.h>
 size_t mbrlen(const char* str, size_t count, mbstate_t* mbstate)
 {
     return (NULL == str || 0 == count /* || NULL == mbstate*/) ? 0 : 1;

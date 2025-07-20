@@ -51,15 +51,15 @@ extern __declspec(dllimport) void abort(void);
 // 
 struct tm
 {
-    int tm_sec;      /* seconds after the minute � [0, 60]	*/
-    int tm_min;      /* minutes after the hour � [0, 59]	*/
-    int tm_hour;     /* hours since midnight � [0, 23]		*/
-    int tm_mday;     /* day of the month � [1, 31]			*/
-    int tm_mon;      /* months since January � [0, 11]		*/
-    int tm_year;     /* years since 1900					*/
-    int tm_wday;     /* days since Sunday � [0, 6]			*/
-    int tm_yday;     /* days since January 1 � [0, 365]		*/
-    int tm_isdst;    /* Daylight Saving Time flag			*/
+    int tm_sec;      /* seconds after the minute � [0, 60]  */
+    int tm_min;      /* minutes after the hour � [0, 59]    */
+    int tm_hour;     /* hours since midnight � [0, 23]      */
+    int tm_mday;     /* day of the month � [1, 31]          */
+    int tm_mon;      /* months since January � [0, 11]      */
+    int tm_year;     /* years since 1900                    */
+    int tm_wday;     /* days since Sunday � [0, 6]          */
+    int tm_yday;     /* days since January 1 � [0, 365]     */
+    int tm_isdst;    /* Daylight Saving Time flag           */
 };
 extern __declspec(dllimport) time_t mktime(struct tm* ptm);
 //
@@ -85,7 +85,7 @@ extern __declspec(dllimport) size_t wcslen(const wchar_t* pszBuffer);
 #define MAX_FILE_NAME_LEN 522 // (20 * (6+5+2))+1) unicode characters from EFI FAT spec (doubled for bytes)
 #define FIND_XXXXX_FILE_BUFFER_SIZE (SIZE_OF_EFI_FILE_INFO + MAX_FILE_NAME_LEN)
 
-extern const short* _CdeGetCurDir(IN CDE_APP_IF *pCdeAppIf, IN const short* FileSystemMapping);
+extern const short* _CdeGetCurDir(IN CDE_APP_IF *pCdeAppIf, IN const wchar_t* FileSystemMapping);
 
 static CDEFILEINFO* __cdeReadDirectory(IN char* strFileName, OUT int* pcntDirEntries);
 
@@ -115,7 +115,7 @@ CDEFILEINFO* _osifUefiShellFileFindAll(IN CDE_APP_IF* pCdeAppIf, IN char* pstrDr
     //
     // non-malloc()'ed pointers
     //
-    char* pColon, * pstrCurDir, * pstrCurDir2, * pstrTargetDir, *pDrive, *pCurPath, * pFilePath;
+    char* pColon, * pstrCurDir, * pstrCurDir2, * pstrTargetDir, * pDrive, * pCurPath, * pFilePath;
 
     //
     // malloc()'ed pointers to be freed at _findfirst return , included in freelist[] are initialized with NULL

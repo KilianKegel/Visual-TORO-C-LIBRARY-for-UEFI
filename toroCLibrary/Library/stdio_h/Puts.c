@@ -43,12 +43,12 @@ int puts(const char* s) {
     char c = '\n';
     do {
         nRet = fwrite(s, 1, strlen(s), (FILE*)CDE_STDOUT);
-        if (nRet == EOF)
+        if (nRet == (size_t)EOF)
             break;
         nRet = fwrite(&c, 1, 1, (FILE*)CDE_STDOUT);
     } while (0);
 
-    fwrite(NULL, (size_t)EOF, 0, (FILE*)CDE_STDOUT);	//flush to stdout
+    fwrite(NULL, (size_t)EOF, 0, (FILE*)CDE_STDOUT);    //flush to stdout
 
-    return nRet != EOF ? 0 : EOF;
+    return nRet != (size_t)EOF ? 0 : EOF;
 }

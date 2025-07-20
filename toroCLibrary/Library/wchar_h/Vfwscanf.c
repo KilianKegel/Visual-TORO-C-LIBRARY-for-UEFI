@@ -92,7 +92,7 @@ Parameters
 Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/vfscanf-vfwscanf?view=msvc-170#return-value
 **/
-int vfwscanf(FILE* stream, const wchar_t* pwcsFormat, va_list ap) {
+int vfwscanf(FILE* const stream, wchar_t const* const pwcsFormat, va_list ap) {
     int nRet;
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
 

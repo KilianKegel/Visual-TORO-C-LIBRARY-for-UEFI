@@ -47,6 +47,8 @@
     <ClCompile Include="Intrinsics\_fltused.c" />
     <ClCompile Include="Intrinsics\_handle_error.c" />
     <ClCompile Include="Intrinsics\_handle_errorf.c" />
+    <ClCompile Include="Intrinsics\_intel_fast_memcpy.c" />
+    <ClCompile Include="Intrinsics\_intel_fast_memset.c" />
     <ClCompile Include="Intrinsics\_invalid_parameter_handler.c" />
     <ClCompile Include="Intrinsics\_invalid_parameter_handlerCDEABI.c" />
     <ClCompile Include="Intrinsics\_set_invalid_parameter_handler.c" />
@@ -79,6 +81,24 @@
     <ClCompile Include="LibAssist\_CdeFileonly.c" />
     <ClCompile Include="LibAssist\_CdeGetCurDir.c" />
     <ClCompile Include="LibAssist\_CdeGetMapFromDevicePath.c" />
+    <ClCompile Include="LibAssist\_cdeINByte.c">
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</UseMSVC>
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</UseMSVC>
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</UseMSVC>
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</UseMSVC>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_cdeINDWord.c">
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</UseMSVC>
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</UseMSVC>
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</UseMSVC>
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</UseMSVC>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_cdeINWord.c">
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</UseMSVC>
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</UseMSVC>
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</UseMSVC>
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</UseMSVC>
+    </ClCompile>
     <ClCompile Include="LibAssist\_CdeLocateHandleBuffer.c" />
     <ClCompile Include="LibAssist\_CdeLocateProtocol.c" />
     <ClCompile Include="LibAssist\_cdeMemGetChar.c" />
@@ -88,6 +108,24 @@
     <ClCompile Include="LibAssist\_CdeMemPutWChar.c" />
     <ClCompile Include="LibAssist\_cdeMemUngetChar.c" />
     <ClCompile Include="LibAssist\_cdeMemUngetWChar.c" />
+    <ClCompile Include="LibAssist\_cdeOUTByte.c">
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</UseMSVC>
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</UseMSVC>
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</UseMSVC>
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</UseMSVC>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_cdeOUTDWord.c">
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</UseMSVC>
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</UseMSVC>
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</UseMSVC>
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</UseMSVC>
+    </ClCompile>
+    <ClCompile Include="LibAssist\_cdeOUTWord.c">
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</UseMSVC>
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</UseMSVC>
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</UseMSVC>
+      <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</UseMSVC>
+    </ClCompile>
     <ClCompile Include="LibAssist\_CdePoolWcs2AppWcs.c" />
     <ClCompile Include="LibAssist\_CdeSetCurDir.c" />
     <ClCompile Include="LibAssist\_cdeStr2Argcv.c" />
@@ -98,24 +136,58 @@
     <ClCompile Include="LibAssist\__cdeTianocoreDEBUGEna.c" />
     <ClCompile Include="LibAssist\__cdeTianocoreDEBUGGet.c" />
     <ClCompile Include="LibAssist\__cdeTianocoreDebugPrintErrolevel2Str.c" />
+    <ClCompile Include="LibAssist\__inbyte.c" />
+    <ClCompile Include="LibAssist\__indword.c" />
+    <ClCompile Include="LibAssist\__inword.c" />
+    <ClCompile Include="LibAssist\__outbyte.c" />
+    <ClCompile Include="LibAssist\__outdword.c" />
+    <ClCompile Include="LibAssist\__outword.c" />
     <ClCompile Include="LibConfig\_gCdeCfgCmdLnParmPoolMemRetain.c" />
     <ClCompile Include="LibConfig\_gCdeCfgCmdLnParmReportStatusCodeSTDOUT.c" />
     <ClCompile Include="LibConfig\_gCdeCfgMofineRawSeparator.c" />
     <ClCompile Include="LibConfig\_gCdeStrLibcVersion.c" />
-    <ClCompile Include="LibCore\_cdeCoreFflush.c" />
-    <ClCompile Include="LibCore\_cdeCoreFread.c" />
-    <ClCompile Include="LibCore\_cdeCoreFsetpos.c" />
-    <ClCompile Include="LibCore\_cdeCoreFwrite.c" />
-    <ClCompile Include="LibCore\_cdeCoreMemRealloc.c" />
-    <ClCompile Include="LibCore\_cdeMemStrxCmp.c" />
-    <ClCompile Include="LibCore\_cdeMemStrxCpy.c" />
-    <ClCompile Include="LibCore\_cdeCoreVwxPrintf.c" />
-    <ClCompile Include="LibCore\_cdeCoreVwxScanf.c" />
-    <ClCompile Include="LibCore\_cdeWcsStrPbrkSpn.c" />
-    <ClCompile Include="LibCore\_cdeCoreWcsStrTok.c" />
-    <ClCompile Include="LibCore\_cdeCoreClock.c" />
-    <ClCompile Include="LibCore\_cdeCoreExit.c" />
-    <ClCompile Include="LibCore\_cdeCoreSprintf.c" />
+    <ClCompile Include="LibCore\_cdeCoreFflush.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeCoreFread.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeCoreFsetpos.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeCoreFwrite.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeCoreMemRealloc.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeMemStrxCmp.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeMemStrxCpy.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeCoreVwxPrintf.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeCoreVwxScanf.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeWcsStrPbrkSpn.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeCoreWcsStrTok.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeCoreClock.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeCoreExit.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="LibCore\_cdeCoreSprintf.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
     <ClCompile Include="Library\assert_h\_assert.c" />
     <ClCompile Include="Library\assert_h\_assertCDEABI.c" />
     <ClCompile Include="Library\assert_h\_wassert.c" />
@@ -858,33 +930,72 @@
     <ClCompile Include="OSInterface\UEFISMM\osifUefiSmmEntryPointEDK.c" />
     <ClCompile Include="OSInterface\UEFISMM\osifUefiSmmMemAlloc.c" />
     <ClCompile Include="OSInterface\UEFISMM\osifUefiSmmMemFree.c" />
-    <ClCompile Include="OSInterface\WINNT\osifWinNTCmdExec.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTCmdExec.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
     <ClCompile Include="OSInterface\WINNT\osifWinNTDirectoryCreate.c">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
     </ClCompile>
-    <ClCompile Include="OSInterface\WINNT\osifWinNTDirectoryRemove.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTDirectoryRemove.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
     <ClCompile Include="OSInterface\WINNT\osifWinNTEntryPoint.c">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
     </ClCompile>
     <ClCompile Include="OSInterface\WINNT\osifWinNTEntryPointW.c">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
     </ClCompile>
-    <ClCompile Include="OSInterface\WINNT\osifWinNTFileClose.c" />
-    <ClCompile Include="OSInterface\WINNT\osifWinNTFileDelete.c" />
-    <ClCompile Include="OSInterface\WINNT\osifWinNTFileFindAll.c" />
-    <ClCompile Include="OSInterface\WINNT\osifWinNTFileOpen.c" />
-    <ClCompile Include="OSInterface\WINNT\osifWinNTFileRead.c" />
-    <ClCompile Include="OSInterface\WINNT\osifWinNTFileRename.c" />
-    <ClCompile Include="OSInterface\WINNT\osifWinNTFileSetPos.c" />
-    <ClCompile Include="OSInterface\WINNT\osifWinNTFileGetStatus.c" />
-    <ClCompile Include="OSInterface\WINNT\osifWinNTFileWrite.c" />
-    <ClCompile Include="OSInterface\WINNT\osifWinNTGetDrvCwd.c" />
-    <ClCompile Include="OSInterface\WINNT\osifWinNTGetEnv.c" />
-    <ClCompile Include="OSInterface\WINNT\osifWinNTGetTime.c" />
-    <ClCompile Include="OSInterface\WINNT\osifWinNTGetTsc.c" />
-    <ClCompile Include="OSInterface\WINNT\osifWinNTGetTscPerSec.c" />
-    <ClCompile Include="OSInterface\WINNT\osifWinNTMemAlloc.c" />
-    <ClCompile Include="OSInterface\WINNT\osifWinNTMemFree.c" />
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileClose.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileDelete.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileFindAll.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileOpen.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileRead.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileRename.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileSetPos.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileGetStatus.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTFileWrite.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTGetDrvCwd.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTGetEnv.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTGetTime.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTGetTsc.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTGetTscPerSec.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTMemAlloc.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="OSInterface\WINNT\osifWinNTMemFree.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
     <ClCompile Include="Tools\PostBuild.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -932,7 +1043,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
     </MASM>
-    <MASM Include="LibAssist\_CdeGetCurrentPrivilegeLevel32.asm">
+    <MASM Include="LibAssist\__cdeGetCurrentPrivilegeLevel32.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
@@ -942,7 +1053,7 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
     </MASM>
-    <MASM Include="LibAssist\CdeGetCurrentPrivilegeLevel64.asm">
+    <MASM Include="LibAssist\__cdeGetCurrentPrivilegeLevel64.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
@@ -951,6 +1062,26 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="LibAssist\__cdeGetEFLAGS32.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+    </MASM>
+    <MASM Include="LibAssist\__cdeGetEFLAGS64.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </MASM>
     <MASM Include="Library\math_h\__cde80387F2XM132.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -1264,7 +1395,7 @@
     <ProjectGuid>{8C250C8A-C234-450D-83ED-F0C898E1A739}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>CdeLib</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -1365,7 +1496,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LLVM_COMPILER_WORKAROUND;CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\CdePkg\include;$(ProjectDir)..\CdePkg\include\###VS2022###;$(ProjectDir)..\MdePkgInc\IA32;$(ProjectDir)..\MdePkgInc</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -1390,9 +1521,10 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <ExternalWarningLevel>Level4</ExternalWarningLevel>
-      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706;4996;4127</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4054;4565;4204;4214;4200;4273;4324;4820;4711;4100;4189;4459;4706;4996;4127</DisableSpecificWarnings>
       <OmitFramePointers>true</OmitFramePointers>
       <FloatingPointModel>Strict</FloatingPointModel>
+      <ForcedIncludeFiles>CdeCompilerCrtl.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -1428,7 +1560,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>CDEABI=__declspec(noinline);NMOFINE;NDEBUG;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;MDEPKG_NDEBUG;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LLVM_COMPILER_WORKAROUND;CDEABI=__declspec(noinline);NMOFINE;NDEBUG;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;MDEPKG_NDEBUG;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\CdePkg\include;$(ProjectDir)..\CdePkg\include\###VS2022###;$(ProjectDir)..\MdePkgInc\IA32;$(ProjectDir)..\MdePkgInc</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -1454,9 +1586,10 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <ExternalWarningLevel>Level4</ExternalWarningLevel>
-      <DisableSpecificWarnings>4200;4273;4324;4820;4711;4100;4189;4459;4706;4996;4127</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4054;4565;4204;4214;4200;4273;4324;4820;4711;4100;4189;4459;4706;4996;4127</DisableSpecificWarnings>
       <OmitFramePointers>true</OmitFramePointers>
       <FloatingPointModel>Strict</FloatingPointModel>
+      <ForcedIncludeFiles>CdeCompilerCrtl.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -1480,7 +1613,6 @@
     </PostBuildEvent>
     <PreLinkEvent>
       <Command>cmd /C tools\PreLinkEvent.bat $(IntDir) $(ProjectDir) $(Configuration) $(PlatformShortName)</Command>
-      <Message>cmd /C tools\PreLinkEvent.bat $(IntDir) $(ProjectDir) $(Configuration) $(PlatformShortName)</Message>
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -1492,7 +1624,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LLVM_COMPILER_WORKAROUND;CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\CdePkg\include;$(ProjectDir)..\CdePkg\include\###VS2022###;$(ProjectDir)..\MdePkgInc\x64;$(ProjectDir)..\MdePkgInc</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -1517,12 +1649,11 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AssemblerOutput />
-      <DisableSpecificWarnings>4200;4324;4100</DisableSpecificWarnings>
-      <UseFullPaths>false</UseFullPaths>
+      <DisableSpecificWarnings>4054;4565;4204;4214;4200;4324;4100</DisableSpecificWarnings>
+      <UseFullPaths>true</UseFullPaths>
       <LanguageStandard_C>Default</LanguageStandard_C>
       <FloatingPointModel>Strict</FloatingPointModel>
-      <ForcedIncludeFiles>
-      </ForcedIncludeFiles>
+      <ForcedIncludeFiles>CdeCompilerCrtl.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -1564,7 +1695,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LLVM_COMPILER_WORKAROUND;CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\CdePkg\include;$(ProjectDir)..\CdePkg\include\###VS2022###;$(ProjectDir)..\MdePkgInc\x64;$(ProjectDir)..\MdePkgInc</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -1591,9 +1722,10 @@
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AssemblerOutput>
       </AssemblerOutput>
-      <DisableSpecificWarnings>4200;4324;4100</DisableSpecificWarnings>
-      <UseFullPaths>false</UseFullPaths>
+      <DisableSpecificWarnings>4054;4565;4204;4214;4200;4324;4100</DisableSpecificWarnings>
+      <UseFullPaths>true</UseFullPaths>
       <FloatingPointModel>Strict</FloatingPointModel>
+      <ForcedIncludeFiles>CdeCompilerCrtl.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

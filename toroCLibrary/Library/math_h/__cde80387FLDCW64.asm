@@ -14,7 +14,7 @@
 ;
 ;    CDE internal math 80387 instruction FLDCW to load the control word.
 ;
-;		double __cde80387FLDCW(double x)
+;       double __cde80387FLDCW(double x)
 ;
 ;Author:
 ;
@@ -24,14 +24,14 @@
 
 .code
 __cde80387FLDCW proc
-	
-	local newcw:WORD
 
-	mov newcw, ax
+    local newcw:WORD
 
-	FLDCW newcw
+    mov newcw, ax
 
-	ret
+    FLDCW newcw
+
+    ret
 
 __cde80387FLDCW endp
 end

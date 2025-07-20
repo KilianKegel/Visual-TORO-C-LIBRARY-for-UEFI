@@ -25,11 +25,7 @@ Author:
 #include <cde.h>
 
 #include <stdint.h>
-
-extern void _disable(void);
-extern void _enable(void);
-
-#pragma intrinsic (_disable, _enable)
+#include <intrin.h>
 
 /** _osifIbmAtGetTscPerSec - calulates TSC clocks per second
 
@@ -55,7 +51,7 @@ extern void _enable(void);
 **/
 static uint16_t GetACPICount(uint16_t AcpiPmTmrBase)
 {
-    return UINT16_MAX & inpd(AcpiPmTmrBase);                // NOTE: PmTmr requires 32Bit read!
+    return UINT16_MAX & _cdeINDWord(AcpiPmTmrBase);                // NOTE: PmTmr requires 32Bit read!
 }
 
 UINT64 _osifUefiShellGetTscPerSec(IN CDE_APP_IF* pCdeAppIf, uint16_t AcpiPmTmrBase) 
@@ -68,7 +64,7 @@ UINT64 _osifUefiShellGetTscPerSec(IN CDE_APP_IF* pCdeAppIf, uint16_t AcpiPmTmrBa
     
     //AcpiPmTmrBase = 0x408;//kgtest
     
-    _disable();
+    __CDEINTERRUPT_DISABLE;
     GetACPICount(AcpiPmTmrBase);
     
     if (1)
@@ -111,7 +107,7 @@ UINT64 _osifUefiShellGetTscPerSec(IN CDE_APP_IF* pCdeAppIf, uint16_t AcpiPmTmrBa
         qwTSCPerIntervall = ((qwTicksGoneThrough) * CLKWAIT) / (CLKWAIT - count);    // get number of CPU TSC per ACPI PmTmr ClkTick (3.57MHz)
 
         if (0x200 & eflags)                                 // restore IF interrupt flag
-            _enable();
+            __CDEINTERRUPT_ENABLE;
     }
 
     return (int64_t) 19 * qwTSCPerIntervall;

@@ -76,7 +76,7 @@ void* _cdeWcsStrPbrkSpn(
             break;
         }
 
-		c1 = PRESET_WID ? 0xFFFF & c1 : 0xFF & c1;								// suppress sign extension from wchar/char to int
+        c1 = PRESET_WID ? 0xFFFF & c1 : 0xFF & c1;                              // suppress sign extension from wchar/char to int
 
         c2 = PRESET_WID ? ((wchar_t*)pszSet)[0] : ((unsigned char*)pszSet)[0];
 

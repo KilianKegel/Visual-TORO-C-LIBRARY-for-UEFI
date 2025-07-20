@@ -49,7 +49,7 @@ Parameters
 Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/vfprintf-vfprintf-l-vfwprintf-vfwprintf-l?view=msvc-160#return-value
 **/
-int vfwprintf(FILE* stream, const wchar_t* pszFormat, va_list ap) {
+int vfwprintf(FILE* const stream, wchar_t const* const pszFormat, va_list ap) {
     ROMPARM_VWXPRINTF RomParm = { \
         /*fForceToDataSeg       */ 1 ,\
         /*fPointerIsParm        */ 0 ,\
@@ -61,7 +61,8 @@ int vfwprintf(FILE* stream, const wchar_t* pszFormat, va_list ap) {
     };
     int nRet = 0;
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
-    
+    void* pDest = stream;
+
     if (NULL == pCdeAppIf)
         errno = EPERM;
     else do
@@ -82,7 +83,8 @@ int vfwprintf(FILE* stream, const wchar_t* pszFormat, va_list ap) {
                 if (    (FILE*)CDE_STDOUT == stream 
                     ||  (FILE*)CDE_STDERR == stream)
                     pfnOutput = pCdeAppIf->pCdeServices->pPutConOut;
-                    stream = (void*)pCdeAppIf;
+                    
+                pDest = (void*)pCdeAppIf;
 
                 break;
             default:
@@ -94,8 +96,8 @@ int vfwprintf(FILE* stream, const wchar_t* pszFormat, va_list ap) {
             pCdeAppIf,          // this
             &RomParm,           // IN ROMPARM_VWXPRINTF *pRomParm,
             pszFormat,          // IN const void *pszFormat,
-            pfnOutput,         	// void (*pfnDevPutChar)(UINT16/*wchar_t*/c,void** ppDest/*address of pDest*/),
-            stream,             // UINT8 *pDest, pointer for the output function memory address or pCdeAppIf
+            pfnOutput,          // void (*pfnDevPutChar)(UINT16/*wchar_t*/c,void** ppDest/*address of pDest*/),
+            pDest,              // UINT8 *pDest, pointer for the output function memory address or pCdeAppIf
             (unsigned)-1,       // unsigned dwCount,
             ap                  // IN va_list ap
         );

@@ -14,7 +14,7 @@
 ;
 ;    CDE internal math 80387 instruction F2XM1 to calculate 2^x - 1.
 ;
-;		double __cde80387F2XM1(double x)
+;       double __cde80387F2XM1(double x)
 ;
 ;Author:
 ;
@@ -23,20 +23,20 @@
 ;--*/
 .code
 __cde80387F2XM1 proc
-	
-	local float64:QWORD
 
-	movsd float64,xmm0
+    local float64:QWORD
 
-	fld float64
+    movsd float64,xmm0
 
-	F2XM1
+    fld float64
 
-	fstp float64
+    F2XM1
 
-	movsd xmm0,float64
+    fstp float64
 
-	ret
+    movsd xmm0,float64
+
+    ret
 
 __cde80387F2XM1 endp
 end

@@ -47,9 +47,10 @@ Returns
 int _osifWinNTFileSetPos(IN CDE_APP_IF* pCdeAppIf, CDEFILE* pCdeFile, CDEFPOS_T* pos) {
 
     BOOL f = 1;
-    LARGE_INTEGER ofs = { .QuadPart = __cdeOffsetCdeFposType(pos->fpos64) };
+    LARGE_INTEGER ofs;
     uint32_t dwMoveMethod = __cdeBiasCdeFposType(pos->fpos64);
 
+    ofs.QuadPart = __cdeOffsetCdeFposType(pos->fpos64);
 
     do {
 

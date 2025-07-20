@@ -14,7 +14,7 @@
 ;
 ;    CDE internal math 80387 instruction FSIN to calculate sine.
 ;
-;		double __cde80387FSIN(double x)
+;       double __cde80387FSIN(double x)
 ;
 ;Author:
 ;
@@ -23,20 +23,20 @@
 ;--*/
 .code
 __cde80387FSIN proc
-	
-	local float64:QWORD
 
-	movsd float64,xmm0
+    local float64:QWORD
 
-	fld float64
+    movsd float64,xmm0
 
-	FSIN
+    fld float64
 
-	fstp float64
+    FSIN
 
-	movsd xmm0,float64
+    fstp float64
 
-	ret
+    movsd xmm0,float64
+
+    ret
 
 __cde80387FSIN endp
 end

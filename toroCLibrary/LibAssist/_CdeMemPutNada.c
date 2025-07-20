@@ -22,6 +22,7 @@ Author:
     Kilian Kegel
 
 --*/
+#include <CdeServices.h>
 void _CdeMemPutNada(int c, void** ppDest) 
 {
     return;

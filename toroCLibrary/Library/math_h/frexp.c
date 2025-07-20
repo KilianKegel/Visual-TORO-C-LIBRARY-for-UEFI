@@ -40,7 +40,7 @@ Returns
 **/
 double __cdecl frexp(double x, int* expptr)
 {
-	CDEDOUBLE* px = (void*)&x;
+    CDEDOUBLE* px = (void*)&x;
     CDEDOUBLE dRet = { .dbl = x };
     CDEDOUBLE dbl = { .dbl = 0.0 };
     int exp = (int)px->member.exp - 1023;

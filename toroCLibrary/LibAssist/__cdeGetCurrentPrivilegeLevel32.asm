@@ -22,7 +22,7 @@
     .code
 
 __cdeGetCurrentPrivilegeLevel proc near public 
-;TODO:
+
     mov ax,cs
     and ax,3
     ret

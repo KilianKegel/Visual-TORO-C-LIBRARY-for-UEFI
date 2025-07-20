@@ -14,20 +14,20 @@
 ;
 ;    CDE internal math 80387 instruction FSTSW to store status word.
 ;
-;		double __cde80387FSTSW(double x)
+;       double __cde80387FSTSW(double x)
 ;
 ;Author:
 ;
 ;    Kilian Kegel
 ;
 ;--*/
-	.model flat
+    .model flat
 .code
 __cde80387FSTSW proc C public
-	
-	FSTSW ax
 
-	ret
+    FSTSW ax
+
+    ret
 
 __cde80387FSTSW endp
 end

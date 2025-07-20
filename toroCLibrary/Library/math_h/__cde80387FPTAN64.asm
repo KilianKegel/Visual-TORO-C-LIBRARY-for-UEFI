@@ -14,7 +14,7 @@
 ;
 ;    CDE internal math 80387 instruction FPTAN to calculate tangens.
 ;
-;		double __cde80387FPTAN(double x)
+;       double __cde80387FPTAN(double x)
 ;
 ;Author:
 ;
@@ -23,21 +23,21 @@
 ;--*/
 .code
 __cde80387FPTAN proc
-	
-	local float64:QWORD
 
-	movsd float64,xmm0
+    local float64:QWORD
 
-	fld float64
+    movsd float64,xmm0
 
-	FPTAN
-	FSTP	ST(0)
+    fld float64
 
-	fstp float64
+    FPTAN
+    FSTP    ST(0)
 
-	movsd xmm0,float64
+    fstp float64
 
-	ret
+    movsd xmm0,float64
+
+    ret
 
 __cde80387FPTAN endp
 end

@@ -19,7 +19,7 @@ Author:
     Kilian Kegel
 
 --*/
-#include <Cde.h>
+#include <cde.h>
 #include <CdeServices.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -148,7 +148,7 @@ Returns
 static signed ExpFieldOfDouble(double d) {
     unsigned long long* pd = (void*)&d;
     unsigned mask = ((1LL << (SIGPOS - EXPPOS)) - 1);
-    unsigned bias = (1LL << (SIGPOS - EXPPOS - 1)) - 1;	//1023
+    unsigned bias = (1LL << (SIGPOS - EXPPOS - 1)) - 1; //1023
     signed exp = (*pd >> EXPPOS);
 
     exp &= mask;
@@ -194,7 +194,7 @@ Returns
     @retval integer part of a double precision value
 
 **/
-static unsigned long long IntgrBinDigits(double d) {	// integer digit
+static unsigned long long IntgrBinDigits(double d) {    // integer digit
     unsigned long long nRet = 0LL;
     unsigned long long fractionplushidden = FractFieldOfDouble(d) + (1LL << EXPPOS); // place hidden bit into the mantisse
     signed exp = ExpFieldOfDouble(d);
@@ -241,7 +241,7 @@ static unsigned long long FractBinDigits(double d) {
     }
     else
         if (0 > exp)
-            nRet = fractionplushidden;	// neg exponent doesn't contain integer part
+            nRet = fractionplushidden;  // neg exponent doesn't contain integer part
 
     //
     // clear hidden bit for subnormals/denormals
@@ -471,7 +471,7 @@ static char* num2str(NUMDESC* pParms, unsigned char fWide) {
     short nZeroExtendedLen = pParms->nZeroExtendedLen;
     char c;
 
-    fWide = 0;  // number strings are ASCII from now on
+    //fWide = 0;  // number strings are ASCII from now on
 
     pParms->pszNumber[i--] = '\0';
 
@@ -612,7 +612,7 @@ static int nprintfield(
 
         break;
         }
-		
+
         case FLTPTDEC: {
             int offsIntgr = 0;
             int addPreciZeros = pFlags->nPrecisionsize - pNumDesc->nFloatFractLen;
@@ -774,7 +774,7 @@ _cdeCoreVwxPrintf(
             case '%':   numdesc.nNumBase = 10;
                 numdesc.fSigned = FALSE;
                 numdesc.nZeroExtendedLen = -1;
-				numdesc.fLowerCase = 1;
+                numdesc.fLowerCase = 1;
                 //TODO: bIntOrLongOrInt64 should be init to ZERO here
                 //      and if not set explicitly by type length (h/l)
                 //      on INT/char/string processing set to default type length
@@ -1090,7 +1090,7 @@ _cdeCoreVwxPrintf(
         }
         case PROCESS_STATUS: {      // %r
             /*EFI_STATUS*/size_t   Status;//kgtest check size!!! = 0x5555aaaa5a96;
-            char* pszErr = &rgbBuffer[0];
+            char* pszErr = (char*)&rgbBuffer[0];
             Status = va_arg(ap,/*EFI_STATUS*/size_t);
             _cdeCoreSprintf(pCdeAppIf, pszErr, "%qX", Status);
 
@@ -1194,8 +1194,8 @@ _cdeCoreVwxPrintf(
                         singlecharbuf[0] = va_arg(ap, unsigned short);
                 }
                 break;
-            case 'a': if (1 == pFixParm->fUEFIFormat) { 			/* EFI_SPECIFIC*/
-                bIntOrLongOrInt64 = 8 * sizeof(short);  /* EFI_SPECIFIC*/	/* in UEFI %a == ASCII STRING, in STDC float print */
+            case 'a': if (1 == pFixParm->fUEFIFormat) {             /* EFI_SPECIFIC*/
+                bIntOrLongOrInt64 = 8 * sizeof(short);  /* EFI_SPECIFIC*/   /* in UEFI %a == ASCII STRING, in STDC float print */
             }                                           /* EFI_SPECIFIC*/
                     else
                 break;
@@ -1222,7 +1222,7 @@ _cdeCoreVwxPrintf(
             flags.fLZero = 0;
             flags.fPrecision = 0;
             flags.fPlus = 0;
-            numdesc.nZeroExtendedLen = sizeof(void*) * 2;   //forced lenght of a pointer including leading zeros
+            numdesc.nZeroExtendedLen = sizeof(void*) * 2;   //forced length of a pointer including leading zeros
             //numdesc.fSigned = 0;
             state = PROCESS_THE_NUMBER; break;
         case PROCESS_THE_DOUBLE_G_SPECIFIER_LIBXLSXWRITER_HACK: {

@@ -66,7 +66,7 @@ EFI_STATUS EFIAPI _cdeCRT0UefiShellDrv/*for non-EDK build environment*/(IN EFI_H
         //
         // get the CdeServices
         //
-        Status = SystemTable->BootServices->LocateProtocol(&_gCdeDxeProtocolGuid, NULL, &CdeAppIfUefiShellDrv.pCdeServices);
+        Status = SystemTable->BootServices->LocateProtocol(&_gCdeDxeProtocolGuid, NULL, (void**)&CdeAppIfUefiShellDrv.pCdeServices);
         if (EFI_SUCCESS != Status)
         {
             __cdeFatalCdeServicesNotAvailUefiShellDrv(SystemTable);

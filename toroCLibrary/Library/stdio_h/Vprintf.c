@@ -34,7 +34,7 @@ Parameters
 Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/vprintf-vprintf-l-vwprintf-vwprintf-l?view=msvc-160#return-value
 **/
-int vprintf(const char* pszFormat, va_list ap) {
+int vprintf(char const* const pszFormat, va_list ap) {
 
     return vfprintf(stdout, pszFormat, ap);
 }

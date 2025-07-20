@@ -13,9 +13,9 @@
 ;Abstract:
 ;
 ;   CDE internal math 80387 instruction FXAM to analyse floating point number.
-;	The function returns the status word.
+;   The function returns the status word.
 ;
-;		unsigned short __cde80387FXAM(double x)
+;       unsigned short __cde80387FXAM(double x)
 ;
 ;Author:
 ;
@@ -24,18 +24,18 @@
 ;--*/
 .code
 __cde80387FXAM proc
-	
-	local float64:QWORD
 
-	movsd float64,xmm0
+    local float64:QWORD
 
-	fld float64
+    movsd float64,xmm0
 
-	FXAM
-	FSTSW ax
-	FSTP st(0)
+    fld float64
 
-	ret
+    FXAM
+    FSTSW ax
+    FSTP st(0)
+
+    ret
 
 __cde80387FXAM endp
 end

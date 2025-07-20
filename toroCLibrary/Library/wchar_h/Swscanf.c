@@ -41,7 +41,7 @@ Parameters
 Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/sscanf-sscanf-l-swscanf-swscanf-l?view=msvc-170#return-value
 **/
-int swscanf(const wchar_t* pwcsBuffer, const wchar_t* pwcsFormat, ...) {
+int swscanf(wchar_t const* const  pwcsBuffer, wchar_t const* const  pwcsFormat, ...) {
     va_list ap;
     int nRet;
 

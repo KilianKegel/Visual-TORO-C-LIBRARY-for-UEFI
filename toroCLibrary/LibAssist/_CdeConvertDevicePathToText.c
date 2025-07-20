@@ -19,11 +19,13 @@ Author:
     Kilian Kegel
 
 --*/
+#include <stdio.h>
+#undef NULL
 #include <uefi.h>
 #include <Protocol\Shell.h>
 #include <Protocol\DevicePathToText.h>
 
-extern void* _cdePoolWcs2AppWcs(short* pwcs, unsigned char freePool);
+extern void* _cdePoolWcs2AppWcs(wchar_t* pwcs, unsigned char freePool);
 extern EFI_DEVICE_PATH_TO_TEXT_PROTOCOL* pCdeEfiDevicePathToTextProtocol;
 
 /** _cdeConvertDevicePathToText()

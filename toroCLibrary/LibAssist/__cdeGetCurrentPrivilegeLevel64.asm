@@ -18,7 +18,8 @@
     .code
 __cdeGetCurrentPrivilegeLevel proc public
 
-    xor ax,ax           ; in UEFI 64 Bit always RING0
+    mov ax,cs
+    and ax,3
     ret
 
 __cdeGetCurrentPrivilegeLevel endp

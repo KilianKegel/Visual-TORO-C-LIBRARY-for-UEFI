@@ -59,8 +59,8 @@ static double modfCDEABI(double x, double* intptr)
         {
             *intptr = x;
 
-			dRet = x;
-			pdRet->uint64 &= 0x8000000000000000ULL;//keep sign
+            dRet = x;
+            pdRet->uint64 &= 0x8000000000000000ULL;//keep sign
 
             break;
         }
@@ -71,7 +71,7 @@ static double modfCDEABI(double x, double* intptr)
         uint64_t* pd = (void*)&dRet;
         uint64_t* pint64 = (void*)&d, fractmask;
         unsigned mask = ((1LL << (CDEDOUBLE_SIGPOS - CDEDOUBLE_EXPPOS)) - 1);
-        unsigned bias = (1LL << (CDEDOUBLE_SIGPOS - CDEDOUBLE_EXPPOS - 1)) - 1;	//1023
+        unsigned bias = (1LL << (CDEDOUBLE_SIGPOS - CDEDOUBLE_EXPPOS - 1)) - 1; //1023
         signed exp = (*pint64 >> CDEDOUBLE_EXPPOS);
         char minus = 0 != ((1LL << CDEDOUBLE_SIGPOS) & *pint64);
         signed shift = 0;

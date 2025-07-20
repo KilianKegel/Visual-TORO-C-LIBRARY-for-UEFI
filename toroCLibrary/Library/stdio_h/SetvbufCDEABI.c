@@ -76,7 +76,7 @@ static int setvbufCDEABI(FILE* stream, char* buf, int mode, size_t size)
     //
     do {
         if (mode & ~(_IONBF | _IOLBF | _IOFBF) ||/* other bit set */
-            mode & (_IONBF) && mode & (_IOLBF | _IOFBF)/* nobuffering simultanously with buffering*/)
+           (mode & (_IONBF) && mode & (_IOLBF | _IOFBF))/* nobuffering simultanously with buffering*/)
         {
             nRet = EOF;
             break;
@@ -109,7 +109,7 @@ static int setvbufCDEABI(FILE* stream, char* buf, int mode, size_t size)
                 break;
             }
 
-            pCdeFile->bsiz = (long)size;
+            pCdeFile->bsiz = (int)size;
 
         }
     } while (0);

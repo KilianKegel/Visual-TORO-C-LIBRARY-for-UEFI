@@ -34,6 +34,6 @@ Parameters
 Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/vscanf-vwscanf?view=msvc-160#return-value
 **/
-int vscanf(const char* pszFormat, va_list ap) {
+int vscanf(char const* const  pszFormat, va_list ap) {
     return vfscanf((FILE*)CDE_STDIN, pszFormat, ap);
 }

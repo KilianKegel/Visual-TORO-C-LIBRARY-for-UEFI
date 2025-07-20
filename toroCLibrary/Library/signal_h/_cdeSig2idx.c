@@ -42,7 +42,7 @@ Returns
 char _cdeSig2idx(int sig) {
 
     static char sigorder[CDE_SIGNAL_NUM] = { SIGINT, SIGILL, SIGFPE, SIGSEGV, SIGTERM, SIGBREAK, SIGABRT, SIGABRT_COMPAT };
-    int i;
+    unsigned i;
 
     for (i = 0; i < ELC(sigorder); i++)
         if (sigorder[i] == (char)sig)

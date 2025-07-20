@@ -220,7 +220,7 @@ int main(int argc, char** argv) {
             }
 
             //
-			// WinNT  second
+            // WinNT  second
             //
             if (1)
             {

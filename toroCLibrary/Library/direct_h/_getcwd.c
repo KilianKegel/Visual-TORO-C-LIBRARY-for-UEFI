@@ -19,4 +19,5 @@ Author:
     Kilian Kegel
 
 --*/
+#include <CdeServices.h>
 static char filler[] = { " warning C4206: nonstandard extension used: translation unit is empty" };

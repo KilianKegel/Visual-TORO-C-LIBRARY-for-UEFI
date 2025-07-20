@@ -33,8 +33,8 @@ Author:
 #define stderr (__acrt_iob_func(2))
 extern FILE* __acrt_iob_func(unsigned i);
 
-extern __declspec(dllimport) size_t fwrite(const void* ptr, size_t size, size_t nelem, FILE* stream);
 #include <CdeServices.h>
+extern __declspec(dllimport) size_t fwrite(const void* ptr, size_t size, size_t nelem, FILE* stream);
 
 extern int __cdeIsFilePointerCORE(CDE_APP_IF* pCdeAppIf, void* stream);
 extern void* __cdereallocCORE(CDE_APP_IF* pCdeAppIf, void* ptr, size_t size);
@@ -158,10 +158,10 @@ size_t _cdeCoreFwrite(CDE_APP_IF* pCdeAppIf, const void* ptr, size_t size, size_
         //
         // speed up buffer flushing, skip for redirected stdout/stderr
         //
-        if (nRet) 
+        if (nRet)
             if ((stream == (FILE*)CDE_STDOUT) || (stream == (FILE*)CDE_STDERR))
                 if (0 == (O_CDEREDIR & pCdeFile->openmode)) // skip flushing if file is redirected to speed up
-                    fwrite(NULL, (size_t)EOF, 0, stream);   // flush the write buffer on each byte
+                    _cdeCoreFwrite(pCdeAppIf, NULL, (size_t)EOF, 0, stream);
     }
 
     //

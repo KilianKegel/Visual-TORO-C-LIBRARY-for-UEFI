@@ -14,23 +14,23 @@
 ;
 ;    CDE internal math 80387 instruction FPTAN to calculate tangens.
 ;
-;		double __cde80387FPTAN(double x)
+;       double __cde80387FPTAN(double x)
 ;
 ;Author:
 ;
 ;    Kilian Kegel
 ;
 ;--*/
-	.model flat
+    .model flat
 .code
 __cde80387FPTAN proc C public float64:QWORD
-	
-	fld float64
 
-	FPTAN
-	FSTP	ST(0)
+    fld float64
 
-	ret
+    FPTAN
+    FSTP    ST(0)
+
+    ret
 
 __cde80387FPTAN endp
 end

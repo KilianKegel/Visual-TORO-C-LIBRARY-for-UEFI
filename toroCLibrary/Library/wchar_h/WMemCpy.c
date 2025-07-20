@@ -35,8 +35,8 @@ Returns
 **/
 wchar_t* wmemcpy(wchar_t* s1, const wchar_t* s2, size_t n) {
     size_t i;
-	volatile wchar_t* dst = s1;         // volatile to prevent optimization issues
-	volatile const wchar_t* src = s2;   // volatile to prevent optimization issues
+    volatile wchar_t* dst = s1;         // volatile to prevent optimization issues
+    volatile const wchar_t* src = s2;   // volatile to prevent optimization issues
 
     for (i = 0; i < n; i++) {
         dst[i] = src[i];

@@ -59,11 +59,6 @@ extern size_t _cdeInt2EfiStatus(int intstatus);
 extern EFI_GUID gEfiLoadedImageProtocolGuid;
 extern EFI_GUID _gCdeDxeProtocolGuid;                   // The GUID for the protocol
 
-extern void _disable(void);
-extern void _enable(void);
-
-#pragma intrinsic (_disable, _enable)
-
 extern __declspec(dllimport) void* malloc(size_t size);
 extern __declspec(dllimport) void free(void* ptr);
 extern __declspec(dllimport) void* memset(void* s, int c, size_t n);
@@ -187,7 +182,7 @@ EFI_STATUS EFIAPI _cdeCRT0UefiDxeEDK(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TA
         //
         // get the CdeServices
         //
-        Status = SystemTable->BootServices->LocateProtocol(&_gCdeDxeProtocolGuid, NULL, &CdeAppIfDxe.pCdeServices);
+        Status = SystemTable->BootServices->LocateProtocol(&_gCdeDxeProtocolGuid, NULL, (void*)&CdeAppIfDxe.pCdeServices);
         if (EFI_SUCCESS != Status)
         {
             __cdeFatalCdeServicesNotAvailDXE(SystemTable);
@@ -229,7 +224,7 @@ EFI_STATUS EFIAPI _MainEntryPointDxe(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TA
     static EFI_GUID gCdeLoadOptionsProtocolGuid = CDE_LOAD_OPTIONS_PROTOCOL_GUID;
     CDE_LOADOPTIONS_PROTOCOL* pCdeLoadOptionsProtocol;
     char* pLoadOptions, * pLoadOptionsRW;
-    size_t eflags = __readeflags();
+    size_t eflags = __cdeGetEFLAGS();
 
     do {
 
@@ -268,7 +263,7 @@ EFI_STATUS EFIAPI _MainEntryPointDxe(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TA
         memset(&CdeAppIfDxe.rgcbAtexit[0], 0, CDE_ATEXIT_REGISTRATION_NUM * sizeof(CdeAppIfDxe.rgcbAtexit[0]));
 
         if (0 == __cdeGetCurrentPrivilegeLevel())       // running in RING0
-            _enable();
+            __CDEINTERRUPT_ENABLE;
 
         nRet = setjmp(CdeAppIfDxe.exit_buf) ? CdeAppIfDxe.exit_status : main(argc, (char**)&argvex[0 + 2]);
 
@@ -276,7 +271,7 @@ EFI_STATUS EFIAPI _MainEntryPointDxe(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TA
 
         if (0 == __cdeGetCurrentPrivilegeLevel())       // running in RING0
             if(0 == (0x200 & eflags))                   // restore IF interrupt flag
-                _disable();
+                __CDEINTERRUPT_DISABLE;
 
         for (i = CDE_ATEXIT_REGISTRATION_NUM - 1; i >= 0; i--)
             if (NULL != CdeAppIfDxe.rgcbAtexit[i])

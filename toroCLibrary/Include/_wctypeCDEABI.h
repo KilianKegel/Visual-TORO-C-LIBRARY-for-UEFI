@@ -22,7 +22,7 @@ Author:
 #ifndef __WCTYPE_CDEABI_H_
 #define __WCTYPE_CDEABI_H_
 
-#include <stddef.h>/*for wchar_t*/
+typedef unsigned short wint_t;
 
 typedef struct tagISWX_TRUTH_TABLE
 {

@@ -21,7 +21,7 @@ Author:
 --*/
 int _cdeMemUngetWChar(int c, void** ppSrc)
 {
-	unsigned short* pDst = *ppSrc;
+    unsigned short* pDst = *ppSrc;
     //
     //NOTE: with "/GF enable read-only string pooling"  memory location is R/O. Don't really put back the char
     //

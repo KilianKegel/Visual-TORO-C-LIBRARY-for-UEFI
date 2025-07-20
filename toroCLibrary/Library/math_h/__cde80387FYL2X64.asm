@@ -14,7 +14,7 @@
 ;
 ;   CDE internal math 80387 instruction FYL2X to calculate y * ld(x).
 ;
-;		double __cde80387FYL2X(double x, double y)
+;       double __cde80387FYL2X(double x, double y)
 ;
 ;Author:
 ;
@@ -23,23 +23,23 @@
 ;--*/
 .code
 __cde80387FYL2X proc
-	
-	local float64X:QWORD
-	local float64Y:QWORD
 
-	movsd float64X,xmm0
-	movsd float64Y,xmm1
+    local float64X:QWORD
+    local float64Y:QWORD
 
-	fld float64Y
-	fld float64X
+    movsd float64X,xmm0
+    movsd float64Y,xmm1
 
-	FYL2X
+    fld float64Y
+    fld float64X
 
-	fstp float64X
+    FYL2X
 
-	movsd xmm0,float64X
+    fstp float64X
 
-	ret
+    movsd xmm0,float64X
+
+    ret
 
 __cde80387FYL2X endp
 end

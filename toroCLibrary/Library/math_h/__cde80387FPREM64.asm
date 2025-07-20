@@ -14,7 +14,7 @@
 ;
 ;   CDE internal math 80387 instruction FPREM to calculate floating point remainder.
 ;
-;		double __cde80387FPREM(double x, double y)
+;       double __cde80387FPREM(double x, double y)
 ;
 ;Author:
 ;
@@ -23,28 +23,28 @@
 ;--*/
 .code
 __cde80387FPREM proc
-	
-	local float64X:QWORD
-	local float64Y:QWORD
 
-	movsd float64X,xmm0
-	movsd float64Y,xmm1
+    local float64X:QWORD
+    local float64Y:QWORD
 
-	fld float64Y
-	fld float64X
+    movsd float64X,xmm0
+    movsd float64Y,xmm1
 
-L1:	FPREM
-	FSTSW AX
-	test AH, 4h	; test C2
-	jnz L1
+    fld float64Y
+    fld float64X
 
-	fstp float64X
+L1: FPREM
+    FSTSW AX
+    test AH, 4h ; test C2
+    jnz L1
 
-	movsd xmm0,float64X
-	
-	fstp	st(0)
+    fstp float64X
 
-	ret
+    movsd xmm0,float64X
+
+    fstp    st(0)
+
+    ret
 
 __cde80387FPREM endp
 end

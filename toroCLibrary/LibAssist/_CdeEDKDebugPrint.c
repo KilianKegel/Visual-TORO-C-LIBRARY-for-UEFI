@@ -67,15 +67,15 @@
 //                        };
 //
 //
-////		printf("%c",(UINT8)*pChar);
+////      printf("%c",(UINT8)*pChar);
 //        DbgNfo.szText[0]=*pChar;
 //        DbgNfo.szText[1]='\0';
 //
 //
-//		(pgEfiStatusCodeProtocol->ReportStatusCode)(
-//	    EFI_DEBUG_CODE,
-//	    (EFI_SOFTWARE_DXE_BS_DRIVER | EFI_DC_UNSPECIFIED),
-//	    0,
-//	    NULL,
-//	    (void*)&DbgNfo);
-//}//kgtest
+//      (pgEfiStatusCodeProtocol->ReportStatusCode)(
+//      EFI_DEBUG_CODE,
+//      (EFI_SOFTWARE_DXE_BS_DRIVER | EFI_DC_UNSPECIFIED),
+//      0,
+//      NULL,
+//      (void*)&DbgNfo);
+//}

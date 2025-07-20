@@ -42,7 +42,7 @@ Returns
 **/
 static double __cdecl frexpCDEABI(double x, int* expptr)
 {
-	CDEDOUBLE* px = (void*)&x;
+    CDEDOUBLE* px = (void*)&x;
     CDEDOUBLE dRet = { .dbl = x };
     CDEDOUBLE dbl = { .dbl = 0.0 };
     int exp = (int)px->member.exp - 1023;
@@ -74,7 +74,7 @@ static double __cdecl frexpCDEABI(double x, int* expptr)
                 if (px->member.mant & (1ULL << i))
                 {
                     *expptr = -1073 + 0 + i;
-					dbl.uint64 = 1ULL << (1 + i);
+                    dbl.uint64 = 1ULL << (1 + i);
                     break;
                 }
             }

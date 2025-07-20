@@ -61,17 +61,17 @@ time_t _cdeEfiTime2TimeT(EFI_TIME* pEfiTime)
     //
     // fill "struct tm"-compatible fields
     //
-    struct tm timetm = {
-        .tm_sec = pEfiTime->Second,
-        .tm_min = pEfiTime->Minute,
-        .tm_hour = pEfiTime->Hour,
-        .tm_mday = pEfiTime->Day,
-        .tm_mon = pEfiTime->Month - 1,
-        .tm_year = pEfiTime->Year - 1900,
-        .tm_wday = 0,
-        .tm_yday = 0,
-        .tm_isdst = 0
-    };
+    struct tm timetm;
+
+    timetm.tm_sec = pEfiTime->Second;
+    timetm.tm_min = pEfiTime->Minute;
+    timetm.tm_hour = pEfiTime->Hour;
+    timetm.tm_mday = pEfiTime->Day;
+    timetm.tm_mon = pEfiTime->Month - 1;
+    timetm.tm_year = pEfiTime->Year - 1900;
+    timetm.tm_wday = 0;
+    timetm.tm_yday = 0;
+    timetm.tm_isdst = 0;
 
     return mktime(&timetm);
 }

@@ -53,4 +53,10 @@ static void* reallocCDEABI(void* ptr, size_t size) {
     return pRet;
 }
 
+#ifdef LLVM_COMPILER_WORKAROUND
+void* _cdeREALLOCCDEABI(void* ptr, size_t size) {
+    return reallocCDEABI(ptr, size);
+}
+MKCDEABI(_cdeREALLOC);
+#endif//LLVM_COMPILER_WORKAROUND
 MKCDEABI(realloc);

@@ -174,7 +174,7 @@ static double powCDEABI(double bas, double exp)
                     if (0x0008000000000000ULL & y.uint64) {
                         product.dbl = 1.0;
                         //else
-                        //	product.uint64 = 0x0008000000000000ULL | y.uint64;
+                        //  product.uint64 = 0x0008000000000000ULL | y.uint64;
                         break;
                     }
                 }

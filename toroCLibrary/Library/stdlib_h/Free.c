@@ -21,6 +21,9 @@ Author:
 
 --*/
 #include <stdlib.h>
+#ifdef LLVM_COMPILER_WORKAROUND
+    extern void* _cdeREALLOC(void* ptr, size_t size);   // w/a for LLVM's buggy code generator
+#endif//LLVM_COMPILER_WORKAROUND
 
 /**
 
@@ -35,8 +38,11 @@ Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/free?view=msvc-160#remarks
 **/
 void free(void* ptr) {
-    void* pRet = NULL;
 
     if(NULL != ptr)
-        pRet = realloc(ptr, 0);
+#ifdef LLVM_COMPILER_WORKAROUND
+        _cdeREALLOC(ptr, 0);
+#else// LLVM_COMPILER_WORKAROUND
+        realloc(ptr, 0);
+#endif//LLVM_COMPILER_WORKAROUND
 }

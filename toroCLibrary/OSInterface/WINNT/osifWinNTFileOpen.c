@@ -70,7 +70,7 @@ Returns
 CDEFILE* _osifWinNTFileOpen(CDE_APP_IF* pCdeAppIf, const wchar_t* pwcsFileName, const char* szModeNoSpace, int fFileExists/* 0 no, 1 yes, -1 unk */, CDEFILE* pCdeFile)
 {
     HANDLE hFile = INVALID_HANDLE_VALUE;
-    int i;
+    unsigned i;
     BOOL f;
     const int _TRUE_ = 1, _FALSE_ = 0;
     unsigned WinNTModeFlags = 0, *pWinNTModeFlags = &WinNTModeFlags;

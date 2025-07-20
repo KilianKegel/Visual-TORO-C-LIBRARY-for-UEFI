@@ -65,7 +65,7 @@ Returns
 
 static int ungetcCDEABI(int c, FILE* stream) {
     CDEFILE* pCdeFile = (CDEFILE*)stream;
-    unsigned int nRet = (size_t)EOF;
+    unsigned nRet = (unsigned)EOF;
 
     do {
 

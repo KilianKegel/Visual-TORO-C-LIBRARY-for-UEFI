@@ -48,3 +48,8 @@ void* realloc(void* ptr, size_t size) {
     return pRet;
 }
 
+#ifdef LLVM_COMPILER_WORKAROUND
+void* _cdeREALLOC(void* ptr, size_t size) {
+    return realloc(ptr, size);
+}
+#endif//LLVM_COMPILER_WORKAROUND

@@ -8,7 +8,7 @@
 
 Module Name:
 
-    osifWinNTGetTsc.c
+    _osifWinNTGetTsc.c
 
 Abstract:
 
@@ -27,7 +27,7 @@ Author:
 /** _osifGetTsc() - get time stamp counter
 
 Synopsis
-    UINT64 osifWinNTGetTsc(IN void* pCdeAppIf);
+    UINT64 _osifWinNTGetTsc(IN void* pCdeAppIf);
 Description
     get TSC
 Parameters
@@ -35,7 +35,7 @@ Parameters
 Returns
     PerformanceCounter
 **/
-UINT64 osifWinNTGetTsc(IN void/*CDE_APP_IF*/* pCdeAppIf) {
+UINT64 _osifWinNTGetTsc(IN void/*CDE_APP_IF*/* pCdeAppIf) {
 
     LARGE_INTEGER PerfClk;
     UINT64* pRet = (UINT64*)&PerfClk;

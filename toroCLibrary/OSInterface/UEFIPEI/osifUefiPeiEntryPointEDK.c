@@ -126,14 +126,14 @@ void* __cdeGetAppIf(void)
     //
     // ... to be able to locate the CdeAppIf protocol
     //
-    Status = (*PeiServices)->LocatePpi(PeiServices, &gEfiCallerIdGuid, 0, NULL, (void**)&pCdeAppIfPei);
+    Status = (*PeiServices)->LocatePpi((CONST EFI_PEI_SERVICES**)PeiServices, &gEfiCallerIdGuid, 0, NULL, (void**)&pCdeAppIfPei);
 
     if (Status != EFI_SUCCESS)
     {
         volatile int deadloop = 0;
     
-        _outp(0x80, 0xCA/*TASTROPHE*/);
-        _outp(0x81, 0xCA/*TASTROPHE*/);
+        _cdeOUTByte(0x80, 0xCA/*TASTROPHE*/);
+        _cdeOUTByte(0x81, 0xCA/*TASTROPHE*/);
         while (0 == deadloop)
             ;
     }
@@ -230,7 +230,7 @@ EFI_STATUS EFIAPI _cdeCRT0UefiPeiEDK(IN EFI_PEI_FILE_HANDLE FileHandle, IN CONST
                 //
                 // allocate HOB space to get a small amount of r/w memory in PEI for placing the CDE protocol in there
                 //
-                Status = (*PeiServices)->CreateHob(PeiServices, EFI_HOB_TYPE_GUID_EXTENSION, sizeof(CDE_APP_IF_HOB), &pCdeAppIfHob);
+                Status = (*PeiServices)->CreateHob(PeiServices, EFI_HOB_TYPE_GUID_EXTENSION, sizeof(CDE_APP_IF_HOB), (void**)&pCdeAppIfHob);
                 if (EFI_SUCCESS != Status)
                     break;
 

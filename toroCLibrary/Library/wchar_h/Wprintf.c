@@ -35,7 +35,7 @@ Parameters
 Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/printf-printf-l-wprintf-wprintf-l?view=msvc-160#return-value
 **/
-int wprintf(const wchar_t* pszFormat, ...) {
+int wprintf(wchar_t const* const pszFormat, ...) {
 
     va_list ap;
     int nRet = 0;

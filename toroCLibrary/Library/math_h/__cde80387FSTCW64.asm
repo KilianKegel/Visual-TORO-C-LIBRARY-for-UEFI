@@ -14,7 +14,7 @@
 ;
 ;    CDE internal math 80387 instruction FSTSCW to store control word.
 ;
-;		double __cde80387FSTSCW(double x)
+;       double __cde80387FSTSCW(double x)
 ;
 ;Author:
 ;
@@ -24,14 +24,14 @@
 
 .code
 __cde80387FSTCW proc
-	
-	local cword:WORD
 
-	FSTCW cword
+    local cword:WORD
 
-	mov ax, cword
+    FSTCW cword
 
-	ret
+    mov ax, cword
+
+    ret
 
 __cde80387FSTCW endp
 end

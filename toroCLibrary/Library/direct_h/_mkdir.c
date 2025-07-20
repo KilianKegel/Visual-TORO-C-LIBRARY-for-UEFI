@@ -38,9 +38,9 @@ Parameters
 Returns
     NOTE: Return value description is wrong at Microsoft link
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/mkdir-wmkdir?view=msvc-160#return-value
-    ERRNO EEXIST 17: File exists			    exist
-    ERRNO EACCES 13: Permission denied		    write protect
-    ERRNO ENOENT 2 : No such file or directory	drive not present
+    ERRNO EEXIST 17: File exists                exist
+    ERRNO EACCES 13: Permission denied          write protect
+    ERRNO ENOENT 2 : No such file or directory  drive not present
     nErrRet on succs 0
     nErrRet on error -1
 **/

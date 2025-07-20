@@ -14,22 +14,22 @@
 ;
 ;    CDE internal math 80387 instruction FSQRT to calculate square root.
 ;
-;		double __cde80387FSQRT(double x)
+;       double __cde80387FSQRT(double x)
 ;
 ;Author:
 ;
 ;    Kilian Kegel
 ;
 ;--*/
-	.model flat
+    .model flat
 .code
 __cde80387FSQRT proc C public float64:QWORD
-	
-	fld float64
 
-	FSQRT
+    fld float64
 
-	ret
+    FSQRT
+
+    ret
 
 __cde80387FSQRT endp
 end

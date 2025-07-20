@@ -45,7 +45,7 @@ Parameters
 Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/fscanf-fscanf-l-fwscanf-fwscanf-l?view=msvc-170#return-value
 **/
-int fwscanf(FILE* stream, const wchar_t* pwcsFormat, ...) {
+int fwscanf(FILE* const stream, wchar_t const* const  pwcsFormat, ...) {
     int nRet;
     va_list ap;
 

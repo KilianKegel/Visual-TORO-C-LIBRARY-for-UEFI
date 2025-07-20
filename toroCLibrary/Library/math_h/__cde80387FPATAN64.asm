@@ -14,7 +14,7 @@
 ;
 ;    CDE internal math 80387 instruction FPATAN to calculate arcus tangens.
 ;
-;		double __cde80387FPATAN(double x)
+;       double __cde80387FPATAN(double x)
 ;
 ;Author:
 ;
@@ -23,21 +23,21 @@
 ;--*/
 .code
 __cde80387FPATAN proc
-	
-	local float64:QWORD
 
-	movsd float64,xmm0
+    local float64:QWORD
 
-	fld float64
+    movsd float64,xmm0
 
-	FLD1
-	FPATAN
+    fld float64
 
-	fstp float64
+    FLD1
+    FPATAN
 
-	movsd xmm0,float64
+    fstp float64
 
-	ret
+    movsd xmm0,float64
+
+    ret
 
 __cde80387FPATAN endp
 end

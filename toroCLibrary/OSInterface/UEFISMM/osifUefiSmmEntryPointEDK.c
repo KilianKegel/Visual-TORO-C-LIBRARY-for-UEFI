@@ -62,11 +62,6 @@ extern size_t _cdeInt2EfiStatus(int intstatus);
 extern EFI_GUID gEfiLoadedImageProtocolGuid;
 extern EFI_GUID _gCdeSmmProtocolGuid;                   // The GUID for the protocol
 
-extern void _disable(void);
-extern void _enable(void);
-
-#pragma intrinsic (_disable, _enable)
-
 extern __declspec(dllimport) void* malloc(size_t size);
 extern __declspec(dllimport) void free(void* ptr);
 extern __declspec(dllimport) void* memset(void* s, int c, size_t n);
@@ -222,7 +217,7 @@ EFI_STATUS EFIAPI _cdeCRT0UefiSmmEDK(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TA
         //
         // get the CdeServices
         //
-        Status = _cdegSmst->SmmLocateProtocol(&_gCdeSmmProtocolGuid, NULL, &CdeAppIfSmm.pCdeServices);
+        Status = _cdegSmst->SmmLocateProtocol(&_gCdeSmmProtocolGuid, NULL, (void**)&CdeAppIfSmm.pCdeServices);
         if (EFI_SUCCESS != Status)
         {
             __cdeFatalCdeServicesNotAvailSmm(SystemTable);

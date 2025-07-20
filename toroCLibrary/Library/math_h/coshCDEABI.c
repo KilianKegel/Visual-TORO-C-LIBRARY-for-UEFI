@@ -51,7 +51,7 @@ static double coshCDEABI(double d)
         double epowx = exp(d);
 
         if(0.0 == epowx)
-			break;
+            break;
 
         double epowminusx = exp(-d);
 

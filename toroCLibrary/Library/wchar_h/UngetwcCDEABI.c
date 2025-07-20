@@ -99,7 +99,7 @@ static wint_t ungetwcCDEABI(wint_t c, FILE * stream)
             } while (0);
 
     }
-    return nRet == EOF ? WEOF : (wint_t)nRet;
+    return nRet == (unsigned)EOF ? WEOF : (wint_t)nRet;
 }
 
 MKCDEABI(ungetwc);

@@ -23,7 +23,7 @@ Author:
     Kilian Kegel
 
 --*/
-#include <CDE.h>
+#include <cde.h>
 #include <CdeServices.h>
 
 void* __cdeGetAppIf(void) 

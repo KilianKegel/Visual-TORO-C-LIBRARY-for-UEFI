@@ -14,22 +14,22 @@
 ;
 ;    CDE internal math 80387 instruction FCOS to calculate cosine.
 ;
-;		double __cde80387FCOS(double x)
+;       double __cde80387FCOS(double x)
 ;
 ;Author:
 ;
 ;    Kilian Kegel
 ;
 ;--*/
-	.model flat
+    .model flat
 .code
 __cde80387FCOS proc C public float64:QWORD
-	
-	fld float64
 
-	FCOS
+    fld float64
 
-	ret
+    FCOS
+
+    ret
 
 __cde80387FCOS endp
 end

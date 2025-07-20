@@ -66,7 +66,7 @@ double pow(double bas, double exp)
     CDEDOUBLE product = { .dbl = -NAN };                                  // assume failure
     CDEDOUBLE x = { .dbl = bas };
     CDEDOUBLE y = { .dbl = exp };
-    double signedOneX = 0 == signbit(x.dbl) ? 1.0 : -1.0;
+    double signedOneX = (0 == x.member.sign ? 1.0 : -1.0);
     CDEDOUBLE absx = { .dbl = fabs(x.dbl) };
     CDEDOUBLE intgr, fract;
     CDEDOUBLE twoPowerFract = { .dbl = 0.0 };
@@ -115,7 +115,7 @@ double pow(double bas, double exp)
                 //
                 // X NEGATIVE
                 //
-                if (signbit(x.dbl)) {
+                if (x.member.sign) {
                     if (0xBFEFFFFFFFFFFFFFULL >= x.uint64 && 0x8000000000000000ULL <= x.uint64) {
                         product.uint64 = 0x0000000000000000ULL;
                         break;
@@ -161,7 +161,7 @@ double pow(double bas, double exp)
                     if (0x0008000000000000ULL & y.uint64) {
                         product.dbl = 1.0;
                         //else
-                        //	product.uint64 = 0x0008000000000000ULL | y.uint64;
+                        //  product.uint64 = 0x0008000000000000ULL | y.uint64;
                         break;
                     }
                 }
@@ -200,7 +200,7 @@ double pow(double bas, double exp)
                     if(fYIsFrational || fYIsEven)
                         product.dbl = 0.0;
                     else
-						product.dbl = INFINITY == x.dbl ? +0.0 : -0.0;
+                        product.dbl = INFINITY == x.dbl ? +0.0 : -0.0;
                     break;
                 }
             }
@@ -242,7 +242,7 @@ double pow(double bas, double exp)
         {
             if (0.0 == y.dbl)
                 product.dbl = 1.0;
-            else if (signbit(yxldx.dbl))
+            else if (yxldx.member.sign)
             {
                 if (fYIsFrational)
                     if (0.0 == fabs(x.dbl))
@@ -261,14 +261,14 @@ double pow(double bas, double exp)
                             product.dbl = -0.0;
             }
             else {
-                if (signbit(x.dbl))
+                if (x.member.sign)
                     product.dbl = -yxldx.dbl;
                 else
                     product.dbl = +yxldx.dbl;
 
                 if (0x7FF0000000000000ULL == yxldx.uint64) {
                     //kgtest product.uint64 = yxldx.uint64;
-                    if (signbit(x.dbl))
+                    if (x.member.sign)
                         if (fYIsFrational)
                             product.dbl = +yxldx.dbl;
                         else
@@ -281,7 +281,7 @@ double pow(double bas, double exp)
                 }
                 
                 if (0ULL != x.member.mant)
-                    if (signbit(product.dbl)) 
+                    if (product.member.sign) 
                     {
                         product.uint64 |= 0x0008000000000000ULL;
                         if (0x7FF != y.member.exp)

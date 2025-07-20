@@ -19,7 +19,7 @@
     .586p
 
     .model flat,C
-    .code	
+    .code
     public _setjmp
     public _setjmp3
     public _imp__setjmp

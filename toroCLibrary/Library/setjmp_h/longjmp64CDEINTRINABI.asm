@@ -32,19 +32,19 @@ REGISTERS struct
     _xmm14  XMMWORD ?
     _xmm15  XMMWORD ?
 
-    _rax    QWORD ? 	
-    _rbx    QWORD ? 	
-    _rbp    QWORD ? 	
-    _rsi    QWORD ? 	
-    _rdi    QWORD ? 	
-    _r12    QWORD ? 	
-    _r13    QWORD ? 	
-    _r14    QWORD ? 	
+    _rax    QWORD ?
+    _rbx    QWORD ?
+    _rbp    QWORD ?
+    _rsi    QWORD ?
+    _rdi    QWORD ?
+    _r12    QWORD ?
+    _r13    QWORD ?
+    _r14    QWORD ?
     _r15    QWORD ?
     _rsp    QWORD ?
     _ret    QWORD ?
 
-    _mxcsr  DWORD ? 	
+    _mxcsr  DWORD ?
     _fpucw  WORD  ?
 
 

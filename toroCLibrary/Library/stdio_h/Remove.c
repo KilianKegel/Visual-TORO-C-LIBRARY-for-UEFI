@@ -47,7 +47,7 @@ int remove(const char* filename)
 
         // NOTE:EFI_FILE_PROTOCOL.Delete() has to be called on OPEN file!!!
 
-        if (SHELLIF == pCdeAppIf->DriverParm.CommParm.OSIf)		// yes, is UEFI Shell interface ?
+        if (SHELLIF == pCdeAppIf->DriverParm.CommParm.OSIf)     // yes, is UEFI Shell interface ?
         {
 
             pCdeFile = (CDEFILE*)fopen(filename, "r+");

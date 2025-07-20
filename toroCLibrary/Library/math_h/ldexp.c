@@ -21,8 +21,8 @@ Author:
 
 --*/
 #undef NCDETRACE
-#include <CDE.h>
 #include <CdeServices.h>
+#include <cde.h>
 
 extern double __cde80387FSCALE(double x, double y);
 
@@ -46,5 +46,5 @@ Returns
 
 double __cdecl ldexp(double x, int exp)
 {
-	return __cde80387FSCALE(x, (double)exp);
+    return __cde80387FSCALE(x, (double)exp);
 }

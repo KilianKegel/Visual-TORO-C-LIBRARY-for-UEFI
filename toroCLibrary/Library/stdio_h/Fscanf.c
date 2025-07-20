@@ -41,7 +41,7 @@ Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/fscanf-fscanf-l-fwscanf-fwscanf-l?view=msvc-160#return-value
 
 **/
-int fscanf(FILE* stream, const char* pszFormat, ...) {
+int fscanf(FILE* const stream, char const* const pszFormat, ...) {
     va_list ap;
     int nRet;
 

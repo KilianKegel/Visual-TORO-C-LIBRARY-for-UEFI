@@ -20,7 +20,7 @@ Author:
     Kilian Kegel
 
 --*/
-extern int sscanf(char* pszBuffer, const char* pszFormat, ...);
+#include <stdio.h>
 
 /**
 

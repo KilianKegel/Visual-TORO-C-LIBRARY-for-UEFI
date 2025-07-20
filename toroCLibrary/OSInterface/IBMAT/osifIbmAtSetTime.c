@@ -46,8 +46,8 @@ int bcd2int(int bcd) {
 int rtcrd8(int idx) {
     int nRet = 1;
 
-    /*/    outp(0x70,idx);
-            nRet = 0xFF & inp(0x71);
+    /*/    _cdeOUTByte(0x70,idx);
+            nRet = 0xFF & _cdeINByte(0x71);
     /**/
     return nRet;
 }

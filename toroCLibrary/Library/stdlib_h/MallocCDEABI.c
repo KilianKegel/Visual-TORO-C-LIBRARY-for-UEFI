@@ -23,8 +23,11 @@ Author:
 
 --*/
 #include <CdeServices.h>
-
-extern __declspec(dllimport) void* realloc(void* ptr, size_t size);
+#ifdef LLVM_COMPILER_WORKAROUND
+    extern __declspec(dllimport) void* _cdeREALLOC(void* ptr, size_t size);
+#else// LLVM_COMPILER_WORKAROUND
+    extern __declspec(dllimport) void* realloc(void* ptr, size_t size);
+#endif//LLVM_COMPILER_WORKAROUND
 
 /**
 
@@ -39,7 +42,11 @@ Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/malloc?view=msvc-160#return-value
 **/
 static void* mallocCDEABI(size_t size) {
+#ifdef LLVM_COMPILER_WORKAROUND
+    return _cdeREALLOC(0, size);
+#else// LLVM_COMPILER_WORKAROUND
     return realloc(0, size);
+#endif//LLVM_COMPILER_WORKAROUND
 }
 
 MKCDEABI(malloc);

@@ -32,7 +32,7 @@ Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/scanf-scanf-l-wscanf-wscanf-l?view=msvc-160#return-value
 
 **/
-int scanf(const char* pszFormat, ...) {
+int scanf(char const* const pszFormat, ...) {
     va_list ap;
     int nRet;
 

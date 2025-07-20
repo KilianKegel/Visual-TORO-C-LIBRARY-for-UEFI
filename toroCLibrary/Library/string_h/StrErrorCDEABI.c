@@ -24,6 +24,8 @@ Author:
     Kilian Kegel
 
 --*/
+#include <assert.h>
+#undef NULL
 #include <Uefi\UefiBaseType.h>
 #include <CdeServices.h>
 

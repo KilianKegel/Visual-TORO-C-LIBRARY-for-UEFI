@@ -14,20 +14,20 @@
 ;
 ;    CDE internal math 80387 instruction FLDCW to load the control word.
 ;
-;		double __cde80387FLDCW(double x)
+;       double __cde80387FLDCW(double x)
 ;
 ;Author:
 ;
 ;    Kilian Kegel
 ;
 ;--*/
-	.model flat
+    .model flat
 .code
 __cde80387FLDCW proc C public newcw:WORD
-	
-	FLDCW newcw
 
-	ret
+    FLDCW newcw
+
+    ret
 
 __cde80387FLDCW endp
 end

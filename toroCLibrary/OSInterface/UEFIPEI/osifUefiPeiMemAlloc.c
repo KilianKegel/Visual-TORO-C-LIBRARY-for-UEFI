@@ -43,11 +43,11 @@ Returns
 HEAPDESC* _osifUefiPeiMemAlloc(IN CDE_APP_IF* pCdeAppIf, IN size_t Pages) {
 
     EFI_PHYSICAL_ADDRESS Memory = (EFI_PHYSICAL_ADDRESS)-1; //NOTE: iapx86 specific -> little endian dependant
-    HEAPDESC** ppMemory = (HEAPDESC**)&Memory; 				//NOTE: iapx86 specific -> little endian dependant
+    HEAPDESC** ppMemory = (HEAPDESC**)&Memory;              //NOTE: iapx86 specific -> little endian dependant
     EFI_STATUS Status;
 
     Status = (*pCdeAppIf->DriverParm.PeimParm.PeiServices)->AllocatePages(
-        pCdeAppIf->DriverParm.PeimParm.PeiServices,
+        (const EFI_PEI_SERVICES**)pCdeAppIf->DriverParm.PeimParm.PeiServices,
         EfiLoaderData,
         Pages,
         &Memory);

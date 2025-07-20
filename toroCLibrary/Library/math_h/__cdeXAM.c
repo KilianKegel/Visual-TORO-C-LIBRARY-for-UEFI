@@ -20,6 +20,7 @@ Author:
     Kilian Kegel
 
 --*/            
+#include <CdeServices.h>
 extern unsigned short __cde80387FXAM(double x);
 //
 //  C3 C2 C0 C1 Meaning
@@ -91,24 +92,24 @@ int __cdeFXAM(double x)
         case 0x0001:
             nRet = NAN;
             break;
-		case 0x0004:
+        case 0x0004:
             nRet = NORMAL;
-			break;
-        case 0x0005:
-			nRet = INF;
             break;
-		case 0x0040:
-			nRet = ZERO;
-			break;
-		case 0x0041:
-			nRet = EMPTY;
-			break;
-		case 0x0044:
-			nRet = DENORMAL;
-			break;
-		default:
-			nRet = UNKNOWN;
-			break;
+        case 0x0005:
+            nRet = INF;
+            break;
+        case 0x0040:
+            nRet = ZERO;
+            break;
+        case 0x0041:
+            nRet = EMPTY;
+            break;
+        case 0x0044:
+            nRet = DENORMAL;
+            break;
+        default:
+            nRet = UNKNOWN;
+            break;
     }
     return nRet | sign;
 }

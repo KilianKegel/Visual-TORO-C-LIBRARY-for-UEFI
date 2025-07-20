@@ -97,7 +97,7 @@ EFI_STATUS EFIAPI _cdeCRT0UefiSmm/*for non-EDK build environment*/(IN EFI_HANDLE
         //
         // get the CdeServices
         //
-        Status = SystemTable->BootServices->LocateProtocol(&_gCdeSmmProtocolGuid, NULL, &CdeAppIfSmm.pCdeServices);
+        Status = SystemTable->BootServices->LocateProtocol(&_gCdeSmmProtocolGuid, NULL, (void**)&CdeAppIfSmm.pCdeServices);
         if (EFI_SUCCESS != Status)
         {
             __cdeFatalCdeServicesNotAvailSmm(SystemTable);

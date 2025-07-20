@@ -42,6 +42,6 @@ wchar_t* wcstok(wchar_t* pszStr, const wchar_t* pszSet, wchar_t** ppLast) {
 
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
 
-    return (wchar_t*)pCdeAppIf->pCdeServices->pWcsStrTok(pCdeAppIf, pszStr, pszSet, ppLast, &ROMPARM);
+    return (wchar_t*)pCdeAppIf->pCdeServices->pWcsStrTok(pCdeAppIf, pszStr, pszSet, (void**)ppLast, &ROMPARM);
 
 }

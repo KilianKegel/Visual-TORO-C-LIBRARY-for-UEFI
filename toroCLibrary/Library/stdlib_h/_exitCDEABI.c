@@ -40,16 +40,16 @@ static void _exitCDEABI(int status) {
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
 
     //
-	// prevent all atexit-registered functions from being called
+    // prevent all atexit-registered functions from being called
     //
     for (int i = CDE_ATEXIT_REGISTRATION_NUM - 1; i >= 0; i--)
         pCdeAppIf->rgcbAtexit[i] = NULL;
 
     //
-	// prevent all file buffers from being flushed
+    // prevent all file buffers from being flushed
     //
     for (int i = 0; i < pCdeAppIf->cIob; i++)
-		pCdeAppIf->pIob[i].fRsv = 0;
+        pCdeAppIf->pIob[i].fRsv = 0;
 
     pCdeAppIf->exit_status = status;
     longjmp(pCdeAppIf->exit_buf, status);

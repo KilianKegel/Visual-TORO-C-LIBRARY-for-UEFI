@@ -40,16 +40,16 @@ static void __insertFree(HEAPDESC* pThis,
     CDE_APP_IF* pCdeAppIf
 ) {
 
-    pThis->pSucc = pFree;	//link forward
-    pFree->pSucc = pSucc;	//link forward
+    pThis->pSucc = pFree;   //link forward
+    pFree->pSucc = pSucc;   //link forward
 
-    pSucc->pPred = pFree;	//link backward
-    pFree->pPred = pThis;	//link backward
+    pSucc->pPred = pFree;   //link backward
+    pFree->pPred = pThis;   //link backward
 
 //  2. free that free block (fuse with  successing free block)
 
     pFree->qwMagic = FREEMEM;
-    _cdeCoreMemRealloc(pCdeAppIf, &pFree[1], 0, pHeapStart);	// fuse with bounding free block //KG20160402
+    _cdeCoreMemRealloc(pCdeAppIf, &pFree[1], 0, pHeapStart);    // fuse with bounding free block //KG20160402
 }
 
 /** _cdeCoreMemRealloc()
@@ -103,11 +103,11 @@ void* _cdeCoreMemRealloc(
             if (size != 0) 
             {
                 static enum ACTION {
-                    REA_DONOTHING,			/*((SIZ + HDX + 1) > TBS) && (SIZ <= TBS)   */
-                    REA_SHRINK_W_DESC,		/*((SIZ + HDX + 1) <= TBS)                  */
-                    REA_STRETCH_W_DESC,		/* ((SIZ + HDX + 1) <= XBS)                 */
-                    REA_STRETCH_WO_DESC,	/* ((SIZ + HDX + 1) > XBS) && (SIZ <= XBS)  */
-                    REA_MALLOC_MOVE,		/* ((SIZ + HDX + 1) > XBS) && (SIZ <= XBS)  */
+                    REA_DONOTHING,          /*((SIZ + HDX + 1) > TBS) && (SIZ <= TBS)   */
+                    REA_SHRINK_W_DESC,      /*((SIZ + HDX + 1) <= TBS)                  */
+                    REA_STRETCH_W_DESC,     /* ((SIZ + HDX + 1) <= XBS)                 */
+                    REA_STRETCH_WO_DESC,    /* ((SIZ + HDX + 1) > XBS) && (SIZ <= XBS)  */
+                    REA_MALLOC_MOVE,        /* ((SIZ + HDX + 1) > XBS) && (SIZ <= XBS)  */
                 }action = REA_MALLOC_MOVE;
 
                 pThis = &((HEAPDESC*)ptr)[-1];
@@ -115,11 +115,11 @@ void* _cdeCoreMemRealloc(
                 if (((SIZ + HDX + 1) > TBS) && (SIZ <= TBS))
                     action = REA_DONOTHING;
                 else if ((SIZ + HDX + 1) <= TBS)
-                    action = REA_SHRINK_W_DESC;		// shrink
+                    action = REA_SHRINK_W_DESC;     // shrink
                 else if ((SIZ + HDX + 1) <= XBS)
-                    action = REA_STRETCH_W_DESC;	// stretch
+                    action = REA_STRETCH_W_DESC;    // stretch
                 else if (((SIZ + HDX + 1) > XBS) && (SIZ <= XBS))
-                    action = REA_STRETCH_WO_DESC;	// stretch without adding a free block
+                    action = REA_STRETCH_WO_DESC;   // stretch without adding a free block
                 else
                     action = REA_MALLOC_MOVE;
 
@@ -139,7 +139,7 @@ void* _cdeCoreMemRealloc(
 
                     case REA_STRETCH_W_DESC: {
 
-                        pSucc = pThis->pSucc->pSucc; 						        // the only thing we need to know
+                        pSucc = pThis->pSucc->pSucc;                                // the only thing we need to know
                         pFree = (HEAPDESC*)((PBYTE)&pThis[1] + size);
 
                         __insertFree(pThis, pSucc, pFree, pHeapStart, pCdeAppIf);
@@ -155,13 +155,13 @@ void* _cdeCoreMemRealloc(
                     case REA_MALLOC_MOVE: {
 
                         unsigned char* pNewBuf, * pOldBuf;
-                        pNewBuf = _cdeCoreMemRealloc(pCdeAppIf, 0, size, pHeapStart);	    // allocate new size KG20160402
-                        pOldBuf = (unsigned char*)&pThis[1];						// get data area of ald buffer
+                        pNewBuf = _cdeCoreMemRealloc(pCdeAppIf, 0, size, pHeapStart);   // allocate new size KG20160402
+                        pOldBuf = (unsigned char*)&pThis[1];                            // get data area of ald buffer
 
                         if (pNewBuf != NULL) {
                             for (i = 0; i < TBS; i++)
                                 pNewBuf[i] = pOldBuf[i];
-                            _cdeCoreMemRealloc(pCdeAppIf, &pThis[1], 0, pHeapStart);		// fuse with bounding free block //KG20160402
+                            _cdeCoreMemRealloc(pCdeAppIf, &pThis[1], 0, pHeapStart);        // fuse with bounding free block //KG20160402
                             pThis = &((HEAPDESC*)pNewBuf)[-1];
                         }
                         else {
@@ -183,18 +183,18 @@ void* _cdeCoreMemRealloc(
             if (pThis->qwMagic == ALLOCMEM) {/*KG20170815_1 don't do anything if not own memory */
                 pThis->qwMagic = FREEMEM;
 
-                if (pThis->pSucc->qwMagic == FREEMEM/*ree*/) {								// fuse with successor
+                if (pThis->pSucc->qwMagic == FREEMEM/*ree*/) {                              // fuse with successor
                     pThis->pSucc = pThis->pSucc->pSucc;
                     pThis->pSucc->pPred = pThis;
                 }
 
-                if (pThis->pPred != NULL && pThis->pPred->qwMagic == FREEMEM) {			// fuse with predessor -> remove pThis
+                if (pThis->pPred != NULL && pThis->pPred->qwMagic == FREEMEM) {         // fuse with predessor -> remove pThis
                     pThis->pPred->pSucc = pThis->pSucc;
                     pThis->pSucc->pPred = pThis->pPred;
 
                     pThis = pThis->pPred;
                 }
-                if (FALSE == pThis->fInalterable && (pThis->pPred != NULL && pThis->pPred->qwMagic == ENDOFMEM) && (pThis->pSucc->qwMagic == ENDOFMEM)) {	//free pages
+                if (FALSE == pThis->fInalterable && (pThis->pPred != NULL && pThis->pPred->qwMagic == ENDOFMEM) && (pThis->pSucc->qwMagic == ENDOFMEM)) {   //free pages
                     pThis->pPred->pSucc = pThis->pSucc->pSucc;
                     if (NULL != pThis->pSucc->pSucc) {
                         pThis->pSucc->pSucc->pPred = pThis->pPred;
@@ -215,12 +215,12 @@ void* _cdeCoreMemRealloc(
 
             do {
                 if (pThis->qwMagic == FREEMEM) {
-                    nSizeWOAddHeapDesc = (PBYTE)(&pThis->pSucc[0]) - (PBYTE)(&pThis[1]);	// size with/out additional heap descriptor
-                    nSizeW_AddHeapDesc = (PBYTE)(&pThis->pSucc[0]) - (PBYTE)(&pThis[2]);	// size with/    additional heap descriptor
+                    nSizeWOAddHeapDesc = (PBYTE)(&pThis->pSucc[0]) - (PBYTE)(&pThis[1]);    // size with/out additional heap descriptor
+                    nSizeW_AddHeapDesc = (PBYTE)(&pThis->pSucc[0]) - (PBYTE)(&pThis[2]);    // size with/    additional heap descriptor
                     nSizeWOAddHeapDesc = nSizeWOAddHeapDesc > (size_t)(&pThis->pSucc[0]) ? 0 : nSizeWOAddHeapDesc; // avoid negative numbers on unsigned
                     nSizeW_AddHeapDesc = nSizeW_AddHeapDesc > (size_t)(&pThis->pSucc[0]) ? 0 : nSizeW_AddHeapDesc; // avoid negative numbers on unsigned
 
-                    if (nSizeWOAddHeapDesc >= size && nSizeW_AddHeapDesc < size) {	// exact match
+                    if (nSizeWOAddHeapDesc >= size && nSizeW_AddHeapDesc < size) {  // exact match
                         pThis->qwMagic = ALLOCMEM;
                         break;
                     }
@@ -244,7 +244,7 @@ void* _cdeCoreMemRealloc(
 
                     unsigned long long qwPages = ((size + 3 * HDX) % PAGESIZE) ? (unsigned long long)((size + 3 * HDX) / PAGESIZE) + 1 : (unsigned long long)((size + 3 * HDX) / PAGESIZE) + 0;
                     HEAPDESC* pTmpThis, * pTmpSucc, * pTmpEnd;
-                    HEAPDESC* pPageBase;		//	W/A
+                    HEAPDESC* pPageBase;        //  W/A
 
                     pPageBase = qwPages >= CDE_MEMALLOC_PAGES_MAX ? NULL : pCdeAppIf->pCdeServices->pMemAlloc(pCdeAppIf, (unsigned int)qwPages);
                     if (pPageBase) {

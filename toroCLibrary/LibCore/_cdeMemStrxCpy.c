@@ -25,7 +25,7 @@ void* _cdeMemStrxCpy(IN int preset, OUT void* pszDest, IN const void* pszSource,
 {
     unsigned n;
     signed xcrement = PRESET_TDN ? -1 : 1;//increment vs decrement
-    unsigned short 	c;
+    unsigned short  c;
     unsigned char* pDst8 = pszDest;
     unsigned short* pDst16 = pszDest;
     const unsigned char* pSrc8 = pszSource;
@@ -49,7 +49,7 @@ void* _cdeMemStrxCpy(IN int preset, OUT void* pszDest, IN const void* pszSource,
     //
     // strncpy support -- that fills remaining buffer until count
     //
-    if ((-1 != count) && PRESET_BOZ) {
+    if (((size_t) -1 != count) && PRESET_BOZ) {
         for ( /*n = 0*/; n < count; n++, pDst16 = &pDst16[xcrement], pDst8 = &pDst8[xcrement]) {
 
             if (PRESET_WID) {

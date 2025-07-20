@@ -79,7 +79,8 @@ int _cdeCoreFsetpos(CDE_APP_IF *pCdeAppIf, FILE* stream, const fpos_t* pos)
     CDEFILE* pCdeFile = (CDEFILE*)stream;
     int nRet = EOF, nRetErr = EOF, *pRet = &nRet;
     
-    CDEFPOS_T CdeFPos = { .fpos64 = *pos };
+    CDEFPOS_T CdeFPos;
+    CdeFPos.fpos64 = *pos;
 
     do {
 
@@ -127,7 +128,8 @@ int _cdeCoreFsetpos(CDE_APP_IF *pCdeAppIf, FILE* stream, const fpos_t* pos)
                     // get EOF position
                     //
                     CDEFPOS_T CdeFposEOF = { .fpos64 = 0, .CdeFposBias.Bias = CDE_SEEK_BIAS_END };
-                    CDEFPOS_T CdeFposCurrent = { .fpos64 = pCdeFile->bpos };
+                    CDEFPOS_T CdeFposCurrent;
+                    CdeFposCurrent.fpos64 = pCdeFile->bpos;
 
                     nRet = pCdeAppIf->pCdeServices->pFsetpos(pCdeAppIf, pCdeFile, &CdeFposEOF);
 

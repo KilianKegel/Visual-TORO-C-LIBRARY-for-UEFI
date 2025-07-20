@@ -37,7 +37,7 @@ Parameters
 Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/fprintf-fprintf-l-fwprintf-fwprintf-l?view=msvc-170#return-value
 **/
-int fwprintf(FILE* stream, const wchar_t* pszFormat, ...) {
+int fwprintf(FILE* const stream, wchar_t const* const pszFormat, ...) {
 
     va_list ap;
     int nRet = 0;
