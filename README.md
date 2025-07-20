@@ -1,4 +1,4 @@
-# torosrc
+# *toro C Library* sourcecode
 
 [**toro C Library**](https://github.com/KilianKegel/toro-C-Library#toro-c-library-formerly-known-as-torito-c-library)
 
@@ -6,8 +6,21 @@
     Copyright (c) 2017-2025, Kilian Kegel. All rights reserved.
     SPDX-License-Identifier: GNU General Public License v3.0
 ```
+![](https://github.com/KilianKegel/pictures/blob/master/LLVMWyvernSmall2.png)
 
 ## Revision history
+
+### 20250720, v0.9.4 Build 672
+* **add LLVM/CLANG-cl-family support — the library source code itself is now buildable with LLVM/CLANG-cl:**
+    * support VS2022 v17.14 with **LLVM (clang-cl)** tool chain
+    * support **Intel C++ Compiler 2024** tool chain<br>
+      **NOTE:** Only [**Intel oneAPI Base Toolkir ver 2024.2.1**](https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html)
+      provides the 32Bit compiler.<br>In versions **2025.x.y** the 32Bit compiler isn't shipped anymore.
+* Windows SDK version **10.0.26100.0**
+* support Microsoft tool chain:
+    * **v143(VS2022)**
+    * **v142(VS2019)** 
+    * **v141(VS2017)**
 
 ### 20250712, v0.9.3 Build 298
 * add C++ `virtual` function support by providing [Microsoft `type_info`](https://learn.microsoft.com/en-us/cpp/cpp/type-info-class?view=msvc-170) intrinsic
@@ -21,6 +34,7 @@
  
 ### 20250322, v0.9.1 Build 267
 * introduce **toro C Library** for the **Microsoft VS2022 LLVM tool chain** for **Windows NT** and **UEFI Shell** targets<br>
+  **NOTE:** the Library binary is now useable with the **LLVM linker** **lld-link**.<br>
     - toroc64LLVMUefiShell.lib
     - toroc64LLVMWinNT.lib
     - toroc32LLVMUefiShell.lib
@@ -46,13 +60,13 @@ it can be used here.<br><br>
 The 80387 processor has various improvements over its 8087 predecessor, such as<br>
   * range extension for transcendental function:
 
-    | Instruction  | function           |
-    |--------------|--------------------|
-    |FPTAN         | Partial tangent    |
-    |FPATAN        | Partial arctangent |
-    |F2XM1         | 2<sup>x</sup> - 1  |
+    | Instruction  | function                      |
+    |--------------|-------------------------------|
+    |FPTAN         | Partial tangent               |
+    |FPATAN        | Partial arctangent            |
+    |F2XM1         | 2<sup>x</sup> - 1             |
     |FYL2X         | Y * log<sub>2</sub>X          |
-    |FYL2XP        |Y * log<sub>2</sub>(X + 1)       |
+    |FYL2XP        |Y * log<sub>2</sub>(X + 1)     |
     
 * new instructions, e.g.
 
@@ -211,27 +225,27 @@ math function from Microsoft **LIBCMT.LIB**:
 * fix `fscanf()`: assignment suppression indicated by a "*": https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf#page=295 
 * fix `raise()`
 * INTERN: 
-	* add:  `size_t _cdeInt2EfiStatus(int intstatus)`
-	* add:  `int _cdeEfiStatus2Int(size_t Status)`
-	* move selected file functions to [`CdeAppIf`](https://github.com/KilianKegel/CdePkg/blob/master/Include/CdeServices.h#L421) driver side.<br>
-	This allows future/upcoming code size reduced shell application type.
-	* preliminary: LINUX-OSIF buildable, ALPHA
-	* preliminary: `osifCdeUefiShellAppEntryPoint()`, `osifCdeUefiShellAppCRT0Service()` for future/upcoming shell application type
+    * add:  `size_t _cdeInt2EfiStatus(int intstatus)`
+    * add:  `int _cdeEfiStatus2Int(size_t Status)`
+    * move selected file functions to [`CdeAppIf`](https://github.com/KilianKegel/CdePkg/blob/master/Include/CdeServices.h#L421) driver side.<br>
+      This allows future/upcoming code size reduced shell application type.
+    * preliminary: LINUX-OSIF buildable, ALPHA
+    * preliminary: `osifCdeUefiShellAppEntryPoint()`, `osifCdeUefiShellAppCRT0Service()` for future/upcoming shell application type
         that doesn't include entire `CdeAppIf` machine code to each .EFI application, but share `CdeAppIf` provided by a **CDE UEFI SHELL**.
         This allows code size reduced applications.
 
 ### 20230625
 * add Standard C95 Library functions: 
-	- [`wcstoul()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/Wcstoul.c)
-	- [`wcstol()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/Wcstol.c)
-	- [`mbrlen()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/mbrlen.c)
-	- [`mbrtowc()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/mbrtowc.c)
-	- [`mbsinit()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/mbsinit.c)
-	- [`mbsrtowcs()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/mbsrtowcs.c)
-	- [`wcrtomb()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/wcrtomb.c)
-	- [`wcsftime()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/wcsftime.c)
-	- [`wcsrtombs()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/wcsrtombs.c)
-	- [`wscanf()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/wscanf.c)
+    - [`wcstoul()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/Wcstoul.c)
+    - [`wcstol()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/Wcstol.c)
+    - [`mbrlen()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/mbrlen.c)
+    - [`mbrtowc()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/mbrtowc.c)
+    - [`mbsinit()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/mbsinit.c)
+    - [`mbsrtowcs()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/mbsrtowcs.c)
+    - [`wcrtomb()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/wcrtomb.c)
+    - [`wcsftime()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/wcsftime.c)
+    - [`wcsrtombs()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/wcsrtombs.c)
+    - [`wscanf()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/wchar_h/wscanf.c)
 * add Microsoft C Library functions from `mbctype.h`: 
     - [`_getmbcp()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/mbctype_h/_getmbcp.c)
     - [`_setmbcp()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/mbctype_h/_setmbcp.c)
