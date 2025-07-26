@@ -8,6 +8,10 @@
 ```
 ![](https://github.com/KilianKegel/pictures/blob/master/LLVMWyvernSmall2.png)
 
+## Tool chain support
+* **LLVM/CLANG:** YES
+* **Microsoft v143, v142, v141:** YES
+
 ## Revision history
 
 ### 20250720, v0.9.4 Build 672
