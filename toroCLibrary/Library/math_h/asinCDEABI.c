@@ -24,8 +24,8 @@ Author:
 --*/
 #include <CdeServices.h>
 
-extern __declspec(dllimport) double __cdecl sqrt(double d);
-extern __declspec(dllimport) double __cdecl atan(double d);
+extern __declspec(dllimport) double __cdecl sqrt(double x);
+extern __declspec(dllimport) double __cdecl atan(double x);
 
 /**
 
@@ -44,13 +44,13 @@ Returns
                         \   √(1 - x²)    /
 
 **/
-static double __cdecl asinCDEABI(double d)
+static double __cdecl asinCDEABI(double x)
 {
     double dRet = 0.0;
-    double x2 = d * d;
+    double x2 = x * x;
     double oneminx2 = 1 - x2;
     double rootoneminx2 = sqrt(oneminx2);
-    double xdivrootoneminx2 = d / rootoneminx2;
+    double xdivrootoneminx2 = x / rootoneminx2;
 
     dRet = atan(xdivrootoneminx2);
 

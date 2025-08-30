@@ -42,6 +42,7 @@ extern char* gEfiCallerBaseName;
 extern int _cdeStr2Argcv(char** argv, char* szCmdline);
 extern char __cdeGetCurrentPrivilegeLevel(void);
 extern void* __cdeGetPeiServices(void);
+extern void __cde80387FINIT(void);
 
 extern __declspec(dllimport) void* malloc(size_t size);
 extern __declspec(dllimport) void free(void* ptr);
@@ -311,6 +312,11 @@ _MainEntryPointPei(
         }
 
         pCdeAppIf = __cdeGetAppIf();
+        
+        //
+        // FPU Coprocessor 80387 initialization
+        // 
+        __cde80387FINIT();
 
         //
         // check memory discovered

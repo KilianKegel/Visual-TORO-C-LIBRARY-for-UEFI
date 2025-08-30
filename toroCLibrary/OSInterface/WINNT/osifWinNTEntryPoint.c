@@ -108,6 +108,7 @@ extern COREFFLUSH       _cdeCoreFflush;             /*pFFlushCORE   */
 
 extern int main(int argc, char** argv);
 extern int _cdeStr2Argcv(char** argv, char* szCmdline);
+extern void __cde80387FINIT(void);
 
 typedef int(__cdecl* _PIFV)(void);
 typedef void(__cdecl* _PVFV)(void);
@@ -300,6 +301,11 @@ int _MainEntryPointWinNT(void)
         /*stderr->*/pCdeFile[2].fRsv = TRUE;                        // reserved/in use
         /*stderr->*/pCdeFile[2].emufp = /* -=PORTING=- */(void*)GetStdHandle(STD_ERROR_HANDLE);
         /*stderr->*/pCdeFile[2].openmode = O_TEXT + O_WRONLY + O_CDENOSEEK + O_CDESTDERR + (FILE_TYPE_DISK == GetFileType(pCdeFile[2].emufp) ? O_CDEREDIR : 0);
+
+        //
+        // FPU Coprocessor 80387 initialization
+        // 
+        __cde80387FINIT();
 
         //
         // clock() initialization

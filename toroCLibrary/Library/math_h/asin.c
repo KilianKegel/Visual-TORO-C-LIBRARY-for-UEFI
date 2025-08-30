@@ -8,7 +8,7 @@
 
 Module Name:
 
-    sin.c
+    asin.c
 
 Abstract:
 
@@ -21,8 +21,8 @@ Author:
 
 --*/
 
-extern double __cdecl sqrt(double d);
-extern double __cdecl atan(double d);
+extern double __cdecl sqrt(double x);
+extern double __cdecl atan(double x);
 
 /**
 
@@ -41,13 +41,13 @@ Returns
                         \   √(1 - x²)    /
 
 **/
-double __cdecl asin(double d)
+double __cdecl asin(double x)
 {
     double dRet = 0.0;
-    double x2 = d * d;
+    double x2 = x * x;
     double oneminx2 = 1 - x2;
     double rootoneminx2 = sqrt(oneminx2);
-    double xdivrootoneminx2 = d / rootoneminx2;
+    double xdivrootoneminx2 = x / rootoneminx2;
 
     dRet = atan(xdivrootoneminx2);
 

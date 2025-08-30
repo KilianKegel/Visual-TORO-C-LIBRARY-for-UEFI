@@ -171,6 +171,7 @@ extern __declspec(dllimport) int raise(int sig);
 extern __declspec(dllimport) int strcmp(const char* pszDst, const char* pszSrc);
 extern __declspec(dllimport) int fprintf(FILE* stream, const char* pszFormat, ...);
 extern char _gCdeStrLibcVersion[];
+extern void __cde80387FINIT(void);
 
 #define IsEqualGUID(rguid1, rguid2) (!memcmp(rguid1, rguid2, sizeof(GUID))) //guiddef.h
 
@@ -497,6 +498,11 @@ _MainEntryPointShell(
                 CDE_STDERR->openmode = O_TEXT + O_WRONLY + O_CDESTDERR + (pCdeAppIf->STDOUT816BitMode == 0 ? O_CDENOSEEK : 0) + (EFI_UNSUPPORTED == _iob[2].pFileProtocol->GetPosition(_iob[2].pRootProtocol, &Position) ? O_CDEWCSZONLY : O_CDEREDIR);
                 CDE_STDERR->emufp = &_iob[2];
             }
+            
+            //
+            // FPU Coprocessor 80387 initialization
+            // 
+            __cde80387FINIT();
 
             //
             // clock() initialization

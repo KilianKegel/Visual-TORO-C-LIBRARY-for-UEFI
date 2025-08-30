@@ -23,6 +23,7 @@ Author:
 
 --*/
 #include <CdeServices.h>
+#include <errno.h>
 //
 // math.h
 //
@@ -76,10 +77,13 @@ Returns
 **/
 static double powCDEABI(double bas, double exp)
 {
-    CDEDOUBLE product = { .dbl = -NAN };                                  // assume failure
+    int currentERRNO = errno;
+
+    int yxldxint = 0;
+    CDEDOUBLE dRet = { .dbl = -NAN };                                   // assume failure
     CDEDOUBLE x = { .dbl = bas };
     CDEDOUBLE y = { .dbl = exp };
-    double signedOneX = 0 == signbit(x.dbl) ? 1.0 : -1.0;
+    double signedOneX = (0 == x.member.sign ? 1.0 : -1.0);
     CDEDOUBLE absx = { .dbl = fabs(x.dbl) };
     CDEDOUBLE intgr, fract;
     CDEDOUBLE twoPowerFract = { .dbl = 0.0 };
@@ -87,6 +91,7 @@ static double powCDEABI(double bas, double exp)
     double tmp;
     char fYIsFrational = 0.0 != modf(y.dbl, &tmp);
     char fYIsEven = 0 == fmod(y.dbl, 2.0);
+    errno = currentERRNO;                                               // restore errno drom fmod()
 
     do
     {
@@ -104,7 +109,7 @@ static double powCDEABI(double bas, double exp)
                 {
                     if ((0 != x.member.mant) && (0x0008000000000000ULL > x.member.mant)) 
                     {
-                        product.uint64 = 0x0008000000000000ULL | x.uint64;
+                        dRet.uint64 = 0x0008000000000000ULL | x.uint64;
                         break;
                     }
                 }
@@ -112,29 +117,29 @@ static double powCDEABI(double bas, double exp)
 
             if (0x7FF0000000000000ULL == y.uint64)    //  Y INF
             {
-
                 if (1.0 == x.dbl || -1.0 == x.dbl)
                 {
-                    product.dbl = 1.0;
+                    dRet.dbl = 1.0;
                     break;
                 }
 
                 if (1.0 > x.dbl && 0.0 < x.dbl)
                 {
-                    product.dbl = 0.0;
+                    dRet.dbl = 0.0;
                     break;
                 }
                 
                 //
                 // X NEGATIVE
                 //
-                if (signbit(x.dbl)) {
+                if (x.member.sign) {
                     if (0xBFEFFFFFFFFFFFFFULL >= x.uint64 && 0x8000000000000000ULL <= x.uint64) {
-                        product.uint64 = 0x0000000000000000ULL;
+                        dRet.uint64 = 0x0000000000000000ULL;
                         break;
                     }
                     if (0xFFF0000000000000ULL >= x.uint64 && 0xBFF0000000000001ULL <= x.uint64) {
-                        product.uint64 = 0x7FF0000000000000ULL;
+                        dRet.uint64 = 0x7FF0000000000000ULL;
+                        //errno = EDOM;
                         break;
                     }
                 }
@@ -144,25 +149,25 @@ static double powCDEABI(double bas, double exp)
             {
                 if (1.0 == x.dbl || -1.0 == x.dbl)
                 {
-                    product.dbl = 1.0;
+                    dRet.dbl = 1.0;
                     break;
                 }
 
                 if (1.0 <= x.dbl && 0x7FF0000000000000ULL >= x.uint64)
                 {
-                    product.dbl = 0.0;
+                    dRet.dbl = 0.0;
                     break;
                 }
 
                 if (-0.0 >= x.dbl && -1.0 < x.dbl)
                 {
-                    product.uint64 = 0x7FF0000000000000ULL;
+                    dRet.uint64 = 0x7FF0000000000000ULL;
                     break;
                 }
 
                 if (-1.0 > x.dbl && -INFINITY <= x.dbl)
                 {
-                    product.dbl = 0.0;
+                    dRet.dbl = 0.0;
                     break;
                 }
             }
@@ -172,19 +177,19 @@ static double powCDEABI(double bas, double exp)
                 if (1.0 == x.dbl) 
                 {
                     if (0x0008000000000000ULL & y.uint64) {
-                        product.dbl = 1.0;
+                        dRet.dbl = 1.0;
                         //else
-                        //  product.uint64 = 0x0008000000000000ULL | y.uint64;
+                        //  dRet.uint64 = 0x0008000000000000ULL | y.uint64;
                         break;
                     }
                 }
 
                 if (0x7FF == x.member.exp && 0ULL != x.member.mant)
                 {
-                    product.uint64 = 0x0008000000000000ULL | x.uint64;
+                    dRet.uint64 = 0x0008000000000000ULL | x.uint64;
                     break;
                 }
-                product.uint64 = 0x0008000000000000ULL | y.uint64;
+                dRet.uint64 = 0x0008000000000000ULL | y.uint64;
                 break;
             }
 
@@ -194,7 +199,7 @@ static double powCDEABI(double bas, double exp)
                 {
                     if (-1.0 == y.dbl)
                     {
-                        product.dbl = -0.0;
+                        dRet.dbl = -0.0;
                         break;
                     }
                 }
@@ -202,26 +207,26 @@ static double powCDEABI(double bas, double exp)
                 if (0.0 < y.dbl && 1.0 != y.dbl && -INFINITY == x.dbl)
                 {
                     if (fYIsFrational || fYIsEven)
-                        product.dbl = INFINITY;
+                        dRet.dbl = INFINITY;
                     else
-                        product.dbl = -INFINITY;
+                        dRet.dbl = -INFINITY;
                     break;
                 }
 
                 if (-0.0 > y.dbl)   // Y NEGATIVE
                 {
                     if(fYIsFrational || fYIsEven)
-                        product.dbl = 0.0;
+                        dRet.dbl = 0.0;
                     else
-                        product.dbl = -0.0;
+                        dRet.dbl = INFINITY == x.dbl ? +0.0 : -0.0;
                     break;
                 }
             }
 
             if (1.0 == fabs(y.dbl) && (0xFFF0000000000000ULL < x.uint64 && 0xFFFFFFFFFFFFFFFFULL >= x.uint64))
             {
-                product.uint64 = 0x0008000000000000ULL | x.uint64;
-                product.member.sign = 0;
+                dRet.uint64 = 0x0008000000000000ULL | x.uint64;
+                dRet.member.sign = 0;
                 break;
             }
 
@@ -229,19 +234,19 @@ static double powCDEABI(double bas, double exp)
             {
                 if (0.0 == fabs(y.dbl))
                 {
-                    product.dbl = 1.0;
+                    dRet.dbl = 1.0;
                     break;
                 }
                 
                 if (1.0 == y.dbl)
                 {
-                    product.dbl = x.dbl;
+                    dRet.dbl = x.dbl;
                     break;
                 }
 
                 if (fYIsFrational) 
                 {
-                    product.uint64 = 0xFFF8000000000000ULL;
+                    dRet.uint64 = 0xFFF8000000000000ULL;
                     break;
                 }
             }
@@ -251,57 +256,60 @@ static double powCDEABI(double bas, double exp)
         // 80387 calculation
         ////////////////////////////////////////////////
         CDEDOUBLE yxldx = { .dbl = __cde80387FYL2X(absx.dbl, y.dbl) };  // product of exponent and ld(base)
+        yxldxint = (int)yxldx.dbl;                    // integer part of yxldx, Microsoft error limit is about -1477
+
         if (0x7FF == yxldx.member.exp)
         {
             if (0.0 == y.dbl)
-                product.dbl = 1.0;
-            else if (signbit(yxldx.dbl))
+                dRet.dbl = 1.0;
+            else if (yxldx.member.sign)
             {
                 if (fYIsFrational)
                     if (0.0 == fabs(x.dbl))
-                        product.dbl = +0.0;                     //001: pow(8000000000000000, 0008000000000000) -> FFF8000000000000
+                        dRet.dbl = +0.0;                     //001: pow(8000000000000000, 0008000000000000) -> FFF8000000000000
                     else
-                        product.uint64 = 0xFFF8000000000000ULL; //401: pow(8000000000000001, 4070000000000001)
+                        dRet.uint64 = 0xFFF8000000000000ULL; //401: pow(8000000000000001, 4070000000000001)
                 else
                     if (fYIsEven)
-                        product.dbl = +0.0;
+                        dRet.dbl = +0.0;
                     else
                         if (0.0 == fabs(x.dbl))
-                            product.dbl = x.dbl;
+                            dRet.dbl = x.dbl;
                         else if (1.0 == y.dbl)
-                            product.dbl = x.dbl;
+                            dRet.dbl = x.dbl;
                         else
-                            product.dbl = -0.0;
+                            dRet.dbl = -0.0;
             }
             else {
-                if (signbit(x.dbl))
-                    product.dbl = -yxldx.dbl;
+                if (x.member.sign)
+                    dRet.dbl = -yxldx.dbl;
                 else
-                    product.dbl = +yxldx.dbl;
+                    dRet.dbl = +yxldx.dbl;
 
                 if (0x7FF0000000000000ULL == yxldx.uint64) {
-                    if (signbit(x.dbl))
+                    //kgtest dRet.uint64 = yxldx.uint64;
+                    if (x.member.sign)
                         if (fYIsFrational)
-                            product.dbl = +yxldx.dbl;
+                            dRet.dbl = +yxldx.dbl;
                         else
                             if (fYIsEven)
-                                product.dbl = +yxldx.dbl;
+                                dRet.dbl = +yxldx.dbl;
                             else
-                                product.dbl = -yxldx.dbl;
+                                dRet.dbl = -yxldx.dbl;
                     else
-                        product.dbl = +yxldx.dbl;
+                        dRet.dbl = +yxldx.dbl;
                 }
                 
                 if (0ULL != x.member.mant)
-                    if (signbit(product.dbl)) 
+                    if (dRet.member.sign) 
                     {
-                        product.uint64 |= 0x0008000000000000ULL;
+                        dRet.uint64 |= 0x0008000000000000ULL;
                         if (0x7FF != y.member.exp)
                         {
                             if (fYIsFrational || fYIsEven)
-                                product.dbl = +product.dbl;
+                                dRet.dbl = +dRet.dbl;
                             else
-                                product.dbl = -product.dbl;
+                                dRet.dbl = -dRet.dbl;
                         }
                     }
             }
@@ -317,7 +325,7 @@ static double powCDEABI(double bas, double exp)
 
             if (ntmp > 0x7FE || 1024.0 < intgr.dbl)
             {
-                product.dbl = signedOneX * INFINITY;
+                dRet.dbl = signedOneX * INFINITY;
                 break;
             }
             twoPowerIntgr.member.exp = 1023/*bias*/ + (uint64_t)intgr.dbl;
@@ -332,12 +340,28 @@ static double powCDEABI(double bas, double exp)
                 twoPowerIntgr.member.mant = 1ULL << ((int64_t)intgr.dbl + 1023 + 51);
         }
 
-        product.dbl = signedOneX * twoPowerIntgr.dbl * twoPowerFract.dbl;
+        dRet.dbl = signedOneX * twoPowerIntgr.dbl * twoPowerFract.dbl;
 
     } while (0);
 
 
-    return product.dbl;
+    //
+    // errno
+    //
+    if (0xFFF8000000000000ULL == dRet.uint64
+        && 0xFFF8000000000000ULL != x.uint64
+        && 0xFFF8000000000000ULL != y.uint64)
+        errno = EDOM;
+    else if (0x7FF0000000000000ULL == dRet.uint64
+        && !(0x7FF0000000000000ULL == y.uint64 || 0xFFF0000000000000ULL == y.uint64 || 0x7FF0000000000000ULL == x.uint64 || 0xFFF0000000000000ULL == x.uint64))
+        errno = ERANGE;
+    else if (0xFFF0000000000000ULL == dRet.uint64 && x.uint64 != 0xFFF0000000000000 && y.uint64 != 0x3FF0000000000000)
+        errno = ERANGE;
+    else if ((0.0 == dRet.dbl) && (0.0 != bas) && (0.0 == twoPowerIntgr.dbl) && (yxldxint >= -1477))
+        if((0x7FF0000000000000ULL != (0x7FF0000000000000ULL & x.uint64)) && (0x7FF0000000000000ULL != ((0x7FF0000000000000ULL & y.uint64))))
+            errno = ERANGE;
+
+    return dRet.dbl;
 }
 
 MKCDEABI(pow);

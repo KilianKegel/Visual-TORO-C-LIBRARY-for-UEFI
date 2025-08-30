@@ -13,6 +13,9 @@
 * **Microsoft v143, v142, v141:** YES
 
 ## Revision history
+### 20250830, v0.9.5 Build 755
+* add [**errno.h**]((https://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=198)) support for [**math.h** functions](https://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=224)
+* publish **math.h** [**C-Validation Suite results**](https://github.com/KilianKegel/toroCVSreport?tab=readme-ov-file#mathh)
 
 ### 20250720, v0.9.4 Build 672
 * **add LLVM/CLANG-cl-family support — the library source code itself is now buildable with LLVM/CLANG-cl:**

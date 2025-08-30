@@ -23,8 +23,9 @@ Author:
 
 --*/
 #undef NCDETRACE
-#include <cde.h>
 #include <CdeServices.h>
+#include <cde.h>
+#include <errno.h>
 
 extern double __cde80387FSCALE(double x, double y);
 
@@ -48,7 +49,31 @@ Returns
 
 static double __cdecl ldexpCDEABI(double x, int exp)
 {
-    return __cde80387FSCALE(x, (double)exp);
+    CDEDOUBLE dRet = {.dbl = x};
+    
+    do 
+    {
+        if (0x7FFULL == dRet.member.exp)
+        {
+            if (0ULL != dRet.member.mant)
+            {
+                if (0ULL == ((1ULL << 51) & dRet.member.mant))  // if highest mantisse bit NOT set
+                    errno = EDOM;                               // set domain error for NAN
+                dRet.member.mant |= (1ULL << 51);               // set highest mantisse bit
+            }
+            break;                                              // return NAN
+        }
+
+        dRet.dbl = __cde80387FSCALE(x, (double)exp);
+
+        //
+        // check result
+        //
+        if(0x7FFULL == dRet.member.exp)
+            errno = ERANGE;                                     // set range error for INF
+    } while (0);
+    
+    return dRet.dbl;
 }
 
 MKCDEABI(ldexp);

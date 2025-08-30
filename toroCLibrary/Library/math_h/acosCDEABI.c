@@ -25,7 +25,7 @@ Author:
 #include <CdeServices.h>
 
 extern const double __cdePI_2;
-extern __declspec(dllimport) double __cdecl asin(double d);
+extern __declspec(dllimport) double __cdecl asin(double x);
 
 /**
 
@@ -42,13 +42,9 @@ Returns
     arccos(x) = pi/2 - arcsin(x)
 
 **/
-static double __cdecl acosCDEABI(double d)
+static double __cdecl acosCDEABI(double x)
 {
-    double dRet;
-
-    dRet = __cdePI_2 - asin(d);
-
-    return dRet;
+    return __cdePI_2 - asin(x);
 }
 
 MKCDEABI(acos);

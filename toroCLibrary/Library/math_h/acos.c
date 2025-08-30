@@ -23,7 +23,7 @@ Author:
 #include <stdint.h>
 
 extern const double __cdePI_2;
-extern double __cdecl asin(double d);
+extern double __cdecl asin(double x);
 
 /**
 
@@ -40,11 +40,7 @@ Returns
     arccos(x) = pi/2 - arcsin(x)
 
 **/
-double __cdecl acos(double d)
+double __cdecl acos(double x)
 {
-    double dRet;
-
-    dRet = __cdePI_2 - asin(d);
-
-    return dRet;
+    return __cdePI_2 - asin(x);
 }

@@ -21,6 +21,7 @@ Author:
 
 --*/
 #include <CdeServices.h>
+#include <errno.h>
 
 extern double __cdecl __cde80387FSQRT(double x);
 
@@ -37,24 +38,37 @@ Returns
     https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/sqrt-sqrtf-sqrtl#return-value
 
 **/
-double __cdecl sqrt(double d)
+double __cdecl sqrt(double x)
 {
-    CDEDOUBLE* pdbl = (void*)&d;
-    uint64_t di = 0xFFF8000000000000ULL;// 0x7FF8002000000000LL;//DOMAIN ERROR
-    double* pd = (void*)&di;
+    CDEDOUBLE d = { .dbl = x };
+    CDEDOUBLE dRet;
 
     do
     {
-        if (0 == pdbl->member.exp)      // 0.0?
+        if (0x7FF == d.member.exp)
         {
-            *pd = d;                    // return 0.0
+            if (0ULL == d.member.mant) 
+            {
+                if(0 == d.member.sign)
+                    dRet.uint64 = 0x7FF0000000000000ULL;
+                else
+                    dRet.uint64 = 0xFFF8000000000000ULL;
+            }
+            else
+                dRet.uint64 = 0x0008000000000000ULL | d.uint64;
             break;
         }
 
-        if (0 == pdbl->member.sign)     // non-neg?
-            *pd = __cde80387FSQRT(d);
+        if (+0.0 <= x)
+            dRet.dbl = __cde80387FSQRT(x);
+        else
+            dRet.uint64 = 0xFFF8000000000000ULL;
 
     } while (0);
 
-    return *pd;
+    if (0xFFF8000000000000ULL == dRet.uint64)
+        if (0xFFF8000000000000ULL != d.uint64)
+            errno = EDOM;
+
+    return dRet.dbl;
 }

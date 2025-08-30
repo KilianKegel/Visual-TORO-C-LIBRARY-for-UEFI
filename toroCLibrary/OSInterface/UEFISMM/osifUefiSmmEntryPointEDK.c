@@ -58,6 +58,7 @@ extern EFI_STATUS EFIAPI OemHookStatusCodeInitialize(void);
 extern int _cdeStr2Argcv(char** argv, char* szCmdline);
 extern char __cdeGetCurrentPrivilegeLevel(void);
 extern size_t _cdeInt2EfiStatus(int intstatus);
+extern void __cde80387FINIT(void);
 
 extern EFI_GUID gEfiLoadedImageProtocolGuid;
 extern EFI_GUID _gCdeSmmProtocolGuid;                   // The GUID for the protocol
@@ -263,6 +264,10 @@ EFI_STATUS EFIAPI _MainEntryPointSmm(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TA
     CDE_LOADOPTIONS_PROTOCOL* pCdeLoadOptionsProtocol;
     char* pLoadOptions, * pLoadOptionsRW = gEfiCallerBaseName;
 
+    //
+    // FPU Coprocessor 80387 initialization
+    // 
+    __cde80387FINIT();
     do {
 
         if (1)

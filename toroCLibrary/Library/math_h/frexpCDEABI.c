@@ -23,6 +23,7 @@ Author:
 
 --*/
 #include <CdeServices.h>
+#include <errno.h>
 
 extern double modf(double x, double* intptr);
 extern double fabs(double x);
@@ -82,6 +83,14 @@ static double __cdecl frexpCDEABI(double x, int* expptr)
         }
 
     } while (0);
+
+    //
+    // errno
+    //
+    if (0x7FFULL == dRet.member.exp)
+        if(dRet.uint64 != px->uint64)
+            if ((0x0008000000000000ULL | px->uint64) == (dRet.uint64))
+                errno = EDOM;
 
     return dRet.dbl;
 }

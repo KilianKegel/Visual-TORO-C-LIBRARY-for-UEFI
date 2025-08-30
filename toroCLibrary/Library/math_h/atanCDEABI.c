@@ -39,25 +39,9 @@ Returns
     https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/atan-atanf-atanl-atan2-atan2f-atan2l#return-value
 
 **/
-static double __cdecl atanCDEABI(double d)
+static double __cdecl atanCDEABI(double x)
 {
-    CDEDOUBLE* pdbl = (void*)&d;
-    uint64_t di = 0xFFF8000000000000ULL;// 0x7FF8002000000000LL;//DOMAIN ERROR
-    double* pd = (void*)&di;
-
-    do
-    {
-        if (0 == pdbl->member.exp)     // 0.0?
-        {
-            *pd = d;                // return 0.0
-            break;
-        }
-
-        *pd = __cde80387FPATAN(d);
-
-    } while (0);
-
-    return *pd;
+    return __cde80387FPATAN(x);
 }
 
 MKCDEABI(atan);

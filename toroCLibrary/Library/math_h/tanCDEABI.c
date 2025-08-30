@@ -21,7 +21,7 @@ Author:
 
 --*/
 #include <CdeServices.h>
-
+#include <errno.h>
 extern double __cdecl __cde80387FPTAN(double x);
 
 /**
@@ -37,16 +37,32 @@ Returns
     https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/tan-tanf-tanl#return-value
 
 **/
-static double __cdecl tanCDEABI(double d)
+static double __cdecl tanCDEABI(double x)
 {
-    CDEDOUBLE* pdbl = (void*)&d;
-    uint64_t di = 0x7FF8042000000000LL;
-    double* pd = (void*)&di;
+    CDEDOUBLE dRet = { .dbl = x };
 
-    if ((63 + 1023) > pdbl->member.exp)
-        *pd = __cde80387FPTAN(d);
+    do
+    {
+        if (0x7FFULL == dRet.member.exp)
+        {
+            if(0ULL == dRet.member.mant)
+                dRet.uint64 = 0x8008000000000000ULL | dRet.uint64,
+                errno = EDOM;
+            else
+                dRet.uint64 = 0x0008000000000000ULL | dRet.uint64;
+            
+            break;
+        }
 
-    return *pd;
+        if ((63 + 1023) > dRet.member.exp)
+            dRet.dbl = __cde80387FPTAN(x);
+        else
+            dRet.uint64 = 0x7FF8042000000000LL,
+            errno = ERANGE;
+
+    } while (0);
+
+    return dRet.dbl;
 }
 
 MKCDEABI(tan);

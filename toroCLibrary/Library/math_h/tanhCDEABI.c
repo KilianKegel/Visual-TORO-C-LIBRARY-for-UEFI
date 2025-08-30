@@ -44,14 +44,40 @@ Returns
                 cosh(x)         2x
                                e   + 1
 **/
-static double __cdecl tanhCDEABI(double d)
+static double __cdecl tanhCDEABI(double x)
 {
-    double epow2x = exp(2.0 * d);
-    double epow2xm1 = epow2x - 1.0;
-    double epow2xp1 = epow2x + 1.0;
-    double dRet = epow2xm1 / epow2xp1;
+    CDEDOUBLE dRet = { .dbl = x };
+    double epow2x;
+    double epow2xm1;
+    double epow2xp1;
 
-    return dRet;
+    do 
+    {
+        if (dRet.member.exp < 0x3E5)
+            break;
+        if (dRet.member.exp <= 0x7FE && dRet.member.exp >= 0x407)
+        {
+            if(0 == dRet.member.sign)
+                dRet.dbl = +1.0;
+            else
+                dRet.dbl = -1.0;
+            break;
+        }
+        
+        if (dRet.uint64 == 0x7FF0000000000000ULL)
+        {
+            dRet.dbl = +1.0;
+            break;
+        }
+
+        epow2x = exp(2.0 * x);
+        epow2xm1 = epow2x - 1.0;
+        epow2xp1 = epow2x + 1.0;
+        dRet.dbl = epow2xm1 / epow2xp1;
+
+    } while (0);
+    
+    return dRet.dbl;
 }
 
 MKCDEABI(tanh);

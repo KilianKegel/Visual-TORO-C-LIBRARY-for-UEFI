@@ -22,6 +22,7 @@ Author:
 --*/
 #include <CdeServices.h>
 #include <math.h>
+#include <errno.h>
 
 //extern double modf(double x, double* intptr);
 extern double __cdecl __cde80387FPREM(double x, double y);
@@ -41,7 +42,7 @@ Returns
 **/
 double __cdecl fmod(double x, double y)
 {
-    CDEDOUBLE dRet, * py = (void*)&y;
+    CDEDOUBLE dRet, * py = (void*)&y , * px = (void*)&x;
 
     dRet.dbl = x;
 
@@ -80,6 +81,16 @@ double __cdecl fmod(double x, double y)
         dRet.dbl = __cde80387FPREM(x, y);
 
     } while (0);
+
+    //
+    // errno
+    //
+    if (0x7FF8000000000000ULL == dRet.uint64 || 0xFFF8000000000000ULL == dRet.uint64)
+        if (0x7FF8000000000000ULL != px->uint64
+            && 0x7FF8000000000000ULL != py->uint64
+            && 0xFFF8000000000000ULL != px->uint64
+            && 0xFFF8000000000000ULL != py->uint64)
+            errno = EDOM;
 
     return dRet.dbl;
 }

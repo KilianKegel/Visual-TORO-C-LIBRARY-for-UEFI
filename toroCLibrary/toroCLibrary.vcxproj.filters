@@ -775,6 +775,12 @@
     <MASM Include="Library\math_h\__cde80387FSCALE64.asm" />
     <MASM Include="LibAssist\__cdeGetEFLAGS32.asm" />
     <MASM Include="LibAssist\__cdeGetEFLAGS64.asm" />
+    <MASM Include="Library\math_h\__cde80387FCLEX64.asm" />
+    <MASM Include="Library\math_h\__cde80387FCLEX32.asm" />
+    <MASM Include="Library\math_h\__cde80387FINIT32.asm" />
+    <MASM Include="Library\math_h\__cde80387FINIT64.asm" />
+    <MASM Include="Library\math_h\__cde80387FMULP32.asm" />
+    <MASM Include="Library\math_h\__cde80387FMULP64.asm" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />

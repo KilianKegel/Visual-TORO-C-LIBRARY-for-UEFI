@@ -22,8 +22,9 @@ Author:
     Kilian Kegel
 
 --*/
+#include <errno.h>
 #include <CdeServices.h>
-
+extern void abort(void);
 extern __declspec(dllimport) double exp(double);
 
 /**
@@ -42,13 +43,57 @@ Returns
     sinh(x) = 0.5 * (e^x - e^(-x))
 
 **/
-static double sinhCDEABI(double d)
+static double sinhCDEABI(double x)
 {
-    double epowx = exp(d);
-    double epowminusx = exp(-d);
-    double diff = epowx - epowminusx;
+    CDEDOUBLE d = { .dbl = x };
+    CDEDOUBLE dRet = { .dbl = x };
+    double epowx;
+    double epowminusx;
+    double diff;
+    do
+    {
+        if (-0.0 == x || +0.0 == x) {
+            dRet.dbl = x;
+            break;
+        }
 
-    return 0.5 * diff;
+        if (1 == d.member.sign)
+        {
+            if (0xBE54000000000000ULL >= d.uint64)
+                break;  // return x
+        }
+        else {
+            if (d.member.exp <= 0x3E4)    // positive number
+            {
+                if (d.member.sign == 0)
+                    dRet.dbl = x;
+                else
+                    dRet.dbl = -x;
+                break;          // return +/-0.0
+            }
+        }
+
+
+        epowx = exp(d.dbl);
+        epowminusx = exp(-d.dbl);
+        diff = epowx - epowminusx;
+
+        //
+        // NOTE: diff == 0.0 appears also with 0x3C90000000000000ULL (5.55111512312578270211815834045E-17, 0.0000000000000000555111512312578270211815834045)
+        //  
+        if (0.0 == diff)
+            abort();
+
+        dRet.dbl = 0.5 * diff;
+
+    } while (0);
+
+    if (0x7FFULL == dRet.member.exp)
+        if (0ULL == dRet.member.mant)
+            if(0x7FF0000000000000ULL != d.uint64 && 0xFFF0000000000000ULL != d.uint64)
+                errno = ERANGE;                     // set domain error
+
+    return dRet.dbl;
 }
 
 MKCDEABI(sinh);

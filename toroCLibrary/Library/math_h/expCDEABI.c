@@ -23,6 +23,7 @@ Author:
 
 --*/
 #include <CdeServices.h>
+#include <errno.h>
 //
 // math.h
 //
@@ -67,14 +68,14 @@ Returns
     NOTE:   80387's only exponential function is F2XM1 -> 2  - 1 in the range -1 <= x <= + 1
             
 **/
-static double expCDEABI(double d)
+static double expCDEABI(double x)
 {
-    double dret = INFINITY;
+    double dRet = INFINITY;
     double intgr, fract;
     double twoPowerFract = 0.0;
     double twoPowerIntgr = 0.0;
     CDEDOUBLE* ptwoPowerIntgr = (void*) &twoPowerIntgr;
-    double dxlde = d * __cdeLOG2E;  // product of d and ld(e)
+    double dxlde = x * __cdeLOG2E;  // product of x and ld(e)
 
     do {
 
@@ -82,7 +83,7 @@ static double expCDEABI(double d)
             break;
 
         if (-INFINITY == dxlde) {
-            dret = 0.0;
+            dRet = 0.0;
             break;
         }
 
@@ -107,11 +108,15 @@ static double expCDEABI(double d)
                 ptwoPowerIntgr->member.mant = 1ULL << ((int64_t)intgr + 1023 + 51);
         }
         
-        dret = twoPowerIntgr * twoPowerFract;
+        dRet = twoPowerIntgr * twoPowerFract;
 
     } while (0);
 
-    return dret;
+    if (INFINITY == dRet)
+        if (INFINITY != x && -INFINITY != x)
+            errno = ERANGE;
+
+    return dRet;
 }
 
 MKCDEABI(exp);

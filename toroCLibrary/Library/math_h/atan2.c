@@ -22,6 +22,7 @@ Author:
 --*/
 #include <CdeServices.h>
 #include <math.h>
+#include <errno.h>
 
 extern double __cdecl __cde80387FPATAN(double x);
 extern const double __cdePI;

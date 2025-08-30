@@ -39,13 +39,17 @@ Returns
     https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/floor-floorf-floorl#return-value
 
 **/
-static double __cdecl floorCDEABI(double d)
+static double __cdecl floorCDEABI(double x)
 {
-    double dRet;
-    double fract = modf(d, &dRet);
-    double add = 0.0 == fract ? 0.0 : (d > 0.0 ? +0.0 : -1.0);
-    
-    return dRet + add;
-}
+    double dRet = x;
 
+    if (-0.0 != x)
+    {
+        double fract = modf(x, &dRet);
+        double add = 0.0 == fract ? 0.0 : (x > 0.0 ? +0.0 : -1.0);
+
+        dRet = dRet + add;
+    }
+    return dRet;
+}
 MKCDEABI(floor);

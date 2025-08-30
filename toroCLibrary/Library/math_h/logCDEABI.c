@@ -23,6 +23,7 @@ Author:
 
 --*/
 #include <CdeServices.h>
+#include <errno.h>
 
 extern double __cdecl __cde80387FYL2X(double x, double y);
 extern double __cdeLN2;
@@ -42,11 +43,25 @@ Returns
     ln(x) = ln(2) * ld(x)       --> ln logarithmus naturalis, ld logarithmus dualis
 
 **/
-static double __cdecl logCDEABI(double d)
+static double __cdecl logCDEABI(double x)
 {   
-    double dRet= __cde80387FYL2X(d, __cdeLN2);
+    CDEDOUBLE d = { .dbl = x };
+    CDEDOUBLE dRet;
 
-    return dRet;
+    dRet.dbl = __cde80387FYL2X(x, __cdeLN2);
+
+    if (0xFFF8000000000000ULL == dRet.uint64)
+    {
+        if (0xFFF8000000000000ULL != d.uint64)
+        {
+            errno = EDOM;
+        }
+    }
+
+    if (0xFFF0000000000000ULL == dRet.uint64)
+        errno = ERANGE;
+
+    return dRet.dbl;
 
 }
 

@@ -22,6 +22,7 @@ Author:
     Kilian Kegel
 
 --*/
+#include <errno.h>
 #include <CdeServices.h>
 
 extern __declspec(dllimport) double exp(double);
@@ -42,29 +43,64 @@ Returns
     cosh(x) = 0.5 * (e^x + e^(-x))
 
 **/
-static double coshCDEABI(double d)
+static double coshCDEABI(double x)
 {
-    double dret = 0x7FF0000000000000ULL;// INFINITY;
+    double dRet = /*INFINITY*/0x7FF0000000000000ULL;
+    CDEDOUBLE d = { .dbl = x };
 
     do
     {
-        double epowx = exp(d);
-
-        if(0.0 == epowx)
+        //
+        // range check / range results
+        //
+        if (0x7FF0000000000000ULL < d.uint64 && 0x8000000000000000ULL > d.uint64)
+        {
+            d.uint64 |= 0x0008000000000000;  // set to +QNAN
+            dRet = d.dbl;                    // return x
             break;
+        }
 
-        double epowminusx = exp(-d);
-
-        if (0.0 == epowminusx)
+        if (0xFFF0000000000000ULL < d.uint64)
+        {
+            d.uint64 |= 0x0008000000000000;  // set to -QNAN
+            dRet = d.dbl;                    // return x
             break;
+        }
 
-        double sum = epowx + epowminusx;
+        if (0xC090000000000000ULL <= d.uint64)
+        {
+            d.dbl = /*INFINITY*/0x7FF0000000000000ULL;                // set to +INF
+            dRet = d.dbl;                    // return x
+            break;
+        }
 
-        dret = 0.5 * sum;
+        //
+        // math calculation
+        //
+        if (1)
+        {
+            double epowx = exp(x);  // epoxw -> e power x
+
+            if (0.0 == epowx)
+                break;
+
+            double epowminusx = exp(-x);
+
+            if (0.0 == epowminusx)
+                break;
+
+            double sum = epowx + epowminusx;
+
+            dRet = 0.5 * sum;
+        }
 
     }while(0);
 
-    return dret;
+    if (/*INFINITY*/0x7FF0000000000000ULL == dRet)
+        if (/*INFINITY*/0x7FF0000000000000ULL != x && /*-INFINITY*/ 0xFFF0000000000000ULL != x)
+            errno = ERANGE;
+
+    return dRet;
 }
 
 MKCDEABI(cosh);
