@@ -96,7 +96,7 @@ int vfprintf(FILE* const stream, char const* const pszFormat, va_list ap) {
             ap                  // IN va_list ap
         );
 
-        if (stdout == stream) {
+        if (stdout == pDest) {
             pCdeAppIf->pCdeServices->pPutConOut(EOF, (void**)&pCdeAppIf);           //flush to stdout
         }
 

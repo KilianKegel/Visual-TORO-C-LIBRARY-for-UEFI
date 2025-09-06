@@ -54,7 +54,7 @@ Parameters
 Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/vfprintf-vfprintf-l-vfwprintf-vfwprintf-l?view=msvc-160#return-value
 **/
-static int vfprintfCDEABI(FILE* stream, const char* pszFormat, va_list ap) {
+static int vfprintfCDEABI(FILE* const stream, char const* const pszFormat, va_list ap) {
     ROMPARM_VWXPRINTF RomParm = { \
         /*fForceToDataSeg       */ 1 ,\
         /*fPointerIsParm        */ 0 ,\
@@ -66,6 +66,7 @@ static int vfprintfCDEABI(FILE* stream, const char* pszFormat, va_list ap) {
     };
     int nRet = 0;
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
+    void* pDest = stream;
 
     if (NULL == pCdeAppIf)
         errno = EPERM;
@@ -76,7 +77,7 @@ static int vfprintfCDEABI(FILE* stream, const char* pszFormat, va_list ap) {
         if (CDEDBGMAGIC == (size_t)stream)
         {
             pfnOutput = pCdeAppIf->pCdeServices->pPutDebug;
-            stream = (void*)pCdeAppIf;
+            pDest = (void*)pCdeAppIf;
         }
         else
         {
@@ -88,7 +89,8 @@ static int vfprintfCDEABI(FILE* stream, const char* pszFormat, va_list ap) {
                 if ((FILE*)CDE_STDOUT == stream
                     || (FILE*)CDE_STDERR == stream)
                     pfnOutput = pCdeAppIf->pCdeServices->pPutConOut;
-                stream = (void*)pCdeAppIf;
+                    
+                pDest = (void*)pCdeAppIf;
 
                 break;
             default:
@@ -101,12 +103,12 @@ static int vfprintfCDEABI(FILE* stream, const char* pszFormat, va_list ap) {
             &RomParm,           // IN ROMPARM_VWXPRINTF *pRomParm,
             pszFormat,          // IN const void *pszFormat,
             pfnOutput,          // void (*pfnDevPutChar)(UINT16/*wchar_t*/c,void** ppDest/*address of pDest*/),
-            stream,             // UINT8 *pDest, pointer for the output function memory address or pCdeAppIf
+            pDest,              // UINT8 *pDest, pointer for the output function memory address or pCdeAppIf
             (unsigned)-1,       // unsigned dwCount,
             ap                  // IN va_list ap
         );
 
-        if (stdout == stream) {
+        if (stdout == pDest) {
             pCdeAppIf->pCdeServices->pPutConOut(EOF, (void**)&pCdeAppIf);           //flush to stdout
         }
 
