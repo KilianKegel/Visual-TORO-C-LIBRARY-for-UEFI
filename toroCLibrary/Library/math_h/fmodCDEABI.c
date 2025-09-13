@@ -24,7 +24,13 @@ Author:
 --*/
 #include <CdeServices.h>
 #include <math.h>
-#include <errno.h>
+//
+// ERRNO.H
+//
+#define EDOM    33
+#define ERANGE  34
+#define errno   (*_errno())
+extern __declspec(dllimport) int* _errno(void);
 
 //extern double modf(double x, double* intptr);
 extern double __cdecl __cde80387FPREM(double x, double y);

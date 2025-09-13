@@ -41,8 +41,6 @@ extern __declspec(dllimport) int* _errno(void);
 
 #include <limits.h>
 
-#define _CRT_FUNCTIONS_REQUIRED 0   // MICROSOFT specific: 
-                                    //      exclude _errno() definition in Microsoft stddef.h to use _IMP__errno()
 #include <CdeServices.h>
 
 extern int __cdeIsFilePointerCORE(CDE_APP_IF *pCdeAppIf, void* stream);

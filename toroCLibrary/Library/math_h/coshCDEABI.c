@@ -22,10 +22,16 @@ Author:
     Kilian Kegel
 
 --*/
-#include <errno.h>
 #include <CdeServices.h>
 
 extern __declspec(dllimport) double exp(double);
+//
+// ERRNO.H
+//
+#define EDOM    33
+#define ERANGE  34
+#define errno   (*_errno())
+extern __declspec(dllimport) int* _errno(void);
 
 /**
 

@@ -23,7 +23,14 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <errno.h>
+//
+// ERRNO.H
+//
+#define EDOM    33
+#define ERANGE  34
+#define errno   (*_errno())
+extern __declspec(dllimport) int* _errno(void);
+
 //
 // math.h
 //

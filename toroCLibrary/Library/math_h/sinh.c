@@ -71,16 +71,9 @@ double sinh(double x)
             }
         }
 
-
         epowx = exp(d.dbl);
         epowminusx = exp(-d.dbl);
         diff = epowx - epowminusx;
-
-        //
-        // NOTE: diff == 0.0 appears also with 0x3C90000000000000ULL (5.55111512312578270211815834045E-17, 0.0000000000000000555111512312578270211815834045)
-        //  
-        if (0.0 == diff)
-            abort();
 
         dRet.dbl = 0.5 * diff;
 

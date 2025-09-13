@@ -22,10 +22,16 @@ Author:
     Kilian Kegel
 
 --*/
-#include <errno.h>
 #include <CdeServices.h>
 extern void abort(void);
 extern __declspec(dllimport) double exp(double);
+//
+// ERRNO.H
+//
+#define EDOM    33
+#define ERANGE  34
+#define errno   (*_errno())
+extern __declspec(dllimport) int* _errno(void);
 
 /**
 
@@ -77,12 +83,6 @@ static double sinhCDEABI(double x)
         epowx = exp(d.dbl);
         epowminusx = exp(-d.dbl);
         diff = epowx - epowminusx;
-
-        //
-        // NOTE: diff == 0.0 appears also with 0x3C90000000000000ULL (5.55111512312578270211815834045E-17, 0.0000000000000000555111512312578270211815834045)
-        //  
-        if (0.0 == diff)
-            abort();
 
         dRet.dbl = 0.5 * diff;
 

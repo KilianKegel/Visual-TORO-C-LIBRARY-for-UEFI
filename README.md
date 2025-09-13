@@ -13,6 +13,8 @@
 * **Microsoft v143, v142, v141:** YES
 
 ## Revision history
+### 20250913, v0.9.7 Build 764
+* fix [**errno.h**]((https://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=198)) support for [**math.h** functions](https://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=224) in **UEFI POST drivers** (Power On Self Test)<br>
 ### 20250906, v0.9.6 Build 757
 * fix buffer flush in `fprintf()`-family functions
 ### 20250830, v0.9.5 Build 755
@@ -214,7 +216,7 @@ math function from Microsoft **LIBCMT.LIB**:
     * `#define CDEDBG STDOUT` – traces directed to stdout
     * `#define CDEDBG STDERR` – traces directed to stderr
     * `#define CDEDBG STDDBG` – traces directed to CDE debug channel, normally COM1, I/O 0x3F8 115200,8,n,1
-    * `CDEDBG` undefined – UEFI Shell/post DRIVERS: STDDBG, Windows NT: STDOUT
+    * `CDEDBG` undefined – UEFI Shell/POST DRIVERS: STDDBG, Windows NT: STDOUT
 
 ### 20230909
 * add `CDE`(*C Development Environment*)-interface for native **Tianocore UEFI SHELL** [`UEFISHELLDRV`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/tree/main/toroCLibrary/OSInterface/UEFISHELLDRV).<br>
@@ -266,7 +268,7 @@ math function from Microsoft **LIBCMT.LIB**:
 * fixed: in the pre-Memory-Discovered PEI (Pre Efi Initialization) POST x86-32
   Standard C function `localeconv()` crashed the platform.<br>
   NOTE: All x86-64 operation modes (UEFI Shell, UEFI SMM, UEFI DXE, Windows NT)
-  and post-Memory-Discovered PEI (Pre Efi Initialization) x86-32 was not affected by that bug.
+  and POST-Memory-Discovered PEI (Pre Efi Initialization) x86-32 was not affected by that bug.
 ### 20230409
 * add Memory Discovered (https://uefi.org/sites/default/files/resources/PI_Spec_1_6.pdf#page=111) handling for PEIM (Pre-EFI Initialization Module)
     * restart memory management when switching from CAR (Cash As RAM) to permanent memory

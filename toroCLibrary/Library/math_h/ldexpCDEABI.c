@@ -25,7 +25,13 @@ Author:
 #undef NCDETRACE
 #include <CdeServices.h>
 #include <cde.h>
-#include <errno.h>
+//
+// ERRNO.H
+//
+#define EDOM    33
+#define ERANGE  34
+#define errno   (*_errno())
+extern __declspec(dllimport) int* _errno(void);
 
 extern double __cde80387FSCALE(double x, double y);
 

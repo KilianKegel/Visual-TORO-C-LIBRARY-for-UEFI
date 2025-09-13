@@ -21,8 +21,14 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <errno.h>
 extern double __cdecl __cde80387FPTAN(double x);
+//
+// ERRNO.H
+//
+#define EDOM    33
+#define ERANGE  34
+#define errno   (*_errno())
+extern __declspec(dllimport) int* _errno(void);
 
 /**
 

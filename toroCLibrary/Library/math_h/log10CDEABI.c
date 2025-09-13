@@ -23,7 +23,13 @@ Author:
 
 --*/
 #include <CdeServices.h>
-#include <errno.h>
+//
+// ERRNO.H
+//
+#define EDOM    33
+#define ERANGE  34
+#define errno   (*_errno())
+extern __declspec(dllimport) int* _errno(void);
 
 extern double __cdecl __cde80387FYL2X(double x, double y);
 extern double __cdeLOG102;

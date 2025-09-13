@@ -22,9 +22,6 @@ Author:
     Kilian Kegel
 
 --*/
-#ifndef _CRT_FUNCTIONS_REQUIRED
-#   define _CRT_FUNCTIONS_REQUIRED 0 /* prevent Microsoft specific definition of errno macro                          */
-#endif//_CRT_FUNCTIONS_REQUIRED
 #include <CdeServices.h>
 //
 // stdio.h
