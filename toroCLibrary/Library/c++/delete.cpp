@@ -20,8 +20,8 @@ Author:
 
 --*/
 #include <stdlib.h>
-//void operator delete(void* ptr)
-void operator delete(void* ptr, unsigned __int64 size)
+
+void operator delete(void* ptr, size_t size)
 {
     free(ptr);
 }

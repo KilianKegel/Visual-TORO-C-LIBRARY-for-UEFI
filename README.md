@@ -8,11 +8,22 @@
 ```
 ![](https://github.com/KilianKegel/pictures/blob/master/LLVMWyvernSmall2.png)
 
-## Tool chain support
-* **LLVM/CLANG:** YES
-* **Microsoft v143, v142, v141:** YES
+
+### Windows 11 SDK / Platform Toolset
+ 
+||Windows SDK<BR>10.0.26100.0|Windows <BR>10.0.22621.0|Windows SDK<BR>10.0.19041.0|Windows SDK<BR>10.0.17763.0|Windows SDK<BR>10.0.14393.0|
+|-|-|-|-|
+|**Platform<br>toolset LLVM**|☑|☑|☑|☐|☐|
+|**Platform<br>toolset v145<br>VS2026**|☑|☑|☑|☐|☐|
+|**Platform<br>toolset v143<br>VS2022**|☑|☑|☑|☐|☐|
+|**Platform<br>toolset v142<br>VS2019**|☑|☑|☑|☐|☐|
+|**Platform<br>toolset v141<br>VS2017**|☑|☑|☑|☐|☐|
+|**Platform<br>toolset v140<br>VS2010**|☐|☐|☐|☐|☐|
 
 ## Revision history
+### 20251004, v0.9.8 Build 797
+* fix **C++ `delete` operator** n/a in 32Bit library<br>
+* default **toolset/SDK** configuration is now **VS2026 v145/10.0.26100.0** 
 ### 20250913, v0.9.7 Build 764
 * fix [**errno.h**]((https://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=198)) support for [**math.h** functions](https://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=224) in **UEFI POST drivers** (Power On Self Test)<br>
 ### 20250906, v0.9.6 Build 757
@@ -25,7 +36,7 @@
 * **add LLVM/CLANG-cl-family support — the library source code itself is now buildable with LLVM/CLANG-cl:**
     * support VS2022 v17.14 with **LLVM (clang-cl)** tool chain
     * support **Intel C++ Compiler 2024** tool chain<br>
-      **NOTE:** Only [**Intel oneAPI Base Toolkir ver 2024.2.1**](https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html)
+      **NOTE:** Only [**Intel oneAPI Base Toolkit ver 2024.2.1**](https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html)
       provides the 32Bit compiler.<br>In versions **2025.x.y** the 32Bit compiler isn't shipped anymore.
 * Windows SDK version **10.0.26100.0**
 * support Microsoft tool chain:
