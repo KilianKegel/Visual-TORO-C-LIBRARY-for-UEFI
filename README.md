@@ -12,7 +12,7 @@
 ### Windows 11 SDK / Platform Toolset
  
 ||Windows SDK<BR>10.0.26100.0|Windows <BR>10.0.22621.0|Windows SDK<BR>10.0.19041.0|Windows SDK<BR>10.0.17763.0|Windows SDK<BR>10.0.14393.0|
-|-|-|-|-|
+|-|-|-|-|-|-|
 |**Platform<br>toolset LLVM**|☑|☑|☑|☐|☐|
 |**Platform<br>toolset v145<br>VS2026**|☑|☑|☑|☐|☐|
 |**Platform<br>toolset v143<br>VS2022**|☑|☑|☑|☐|☐|
