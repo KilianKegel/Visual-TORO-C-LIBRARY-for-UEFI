@@ -1751,7 +1751,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>LLVM_COMPILER_WORKAROUND;CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LLVM_COMPILER_WORKAROUND;CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;_STATIC_INLINE_UCRT_FUNCTIONS=1;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\CdePkg\include;$(ProjectDir)..\CdePkg\include\###VS2022###;$(ProjectDir)..\MdePkgInc\x64;$(ProjectDir)..\MdePkgInc</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -1822,7 +1822,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>LLVM_COMPILER_WORKAROUND;CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LLVM_COMPILER_WORKAROUND;CDEABI=__declspec(noinline);MDEPKG_NDEBUG;NMOFINE;NDEBUG;NCDETRACE;_CRT_SECURE_NO_WARNINGS;_NO_CRT_STDIO_INLINE;_STATIC_INLINE_UCRT_FUNCTIONS=1;CDE_MODULE_NAME="$(TargetName)"</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\CdePkg\include;$(ProjectDir)..\CdePkg\include\###VS2022###;$(ProjectDir)..\MdePkgInc\x64;$(ProjectDir)..\MdePkgInc</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>

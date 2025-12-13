@@ -21,6 +21,33 @@
 |**Platform<br>toolset v140<br>VS2010**|☐|☐|☐|☐|☐|
 
 ## Revision history
+### 20251213, v0.9.9 Build 799
+* fix **LLVM/CLANG-cl-family** (`clang version 20.1.8`) translated library application link error
+```
+    lld-link : error : duplicate symbol: mktime
+      >>> defined at C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\ucrt\time.h:544
+      >>>            toroC64LLVMWinNT.lib(osifWinNTGetTime.obj)
+      >>> defined at toroC64LLVMWinNT.lib(mktime.obj)
+```
+Root cause is that compiler  `clang version 20.1.8` internally reports `_MSC_VER 1950` and the 
+snippet from `time.h`: 
+```C
+// Ensure that `_STATIC_INLINE_UCRT_FUNCTIONS` is always defined.
+// The STL needs this to know if it's safe to export UCRT functions through C++ modules.
+#ifndef _STATIC_INLINE_UCRT_FUNCTIONS
+    #if defined _MSC_VER && _MSC_VER >= 1950
+        #define _STATIC_INLINE_UCRT_FUNCTIONS 0
+    #else
+        #define _STATIC_INLINE_UCRT_FUNCTIONS 1
+    #endif
+#endif // !defined _STATIC_INLINE_UCRT_FUNCTIONS
+```
+and inline generated functions doesn't get the `static` linkage.<br>
+
+**NOTE: This bugfix is irrelevant for the released LLVM-Library-binaries, because those where build with Microsoft compiler.<br>It is only relevant for the clang tool chain (VS2026) built of ***toro C Library*** sourcecode**
+
+`_STATIC_INLINE_UCRT_FUNCTIONS = 1` must be set for **toro C Library** build with `clang-cl`.<br>
+
 ### 20251004, v0.9.8 Build 797
 * fix **C++ `delete` operator** n/a in 32Bit library<br>
 * default **toolset/SDK** configuration is now **VS2026 v145/10.0.26100.0** 
