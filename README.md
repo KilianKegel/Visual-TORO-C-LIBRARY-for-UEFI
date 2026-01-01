@@ -18,7 +18,7 @@
 |**Platform<br>toolset v143<br>VS2022**|☑|☑|☑|☐|☐|
 |**Platform<br>toolset v142<br>VS2019**|☑|☑|☑|☐|☐|
 |**Platform<br>toolset v141<br>VS2017**|☑|☑|☑|☐|☐|
-|**Platform<br>toolset v140<br>VS2010**|☐|☐|☐|☐|☐|
+|**Platform<br>toolset v140<br>VS2015**|☐|☐|☐|☐|☐|
 
 ## Revision history
 ### 20251213, v0.9.9 Build 799
