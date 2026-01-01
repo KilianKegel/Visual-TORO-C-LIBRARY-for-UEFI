@@ -52,12 +52,12 @@ and inline generated functions doesn't get the `static` linkage.<br>
 * fix **C++ `delete` operator** n/a in 32Bit library<br>
 * default **toolset/SDK** configuration is now **VS2026 v145/10.0.26100.0** 
 ### 20250913, v0.9.7 Build 764
-* fix [**errno.h**]((https://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=198)) support for [**math.h** functions](https://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=224) in **UEFI POST drivers** (Power On Self Test)<br>
+* fix [**`errno.h`**]((https://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=198)) support for [**`math.h`** functions](https://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=224) in **UEFI POST drivers** (Power On Self Test)<br>
 ### 20250906, v0.9.6 Build 757
 * fix buffer flush in `fprintf()`-family functions
 ### 20250830, v0.9.5 Build 755
-* add [**errno.h**]((https://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=198)) support for [**math.h** functions](https://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=224)
-* publish **math.h** [**C-Validation Suite results**](https://github.com/KilianKegel/toroCVSreport?tab=readme-ov-file#mathh)
+* add [**errno.h**]((https://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=198)) support for [**`math.h`** functions](https://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf#page=224)
+* publish **`math.h`** [**C-Validation Suite results**](https://github.com/KilianKegel/toroCVSreport?tab=readme-ov-file#mathh)
 
 ### 20250720, v0.9.4 Build 672
 * **add LLVM/CLANG-cl-family support — the library source code itself is now buildable with LLVM/CLANG-cl:**
@@ -98,11 +98,14 @@ and inline generated functions doesn't get the `static` linkage.<br>
  
     
 ### 20250309, v0.9.0 Build 243
-#### finalize MATH.H implementation
+#### finalize `math.h` implementation
 <img src="https://upload.wikimedia.org/wikipedia/commons/0/06/KL_intel_i387DX.jpg" width="200"/><br>
 
-The architecture of this math library introduces a space optimized implementation of C's MATH.H functions,
+The architecture of this math library introduces a space optimized implementation of C's **`math.h`** functions,
 while keeping precision and correctness as good as already known in earlier x87-based math libraries.<BR>
+
+**NOTE:** Find the **`math.h`** [**CVS-Report**](https://github.com/KilianKegel/toroCVSreport?tab=readme-ov-file#torocvsreport) (C-Validation-Suite report)
+
 Since the traditional math coprocessor 80387 is still present in current x86 processors and is also not deprecated
 in the [X86S specification](https://www.intel.com/content/www/us/en/developer/articles/technical/envisioning-future-simplified-architecture.html) [.PDF](https://github.com/KilianKegel/4KPages-TechDocs/blob/main/x86s-eas-external-1.1.pdf),
 it can be used here.<br><br>
