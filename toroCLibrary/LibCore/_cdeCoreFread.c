@@ -3,7 +3,7 @@
     toro C Library
     https://github.com/KilianKegel/toro-C-Library#toro-c-library-formerly-known-as-torito-c-library
 
-    Copyright (c) 2017-2025, Kilian Kegel. All rights reserved.
+    Copyright (c) 2017-2026, Kilian Kegel. All rights reserved.
     SPDX-License-Identifier: GNU General Public License v3.0
 
 Module Name:
@@ -59,6 +59,7 @@ size_t _cdeCoreFread(CDE_APP_IF* pCdeAppIf, const void* ptr, size_t size, size_t
     size_t lastnum;
     unsigned char fposoosync = TRUE; //file position out of sync
     unsigned char fLFexpected;/*line feed*/
+    unsigned char fIsStdIn = (O_CDESTDIN == ((O_CDESTDMASK + O_CDEREDIR) & pCdeFile->openmode));
   
 
     if(__cdeIsFilePointerCORE(pCdeAppIf, pCdeFile)) do
@@ -88,7 +89,7 @@ size_t _cdeCoreFread(CDE_APP_IF* pCdeAppIf, const void* ptr, size_t size, size_t
             if (pCdeFile->fEof)
                 __cderewindCORE(pCdeAppIf, (FILE*)pCdeFile);
 
-        for (/* done above */; (provided + skipped) < requested && pCdeFile->fCtrlZ == FALSE && pCdeFile->bidx < pCdeFile->bufPosEOF && 0 == pCdeFile->fEof; /* do nothing */)
+        for (/* done above */; (provided + (fIsStdIn ? 0 : skipped)) < requested && pCdeFile->fCtrlZ == FALSE && pCdeFile->bidx < pCdeFile->bufPosEOF && 0 == pCdeFile->fEof; /* do nothing */)
         {
             if ((0 == pCdeFile->bvld) || pCdeFile->bidx >= pCdeFile->bvld)
             {
@@ -108,7 +109,8 @@ size_t _cdeCoreFread(CDE_APP_IF* pCdeAppIf, const void* ptr, size_t size, size_t
                 //
                 // buffer EOF, keep track of buffer offset of EOF. No need do read 0 bytes anymore
                 //
-                pCdeFile->bufPosEOF = (size_t)pCdeFile->bsiz != lastnum ? (int)lastnum : LONG_MAX;
+                if(FALSE == fIsStdIn)
+                    pCdeFile->bufPosEOF = (size_t)pCdeFile->bsiz != lastnum ? (int)lastnum : LONG_MAX;
 
                 pCdeFile->fEof = 0 == lastnum ? TRUE : FALSE;
                 pCdeFile->bpos += lastnum;
@@ -121,7 +123,12 @@ size_t _cdeCoreFread(CDE_APP_IF* pCdeAppIf, const void* ptr, size_t size, size_t
                     break;
             }
 
-            for (/* provided = 0 , requested = size * nelem */; (provided + skipped) < requested && pCdeFile->bidx < pCdeFile->bvld && pCdeFile->fCtrlZ == FALSE; /* do nothing */)
+            //
+			// copy from internal buffer to user buffer (ptr)
+			//  apply text mode translations in text mode
+			//  apply CTRL-Z termination in text mode
+            //
+            for (/* provided = 0 , requested = size * nelem */; (provided + (fIsStdIn ? 0 : skipped)) < requested && pCdeFile->bidx < pCdeFile->bvld && pCdeFile->fCtrlZ == FALSE; /* do nothing */)
             {
 
                 if (TRUE == fLFexpected) {

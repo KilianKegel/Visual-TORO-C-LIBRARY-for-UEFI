@@ -3,7 +3,7 @@
 [**toro C Library**](https://github.com/KilianKegel/toro-C-Library#toro-c-library-formerly-known-as-torito-c-library)
 
 ```
-    Copyright (c) 2017-2025, Kilian Kegel. All rights reserved.
+    Copyright (c) 2017-2026, Kilian Kegel. All rights reserved.
     SPDX-License-Identifier: GNU General Public License v3.0
 ```
 ![](https://github.com/KilianKegel/pictures/blob/master/LLVMWyvernSmall2.png)
@@ -21,6 +21,12 @@
 |**Platform<br>toolset v140<br>VS2015**|☐|☐|☐|☐|☐|
 
 ## Revision history
+### 20260124, v0.9.10 Build 803
+* fix `getchar()`/`fread()` (when reading from `stdin`) returns `EOF` after receiving ENTER key
+* fix `__chkstk()` missing in 32Bit library build
+* update UEFI Include files to EDK2 version edk2-stable202511
+* update copyright calendar year to 2026
+
 ### 20251213, v0.9.9 Build 799
 * fix **LLVM/CLANG-cl-family** (`clang version 20.1.8`) translated library application link error
 ```
