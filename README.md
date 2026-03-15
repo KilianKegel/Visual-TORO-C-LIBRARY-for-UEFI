@@ -43,10 +43,9 @@
     ```
 * add [`_get_invalid_parameter_handler()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/stdlib_h/_get_invalid_parameter_handler.c)
 * fix [`_set_invalid_parameter_handler()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/stdlib_h/_set_invalid_parameter_handler.c) to return **NULL** when default invaid parameter handler is installed
-* imporove [`invalid_parameter_handler()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Library/Intrinsics/_cdeDefaultInvalidParameterHandler.c) to emulate Microsoft `FAST_FAIL` behavior
+* imporove [`invalid_parameter_handler()`](https://github.com/KilianKegel/Visual-TORO-C-LIBRARY-for-UEFI/blob/main/toroCLibrary/Intrinsics/_cdeDefaultInvalidParameterHandler.c) to emulate Microsoft `FAST_FAIL` behavior
 * Ensure **`FATAL ERROR: CdeServices DXE not available.`** is emitted to `ConOut`.
-* add UEFI Box Draw definitions: [`CdeBoxDraw.h`](https://github.com/KilianKegel/CdePkg/Include/CdeBoxDraw.h)
-    
+* add UEFI Box Draw definitions: [`CdeBoxDraw.h`](https://github.com/KilianKegel/CdePkg/blob/master/Include/CdeBoxDraw.h)    
 ### 20260124, v0.9.10 Build 803
 * fix `getchar()`/`fread()` (when reading from `stdin`) returns `EOF` after receiving ENTER key
 * fix `__chkstk()` missing in 32Bit library build
