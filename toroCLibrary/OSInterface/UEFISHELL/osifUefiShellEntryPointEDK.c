@@ -391,14 +391,13 @@ _MainEntryPointShell(
     EFI_LOADED_IMAGE_PROTOCOL* pLoadedImageProtocol;
     static EFI_GUID EfiSimpleTextOutputProtocolGuid = EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL_GUID;
     int i;
-    static ROMPARM_VWXPRINTF RomParmVWXPRINTF = { \
-        /*fForceToDataSeg       */ 2 ,\
-        /*fPointerIsParm        */ 0 ,\
-        /*fPointerIsFilePointer */ 0 ,\
-        /*fCountIsParm;         */ 0 ,\
-        /*fAjustDifference      */ 0 ,\
-        /*fWide                 */ 0 ,\
-        /*fUEFIFormat           */ 0 
+    static ROMPARM_VWXPRINTF RomParmVWXPRINTF = {
+        .fForceToDataSeg = 2,
+        .fCdeFilePointer = 0,
+        .fCountIsParm = 0,
+        .fAjustDifference = 0,
+        .fWide = 0,
+        .fUEFIFormat = 0
     };
     size_t eflags = __cdeGetEFLAGS();
     CDE_APP_IF* pCdeAppIf = &CdeAppIfShell;

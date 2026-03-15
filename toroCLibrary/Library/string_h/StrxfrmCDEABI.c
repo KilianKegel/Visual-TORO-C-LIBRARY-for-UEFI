@@ -36,7 +36,7 @@ extern __declspec(dllimport) int* _errno(void);
 
 extern __declspec(dllimport) size_t strlen(const char* pszBuffer);
 extern __declspec(dllimport) char* strncpy(char* pszDst, const char* pszSrc, size_t n);
-extern void (*pinvalid_parameter_handlerCDEABI)(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);  
+extern void _cdeInvalidParameterHandler(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);
 
 /**
 Synopsis
@@ -66,8 +66,8 @@ static size_t strxfrmCDEABI(char* pszDst, const char* pszSrc, size_t n) {
         if ((n >= INT_MAX) || (pszDst == NULL) || (pszSrc == NULL))
         {
             errno = EINVAL;
-            //(*pinvalid_parameter_handler)(L"\"NULL pointer assignment\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
-            (*pinvalid_parameter_handlerCDEABI)(NULL, NULL, NULL, 0, 0);
+            //(*_pcdeInvalidParameterHandler)(L"\"NULL pointer assignment\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+            _cdeInvalidParameterHandler(NULL, NULL, NULL, 0, 0);
             break;
         }
         nRet =  strlen(strncpy(pszDst, pszSrc, n));

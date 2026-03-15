@@ -33,14 +33,13 @@ extern void* __cdeGetAppIf(void);
 extern __declspec(dllimport) int fgetc(FILE* stream);
 extern __declspec(dllimport) int ungetc(int c, FILE* stream);
 
-static ROMPARM_VWXSCANF RomParm = { \
-/*fForceToDataSeg       */ 1 ,\
-/*fPointerIsParm        */ 1 ,\
-/*fPointerIsFilePointer */ 1 ,\
-/*fCountIsParm;         */ 0 ,\
-/*fAjustDifference      */ 0 ,\
-/*fWide                 */ 0 ,\
-/*EndMarker             */EOF \
+static ROMPARM_VWXSCANF RomParm = {
+    .fForceToDataSeg = 1,
+    .fCdeFilePointer = 1,
+    .fCountIsParm = 0,
+    .fAjustDifference = 0,
+    .fWide = 0,
+    .EndMarker = EOF
 };
 
 static int __fgetcpp(void** stream)

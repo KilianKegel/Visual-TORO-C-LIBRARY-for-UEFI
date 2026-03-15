@@ -32,7 +32,7 @@ static void __fputcpp(int b, void** pstream)
 {
     CDEFILE* pCdeFile = *pstream;
 
-    if (O_TEXT == (pCdeFile->openmode & O_TEXT))
+    if (O_TEXT == (pCdeFile->openmode & (O_TEXT + _O_U16TEXT + _O_WTEXT)))
         fputc(b, *pstream);
     else
         fputwc((wchar_t)b, *pstream);
@@ -50,19 +50,27 @@ Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/vfprintf-vfprintf-l-vfwprintf-vfwprintf-l?view=msvc-160#return-value
 **/
 int vfwprintf(FILE* const stream, wchar_t const* const pszFormat, va_list ap) {
-    ROMPARM_VWXPRINTF RomParm = { \
-        /*fForceToDataSeg       */ 1 ,\
-        /*fPointerIsParm        */ 0 ,\
-        /*fPointerIsFilePointer */ 1 ,\
-        /*fCountIsParm;         */ 0 ,\
-        /*fAjustDifference      */ 0 ,\
-        /*fWide                 */ 1 ,\
-        /*fUEFIFormat           */ 0, \
+    ROMPARM_VWXPRINTF RomParmSHELL = {
+        .fForceToDataSeg = 1,
+        .fCdeFilePointer = 1,   // after POST it is a pCdeFile
+        .fCountIsParm = 0,
+        .fAjustDifference = 0,
+        .fWide = 1,
+        .fUEFIFormat = 0
+    };
+    ROMPARM_VWXPRINTF RomParmPOST = {
+        .fForceToDataSeg = 1,
+        .fCdeFilePointer = 0,   // during POST it is a pCdeAppIf
+        .fCountIsParm = 0,
+        .fAjustDifference = 0,
+        .fWide = 1,
+        .fUEFIFormat = 0
     };
     int nRet = 0;
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
     void* pDest = stream;
-
+    ROMPARM_VWXPRINTF* pROMPARM_VWXPRINTF = &RomParmPOST;
+    
     if (NULL == pCdeAppIf)
         errno = EPERM;
     else do
@@ -72,6 +80,7 @@ int vfwprintf(FILE* const stream, wchar_t const* const pszFormat, va_list ap) {
         if (CDEDBGMAGIC == (size_t)stream)
         {
             pfnOutput = pCdeAppIf->pCdeServices->pPutDebug;
+            pDest = (void*)pCdeAppIf;
         }
         else 
         {
@@ -89,12 +98,13 @@ int vfwprintf(FILE* const stream, wchar_t const* const pszFormat, va_list ap) {
                 break;
             default:
                 pfnOutput = __fputcpp;
+                pROMPARM_VWXPRINTF = &RomParmSHELL;
                 break;
             }
         }
     nRet = (int)pCdeAppIf->pCdeServices->pVwxPrintf(
             pCdeAppIf,          // this
-            &RomParm,           // IN ROMPARM_VWXPRINTF *pRomParm,
+            pROMPARM_VWXPRINTF, // IN ROMPARM_VWXPRINTF *pRomParm,
             pszFormat,          // IN const void *pszFormat,
             pfnOutput,          // void (*pfnDevPutChar)(UINT16/*wchar_t*/c,void** ppDest/*address of pDest*/),
             pDest,              // UINT8 *pDest, pointer for the output function memory address or pCdeAppIf

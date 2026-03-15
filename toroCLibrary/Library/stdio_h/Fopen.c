@@ -169,6 +169,12 @@ FILE* fopen(const char* filename, const char* mode) {
                 pCdeFile->fRsv = 0;
 
             //
+            // enable wide character processing if NOT stdout or stderr
+            //
+            if (0 == ((O_CDESTDOUT | O_CDESTDERR) & pCdeFile->openmode))
+                pCdeFile->openmode |= _O_U16TEXT;
+
+            //
             // MSFT UNDEFIND BEHAVIOUR POST PROCESSING:
             //  errno:=22 == "Invalid argument" set even on successful fopen() with the conditions below:
             if (1) 

@@ -27,10 +27,8 @@ Author:
 #include <stdio.h>
 #include <stdint.h>
 
-//EFI_SYSTEM_TABLE* _cdegST;
-//extern char trcen;
-//short wcsbuf[512];
-//extern int swprintf(short* pszDest, size_t dwCount, const short* pszFormat, ...);
+extern EFI_SYSTEM_TABLE* _cdegST;
+
 /**
 
 Synopsis
@@ -52,13 +50,14 @@ size_t _osifUefiShellFileWrite(IN CDE_APP_IF* pCdeAppIf, void* ptr, size_t nelem
     size_t count = 0;
     size_t BufferSize = 0;
     size_t elmsize = 1;                              // 1 16bit write, 2 8Bit write
-//        size_t *pBufferSize = pCdeFile->openmode & O_CDEWCSZONLY ? &BufferSize1 : &BufferSize;
     char* pBuffer = ptr;
     void* p = ptr;
     unsigned int i;
     EFI_STATUS Status;
     static wchar_t wcBuffer[BUFSIZ + 1/*termination zero*/];/* BUFSIZ can not be changed on STDOUT/STDERR */
     unsigned char* pUni = (unsigned char*)&pCdeFile->pFileProtocol->OpenEx;
+    int fUseUEFIConsoleInterface = 0;
+    int fIsConsole = (0 != ((O_CDESTDOUT | O_CDESTDERR) & pCdeFile->openmode)) && (0 == (O_CDEREDIR & pCdeFile->openmode));
 
 #define OPENMODE pCdeFile->openmode
     do {
@@ -74,13 +73,21 @@ size_t _osifUefiShellFileWrite(IN CDE_APP_IF* pCdeAppIf, void* ptr, size_t nelem
             else {
                 if (0 == (OPENMODE & O_CDEREDIR) /* Console is NOT redirected */) {
 
-                    for (i = 0; i < nelem; i++)
-                        wcBuffer[i] = 0xFF & pBuffer[i];
+                    if (0 == (OPENMODE & (_O_U16TEXT | _O_WTEXT)))
+                        for (i = 0; i < nelem; i++)
+                            wcBuffer[i] = 0xFF & pBuffer[i];
+                    else
+                        for (i = 0; i < nelem / 2; i++)
+                            wcBuffer[i] = ((short*)pBuffer)[i];
 
                     wcBuffer[i] = '\0';/*termination zero*/
 
                     elmsize = 2;
                     p = &wcBuffer[0];
+                    
+                    if ((1 == fIsConsole) && (0 != (OPENMODE & (_O_U16TEXT | _O_WTEXT))))
+                        fUseUEFIConsoleInterface = 1;
+
                 }
                 else { // STDOUT/STDERR is redirected to file
 
@@ -104,51 +111,41 @@ size_t _osifUefiShellFileWrite(IN CDE_APP_IF* pCdeAppIf, void* ptr, size_t nelem
             // UEFI BUG: file positioning bug, if data written behind EOF, data range between old EOF and 
             // new data contains medium data / garbage, instead of 0
             //
-//            if (trcen == 2)swprintf(wcsbuf, INT_MAX, L"%hs(), Line %d\r\n", __FUNCTION__, __LINE__), _cdegST->ConOut->OutputString(_cdegST->ConOut, wcsbuf);
             if (0 != pCdeFile->gapsize)
             {
-                static char zBuf64k[64 * 1024];                                                                 // reserve static 64k buffer initialized to 0 in .bss
+                static char zBuf64k[64 * 1024];                                                                     // reserve static 64k buffer initialized to 0 in .bss
                 EFI_STATUS Status1, Status2;
-                int64_t sGapSize = (long long)pCdeFile->gapsize;                                                // convert size to signed type
+                int64_t sGapSize = (long long)pCdeFile->gapsize;                                                    // convert size to signed type
                 int64_t sBufSiz;
 
-//                if (trcen == 2)swprintf(wcsbuf, INT_MAX, L"%hs(), Line %d\r\n", __FUNCTION__, __LINE__), _cdegST->ConOut->OutputString(_cdegST->ConOut, wcsbuf);
-                Status1 = pCdeFile->pRootProtocol->SetPosition(pCdeFile->pFileProtocol, pCdeFile->gappos);      // set position
-/*                if (trcen == 2)
-                    swprintf(wcsbuf, INT_MAX, L"%hs(), Line %d Status %hs, pCdeFile->gappos %lld, sGapSize %lld\r\n", 
-                    __FUNCTION__, 
-                    __LINE__, 
-                    _strefierror(Status1), 
-                    pCdeFile->gappos,
-                        sGapSize),
+                Status1 = pCdeFile->pRootProtocol->SetPosition(pCdeFile->pFileProtocol, pCdeFile->gappos);          // set position
 
-                    _cdegST->ConOut->OutputString(_cdegST->ConOut, wcsbuf);
-*/
                 do
                 {
+                    sGapSize -= sizeof(zBuf64k);                                                                    // subtract buffer size
+                    sBufSiz = sGapSize > 0 ? sizeof(zBuf64k) : sGapSize + sizeof(zBuf64k);                          // write full buffersize of zeros / write remaining zeros
 
-                    sGapSize -= sizeof(zBuf64k);                                                                // subtract buffer size
-                    sBufSiz = sGapSize > 0 ? sizeof(zBuf64k) : sGapSize + sizeof(zBuf64k);                      // write full buffersize of zeros / write remaining zeros
+                    Status2 = pCdeFile->pRootProtocol->Write(pCdeFile->pFileProtocol, (UINTN*) &sBufSiz, zBuf64k);  // initialize file gap with zeros
 
-//                    if (trcen == 2)swprintf(wcsbuf, INT_MAX, L"%hs(), Line %d, sGapSize %lld, sBufSiz %lld\r\n", __FUNCTION__, __LINE__, sGapSize, sBufSiz), _cdegST->ConOut->OutputString(_cdegST->ConOut, wcsbuf);
-
-                    Status2 = pCdeFile->pRootProtocol->Write(pCdeFile->pFileProtocol, (UINTN*) &sBufSiz, zBuf64k);       // initialize file gap with zeros
-
-//                    if (trcen == 2)swprintf(wcsbuf, INT_MAX, L"%hs(), Line %d, sGapSize %lld, sBufSiz %lld\r\n", __FUNCTION__, __LINE__, sGapSize, sBufSiz), _cdegST->ConOut->OutputString(_cdegST->ConOut, wcsbuf);
-
-                } while (sGapSize > 0);                                                                         // untile nothing to to anymore
-//                if (trcen == 2)swprintf(wcsbuf, INT_MAX, L"%hs(), Line %d\r\n", __FUNCTION__, __LINE__), _cdegST->ConOut->OutputString(_cdegST->ConOut, wcsbuf);
+                } while (sGapSize > 0);                                                                             // untile nothing to to anymore
             }
         }
-//        if (trcen == 2)swprintf(wcsbuf, INT_MAX, L"%hs(), Line %d\n", __FUNCTION__, __LINE__), _cdegST->ConOut->OutputString(_cdegST->ConOut, wcsbuf);
+        
         BufferSize = nelem * elmsize;
-        Status = __cdeOnErrSet_status(pCdeFile->pRootProtocol->Write(pCdeFile->pFileProtocol, &BufferSize, p));
+
+        if (0 == fUseUEFIConsoleInterface)
+            Status = __cdeOnErrSet_status(pCdeFile->pRootProtocol->Write(pCdeFile->pFileProtocol, &BufferSize, p));
+        else
+            if(O_CDESTDOUT == (pCdeFile->openmode & O_CDESTDMASK))
+                Status = _cdegST->ConOut->OutputString(_cdegST->ConOut, p);
+            else
+                Status = _cdegST->StdErr->OutputString(_cdegST->StdErr, p);
+
         count = BufferSize / elmsize;
 
         *pUni = 'T' == *pUni ? 0 : *pUni;
 
     } while (0);
-//    if (trcen == 2)swprintf(wcsbuf, INT_MAX, L"%hs(), Line %d\n", __FUNCTION__, __LINE__), _cdegST->ConOut->OutputString(_cdegST->ConOut, wcsbuf);
 
     return  EFI_SUCCESS == Status ? (size_t)count : 0;
 }

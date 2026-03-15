@@ -25,7 +25,6 @@ Author:
 #include <errno.h>
 #include <CdeServices.h>
 extern int __cdeIsIOBuffer(void* stream);
-extern void (*pinvalid_parameter_handler)(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);
 extern void _cdeAbort(void);
 
 /** _lseek()

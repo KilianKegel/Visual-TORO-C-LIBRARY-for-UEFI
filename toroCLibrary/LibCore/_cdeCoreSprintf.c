@@ -31,14 +31,13 @@ int _cdeCoreSprintf(CDE_APP_IF* pCdeAppIf, char* pszDest, const char* pszFormat,
     size_t dwCount = (size_t)INT_MAX;
     unsigned dwUsedCount = (unsigned)dwCount;
     void (*pfnPutXxx)(int c, void** ppDest) = &_CdeMemPutChar;
-    static ROMPARM_VWXPRINTF RomParm = { \
-        /*fForceToDataSeg       */ 1 ,\
-        /*fPointerIsParm        */ 1 ,\
-        /*fPointerIsFilePointer */ 0 ,\
-        /*fCountIsParm;         */ 1 ,\
-        /*fAjustDifference      */ 0 ,\
-        /*fWide                 */ 0 ,\
-        /*fUEFIFormat           */ 0, \
+    static ROMPARM_VWXPRINTF RomParm = {
+        .fForceToDataSeg = 1,
+        .fCdeFilePointer = 0,
+        .fCountIsParm = 1,
+        .fAjustDifference = 0,
+        .fWide = 0,
+        .fUEFIFormat = 0
     };
 
     va_start(ap, pszFormat);

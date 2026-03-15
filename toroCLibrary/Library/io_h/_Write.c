@@ -25,7 +25,7 @@ Author:
 #include <limits.h>
 #include <CdeServices.h>
 
-extern void (*pinvalid_parameter_handler)(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);
+extern void _cdeInvalidParameterHandler(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);
 extern void* __cdeGetIOBuffer(unsigned i);
 
 /** close
@@ -56,12 +56,12 @@ int _write(int fd, const void* buffer, unsigned int count)
     if (NULL != pCdeFile) do {
 
 //TODO check    if (NULL == stream)
-//TODO check        (*pinvalid_parameter_handler)(NULL, NULL, NULL, 0, 0);
+//TODO check        (*_pcdeInvalidParameterHandler)(NULL, NULL, NULL, 0, 0);
 
         if (NULL == buffer || count > INT_MAX)
         {
-            //(*pinvalid_parameter_handler)(L"\"NULL == buffer || count > INT_MAX\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
-            (*pinvalid_parameter_handler)(NULL, NULL, NULL, 0, 0);
+            //(*_pcdeInvalidParameterHandler)(L"\"NULL == buffer || count > INT_MAX\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+            _cdeInvalidParameterHandler(NULL, NULL, NULL, 0, 0);
             break;
         }
         

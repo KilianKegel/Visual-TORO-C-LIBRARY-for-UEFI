@@ -14,10 +14,6 @@
     <ClCompile Include="Intrinsics\_fltused.c" />
     <ClCompile Include="Intrinsics\_handle_error.c" />
     <ClCompile Include="Intrinsics\_handle_errorf.c" />
-    <ClCompile Include="Intrinsics\_invalid_parameter_handler.c" />
-    <ClCompile Include="Intrinsics\_invalid_parameter_handlerCDEABI.c" />
-    <ClCompile Include="Intrinsics\_set_invalid_parameter_handler.c" />
-    <ClCompile Include="Intrinsics\_set_invalid_parameter_handlerCDEABI.c" />
     <ClCompile Include="Intrinsics\_set_printf_count_output.c" />
     <ClCompile Include="Intrinsics\__abort_behavior.c" />
     <ClCompile Include="Intrinsics\__acrt_iob_func.c" />
@@ -721,6 +717,10 @@
     <ClCompile Include="LibAssist\__inbyte.c" />
     <ClCompile Include="LibAssist\__indword.c" />
     <ClCompile Include="LibAssist\__inword.c" />
+    <ClCompile Include="Library\io_h\_setmode.c" />
+    <ClCompile Include="Intrinsics\_cdeDefaultInvalidParameterHandler.c" />
+    <ClCompile Include="Library\stdlib_h\_get_invalid_parameter_handler.c" />
+    <ClCompile Include="Library\stdlib_h\_set_invalid_parameter_handler.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\CdeServices.h" />

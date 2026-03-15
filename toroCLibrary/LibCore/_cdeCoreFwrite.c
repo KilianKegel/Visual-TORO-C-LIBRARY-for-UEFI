@@ -100,7 +100,17 @@ size_t _cdeCoreFwrite(CDE_APP_IF* pCdeAppIf, const void* ptr, size_t size, size_
 
                 if (pCdeFile->openmode & O_TEXT) {
                     if (('\n' == pCdeFile->Buffer[pCdeFile->bidx - 1]) && (FALSE == fCRinserted)) {
-                        pCdeFile->Buffer[pCdeFile->bidx - 1] = '\r';
+                        if ((_O_U16TEXT | _O_WTEXT) & pCdeFile->openmode)
+                        {
+                            short* pWide = (void*) &pCdeFile->Buffer[pCdeFile->bidx - 1];
+
+                            *pWide = L'\r';
+                            pCdeFile->bidx++;
+                            if (O_RDONLY != (pCdeFile->openmode & (O_RDONLY | O_WRONLY | O_RDWR))) 
+                                pCdeFile->bvld++;   //??? += pCdeFile->bvld < pCdeFile->bsiz ? 1 : 0;
+                        }
+                        else
+                            pCdeFile->Buffer[pCdeFile->bidx - 1] = '\r';
                         fCRinserted = TRUE;
                         continue;
                     }

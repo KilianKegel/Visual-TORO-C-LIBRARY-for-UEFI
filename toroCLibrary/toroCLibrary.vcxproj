@@ -43,16 +43,13 @@
     <ClCompile Include="Guids\EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID.c" />
     <ClCompile Include="Guids\EFI_SMM_BASE2_PROTOCOL_GUID.c" />
     <ClCompile Include="Guids\EFI_STATUS_CODE_RUNTIME_PROTOCOL_GUID.c" />
+    <ClCompile Include="Intrinsics\_cdeDefaultInvalidParameterHandler.c" />
     <ClCompile Include="Intrinsics\_except1.c" />
     <ClCompile Include="Intrinsics\_fltused.c" />
     <ClCompile Include="Intrinsics\_handle_error.c" />
     <ClCompile Include="Intrinsics\_handle_errorf.c" />
     <ClCompile Include="Intrinsics\_intel_fast_memcpy.c" />
     <ClCompile Include="Intrinsics\_intel_fast_memset.c" />
-    <ClCompile Include="Intrinsics\_invalid_parameter_handler.c" />
-    <ClCompile Include="Intrinsics\_invalid_parameter_handlerCDEABI.c" />
-    <ClCompile Include="Intrinsics\_set_invalid_parameter_handler.c" />
-    <ClCompile Include="Intrinsics\_set_invalid_parameter_handlerCDEABI.c" />
     <ClCompile Include="Intrinsics\_set_printf_count_output.c" />
     <ClCompile Include="Intrinsics\__abort_behavior.c" />
     <ClCompile Include="Intrinsics\__acrt_iob_func.c">
@@ -259,6 +256,7 @@
     <ClCompile Include="Library\io_h\_Lseek.c" />
     <ClCompile Include="Library\io_h\_Open.c" />
     <ClCompile Include="Library\io_h\_Read.c" />
+    <ClCompile Include="Library\io_h\_setmode.c" />
     <ClCompile Include="Library\io_h\_Write.c" />
     <ClCompile Include="Library\io_h\__cdeSplitSearchNameExt2Upcase.c" />
     <ClCompile Include="Library\io_h\__cdeStrMatch.c" />
@@ -636,6 +634,8 @@
     <ClCompile Include="Library\stdlib_h\randCDEABI.c" />
     <ClCompile Include="Library\stdlib_h\_exit.c" />
     <ClCompile Include="Library\stdlib_h\_exitCDEABI.c" />
+    <ClCompile Include="Library\stdlib_h\_get_invalid_parameter_handler.c" />
+    <ClCompile Include="Library\stdlib_h\_set_invalid_parameter_handler.c" />
     <ClCompile Include="Library\stdlib_h\__cdereallocCORE.c" />
     <ClCompile Include="Library\stdlib_h\ReallocCDEABI.c" />
     <ClCompile Include="Library\stdlib_h\srandCDEABI.c" />

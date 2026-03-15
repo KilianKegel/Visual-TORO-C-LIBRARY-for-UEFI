@@ -48,14 +48,29 @@ size_t _osifWinNTFileWrite(CDE_APP_IF* pCdeAppIf, void* ptr, size_t nelem, CDEFI
     //NOTE: filesize < 4GB    
     BOOL f;
     DWORD dwCount;
+    //
+    // if redirected of if not STDERR/STDOUT
+    //
+    int fIsConsole = (0 != ((O_CDESTDOUT | O_CDESTDERR) & pCdeFile->openmode)) && (0 == (O_CDEREDIR & pCdeFile->openmode));
 
-    f = WriteFile(
-        (HANDLE)pCdeFile->emufp,        /*__in          HANDLE hFile,*/
-        ptr,                            /*__in          LPCVOID lpBuffer,*/
-        (DWORD)nelem,                   /*__in          DWORD nNumberOfBytesToWrite,*/
-        &dwCount,                       /*__out         LPDWORD lpNumberOfBytesWritten,*/
-        NULL                            /*__in          LPOVERLAPPED lpOverlapped*/
-    );
+    if ((0 == fIsConsole) || (0 == (pCdeFile->openmode & (_O_U16TEXT | _O_WTEXT))))
+    {
+        f = WriteFile(
+            (HANDLE)pCdeFile->emufp,        /*__in          HANDLE hFile,*/
+            ptr,                            /*__in          LPCVOID lpBuffer,*/
+            (DWORD)nelem,                   /*__in          DWORD nNumberOfBytesToWrite,*/
+            &dwCount,                       /*__out         LPDWORD lpNumberOfBytesWritten,*/
+            NULL                            /*__in          LPOVERLAPPED lpOverlapped*/
+        );
+    } else {
+        f = WriteConsoleW(
+            (HANDLE)pCdeFile->emufp,
+            ptr,
+            (DWORD)nelem/sizeof(wchar_t),
+            &dwCount,
+            NULL
+        );
+    }
 
     return f != 0 ? (size_t)dwCount : 0;
 }

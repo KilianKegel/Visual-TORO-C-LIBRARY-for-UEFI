@@ -31,7 +31,7 @@ Author:
 #define SIGSEGV 11
 
 extern char _cdeSig2idx(int sig);
-extern void (*pinvalid_parameter_handlerCDEABI)(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);
+extern void _cdeInvalidParameterHandler(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);
 extern void _cdeSigDflt(int sig);
 extern void _cdeSigIgn(int sig);
 
@@ -61,8 +61,8 @@ static int raiseCDEABI(int sig) {
 
     do {
         if (idx < 0){
-            //(*pinvalid_parameter_handlerCDEABI)(L"\"idx < 0\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
-            (*pinvalid_parameter_handlerCDEABI)(NULL, NULL, NULL, 0, 0);
+            //(*_pcdeInvalidParameterHandler)(L"\"idx < 0\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+            _cdeInvalidParameterHandler(NULL, NULL, NULL, 0, 0);
         }
         else {
             sighnd = pCdeAppIf->rgfnSignal[idx];

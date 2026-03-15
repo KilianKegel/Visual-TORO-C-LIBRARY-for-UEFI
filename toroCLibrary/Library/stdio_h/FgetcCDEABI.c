@@ -29,7 +29,7 @@ Author:
 #define EOF    (-1)
 #define FILE void
 
-extern void (*pinvalid_parameter_handlerCDEABI)(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);
+extern void _cdeInvalidParameterHandler(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);
 extern __declspec(dllimport) size_t fread(const void* ptr, size_t size, size_t nelem, FILE* stream);
 
 /** fgetc
@@ -63,8 +63,8 @@ static int fgetcCDEABI(FILE* stream) {
     char c = 0;
 
     if (NULL == stream) {
-        //(*pinvalid_parameter_handlerCDEABI)(L"\"NULL == stream\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
-        (*pinvalid_parameter_handlerCDEABI)(NULL, NULL, NULL, 0, 0);
+        //(*_pcdeInvalidParameterHandler)(L"\"NULL == stream\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+        _cdeInvalidParameterHandler(NULL, NULL, NULL, 0, 0);
     }
     else
         do {

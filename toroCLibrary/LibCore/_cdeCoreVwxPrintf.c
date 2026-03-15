@@ -432,7 +432,7 @@ static int fract2bcd(double d, DOUBLEPRINTBUF* pDblData) {
 static int str2dev(void (*pfnDevPutChar)(int, void**), char* pszBuf, unsigned int* pCount, void** ppDest, unsigned int nMaxnum, unsigned char fWide, unsigned char IsSingle/*Char->allow '\0' to be printed*/) {
     unsigned int nCnt, nEnd;
     int nRet = 0;
-    short c;
+    unsigned short c;
 
     nEnd = IsSingle ? 1 : (int)STRLEN(pszBuf);
     nEnd = nEnd > nMaxnum ? nMaxnum : nEnd;
@@ -440,7 +440,7 @@ static int str2dev(void (*pfnDevPutChar)(int, void**), char* pszBuf, unsigned in
     for (nCnt = 0; nCnt < nEnd && *pCount; nCnt++) {
         (*pCount)--;
         nRet++;
-        c = (fWide ? ((short*)pszBuf)[nCnt] : pszBuf[nCnt]);
+        c = (fWide ? ((unsigned short*)pszBuf)[nCnt] : ((unsigned char*)pszBuf)[nCnt]);
         if (pfnDevPutChar != NULL)
             (*pfnDevPutChar)(c, ppDest);
     }
@@ -711,6 +711,13 @@ _cdeCoreVwxPrintf(
     IN va_list ap
 ) {
     unsigned char fWide = pFixParm->fWide;
+    //
+    // NOTE: Accept format string characters above 0xFF, only for file streams with _O_U16TEXT/_O_WTEXT modes, 
+    //       or memory buffers with fWide set to 1,  otherwise characters above 0xFF force exit -1 of this function.
+    //
+    unsigned char fWideFormatAboveFF = TRUE;
+    unsigned char fStopProcessing = FALSE;
+
     unsigned char fDes = 2 == (pFixParm->fForceToDataSeg & 2);
     int i, t;
     NUMDESC numdesc = { 
@@ -764,9 +771,15 @@ _cdeCoreVwxPrintf(
     numdesc.pszNumber = rgbBuffer;
     numdesc.pszSignSharp = &szSignSharp[0];
 
+    if (TRUE == pFixParm->fWide
+        && TRUE == pFixParm->fCdeFilePointer
+        && (0 == ((_O_U16TEXT | _O_WTEXT) & ((CDEFILE*)pDest)->openmode))
+        )
+        fWideFormatAboveFF = FALSE;
+
     pszFormatW = (short*)pszFormat;
 #define CHAR816(IX) fWide ? pszFormatW[IX] : ((char*)pszFormat)[IX]
-    for (i = 0, c = ydes(fDes, i, CHAR816(i)); c != '\0' && (dwCount <= dwInitialCount)/*kg20150210_00*/; c = ydes(fDes, i, CHAR816(i))) {
+    for (i = 0, c = ydes(fDes, i, CHAR816(i));  FALSE == fStopProcessing && c != '\0' && (dwCount <= dwInitialCount)/*kg20150210_00*/; c = ydes(fDes, i, CHAR816(i))) {
 
         switch (state) {
         case PROCESS_WRITECHARS:
@@ -795,7 +808,14 @@ _cdeCoreVwxPrintf(
                 if (dwCount) {
                     dwCount--;
                     if (pfnDevPutChar != NULL)
-                        (*pfnDevPutChar)(ydes(fDes, i - 1, CHAR816(i - 1)), &pDest);
+                    {
+                        if ((0xFF00 & c) && (FALSE == fWideFormatAboveFF))  // if character above 0xFF and not in a wide format that allows above 0xFF characters, then exit with -1
+                        {
+                            state = PROCESS_DONT_WRITE_ANYMORE;             // stop processing, return -1
+                            break;
+                        }
+                        (*pfnDevPutChar)(ydes(fDes, i - 1, c), &pDest);
+                    }
                 }
                 state = dwCount ? state : PROCESS_DONT_WRITE_ANYMORE;   //set state before decrement dwCount    /*kg20150210_00*/
                 break;
@@ -824,7 +844,10 @@ _cdeCoreVwxPrintf(
                         else
                             if(0 == bIntOrLongOrInt64)
                                 bIntOrLongOrInt64 = fWide ? 32 : 64;
-            case 'c':   i--; state = PROCESS_CHARSSTRING; break;
+                        i--; state = PROCESS_CHARSSTRING; break;
+            case 'c':   if (0 == bIntOrLongOrInt64)
+                            bIntOrLongOrInt64 = fWide ? 32 : 64;
+                        i--; state = PROCESS_CHARSSTRING; break;
             case 'a':   if (1 == pFixParm->fUEFIFormat)
                             i--, state = PROCESS_CHARSSTRING;
                         break;   /* in UEFI %a == ASCII STRING, in STDC float print */
@@ -1357,6 +1380,7 @@ _cdeCoreVwxPrintf(
             break;
         case PROCESS_DONT_WRITE_ANYMORE:
             dwCount = dwInitialCount + 1;   // return -1 on overflow /*kg20150210_00*/
+            fStopProcessing = TRUE;
             break;
         }//switch(state)
     }//while( ((char*)pszFormat)[i] != '\0'){

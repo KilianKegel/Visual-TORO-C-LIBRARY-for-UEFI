@@ -30,14 +30,13 @@ extern void* __cdeGetAppIf(void);
 extern void _CdeMemPutWChar(int c, void** ppDest);
 extern void _CdeMemPutNada(int c, void** ppDest);
 
-static ROMPARM_VWXPRINTF RomParm = { \
-/*fForceToDataSeg       */ 1 ,\
-/*fPointerIsParm        */ 1 ,\
-/*fPointerIsFilePointer */ 0 ,\
-/*fCountIsParm;         */ 1 ,\
-/*fAjustDifference      */ 0 ,\
-/*fWide                 */ 1 ,\
-/*fUEFIFormat           */ 0, \
+static ROMPARM_VWXPRINTF RomParm = {
+    .fForceToDataSeg = 1,
+    .fCdeFilePointer = 0,
+    .fCountIsParm = 1,
+    .fAjustDifference = 0,
+    .fWide = 1,
+    .fUEFIFormat = 0
 };
 
 /**

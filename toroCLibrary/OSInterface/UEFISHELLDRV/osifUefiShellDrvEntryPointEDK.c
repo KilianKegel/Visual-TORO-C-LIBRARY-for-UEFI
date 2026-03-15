@@ -627,12 +627,16 @@ static void __cdeFatalCdeServicesNotAvailUefiShellDrv(EFI_SYSTEM_TABLE* SystemTa
     };
 
     //
-    // locate the protocols needed to run CdeLib
+    // locate the report status code protocol
     //
     Status = SystemTable->BootServices->LocateProtocol(&EfiStatusCodeRuntimeProtocolGuid, NULL, (void**)&pReportStatucCode);
 
     if(EFI_SUCCESS == Status)
         (*pReportStatucCode)(EFI_DEBUG_CODE, (EFI_SOFTWARE_DXE_BS_DRIVER | EFI_DC_UNSPECIFIED), 0, NULL, (void*)&DbgNfo);
+    //
+    // report additionally to ConOut (shown when driver is started from UEFI Shell)
+    //
+    SystemTable->ConOut->OutputString(SystemTable->ConOut, L"\r\n\r\nFATAL ERROR : CdeServices DXE not available.\r\n              Check APRIORI and DEPEX settings!!!\r\n\r\n");
 }
 
 //

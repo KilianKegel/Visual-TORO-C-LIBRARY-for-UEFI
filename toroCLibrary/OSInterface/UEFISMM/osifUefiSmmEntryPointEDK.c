@@ -375,7 +375,7 @@ Returns
 //    };
 //
 //    //
-//    // locate the protocols needed to run CdeLib
+//    // locate the report status code protocol
 //    //
 //    Status = SystemTable->BootServices->LocateProtocol(&EfiStatusCodeRuntimeProtocolGuid, NULL, (void**)&pReportStatucCode);
 //

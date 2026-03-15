@@ -91,14 +91,13 @@ DebugVPrint (
   IN  VA_LIST       VaListMarker
   )
 {
-    static ROMPARM_VWXPRINTF RomParm = { \
-        /*fForceToDataSeg       */ 1 ,\
-        /*fPointerIsParm        */ 0 ,\
-        /*fPointerIsFilePointer */ 0 ,\
-        /*fCountIsParm;         */ 0 ,\
-        /*fAjustDifference      */ 0 ,\
-        /*fWide                 */ 0 ,\
-        /*fUEFIFormat           */ 1 /*0 != (MOFINE_UEFIFMTSTR & fTraceEn),\*/
+    static ROMPARM_VWXPRINTF RomParm = {
+        .fForceToDataSeg       = 1,
+        .fCdeFilePointer       = 0,
+        .fCountIsParm          = 0,
+        .fAjustDifference      = 0,
+        .fWide                 = 0,
+        .fUEFIFormat           = 1 /*0 != (MOFINE_UEFIFMTSTR & fTraceEn),\*/
     };
 
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();

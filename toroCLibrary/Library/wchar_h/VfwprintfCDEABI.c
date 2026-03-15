@@ -64,15 +64,15 @@ Returns
     https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/vfprintf-vfprintf-l-vfwprintf-vfwprintf-l?view=msvc-160#return-value
 **/
 static int vfwprintfCDEABI(FILE* stream, const wchar_t* pszFormat, va_list ap) {
-    ROMPARM_VWXPRINTF RomParm = { \
-        /*fForceToDataSeg       */ 1 ,\
-        /*fPointerIsParm        */ 0 ,\
-        /*fPointerIsFilePointer */ 1 ,\
-        /*fCountIsParm;         */ 0 ,\
-        /*fAjustDifference      */ 0 ,\
-        /*fWide                 */ 1 ,\
-        /*fUEFIFormat           */ 0, \
+    ROMPARM_VWXPRINTF RomParm = {
+        .fForceToDataSeg = 1,
+        .fCdeFilePointer = 1,
+        .fCountIsParm = 0,
+        .fAjustDifference = 0,
+        .fWide = 1,
+        .fUEFIFormat = 0
     };
+
     int nRet = 0;
     CDE_APP_IF* pCdeAppIf = __cdeGetAppIf();
     

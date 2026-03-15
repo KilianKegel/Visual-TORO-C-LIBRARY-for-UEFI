@@ -30,14 +30,13 @@ extern void _CdeMemPutWChar(int c, void** ppDest);
 extern void _CdeMemPutNada(int c, void** ppDest);
 extern __declspec(dllimport) int _vsnwprintf(wchar_t* pszDest, size_t dwCount, const wchar_t* pszFormat, va_list ap);
 
-static ROMPARM_VWXPRINTF RomParm = { \
-/*fForceToDataSeg       */ 1 ,\
-/*fPointerIsParm        */ 1 ,\
-/*fPointerIsFilePointer */ 0 ,\
-/*fCountIsParm;         */ 1 ,\
-/*fAjustDifference      */ 0 ,\
-/*fWide                 */ 1 ,\
-/*fUEFIFormat           */ 0, \
+static ROMPARM_VWXPRINTF RomParm = {
+    .fForceToDataSeg = 1,
+    .fCdeFilePointer = 0,
+    .fCountIsParm = 1,
+    .fAjustDifference = 0,
+    .fWide = 1,
+    .fUEFIFormat = 0
 };
 
 /**

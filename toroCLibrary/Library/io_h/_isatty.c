@@ -25,7 +25,7 @@ Author:
 #include <CdeServices.h>
 
 extern int __cdeIsFilePointer(void* stream);
-extern void (*pinvalid_parameter_handler)(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);
+extern void _cdeInvalidParameterHandler(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);
 
 /** isatty()
 
@@ -79,8 +79,8 @@ int _isatty(int fd)
 
         if (NULL == pCdeFile || 0 == pCdeFile->fRsv || -1 == fd)
         {
-            //(*pinvalid_parameter_handler)(L"\"NULL == pCdeFile || 0 == pCdeFile->fRsv || -1 == fd\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
-            (*pinvalid_parameter_handler)(NULL, NULL, NULL, 0, 0);
+            //(*_pcdeInvalidParameterHandler)(L"\"NULL == pCdeFile || 0 == pCdeFile->fRsv || -1 == fd\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
+            _cdeInvalidParameterHandler(NULL, NULL, NULL, 0, 0);
             errno = EBADF;
             break;//while(0);
         }

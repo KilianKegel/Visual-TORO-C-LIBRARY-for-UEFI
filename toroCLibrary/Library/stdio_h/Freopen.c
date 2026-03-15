@@ -49,6 +49,7 @@ Returns
 FILE* freopen(const char* filename, const char* mode, FILE* stream) {
 
     CDEFILE* fp, * sp = (CDEFILE*)stream;
+    int mode16 = (_O_U16TEXT | _O_WTEXT) & sp->openmode;    // remember 16 bit mode flags
 
     fp = (CDEFILE*)fopen(filename, mode);
 
@@ -64,6 +65,9 @@ FILE* freopen(const char* filename, const char* mode, FILE* stream) {
         fp->fRsv = FALSE;
 
         sp->openmode |= O_CDEREOPEN + O_CDEREDIR;
+
+        sp->openmode &= ~(_O_U16TEXT | _O_WTEXT);           // copy 16 bit mode flags from old stream
+        sp->openmode |= mode16;
     }
     else
         stream = NULL;

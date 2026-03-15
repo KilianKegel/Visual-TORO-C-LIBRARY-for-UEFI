@@ -29,16 +29,14 @@ extern void* __cdeGetAppIf(void);
 extern int _cdeMemGetWChar(void** ppSrc);
 extern int _cdeMemUngetWChar(int c, void** ppSrc);
 
-static ROMPARM_VWXSCANF RomParm = { \
-/*fForceToDataSeg       */ 1 ,\
-/*fPointerIsParm        */ 1 ,\
-/*fPointerIsFilePointer */ 0 ,\
-/*fCountIsParm;         */ 0 ,\
-/*fAjustDifference      */ 0 ,\
-/*fWide                 */ 1 ,\
-/*EndMarker             */'\0'\
+static ROMPARM_VWXSCANF RomParm = {
+    .fForceToDataSeg = 1,
+    .fCdeFilePointer = 0,
+    .fCountIsParm = 0,
+    .fAjustDifference = 0,
+    .fWide = 1,
+    .EndMarker = '\0'
 };
-
 
 /**
 

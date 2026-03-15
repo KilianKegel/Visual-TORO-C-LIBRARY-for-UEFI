@@ -24,7 +24,8 @@ Author:
 #include <errno.h>
 #include <CdeServices.h>
 extern int __cdeIsIOBuffer(void* stream);
-extern void (*pinvalid_parameter_handler)(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);
+extern void _cdeInvalidParameterHandler(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);
+
 extern void _cdeAbort(void);
 
 /** fileno
@@ -51,8 +52,7 @@ int _fileno(FILE* stream)
 
         if (NULL == pCdeFile)
         {
-            //(*pinvalid_parameter_handler)(L"\"NULL == pCdeFile\"", __CDEWCSFUNCTION__, __CDEWCSFILE__, __LINE__, 0);
-            (*pinvalid_parameter_handler)(NULL, NULL, NULL, 0, 0);
+            _cdeInvalidParameterHandler(NULL, NULL, NULL, 0, 0);
             errno = EINVAL;
             break;
         }

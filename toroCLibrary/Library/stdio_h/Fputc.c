@@ -49,7 +49,7 @@ Returns
 **/
 int fputc(int b, FILE* stream) {
     unsigned nRet = (unsigned)EOF;
-    unsigned char c = (unsigned char)b;
+    unsigned char c = (unsigned)b > 0xFF ? '?' : (unsigned char)b;
 
     do {
 
