@@ -11,20 +11,20 @@
 
 ### Windows 11 SDK / Platform Toolset
  
-||Windows SDK<BR>10.0.28000.0|Windows <BR>10.0.26100.0|Windows SDK<BR>10.0.19041.0|
+|Platform<br>toolset |Windows SDK<BR>10.0.28000.0|Windows <BR>10.0.26100.0|Windows SDK<BR>10.0.19041.0|
 |-|-|-|-|
-|**Platform<br>toolset LLVM**|☑|☑|☑|
-|**Platform<br>toolset v145<br>VS2026**|☑|☑|☑|
-|**Platform<br>toolset v143<br>VS2022**|☑|☑|☑|
-|**Platform<br>toolset v142<br>VS2019**|☑|☑|☑|
-|**Platform<br>toolset v141<br>VS2017**|☑|☑|☑|
+|**CLANG/LLVM**|☑|☑|☑|
+|**v145 VS2026**|☑|☑|☑|
+|**v143 VS2022**|☑|☑|☑|
+|**v142 VS2019**|☑|☑|☑|
+|**v141 VS2017**|☑|☑|☑|
 
 ## Revision history
 ### 20261114, v0.9.11 Build 888
 * add support for:
     * **MSVC Tools Version 14.52.37025** 
     * **Windows SDK 10.0.28000.0**
-### 20260315, v0.9.11 Build 857[README](CdePkg/README.md)
+### 20260315, v0.9.11 Build 857
 * add Microsoft compatible wide character support for `printf()` family
     * add `_setmode()` to control wide character handling<br>
 **NOTE: This enables developers to directly use UEFI box-drawing symbols with formatted output functions:**<br>
