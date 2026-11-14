@@ -20,4 +20,4 @@ Author:
 
 --*/
 #include <isa_availability.h>
-unsigned int __isa_available = __ISA_AVAILABLE_SSE42;
+int __isa_available = __ISA_AVAILABLE_SSE42;

@@ -1,0 +1,37 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="CdePkg/Include/CDE.h" />
+    <File Path="CdePkg/Include/CdeServices.h" />
+    <File Path="CdePkg/Include/VS2022/assert.h" />
+    <File Path="CdePkg/Include/VS2022/ctype.h" />
+    <File Path="CdePkg/Include/VS2022/errno.h" />
+    <File Path="CdePkg/Include/VS2022/fcntl.h" />
+    <File Path="CdePkg/Include/VS2022/float.h" />
+    <File Path="CdePkg/Include/VS2022/inttypes.h" />
+    <File Path="CdePkg/Include/VS2022/io.h" />
+    <File Path="CdePkg/Include/VS2022/limits.h" />
+    <File Path="CdePkg/Include/VS2022/locale.h" />
+    <File Path="CdePkg/Include/VS2022/math.h" />
+    <File Path="CdePkg/Include/VS2022/mbctype.h" />
+    <File Path="CdePkg/Include/VS2022/setjmp.h" />
+    <File Path="CdePkg/Include/VS2022/signal.h" />
+    <File Path="CdePkg/Include/VS2022/standardHeader.cif" />
+    <File Path="CdePkg/Include/VS2022/stdarg.h" />
+    <File Path="CdePkg/Include/VS2022/stddef.h" />
+    <File Path="CdePkg/Include/VS2022/stdint.h" />
+    <File Path="CdePkg/Include/VS2022/stdio.h" />
+    <File Path="CdePkg/Include/VS2022/stdlib.h" />
+    <File Path="CdePkg/Include/VS2022/string.h" />
+    <File Path="CdePkg/Include/VS2022/time.h" />
+    <File Path="CdePkg/Include/VS2022/wchar.h" />
+    <File Path="CdePkg/Include/VS2022/wctype.h" />
+    <File Path="clean.bat" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="toroCLibrary/toroCLibrary.vcxproj" Id="8c250c8a-c234-450d-83ed-f0c898e1a739" />
+</Solution>

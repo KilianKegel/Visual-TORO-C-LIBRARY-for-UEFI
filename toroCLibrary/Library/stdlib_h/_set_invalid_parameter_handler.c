@@ -27,9 +27,9 @@ Author:
 // 
 // Invalid parameter handler function pointer type
 typedef void(__cdecl* _invalid_parameter_handler)(
-    wchar_t const*,
-    wchar_t const*,
-    wchar_t const*,
+    const wchar_t*,
+    const wchar_t*,
+    const wchar_t*,
     unsigned int,
     uintptr_t
     );
@@ -38,8 +38,8 @@ typedef void(__cdecl* _invalid_parameter_handler)(
     #define  wchar_t short
 #endif//wchar_t
 
-extern void (*_pcdeInvalidParameterHandler)(_invalid_parameter_handler);
-extern void _cdeDefaultInvalidParameterHandler(_invalid_parameter_handler);
+extern void (*_pcdeInvalidParameterHandler)(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, uintptr_t pReserved);
+extern void _cdeDefaultInvalidParameterHandler(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, uintptr_t pReserved);
 
 /**
 
@@ -61,7 +61,7 @@ _invalid_parameter_handler* _set_invalid_parameter_handler(_invalid_parameter_ha
     if (_pcdeInvalidParameterHandler != _cdeDefaultInvalidParameterHandler)
         pRet = (void*)_pcdeInvalidParameterHandler;
 
-    _pcdeInvalidParameterHandler = (void (*)(_invalid_parameter_handler))fn;
-    
+    _pcdeInvalidParameterHandler = (void (*)(const wchar_t*, const wchar_t*, const wchar_t *,unsigned int,uintptr_t))fn;
+
     return pRet;
 }

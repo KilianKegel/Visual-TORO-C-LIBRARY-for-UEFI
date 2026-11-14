@@ -44,7 +44,7 @@ Returns
     @retval void
 
 **/
-void _cdeDefaultInvalidParameterHandler(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved) {
+void _cdeDefaultInvalidParameterHandler(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, uintptr_t pReserved) {
 
     if (NULL != file)
     {
@@ -65,10 +65,10 @@ void _cdeDefaultInvalidParameterHandler(const wchar_t* expression, const wchar_t
 
 }
 
-void (*_pcdeDefaultInvalidParameterHandler)(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved) = _cdeDefaultInvalidParameterHandler;
-void (*_pcdeInvalidParameterHandler)(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved) = _cdeDefaultInvalidParameterHandler;
+void (*_pcdeDefaultInvalidParameterHandler)(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, uintptr_t pReserved) = _cdeDefaultInvalidParameterHandler;
+void (*_pcdeInvalidParameterHandler)(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, uintptr_t pReserved) = _cdeDefaultInvalidParameterHandler;
 
-void _cdeInvalidParameterHandler(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved) {
+void _cdeInvalidParameterHandler(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, uintptr_t pReserved) {
     
     if (NULL != _pcdeInvalidParameterHandler)
         (*_pcdeInvalidParameterHandler)(NULL, NULL, NULL, 0, 0);

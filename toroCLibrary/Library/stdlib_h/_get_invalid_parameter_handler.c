@@ -25,19 +25,19 @@ Author:
 // stdlib.h
 //
 typedef void(__cdecl* _invalid_parameter_handler)(
-    wchar_t const*,
-    wchar_t const*,
-    wchar_t const*,
+    const wchar_t*,
+    const wchar_t*,
+    const wchar_t*,
     unsigned int,
-    uintptr_t
+    unsigned *
     );
 
 #ifndef wchar_t
     #define  wchar_t short
 #endif//wchar_t
 
-extern void (*_pcdeInvalidParameterHandler)(const wchar_t * expression,const wchar_t * function,const wchar_t * file,unsigned int line,unsigned* pReserved);
-extern void _cdeDefaultInvalidParameterHandler(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, unsigned* pReserved);
+extern void (*_pcdeInvalidParameterHandler)(const wchar_t * expression,const wchar_t * function,const wchar_t * file,unsigned int line,uintptr_t pReserved);
+extern void _cdeDefaultInvalidParameterHandler(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, uintptr_t pReserved);
 
 /**
 
